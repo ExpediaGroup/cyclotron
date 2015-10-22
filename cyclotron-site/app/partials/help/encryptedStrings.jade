@@ -1,0 +1,55 @@
+h3 Encrypted Strings
+
+p.
+    Cyclotron has limited support for encrypting passwords or other sensitive information in several Data Sources.  This is a one-way process, and it can only be decrypted inside the Cyclotron Service, immediately prior to executing the Data Source.  The plaintext is never sent back to the UI or acessible to the user; only Data Source results will be returned.
+
+p
+    | This feature is available in Data Sources that can be proxied through the Cyclotron Service, and require the
+    em  proxy
+    | property to be set.  This includes the Crunch Data Source, JSON Data Source, and Graphite Data Source.
+
+h3 How It Works
+
+ol
+    li The Cyclotron Dashboard Editor encrypts the plaintext (before saving!), and wraps the encrypted text in \!{} to indicate that text is encrypted.
+    li The encrypted text is saved directly in the Dashboard, and the unencrypted text is not saved at all.
+    li When viewing the Dashboard, the user's browser downloads the Dashboard definition, including the Data Sources and the Crunch query containing the encrypted password.
+    li The Crunch query is sent to the Proxy Server, which parses the query for sections of encrypted text.  Each one is decrypted using the same key.  
+    li The unencrypted Crunch query is sent from the Proxy Server to the Crunch service, which executes the query and returns the results.
+    li The Proxy Server returns the results to the browser.
+
+p This example assumes a Crunch query, but it applies similarly to other Data Sources with different encrypted properties.  Any property of the Data Source that is sent to the proxy server can be encrypted, as they are all handled generically.  The JSON Data Source supports encrypting the URL, Query Parameters, and Options.  The Graphite Data Source supports encrypting the URL, Targets, and From/Until.
+
+p All Cyclotron servers share the same encryption/decryption key, so any server can be used a proxy for any Dashboard.
+ 
+h3 Example
+
+p Consider this Data Source, which has a plaintext password embedded in it:
+
+pre.code.
+    {
+        "name": "datasource_0",
+        "options": {
+            "auth": {
+                "user": "dave",
+                "password": "password1"
+            }
+        },
+        "type": "json",
+        "url": "http://mywebsite/"
+    }
+
+p After encrypting the password and setting the proxy, it might look something like this:
+
+pre.code.
+    {
+        "name": "datasource_0",
+        "options": {
+            "auth": {
+                "user": "dave",
+                "password": "\!{QgVBLpMbbkcRtdicLrEvWg==}"
+            }
+        },
+        "type": "json",
+        "url": "http://mywebsite/"
+    }

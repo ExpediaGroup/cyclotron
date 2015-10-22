@@ -1,0 +1,10 @@
+.editor-view-header
+    h3 {{ getScriptOrStyleName(editor.selectedItem, editor.selectedItemIndex, 'Script') }}
+
+    .editor-view-header-buttons
+        button#editor-script-remove.btn.btn-default(type='button', ng-click='removeScript(editor.selectedItemIndex); goToSubState("edit.scripts", editor.dashboard.scripts)', title='Remove') 
+            i.fa.fa-times
+            span  Remove Script
+
+     
+.editor-property-set(model='editor.selectedItem', definition='dashboardProperties.scripts.properties')

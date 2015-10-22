@@ -1,0 +1,23 @@
+div.treemap-widget(ng-controller='TreemapWidget')
+    
+    h1.title(ng-if='widget.title') {{ widgetTitle() }}
+
+    .widget-body
+
+        .spinjs(ng-if='loading')
+        .widget-error(ng-if='dataSourceError == true && !loading')
+        .widget-nodata(ng-if='nodata && !loading')
+            .fa.fa-exclamation-triangle
+            span  {{ nodata }}
+
+        .treemap(ng-if='!nodata && !dataSourceError && treeData', data='treeData', 
+            label-property='labelProperty',
+            value-property='valueProperty',
+            value-description='valueDescription',
+            value-format='valueFormat',
+            color-property='colorProperty',
+            color-description='colorDescription',
+            color-format='colorFormat'
+            color-stops='colorStops',
+            show-legend='showLegend',
+            legend-height='legendHeight')

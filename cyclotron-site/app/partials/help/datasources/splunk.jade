@@ -1,0 +1,22 @@
+h3 Splunk Data Source
+
+p The Splunk Data Source runs Splunk jobs synchronously via its API and returns the results.  This 
+    | Data Source is compatible with the 
+    a(href='http://docs.splunk.com/Documentation/Splunk/6.2.4/RESTUM/RESTusing', target='_blank') Splunk 6 API
+    | , and may not work with old versions.
+
+p Examples of the Splunk Data Source are available on the 
+    a(href='/example-datasource-splunk') example-datasource-splunk
+    |  dashboard
+
+property-table(properties='config.dashboard.properties.dataSources.options.splunk.properties')
+
+h4 Pre-Processor
+
+p The Splunk Data Source supports an optional pre-processor function that will be called before
+    | the Data Source executes.  For more details, see the main Data Sources page.
+
+h4 Post-Processor
+
+p The Splunk Data Source supports an optional post-processor function that will be called after
+    | data is loaded.  For more details, see the main Data Sources page.

@@ -1,0 +1,13 @@
+.login-modal
+    .modal-header
+        h3.modal-title Delete Dashboard
+
+    .modal-body
+        p Are you sure you want to delete this dashboard:
+
+        p
+            strong {{ editor.dashboardWrapper.name }}
+
+    .modal-footer
+        button.btn(ng-click='$dismiss("cancel")') Cancel
+        button.btn.btn-primary(ng-click='$close("ok")') Delete

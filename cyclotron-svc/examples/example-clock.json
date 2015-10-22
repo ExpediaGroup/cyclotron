@@ -1,0 +1,23 @@
+{
+    "dataSources": [],
+    "description": "Example of the Clock widget",
+    "disableAnalytics": true,
+    "name": "example-clock",
+    "pages": [{
+        "layout": {
+            "gridColumns": 2,
+            "gridRows": 2
+        },
+        "widgets": [{
+            "name": "Default",
+            "widget": "clock"
+        }, {
+            "format": "HH:mm:ss",
+            "widget": "clock"
+        }, {
+            "format": "YYYY-MM-DD",
+            "widget": "clock"
+        }]
+    }],
+    "theme": "dark"
+}

@@ -1,0 +1,453 @@
+h3 Table Widget
+p.
+    The Table Widget gets data from some data source and displays it in a tabular form.
+    It requires a dataSource property, indicating where the data will come from.
+
+p.
+    Many properties support value subsitution from the row data, using this 
+    notation: \#{name}.  Name must be the name of a column in the data source.  
+    Here is an example:
+
+pre.code.
+    "columns": [{
+        "label": "Color",
+        "link": "http://www.google.com/search?q=color+\#{color}",
+        "name": "color"
+    }
+
+p.
+    An additional column '__index' will be provided in each row, with the current 0-based row index.  This can 
+    be output as a column, used in a rule, etc.
+
+p The Table Widget has optional support for embedding 
+    a(href='http://fontawesome.io/', title='Font Awesome, the iconic font and CSS toolkit', target='_blank') Font Awesome 
+    |  icons in the table, as part of the 
+    em columns 
+    |  or 
+    em rules 
+    |  configs.  The specific icon class names can be looked up on the Font Awesome page and referenced in Cyclotron.
+
+p The Table Widget also has support for 
+    a(href='http://numeraljs.com/', title='Numeral.js, a javascript library for formatting and manipulating numbers', target='_blank') Numeral.js
+    |  formatting.  Documentation for the format
+
+h4 Properties
+p.
+    These are the properties specific to this widget.  
+    General Cyclotron widget properties are not repeated here (e.g. layout properties).
+
+property-table(properties='config.widgets.table.properties')
+
+
+h4 Columns
+
+p The 
+    em columns 
+    | property can be provided to manually specify the columns for the table.  
+    | It takes an array of objects, each of which is the settings for a column.  
+    | The columns are displayed in order.
+
+property-table(properties='config.widgets.table.properties.columns.properties')
+
+p
+    | If the value of 
+    em name 
+    | is "*", that column will be duplicated to use all remaining unused columns in the data source.  All
+    | column properties will be copied to all new columns created by the expansion.
+    | That is, the wildcard series will be cloned, with each unused column name replacing the 
+    em name 
+    | property.  Unused columns means any columns which were not used in the 
+    em name 
+    | property of previous columns.
+p
+    | Similarly, a regular expression can be used to achieve similar results with a more specific 
+    | expansion.  Instead of expanding to all unused columns, only unused column names matching the regex will
+    | be used.  
+    | The regex should be given between two slashes, e.g. "/.*/".
+p
+    | An additional property can be used to further control the wildcard/regex expansion. 
+    em columnsIgnored 
+    | is an optional string list of one or more hardcoded columns which should not be matched.
+
+p
+    | Columns created in this fashion will be ordered by the their order in the Data Source.  An optional property, 
+    em columnSortFunction
+    | is available to customize the sort order and/or do additional filtering.  This property takes an inlineJS 
+    | function which, if defined, will be used to sort the columns.  The function must take an array of column 
+    | names as an argument and return a sorted and/or filtered array.  See examples below.
+
+h4 Rules
+
+p The 
+    em rules 
+    | property can contain an array of one or more rules.  Each rule is defined with an expression 
+    | that is evaluated per row.  The expression can contain column values subsituted from the row.  
+    | If it evaluates 
+    | to true, then any settings in the rule will be applied to the row.  
+p It is also possible to limit the rule to a subset of columns by including the 
+    em columns 
+    | property, containing an array of column names.  Matching rules will affect only the specified
+    | columns, instead of the entire row.
+
+p Most properties that can be set on the column can be set in a Rule as well, as shown below.  For example, 
+    em text
+    |, 
+    em image
+    |, etc.  The value from a Rule will always override the default column value.
+
+property-table(properties='config.widgets.table.properties.rules.properties')
+
+h4 Sorting
+
+p The data coming from the selected Data Source can be re-sorted in the Widget, like all Data Source-driven Widgets.
+    | Specifying one or more columns in the 
+    em sortBy
+    |  property will activate directional arrow icons in the header, indicating which columns are currently sorted, and in 
+    | which order.  If the data is sorted in the Data Source or upstream, this cannot be detected and no sort icons will be displayed.
+
+p By default, the Table Widget allows Dashboard viewers to re-sort columns in the Widget. When this
+    | happens, it replaces the default 
+    em sortBy 
+    |  property.  This interactivity can
+    | be disabled via the 
+    em enableSort
+    |  property.
+
+p For more control over sorting, the default sorter can be replaced with a custom Javascript function. 
+    | The optional 
+    em sortFunction 
+    | property allows a Javascript function to be defined that handles the entire sorting operation.
+    | Here is a basic implementation that wraps the default behavior:
+
+pre.code.
+    function (data, sortBy, defaultSortFunction) { 
+        defaultSortFunction(data, sortBy);
+    }
+
+p The first parameter is the array of rows; the second is the value of the 
+    em sortBy 
+    | parameter (or the user's selection if modified).  Finally, the default implementation is provided
+    | for convenience.
+
+p One main reason to implement custom sort function is to provide some limitations to the sorting
+    | that a user can do.  It can be used to implement fixed rows in the table, such as a total 
+    | or header row.  These cannot be implemented via the 
+    em sortBy 
+    | property, since this property is overwritten by the user's actions.  Here's an example of a custom 
+    | function that always sorts first by a custom sort function:
+
+pre.code.
+    function (data, sortBy, defaultSortFunction) {
+        /* Create a new sortBy array that starts with a custom function */
+        var newSortBy = [Cyclotron.customSortFunction].concat(sortBy);
+
+        /* Use the default sorter */
+        defaultSortFunction(data, newSortBy);
+    }
+
+p A custom sort function can either modify the provided data array in-place, or return a new array.
+
+h3 Examples
+
+h4 Basic Usage
+
+p This example automatically displays all rows/columns for a data source. 
+p This example is available on the 
+    a(href='/example-table-basic') example-table-basic
+    |  dashboard
+pre.code.
+    {
+        "dataSource": "uscrime",
+        "title": "US Crime Over Time (all columns)",
+        "widget": "table"
+    }
+
+h4 Explicit Columns
+
+p Here, columns are specified explicitly, and extra columns in the data source are ignored.
+    
+p This example is available on the 
+    a(href='/example-table-basic') example-table-basic
+    |  dashboard
+pre.code.
+    {
+        "columns": [{
+            "name": "Year"
+        }, {
+            "name": "Total"
+        }, {
+            "name": "Burglary"
+        }, {
+            "name": "Robbery"
+        }, {
+            "name": "Murder"
+        }],
+        "dataSource": "uscrime",
+        "title": "US Crime Over Time (some columns)",
+        "widget": "table"
+    }
+
+h4 Formatted Columns, Sorted Data Source
+
+p This builds on the previous example by adding a formatter to the number columns. 
+    | It also sorts the Data Source by the Total column, descending.
+
+p This example is available on the 
+    a(href='/example-table-basic') example-table-basic
+    |  dashboard
+pre.code.
+    {
+        "columns": [{
+            "name": "Year"
+        }, {
+            "name": "Total",
+            "numeralformat": "0,0"
+        }, {
+            "name": "Burglary",
+            "numeralformat": "0.0 a"
+        }, {
+            "name": "Robbery",
+            "numeralformat": "0.0 a"
+        }, {
+            "name": "Murder",
+            "numeralformat": "0.0 a"
+        }],
+        "dataSource": "uscrime",
+        "sortBy": ["-Total"],
+        "title": "US Crime Over Time (formatted, sorted)",
+        "widget": "table"
+    }
+
+h4 Column Groups
+p One or more Column Groups can be added to visually segment the different column.  Set the 
+    em group 
+    |  property to the same value to combine two consecutive columns into a column group.
+p This example is available on the 
+    a(href='/example-table-basic') example-table-basic
+    |  dashboard
+pre.code.
+    {
+        "columns": [{
+            "name": "Year"
+        }, {
+            "name": "Total",
+            "numeralformat": "0,0"
+        }, {
+            "group": "Crime Breakdown",
+            "name": "Burglary",
+            "numeralformat": "0.0 a"
+        }, {
+            "group": "Crime Breakdown",
+            "name": "Robbery",
+            "numeralformat": "0.0 a"
+        }, {
+            "group": "Crime Breakdown",
+            "name": "Murder",
+            "numeralformat": "0.0 a"
+        }],
+        "dataSource": "uscrime",
+        "sortBy": ["-Total"],
+        "title": "US Crime Over Time (column groups)",
+        "widget": "table"
+    }
+
+h4 Wildcard Columns
+
+p This example uses a "*" to dynamically create table columns to match the Data Source columns.  "Year" and "Total" are 
+    | not included in the "*", since "Year" was already used and "Total" is ignored.
+p This example is available on the 
+    a(href='/example-table-basic?page=2') example-table-basic
+    |  dashboard
+pre.code.
+    {
+        "columns": [{
+            "border": "right",
+            "name": "Year"
+        }, {
+            "columnsIgnored": ["Total"],
+            "name": "*",
+            "numeralformat": "0,0"
+        }, {
+            "border": "left",
+            "name": "Total"
+        }],
+        "dataSource": "uscrime",
+        "gridHeight": 1,
+        "gridWidth": 1,
+        "layout": {},
+        "title": "US Crime Over Time (wildcard)",
+        "widget": "table"
+    }
+
+h4 Wildcard Columns with Sort function
+
+p A sort function can be used to order the Wildcard/Regex columns.  This example performs a simple alphanumeric sort.
+p This example is available on the 
+    a(href='/example-table-basic?page=2') example-table-basic
+    |  dashboard
+pre.code.
+    {
+        "columns": [{
+            "border": "right",
+            "name": "Year"
+        }, {
+            "columnSortFunction": "${function(columns) { return _.sortBy(columns); }}",
+            "columnsIgnored": ["Total"],
+            "name": "*",
+            "numeralformat": "0,0"
+        }, {
+            "border": "left",
+            "name": "Total"
+        }],
+        "dataSource": "uscrime",
+        "gridHeight": 1,
+        "gridWidth": 1,
+        "title": "US Crime Over Time (wildcard)",
+        "widget": "table"
+    }
+
+h4 Regex Columns
+
+p This example uses regular expressions for finer control than the previous wildcard example.  Only columms ending in "Theft" 
+    | will be included.
+p This example is available on the 
+    a(href='/example-table-basic?page=2') example-table-basic
+    |  dashboard
+pre.code.
+    {
+        "columns": [{
+            "name": "Year"
+        }, {
+            "name": "/.*Theft/",
+            "numeralformat": "0,0"
+        }],
+        "dataSource": "uscrime",
+        "gridHeight": 1,
+        "gridWidth": 1,
+        "title": "US Crime Over Time (regexes)",
+        "widget": "table"
+    }
+
+h4 Regex Columns with Sort function
+
+p This example is the same as before, but with a sort function that reverses order of the dynamic columns.
+
+pre.code.
+    {
+        "columns": [{
+            "name": "Year"
+        }, {
+            "name": "/.*Theft/",
+            "numeralformat": "0,0",
+            "columnSortFunction": "${function(columns) { columns.reverse(); return columns; }}",
+        }],
+        "dataSource": "uscrime",
+        "gridHeight": 1,
+        "gridWidth": 1,
+        "title": "US Crime Over Time (regexes)",
+        "widget": "table"
+    }
+
+h4 Simple Rules
+
+p This example illustrates rule-based styling of the table rows, based on a value in the row.  The rules
+    | are evaulated against each row, and if the rule expression is true, the background-color is 
+    | applied to the entire row.
+p This example is available on the 
+    a(href='/example-table-rules') example-table-rules
+    |  dashboard
+pre.code.
+    {
+        "columns": [{
+            "label": "2009 Rank",
+            "name": "2009_rank"
+        }, {
+            "label": "Metro Area",
+            "name": "metro_area"
+        }, {
+            "label": "# of Buildings 2009",
+            "name": "buildings_2009"
+        }, {
+            "label": "Total Floor Space",
+            "name": "total_floor_space"
+        }, {
+            "label": "Emissions Prevented",
+            "name": "emissions_prevented"
+        }, {
+            "label": "Cost Savings",
+            "name": "cost_savings",
+            "numeralformat": "$ 0.0"
+        }],
+        "dataSource": "green-cities",
+        "rules": [{
+            "background-color": "#B2EC5D",
+            "rule": "\#{cost_savings} &gt; 50"
+        }, {
+            "background-color": "#FFA6C9",
+            "rule": "\#{cost_savings} &lt; 5"
+        }],
+        "title": "Most and Least Cost Savings",
+        "widget": "table"
+    }
+
+h4 Column-based Rules
+
+p The rule in this sample is limited to a single column, rather than the entire row.  The rule adds an colored icon and
+    | tooltip to a single column of matching rows.  This example also illustrates making a column into a link.
+p The data source in this example is being filtered in the Widget using a Regex expression.  Essentially, the filter is 
+    | matching only rows which have a Sub Type column, and excluding any other rows.
+
+p Note that when using variable-replacement for columns containing string values, the variable must be wrapped in quotes, as shown below.
+
+p This example is available on the 
+    a(href='/example-table-rules') example-table-rules
+    |  dashboard
+pre.code.
+    {
+        "columns": [{
+            "name": "Common Name"
+        }, {
+            "name": "Type"
+        }, {
+            "name": "Sub Type"
+        }, {
+            "link": "https://duckduckgo.com/?q=\#{Capital}",
+            "name": "Capital"
+        }],
+        "dataSource": "countries",
+        "filters": {
+            "Sub Type": "/.*/"
+        },
+        "rules": [{
+            "columns": ["Sub Type"],
+            "icon": "fa-life-ring",
+            "iconColor": "#9BDDFF",
+            "rule": "!_.isNull('\#{Sub Type}'.match(/Overseas.*/gi))",
+            "tooltip": "This country is located overseas."
+        }],
+        "title": "Countries of the World",
+        "widget": "table"
+    }
+
+h4 Sort Function for Header row
+
+p This Sort Function always moves a specific row to the top of the table, regardless of which
+    | column the user has sorted.  This example shows only the Sort Function of the Widget.
+
+p This example is available on the 
+    a(href='/example-filters-sort') example-filters-sort
+    |  dashboard
+
+pre.code.
+    ss = function (data, sortBy, defaultSortFunction) {
+        /* Perform default sort with selected columns */
+        defaultSortFunction(data, sortBy);
+        
+        /* Remove US row from array */
+        var row = _.remove(data, function (row) {
+            return row['Common Name'] == 'United States';
+        });
+        
+        /* Return a new array starting with the US row */
+        return row.concat(data);
+    }

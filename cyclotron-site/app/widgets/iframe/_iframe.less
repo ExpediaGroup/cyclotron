@@ -1,0 +1,40 @@
+/*
+ * Copyright (c) 2013-2015 the original author or authors.
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at
+ *
+ *     http://www.opensource.org/licenses/mit-license.php
+ *
+ * Unless required by applicable law or agreed to in writing, 
+ * software distributed under the License is distributed on an 
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+ * either express or implied. See the License for the specific 
+ * language governing permissions and limitations under the License. 
+ */
+
+.iframe-widget {
+    height: 100%;
+    .box-sizing(border-box);
+
+    > iframe {
+        .box-sizing(border-box);
+        display: block;
+        width: 100%;
+        height: 100%;
+        border: 0px;
+    }
+
+}
+
+.widget-noscroll .iframe-widget {
+    > iframe {
+        overflow-y: hidden;
+        overflow-x: hidden;
+    }
+
+    > iframe::-webkit-scrollbar {  
+        display: none;
+    }  
+}

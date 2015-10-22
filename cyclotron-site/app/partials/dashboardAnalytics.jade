@@ -1,0 +1,98 @@
+.analytics-page.container-fluid
+    include header
+
+
+    .row.header
+        .dashboard-well
+            .button-bar
+                a(ui-sref='edit.details({ dashboardName: dashboard.name })')
+                    button.btn(title='Edit this Dashboard')
+                        i.fa.fa-edit
+                        |  Edit Dashboard
+
+            h1 {{ dashboard.name }}
+
+            span.dates
+                i.fa.fa-clock-o
+                span(title='Created on {{ longCreatedDate }}')  Created {{ createdDate }}
+                |  &mdash;
+                span(title='Last modified on {{ longModifiedDate }}')  Last Modified {{ lastModifiedDate }}
+
+            h4.small.text-muted(ng-show='dashboard.dashboard.description')
+                i.fa.fa-quote-left
+                |  {{ dashboard.dashboard.description }} 
+                i.fa.fa-quote-right
+
+    .row
+        .col-sm-12
+            .time-controls.btn-group
+                .btn.btn-default(ng-model='selectedTimespan', btn-radio='"year"') Year
+                .btn.btn-default(ng-model='selectedTimespan', btn-radio='"month"') Month
+                .btn.btn-default(ng-model='selectedTimespan', btn-radio='"3_day"') 3-Days
+                .btn.btn-default(ng-model='selectedTimespan', btn-radio='"day"') Day
+                .btn.btn-default(ng-model='selectedTimespan', btn-radio='"hour"') Hour
+
+            .overview
+                dl.inline(title='Total number of times this Dashboard was visited')
+                    dt {{ dashboard.visits }} 
+                    dd total 
+                        ng-pluralize(count='dashboard.visits', when='{"one": "visit", "other": "visits"}')
+                dl.inline(title='Total number of times a Page in this Dashboard was viewed')
+                    dt {{ dashboard.pageViews}} 
+                    dd total page 
+                        ng-pluralize(count='dashboard.pageViews', when='{"one": "view", "other": "views"}')
+                dl.inline(title='Number of unique visitors that viewed this Dashboard')
+                    dt {{ uniqueVisitorCount }}
+                    dd unique 
+                        ng-pluralize(count='uniqueVisitorCount', when='{"one": "visitor", "other": "visitors"}')
+
+    .row
+        .col-sm-6
+            h2 Active Visits Over Time
+            div.metrics-graphics(data='visits', options='visitsOptions')
+
+        .col-sm-6
+            h2 Page Views Over Time
+            div.metrics-graphics(data='pageViews', options='pageViewsOptions')
+
+    .row
+        .col-sm-8
+            h2 Data Sources (All-Time)
+            table.table(ts-wrapper)
+                thead
+                    tr
+                        th(ts-criteria='dataSourceName|lowercase') Name
+                        th(ts-criteria='dataSourceType|lowercase') Type
+                        th(ts-criteria='count|parseInt') Executions
+                        th(ts-criteria='successRate|parseFloat') Success Rate
+                        th(ts-criteria='avgDuration|parseFloat') Duration (ms)
+                tbody
+                    tr(ng-repeat='dataSource in dataSources | tablesort | limitTo:20', ts-repeat)
+                        td {{ dataSource.dataSourceName }}
+                        td {{ dataSource.dataSourceType }}
+                        td {{ dataSource.count }}
+                        td {{ dataSource.successRate | numeraljs:'0.0%' }}
+                        td {{ dataSource.avgDuration | numeraljs:'0.0' }}
+
+        .col-sm-4
+            h2 Top Unique Visitors (All-Time)
+            table.table(ts-wrapper)
+                thead
+                    tr
+                        th(ts-criteria='pageViews|parseInt') Page views
+                        th(ts-criteria='user.name|lowercase') User
+                tbody
+                    tr(ng-repeat='visitor in uniqueVisitors | tablesort | limitTo:20', ts-repeat)
+                        td {{ visitor.pageViews }}
+                        td {{ visitor.user.name || 'Anonymous' }}
+
+    .row
+        .col-sm-4
+            h2 Browser Usage (All-Time)
+            div.c3chart(data='browsers', options='browserOptions')
+        .col-sm-4
+            h2 Widgets Viewed (All-Time)
+            div.c3chart(data='widgets', options='widgetOptions')
+        .col-sm-4
+            h2 Views Per Page (All-Time)
+            div.c3chart(data='viewsPerPage', options='viewsPerPageOptions')

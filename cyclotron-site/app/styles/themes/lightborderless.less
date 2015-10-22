@@ -1,0 +1,90 @@
+/*
+ * Copyright (c) 2013-2015 the original author or authors.
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at
+ *
+ *     http://www.opensource.org/licenses/mit-license.php
+ *
+ * Unless required by applicable law or agreed to in writing, 
+ * software distributed under the License is distributed on an 
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+ * either express or implied. See the License for the specific 
+ * language governing permissions and limitations under the License. 
+ */
+
+/* Theme: lightborderless */
+
+@import "../../../vendor/lesselements/_elements.less";
+@import "../common/variables.less";
+
+/* Variables */
+@color: black;
+@pageBackgroundColor: white;
+@widgetBackgroundColor: white;
+
+@linkColor: #081F79;
+@accentColor: #efefef;
+@headerColor: white;
+@tableBorderColor: #555;
+
+/* Dashboard Styles */
+.dashboard-page {
+    /* Well style, normal only */
+    &.normal {
+        .dashboard-lightborderless.dashboard-widgetwrapper > .dashboard-widget {
+            .rounded(4px);
+            padding: 10px;
+        }
+    }
+
+    /* Page styles */
+    &.dashboard-lightborderless {
+        color: @color;
+        background-color: @pageBackgroundColor;
+    }
+}
+
+/* Widget styles */
+.dashboard-lightborderless.dashboard-widgetwrapper > .dashboard-widget {
+
+    color: @color;
+    background-color: @widgetBackgroundColor;
+
+    a {
+        color: @linkColor;
+        text-decoration: none;
+        border-bottom: 1px dotted #888;
+
+        &:hover {
+            color: darken(@color, 30%);
+        }
+    }    
+}
+
+.dashboard-lightborderless.dashboard-controls {
+    color: @color;
+    a { color: @color; }
+    background-color: @pageBackgroundColor;
+    border: 1px dotted @color;
+}
+
+.dashboard-lightborderless.dashboard-widgetwrapper {
+    /* Import widget styles, using the theme variables */
+    @import "../../widgets/chart/_chart.less";
+    @import "../../widgets/clock/_clock.less";
+    @import "../../widgets/html/_html.less";
+    @import "../../widgets/iframe/_iframe.less";
+    @import "../../widgets/javascript/_javascript.less";
+    @import "../../widgets/number/_number.less";
+    @import "../../widgets/stoplight/_stoplight.less";
+    @import "../../widgets/table/_table.less";
+    @import "../../widgets/tableau/_tableau.less";
+    @import "../../widgets/treemap/_treemap.less";
+
+    /* Extra styles */
+    .table-widget table th {
+        font-style: italic;
+    }
+}

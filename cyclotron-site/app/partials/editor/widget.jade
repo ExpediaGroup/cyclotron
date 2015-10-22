@@ -1,0 +1,17 @@
+.editor-view-header
+    h3 {{ getWidgetName(editor.selectedItem, editor.selectedItemIndex) }}
+
+    .editor-view-header-buttons
+        button#editor-widget-remove.btn.btn-default(type='button', ng-click='removeWidget(editor.selectedItemIndex); goToSubState("edit.page", editor.selectedPage, editor.selectedPageIndex)', title='Remove') 
+            i.fa.fa-times
+            span  Remove Widget
+     
+.form-group
+    label(title='{{ dashboardProperties.pages.properties.widgets.properties.widget.description }}') Widget Type
+    
+    select.form-control(ng-model='editor.selectedItem.widget', 
+        ng-change='selectWidget()'
+        title='{{ dashboardProperties.pages.properties.widgets.properties.widget }}')
+        option(ng-repeat='(optionKey, optionValue) in widgets') {{ optionKey }}
+
+.editor-property-set(dashboard='editor.dashboard', model='editor.selectedItem', definition='combinedWidgetProperties(editor.selectedItem)')

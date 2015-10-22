@@ -1,0 +1,65 @@
+h3 Html Widget
+p
+    | The Html Widget displays embedded HTML directly in the widget.  The HTML markup contained in the 
+    em html
+    | property in the widget definition will be displayed.  Any HTML tags can be used and will be 
+    | displayed as-is, using styles from the current theme.
+p
+    | This widget has two modes:  
+
+    ol
+        li It can display plain HTML markup as-is (inline Javascript allowed)
+        li It can be used as a repeater, rendering the HTML for each row in the Data Source result.
+    
+p If the 
+    em dataSource 
+    | property is set, the 
+    em html 
+    | property will act as a repeater, rendering once for each row in the Data Source result.  Variables from the row
+    | can be inlined into the HTML using \#{name} notation, and Javascript can be used inline usign ${...} notation. 
+    | An additional column '__index' will be provided in each row, with the current 0-based row index.  This can 
+    | be output in the HTML or used in an inline Javascript expression.
+p
+    em preHtml 
+    | and 
+    em postHtml 
+    | are primarily useful in repeater mode, since they will be rendered once and not repeated.  It's possible to build tables, dropdowns, etc
+    | using rows from a Data Source.
+
+p None of the properties are required, since different properties can be used depending on the desired mode.
+
+h4 Properties
+p.
+    These are the properties specific to this widget.  
+    General Cyclotron widget properties are not repeated here (e.g. layout properties).
+
+property-table(properties='config.widgets.html.properties')
+
+
+h3 Examples
+
+h4 Basic Usage
+
+p This is the minimum set of properties needed for this widget.
+pre.code.
+    "widgets": [{
+        "html": "&lt;p&gt;Hello, World&lt;/p&gt;"
+        "widget": "html"
+    }]
+
+h4 Data Source Repeater
+
+p This illustrates getting data from a Data Source and rendering an ordered list of the items
+pre.code.
+    "widgets": [{
+        "dataSource": {
+            "name": "datasource_0",
+            "type": "mock"
+        },
+        "html": "&lt;li&gt;\#{state} (\#{number})&lt;/li&gt;",
+        "postHtml": "&lt;/ol&gt;",
+        "preHtml": "&lt;ol&gt;",
+        "title": "HTML",
+        "widget": "html"
+    }
+

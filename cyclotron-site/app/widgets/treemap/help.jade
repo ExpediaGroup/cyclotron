@@ -1,0 +1,194 @@
+h3 Treemap Widget
+p
+    | The Treemap Widget visualizes hierarchical data using a space-filling layout, 
+    | where the area of the widget is filled with rectangles, each sized proportionally
+    | to its data.  This implementation shows no more than two levels at a time, but allows 
+    | the user to zoom into the tree to view subsequent levels.
+
+h4 Data Format
+p
+    | The Treemap Widget requires hierarchical data rather than tabular data.  A simple example dataset is:
+
+pre.code.
+    [{
+        "name": "Level 1",
+        "children": [{
+            "name": "Level 2: A",
+            "value": 60
+        }, {
+            "name": "Level 2: B",
+            "value": 30
+        }, {
+            "name": "Level 2: C",
+            "value": 10
+        }]
+    }]
+
+p
+    | Please note that the dataset format is a single object inside an array.  The top-level object will be
+    | displayed in the header, and its children as space-filling boxes.  Any of the items in the second
+    | level could also have a "children" property, and so on for any depth.  All data for the Treemap must 
+    | be preloaded; it's not possible to load data on-demand.
+
+p
+    | Only the leaf-level nodes need to have a "value" property&mdash;the Treemap Widget will 
+    | automatically calculate a parent's value by summing the "value" of each child.
+
+p
+    | The default property names are "name", "value", and "children".  Both "name" and "value" can be
+    | changed using the
+    em  labelProperty
+    |  and
+    em  valueProperty
+    |  properties, but "children" cannot be renamed.
+
+p
+    | This is an example dataset with multiple levels:
+
+pre.code.
+    [{
+        "name": "Level 1",
+        "children": [{
+            "name": "Level 2: A",
+            "value": 60, 
+            "children": [{
+                "name": "Level3: 1",
+                "value": 20
+            }, {
+                "name": "Level3: 2",
+                "value": 40
+            }]
+        }, {
+            "name": "Level 2: B",
+            "value": 30, 
+            "children": [{
+                "name": "Level3: 1",
+                "value": 5
+            }, {
+                "name": "Level3: 2",
+                "value": 15
+            }, {
+                "name": "Level3: 3",
+                "value": 10
+            }]
+        }, {
+            "name": "Level 2: C",
+            "value": 10
+        }]
+    }]
+
+h4 Coloring
+p
+    | Each box can also be colored using a value and a color gradient.  In order to enable color,
+    | the
+    em  colorProperty
+    |  property must be set to the name of a property defined in each node of the tree.  Unlike value,
+    | this property is not automatically rolled up.
+    | In addition, two or more color stops must be defined in the
+    em  colorStops
+    |  property.  Each color stop defines a number and a corresponding color, and a gradient is built
+    | between them.
+
+p Colors can be given as hexadecimal colors (e.g. #FFFFFF) or named CSS colors.
+
+h4 Properties
+
+property-table(properties='config.widgets.treemap.properties')
+
+h3 Examples
+
+h4 Basic usage
+
+p This widget uses the default property names ("name", "value").
+p This example is available on the 
+    a(href='/example-treemap') example-treemap
+    |  dashboard
+pre.code.
+    {
+        "dataSource": "simple-dataset",
+        "title": "Simple Data Set",
+        "widget": "treemap"
+    }
+
+h4 Customized Properties
+
+p The Treemap widget can be configured to read different properties from each node in the data source.
+pre.code.
+    {
+
+        "dataSource": "datasource_0",
+        "labelProperty": "description",
+        "valueProperty": "count"
+        "widget": "treemap"
+    }
+
+h4 Color
+
+p This dashboard applies a color gradient to each node.  It uses the "rate" property, and maps the value
+    | between red, white, and steelblue.  Any CSS colors or hex color codes can be used.  Please note that
+    | both
+    em  colorProperty
+    |  and
+    em  colorStops
+    |  are required to enable colors.
+
+p This example is available on the 
+    a(href='/example-treemap') example-treemap
+    |  dashboard
+pre.code.
+    {
+        "colorFormat": "0,0%",
+        "colorProperty": "rate",
+        "colorStops": [{
+            "color": "red",
+            "value": "-0.6"
+        }, {
+            "color": "white",
+            "value": "-0.2"
+        }, {
+            "color": "steelblue",
+            "value": ".6"
+        }],
+        "dataSource": "datasource_0",
+        "showLegend": true,
+        "valueFormat": "0,0.[0]",
+        "widget": "treemap"
+    }
+
+h4 Simple Post-Processor
+
+p This is an example of a Post-Processor function that converts tabular data into a tree with a single-level 
+    | (and a root level).  This can be used with any of the tabular Data Sources.  For multiple-levels 
+    | of nesting, a more complicated function is needed.
+
+pre.core.
+    pp = function(data) {
+        return [{
+            "name": "Top Level",
+            "children": data
+        }];
+    }
+
+h4 Interactive Treemap
+
+p Most of the properties of the Treemap widget support inline JavaScript, so their values can be 
+    | dynamically set or changed.  This example allows changing what properties are used for the 
+    | size and color of the boxes.  It uses Parameters and helper functions to load the correct values
+    | for the user's selection.
+
+p This example is available on the
+    a(href='/example-treemap/population') example-treemap
+    |  dashboard
+pre.core.
+    {
+        "colorDescription": "${Cyclotron.getPopulationColorDescription()}",
+        "colorFormat": "${Cyclotron.getPopulationColorFormat()}",
+        "colorProperty": "${Cyclotron.parameters.pop_colorproperty}",
+        "colorStops": "${Cyclotron.getPopulationColorStops()}",
+        "dataSource": "population",
+        "labelProperty": "state",
+        "showLegend": true,
+        "valueDescription": "${Cyclotron.getPopulationValueDescription()}",
+        "valueProperty": "${Cyclotron.parameters.pop_valueproperty}",
+        "widget": "treemap"
+    }

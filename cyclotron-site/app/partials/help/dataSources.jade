@@ -1,0 +1,197 @@
+h3 Data Sources
+
+p.
+    Cyclotron provides several Data Source Types, each of which connects to an external service to 
+    pull in data for the Dashboard.  Most Data Sources and Widgets consume a common row/column interface, so Widgets and 
+    Data Sources are interchangeable.  Each Data Source handles converting data into this format automatically.
+
+p.
+    Here is an example of the tabular data format, consisting of an array of rows.
+    Each row is a JavaScript object, where the keys represent columns and the values represent the value of each column.
+
+pre.code.
+    [
+        { "row": 1, "value": 5, "letter": "a" },
+        { "row": 2, "value": 4, "letter": "b" },
+        { "row": 3, "value": 3, "letter": "c" },
+        { "row": 4, "value": 2, "letter": "d" },
+        { "row": 5, "value": 1, "letter": "e" }
+    ]
+
+p.
+    The easiest way to verify that a Data Source is working is to use the Table Widget.  By default, the Table 
+    Widget will display all columns and rows, so it can be used to quickly view and verify the data available 
+    from a Data Source. Be aware that the Table Widget will automatically camel-case the column headers, 
+    but the correct capitalization must be used elsewhere to reference the columns.
+
+
+h4 Common Properties
+
+p These properties are common to all Data Sources.  Each Data Source type has additional properties 
+    | that are specific to that type.
+
+property-table(properties='config.dashboard.properties.dataSources.properties')
+
+p Both properties 
+    em filters 
+    | and 
+    em sortBy 
+    | can also be placed on Data Sources and/or Widgets.  So a shared Data Source can have one set of filters, and it can be consumed by two Widgets, each
+    | of which have their own unique filters, which are applied after the common filter.
+
+h4 Auto-Refresh
+
+p
+    | By default, Data Sources run only once and send data to dependent Widgets.  However, all 
+    | Data Source types have the ability to automatically refresh their data periodically,
+    | updating the Widgets as well.  The
+    em  refresh
+    |  property configures the refresh rate&mdash;it gives
+    | the number of seconds between each refresh.
+
+h4 Filters
+
+p Examples of Filters and Sorting are available on the 
+    a(href='/example-filters-sort') example-filters-sort
+    |  dashboard
+
+p Filters are used to remove rows from a Data Source, implemented as a hash of key/value pairs.  
+    | Here's an example which matches only rows of type "Independent State":
+
+pre.code.
+    "filters": {
+        "Type": "Independent State"
+    }
+
+p If multiple Filters are set, all of them must be true for a row to be included:
+
+pre.code.
+    "filters": {
+        "Sub Type": "Territory",
+        "Type": "Dependency"
+    }
+
+p Each Filter value can also be an array of multiple values.  In this scenario, a row will match if the given column has any of the values in the array.  
+
+p.bg-warning
+    i.fa.fa-exclamation-triangle
+    span The GUI Editor cannot edit Filter arrays; this must be done in the JSON editor.
+
+pre.code.
+    "filters": {
+        "Type": ["Disputed Territory", "Antarctic Territory"]
+    }
+
+p Filters also support wildcards and regular expressions.  A wildcard ("*") matches any non-null, non-empty values.
+
+pre.code.
+    "filters": {
+        "Capital": "*",
+        "Type": "Dependency"
+    }
+
+p Use slashes to indicate a regular expression:
+pre.code.
+    "filters": {
+        "Sub Type": "/.*Territory/",
+        "Type": "Dependency"
+    } 
+
+h4 Sorting
+
+p Examples of Filters and Sorting are available on the 
+    a(href='/example-filters-sort') example-filters-sort
+    |  dashboard
+
+p After rows have been filtered, they can be sorted by one or more columns (or functions).  
+    | This simple example sorts by the "Type" column, in ascending order:
+
+pre.code.
+    "sortBy": "Type"
+
+p Multiple columns can be combined in an array.  The sort order can be flipped by placing a minus ("-") symbol at the beginning of the string, before the column name.
+pre.code.
+    "sortBy": ["Type", "Sub Type", "-ISO 3166-1 Number"]
+
+p Javascript functions can be used to define more complicated sort logic, and used instead of a column name.  Here is an example:
+
+pre.code.
+    "sortBy": ["${Cyclotron.customSortFunction}", "Common Name"]
+
+p And the custom sort function (defined as a Script):
+
+pre.code.
+    Cyclotron.customSortFunction = function(r1, r2, defaultSort) {
+        if (r1['Common Name'] == 'United States') {
+            return -1;
+        } else if (r2['Common Name'] == 'United States') {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+p The first two parameters are two rows, and the return value indicates which of the two rows comes first, following the definition of 
+    a(href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort') Array.sort
+    |  in Javascript.
+
+p The last parameter is a reference to the default sort function, which has built-in support for numbers, strings, etc.  Here's a trivial example of using it to sort by value:
+
+pre.code.
+    "sortBy": ["${Cyclotron.customSortFunction}"]
+pre.code.
+    Cyclotron.customSortFunction = function (r1, r2, defaultSort) {
+        return defaultSort(r1.value, r2.value);
+    };
+
+p This is identical to the following, shorter version:
+
+pre.code.
+    "sortBy": "value"
+
+p Additionally, the 
+    em postProcessor 
+    |  property of some Data Sources can be used to implement custom sort logic in Javascript, if the default alphanumerical sort is not sufficient.
+
+h4 Pre-Processor
+
+p All Data Sources support an optional pre-processor function that will be called immediately before each
+    | execution of the Data Source.  The pre-processor can view or modify the Data Source properties, which are
+    | passed into the function as an argument.  Any changes to the Data Source are transient and will not persist beyond
+    | the execution immediately following.
+
+h4 Post-Processors
+
+p Most Data Sources support an optional post-processor function that will be called after
+    | data is loaded, and optionally filtered and/or sorted.  The post-processor can either 
+    | modify the original result object, or it can return a non-null array to replace it.  
+    | The Post-Processor function is invoked for each Result Set (if the Data Source returns multiple Result Sets), 
+    | and the Result Set name is passed as the second argument.
+
+p Here is an example of a post-processor that modifies the data set:
+pre.code.
+    function(dataSet, resultSetName) { 
+        _.each(dataSet, function(row) { 
+            row.col1 += 1000;
+        }); 
+    }
+
+p Here is an example of a post-processor that returns a new data set:
+pre.code.
+    function(dataSet, resultSetName) { 
+        return _.map(dataSet, function(row) { 
+            return { newCol: row.col1 + 1000 }; 
+        }); 
+    }
+
+p Post-Processors can also perform side effects, such as updating global JavaScript variables, or executing functions. 
+    | Since they are triggered by the completion of a Data Source, they are the most-reliable method of running some
+    | JavaScript after the Data Source has finished loading.
+pre.code.
+    function(dataSet) {
+        Cyclotron.customFunction(dataSet);
+    }
+
+h4 Data Sources
+
+p Select the individual Data Source names in the menu to see documentation specific to each Data Source type.

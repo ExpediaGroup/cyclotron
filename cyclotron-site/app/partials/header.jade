@@ -1,0 +1,30 @@
+.row.cyclotron-header
+    h1(ui-sref='home')
+        img.logo(src='/img/favicon64.png', alt='Logo')
+        | Cyclotron
+    .links
+        a.home(ui-sref='home', title='Return to Home')
+            i.fa.fa-home
+        a.new(ng-href='/edit/', target='_self', title='Create a new Dashboard')
+            i.fa.fa-file-o
+        a.documentation(ui-sref='help', target='_blank' title='Documentation for Cyclotron')
+            i.fa.fa-question-circle
+        a.analytics(ui-sref='analytics', title='Analytics for Cyclotron')
+            i.fa.fa-bar-chart
+        a.login(requires-auth, ng-click='login()', ng-if='!isLoggedIn()', title='Login')
+            i.fa.fa-unlock
+        span.dropdown(requires-auth, ng-if='isLoggedIn()')
+            a.user.dropdown-toggle(title='{{ userTooltip() }}', data-toggle='dropdown')
+                i.fa.fa-user(ng-if='!currentUser().emailHash')
+                img(ng-if='currentUser().emailHash', ng-src='{{ userGravatar() }}')
+            ul.dropdown-menu(role='menu')
+                li.dropdown-header(role='presentation')
+                    a {{ currentUser().name }}
+                li(ng-if='isAdmin()')
+                    a.admin(title='Admin') Is Admin 
+                        i.fa.fa-key
+                li.divider(ng-if='isAdmin()', role='presentation')
+                    a
+                li
+                    a.logout(ng-click='logout()', title='Logout') Logout 
+                        i.fa.fa-lock

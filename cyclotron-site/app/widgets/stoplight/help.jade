@@ -1,0 +1,86 @@
+h3 Stoplight Widget
+p.
+    The Stoplight Widget displays an image of a traffic light with 3 lights, one of which can be
+    illuminated at a time.  Which light will be lit is determined by three rule expressions, one for each
+    color.  The Widget can optionally take a Data Source: if provided, the first row of the Data Source will
+    be available to the rule expressions for variable replacement.  The rules are short-circuiting, and execute
+    in the order red-yellow-green.  The first rule that returns true will be illuminated, while the other lights
+    go dark.
+
+p
+    | When using a Data Source, only the first row of the result set will be used.  Ideally, the data 
+    | source would only return one row, but the 
+    em filters/sortBy 
+    | properties can be used to manipulate the result, removing unwanted rows and ordering the correct row 
+    | at the front (ascending).  For example, if a Data Source returns daily data for the past month, sorting 
+    | by "-date" would order by date descending, causing the row with the most recent data to appear first.
+
+
+h4 Properties
+p.
+    These are the properties specific to this widget.  
+    General Cyclotron widget properties are not repeated here (e.g. layout properties).
+
+property-table(properties='config.widgets.stoplight.properties')
+
+h4 Rules
+p
+    | These are the properties inside the 
+    em rules  
+    | property.  They support inline Javascript and variable replacement from the Data Source, if provided. 
+property-table(properties='config.widgets.stoplight.properties.rules.properties')
+   
+
+h3 Examples
+
+h4 Hard-coded Stoplight
+
+p This widget always displays a red light.
+p This example is available on the 
+    a(href='/example-stoplight') example-stoplight
+    |  dashboard
+pre.code.
+    {
+        "rules": {
+            "red": "${true}"
+        },
+        "widget": "stoplight"
+    }
+
+h4 Stoplight with Title
+
+p A title is shown above this stoplight.
+p This example is available on the 
+    a(href='/example-stoplight') example-stoplight
+    |  dashboard
+pre.code.
+    {
+        "rules": {
+            "green": "${true}",
+            "yellow": "${false}",
+            "red": "${false}"
+        },
+        "title": "Stoplight with Title",
+        "widget": "stoplight"
+    }
+
+h4 Random Stoplight
+p This widget uses the Mock Data Source to generate random numbers.  The rule expressions for each light
+    | evaluate one of the columns in the Data Source and toggle the color accordingly.  Since Green is evaluated
+    | last, it can be set to "${true}" to ensure it catches all other cases.
+p This example is available on the 
+    a(href='/example-stoplight') example-stoplight
+    |  dashboard
+pre.code.
+    {
+        "dataSource": "datasource_0",
+        "gridHeight": 3.5,
+        "gridWidth": 1,
+        "rules": {
+            "green": "${true /* Else */}",
+            "red": "${\#{roomnightcount} &gt;= 150}",
+            "yellow": "${\#{roomnightcount} &gt;= 100}"
+        },
+        "title": "Random Stoplight",
+        "widget": "stoplight"
+    }

@@ -1,0 +1,33 @@
+h3 Styles
+
+p The 
+    em styles 
+    | property is an optional list of CSS styles to apply to the Dashboard.  
+    | Each item in the array either points to an externally-hosted CSS file, or it contains inline CSS.  
+    | In both cases, the list of CSS styles will be executed top-down when the dashboard loads.  Specifically, these styles
+    | applied after the Cyclotron, 3rd-party, and theme styles have been loaded loaded.
+
+p This example shows two styles: the first is an external CSS file, and the second is an inline style:
+
+pre.code.
+    "styles": [{
+        "path": "http://mrmrs.io/btns/css/btns.min.css"
+    }, {
+        "text": "button.custom-button { color: black !important; }"
+    }]
+
+h4 Overriding Styles
+
+p There are several potential pitfalls to applying custom styles.  Cyclotron comes with several baseline 
+    | styles and a "CSS Reset", which attempts to normalize styles across all browsers.  On top of this,
+    | each Dashboard Theme applies additional styles.  Due to 
+    a(href='http://www.vanseodesign.com/css/css-specificity-inheritance-cascaade/') CSS precedence and inheritance
+    |  rules, it can be
+    | tricky to correctly override Theme styles with custom styles.
+
+p The easiest (and ugliest) solution is generally to add "!important" to the end of each custom style, as this generally trumps
+    | other styles.  Alternatively, inspect the element to be styled in the browser's developer tools, 
+    | and write the custom style in a more-specific fashion to trump the theme styles.  Using an ID for a parent DIV is generally effective.
+
+h4 Properties
+property-table(properties='config.dashboard.properties.styles.properties')

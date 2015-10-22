@@ -1,0 +1,12 @@
+table 
+    tr
+        th Property
+        th Description
+        th Type
+        th Required
+    tr(ng-repeat='(key, property) in properties')
+        td {{ key }}
+        td {{ property.description }}
+        td {{ property.editorMode || property.type }}
+        td
+            i.fa.fa-check(ng-show='property.required')

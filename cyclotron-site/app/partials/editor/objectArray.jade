@@ -1,0 +1,27 @@
+div
+    ul.list-group
+        li.list-group-item(ng-repeat='item in model') 
+
+            .clearfix
+                span.object-array-name(ng-click='goToSubState(substate, item, $index)', title='Edit this {{ label }}') 
+                    | {{ headingfn({item: item, index: $index, label: label}) }}
+
+                span.button-group.pull-right
+                    button#move-up.btn.btn-default(type='button', ng-click='moveUp($index)', title='Move {{ label }} Up') 
+                        i.fa.fa-angle-double-up
+
+                    button#move-down.btn.btn-default(type='button', ng-click='moveDown($index)', title='Move {{ label }} Down') 
+                        i.fa.fa-angle-double-down
+                    
+                    button#clone.btn.btn-default(type='button', ng-click='cloneItem($index)', title='Clone {{ label }}') 
+                        i.fa.fa-copy
+                        span  Clone
+                
+                    button#remove.btn.btn-default(type='button', ng-click='removeItem($index)', title='Remove {{ label }}') 
+                        i.fa.fa-times
+                        span  Remove
+
+            div(ng-transclude='parent')
+
+    p.text-muted(ng-if='model.length == 0')
+        | There are no {{ label }}s in this Dashboard

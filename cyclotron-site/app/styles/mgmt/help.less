@@ -1,0 +1,163 @@
+/*
+ * Copyright (c) 2013-2015 the original author or authors.
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at
+ *
+ *     http://www.opensource.org/licenses/mit-license.php
+ *
+ * Unless required by applicable law or agreed to in writing, 
+ * software distributed under the License is distributed on an 
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+ * either express or implied. See the License for the specific 
+ * language governing permissions and limitations under the License. 
+ */
+
+@import "../../../vendor/lesselements/_elements.less";
+@import "../common/variables.less";
+
+.help-page {
+    .box-sizing(border-box);
+    * {
+        .box-sizing(border-box);
+    }
+    *:before,
+    *:after {
+        .box-sizing(border-box);
+    }
+
+    color: #555;
+    @menubar-width: 25%;
+    @content-width: 700px;
+
+    h3 { 
+        font-weight: normal; 
+        font-size: 1.6rem; 
+        margin-top: 1.7rem; 
+    }
+    h4 { 
+        font-weight: normal; 
+        font-size: 1.4rem; 
+        margin-top: 2.4rem; 
+        margin-bottom: 0.8rem; 
+    }
+    h5 { 
+        font-weight: normal;
+        text-decoration: underline; 
+        font-size: 1.3rem; 
+        margin-top: 1.2rem; 
+        font-variant: small-caps;
+    }
+
+    .sidebar {
+        .user-select(none);
+        .nav-stacked {
+            &.nav > li > a {
+                padding: 8px 15px;
+            }
+
+            .indent {
+                padding-left: 1rem;
+            }
+        }
+
+        a:hover {
+            border-bottom: 1px solid transparent;
+        }
+
+        h2 {
+            font-weight: bold;
+        }
+    }
+
+    .footer {
+        margin-top: 20px;
+    }
+
+    .help-content {
+
+        em {
+            color: #000;
+        }
+
+        pre.code {
+            margin: 1rem 0;
+        }
+
+        @media only screen and (min-width: @phonePortraitMaxWidth) { 
+            padding-left: 2rem;
+            padding-right: 1rem;
+            padding-bottom: 2rem;
+
+            p, ul, pre { 
+                max-width: @content-width;
+            }
+
+            .dl-horizontal dt {
+                clear: none;
+            }
+
+            table {
+                max-width: 90%;
+            }
+        }
+
+        font-size: .9rem;
+        p {
+            margin: 1rem 0;
+            a { 
+                font-style: italic;
+                color: #000;
+                &:after { 
+                    font-family: FontAwesome; 
+                    font-style: normal;
+                    font-weight: normal;
+                    content: "\f08e";
+                    margin-left: .4rem;
+                }
+            }
+        }
+
+        .no-help {
+            padding-top: 32px;
+        }
+
+        .no-wrap {
+            white-space: nowrap;
+        }
+
+        .bg-info, .bg-warning {
+            margin: 1rem 0;
+            padding: .5rem;
+            border-radius: 6px;
+            max-width: @content-width;
+
+            i {
+                float: left;
+            }
+
+            a {
+                color: #000;
+            }
+
+            .inner {
+                margin-left: 1.5rem;
+            }
+        }
+
+        table {
+            th {
+                padding: 10px 8px;
+                border-bottom: 1px dashed #999;
+            }
+            td {
+                padding: 9px 8px 0px 8px;
+            }
+
+            tr:hover {
+                background-color: #efefef;
+            }
+        }
+    }
+}

@@ -1,0 +1,291 @@
+/*
+ * Copyright (c) 2013-2015 the original author or authors.
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at
+ *
+ *     http://www.opensource.org/licenses/mit-license.php
+ *
+ * Unless required by applicable law or agreed to in writing, 
+ * software distributed under the License is distributed on an 
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+ * either express or implied. See the License for the specific 
+ * language governing permissions and limitations under the License. 
+ */
+
+@import "../../../vendor/lesselements/_elements.less";
+@import "../common/variables.less";
+
+.editor-gui {
+
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: .9rem;
+
+    .box-sizing(border-box);
+    * {
+        .box-sizing(border-box);
+    }
+    *:before,
+    *:after {
+        .box-sizing(border-box);
+    }
+
+    .header {
+        .dashboard-well {
+            min-height: 2rem;
+            margin-bottom: 20px;
+            background-color: #F5F5F5;
+            padding: 20px 15px 15px;
+            border-bottom: 1px solid #aaa;
+        }
+        .button-bar { 
+            float: right; 
+            .btn {
+                margin-left: .8rem;
+            }
+        }
+
+        h1, h2 { display: inline-block; margin-top: 0; }
+        h1 { margin-right: 4rem; }
+
+        .revision-control {
+            margin: 1px 3px;
+            margin-right: 1.5rem;
+            text-align: center;
+            
+            .fa-angle-double-left,
+            .fa-angle-double-right {
+                display: inline-block;
+                width: 1.5em;
+                height: 1.5em;
+                line-height: 1.5em;
+
+                .transition-duration(.25s);
+                
+                &:hover {
+                    .box-shadow(inset 0 0 5px #440);
+                    border: 0;
+                }
+            }
+
+            .fa-angle-double-left {
+                margin-right: 1rem;
+            }
+
+            .fa-angle-double-right { 
+                margin-left: 1rem;
+            }
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        .analytics-control {
+            margin: 1px 3px;
+            text-align: center;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    .sidebar {
+        .nav-stacked {
+            &.nav > li > a {
+                padding: 8px 15px;
+            }
+
+            .divider {
+                padding-top: .9rem;
+                border-bottom: 1px solid #aaa;
+                margin-bottom: .9rem;
+            }
+
+            .indent {
+                padding-left: 1rem;
+            }
+        }
+
+        a:hover {
+            border-bottom: 1px solid transparent;
+        }
+
+        .push-dashboard {
+            line-height: 2rem;
+            button {
+                float: right;
+            }
+        }
+    }
+
+    .footer {
+        margin-top: 20px;
+    }
+
+    /* Editor Form Controls */
+
+    .editor-view-header {
+        margin-bottom: 1rem;
+
+        h3 {
+            display: inline-block;
+            margin-top: 0;
+        }
+
+        .editor-view-header-buttons {
+            display: inline-block;
+            float: right;
+
+            margin-right: 6px;
+        }
+    }
+
+    .editor-contents {
+
+        .well-sm {
+           width: 90%;
+        }
+
+        .ui-select-prefix-icon {
+            padding-right: .5rem;
+        }
+
+        .bg-info {
+            width: 90%;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .editor-property-set {
+            margin-bottom: 2rem;
+        }
+
+        .horizontal-add {
+            margin-top: 16px;
+        }
+
+        .form-group {
+            width: 100%;
+
+            .text-danger {
+                font-size: 80%;
+                font-style: italic;
+            }
+
+            .select2-container {
+                width: 90%;
+                
+                .select2-choices {
+                    height: 20px;
+                    padding: 2px;
+                }
+            }
+        }
+
+        .list-group {
+            .label {
+                font-weight: normal;
+                margin-right: 8px;
+            }
+
+            .drilldown {
+                font-size: 36px;
+                cursor: pointer;
+                color: #444;
+            }
+        }
+
+        label {
+            display: block;
+        }
+
+        .form-control {
+            width: 90%;
+            padding: 6px;
+            display: inline-block;
+        }
+
+        .radio-group {
+            display: inline-block;
+            margin: 0 1.5rem;
+
+            label {
+                display: inline-block;
+            }
+        }
+
+        input.form-control {
+            height: 2.1rem;
+
+            &.inline {
+                width: 44.6%;
+            }
+        }
+
+        select.form-control {
+            height: 2.2rem;
+        }
+
+        textarea.form-control {
+            height: 12rem;
+        }
+
+        input[type=radio] {
+            display: inline-block;
+            margin-right: 1.5rem;
+        }
+
+        .ace_editor {
+            width: 90%;
+        }
+
+        .inline-js-icon, .inline-encrypt-icon {
+            color: #bbb;
+            margin-left: .5rem;
+        }
+
+        .fa-times {
+            color: #999;
+        }
+
+        .inline-delete-icon {
+            display: inline-block;
+            cursor: pointer;
+            padding: 4px;
+            margin-left: 4px;
+
+            &:focus,&:hover {
+                color: #000;
+                cursor: pointer;
+                opacity: .5;
+                filter: alpha(opacity=50)
+            }
+        }
+
+        .object-array-name {
+            line-height: 36px;
+
+            &:hover, &:focus {
+                color: #888;
+                cursor: pointer;
+            }
+        }
+
+        .panel-title {
+            font-size: 1rem;
+        }
+
+        input.ng-invalid, textarea.ng-invalid {
+            border: 1px solid red;
+        }
+
+        .permission-selector {
+            small.category {
+                margin-right: .6rem;
+            }
+        }
+    }
+}

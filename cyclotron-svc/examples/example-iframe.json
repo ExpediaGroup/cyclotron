@@ -1,0 +1,28 @@
+{
+    "allowFullscreen": false,
+    "dataSources": [],
+    "description": "Example of using the iframe widget to display websites.",
+    "disableAnalytics": true,
+    "name": "example-iframe",
+    "pages": [{
+        "layout": {
+            "gridColumns": 2,
+            "gridRows": 2
+        },
+        "widgets": [{
+            "url": "http://www.expedia.com",
+            "widget": "iframe",
+            "gridHeight": 1,
+            "gridWidth": 2
+        }, {
+            "url": "http://www.hotels.com",
+            "widget": "iframe"
+        }, {
+            "url": "http://www.trivago.com",
+            "widget": "iframe"
+        }]
+    }],
+    "parameters": [],
+    "theme": "lightborderless",
+    "style": "fullscreen"
+}

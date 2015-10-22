@@ -1,0 +1,63 @@
+h3 iframe Widget
+p.
+    The iframe Widget embeds a web site inside a Cyclotron dashboard.  It uses an iframe tag (hence the name), 
+    so the target website is loaded completely within the confines of the widget.
+
+p.
+    Please note that currently, Cyclotron does not have the ability to provide authentication to the website.  
+    Pages requiring a login (e.g. Jira) can be used, but they will only work correctly if the browser viewing 
+    the dashboard has logged into the website.  Otherwise, the widget will most likely show a login screen.
+
+p
+    | By default, iframe widgets will have scroll bars if their content is too large for the widget size.  This can be suppressed by setting the 
+    em noscroll 
+    | property to true.
+
+
+h4 Properties
+p.
+    These are the properties specific to this widget.  
+    General Cyclotron widget properties are not repeated here (e.g. layout properties).
+
+property-table(properties='config.widgets.iframe.properties')
+
+
+h3 Examples
+
+h4 Basic Usage
+
+p This is the minimum set of properties needed for this widget.
+pre.code.
+    "widgets": [{
+        "url": "http://www.expedia.com",
+        "widget": "iframe"
+    }]
+
+
+h4 Fullscreen iframe
+
+p.
+    This dashboard has a single row/column, which is filled with the iframe.  The page margin and widget padding is removed 
+    with style: "fullscreen", which gives the illusion that the target site is loaded directly.
+pre.code.
+    {
+        "duration": 20,
+        "name": "example-fullscreen-iframe",
+        "pages": [{
+                "layout": {
+                    "gridColumns": 1,
+                    "gridRows": 1
+                },
+                "widgets": [{
+                        "gridHeight": 1,
+                        "gridWidth": 1,
+                        "noscroll": true,
+                        "url": "http://www.expedia.com",
+                        "widget": "iframe"
+                    }
+                ]
+            }
+        ],
+        "style": "fullscreen",
+        "theme": "dark"
+    }

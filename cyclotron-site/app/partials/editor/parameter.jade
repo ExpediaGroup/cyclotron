@@ -1,0 +1,9 @@
+.editor-view-header
+    h3 {{ getParameterName(editor.selectedItem, editor.selectedItemIndex) }}
+
+    .editor-view-header-buttons
+        button.btn.btn-default(type='button', ng-click='removeParameter(editor.selectedItemIndex); goToSubState("edit.parameters", editor.dashboard.parameters)', title='Remove') 
+            i.fa.fa-times
+            span  Remove Parameter
+        
+.editor-property-set(model='editor.selectedItem', definition='dashboardProperties.parameters.properties')

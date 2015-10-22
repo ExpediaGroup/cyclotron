@@ -1,0 +1,250 @@
+{
+    "dataSources": [{
+        "name": "countries",
+        "postProcessor": "postProcessor = function(data) { \n    _.each(data, function(row) {\n        if(_.isEmpty(row.Capital)) {\n            row.Capital = null\n        }\n    });\n}",
+        "source": "http://www.andrewpatton.com/countrylist.html",
+        "type": "json",
+        "url": "http://pastebin.com/raw.php?i=ccJKA9ph"
+    }],
+    "description": "Examples of filters and sort options",
+    "disableAnalytics": true,
+    "name": "example-filters-sort",
+    "pages": [{
+        "layout": {
+            "gridColumns": 3,
+            "gridRows": 2
+        },
+        "name": "Filters",
+        "widgets": [{
+            "columns": [{
+                "name": "Common Name"
+            }, {
+                "name": "Type"
+            }, {
+                "link": "https://duckduckgo.com/?q=#{Capital}",
+                "name": "Capital"
+            }],
+            "dataSource": "countries",
+            "filters": {
+                "Type": "Independent State"
+            },
+            "sortBy": ["Common Name"],
+            "title": "Single Filter - Independent State",
+            "widget": "table"
+        }, {
+            "columns": [{
+                "name": "Common Name"
+            }, {
+                "name": "Type"
+            }, {
+                "link": "https://duckduckgo.com/?q=#{Capital}",
+                "name": "Capital"
+            }],
+            "dataSource": "countries",
+            "filters": {
+                "Type": ["Disputed Territory", "Antarctic Territory"]
+            },
+            "sortBy": ["Common Name"],
+            "title": "Array Filter - Disputed and Antarctic Territories",
+            "widget": "table"
+        }, {
+            "columns": [{
+                "name": "Common Name"
+            }, {
+                "name": "Type"
+            }, {
+                "name": "Sub Type"
+            }],
+            "dataSource": "countries",
+            "filters": {
+                "Sub Type": "Territory",
+                "Type": "Dependency"
+            },
+            "sortBy": ["Common Name"],
+            "title": "Double Filter - Dependency / Territory",
+            "widget": "table"
+        }, {
+            "columns": [{
+                "name": "Common Name"
+            }, {
+                "name": "Type"
+            }, {
+                "name": "Sub Type"
+            }, {
+                "link": "https://duckduckgo.com/?q=#{Capital}",
+                "name": "Capital"
+            }],
+            "dataSource": "countries",
+            "filters": {
+                "Sub Type": "/.*Territory/",
+                "Type": "Dependency"
+            },
+            "sortBy": ["Type", "Sub Type"],
+            "title": "Regex Filter - Dependency / *Territory",
+            "widget": "table"
+        }, {
+            "columns": [{
+                "name": "Common Name"
+            }, {
+                "name": "Type"
+            }, {
+                "name": "Sub Type"
+            }, {
+                "link": "https://duckduckgo.com/?q=#{Capital}",
+                "name": "Capital"
+            }],
+            "dataSource": "countries",
+            "filters": {
+                "Capital": "*",
+                "Type": "Dependency"
+            },
+            "sortBy": ["Capital"],
+            "title": "Wildcard Filter - Dependency with a Capital",
+            "widget": "table"
+        }, {
+            "columns": [{
+                "name": "Common Name"
+            }, {
+                "name": "Type"
+            }, {
+                "link": "https://duckduckgo.com/?q=#{Capital}",
+                "name": "Capital"
+            }],
+            "dataSource": "countries",
+            "filters": {
+                "Capital": "*",
+                "Common Name": "/.*Republic.*/"
+            },
+            "sortBy": ["Type"],
+            "title": "Regex Filter - Republics with Capital",
+            "widget": "table"
+        }]
+    }, {
+        "layout": {
+            "gridColumns": 2,
+            "gridRows": 5
+        },
+        "name": "Sort",
+        "widgets": [{
+            "columns": [{
+                "name": "Common Name"
+            }, {
+                "name": "Formal Name"
+            }, {
+                "link": "https://duckduckgo.com/?q=#{Capital}",
+                "name": "Capital"
+            }],
+            "dataSource": "countries",
+            "filters": {
+                "Type": "Dependency"
+            },
+            "gridHeight": 2,
+            "gridWidth": 1,
+            "layout": {},
+            "sortBy": ["Common Name"],
+            "theme": "gto",
+            "title": "Sort Name Ascending",
+            "widget": "table"
+        }, {
+            "columns": [{
+                "name": "Common Name"
+            }, {
+                "name": "Formal Name"
+            }, {
+                "link": "https://duckduckgo.com/?q=#{Capital}",
+                "name": "Capital"
+            }],
+            "dataSource": "countries",
+            "filters": {
+                "Type": "Dependency"
+            },
+            "gridHeight": 2,
+            "gridWidth": 1,
+            "sortBy": ["-Common Name"],
+            "theme": "gto",
+            "title": "Sort Name Descending",
+            "widget": "table"
+        }, {
+            "columns": [{
+                "groupRows": true,
+                "name": "Type"
+            }, {
+                "border": "right",
+                "groupRows": true,
+                "name": "Sub Type"
+            }, {
+                "name": "ISO 3166-1 Number"
+            }, {
+                "name": "Common Name"
+            }, {
+                "name": "Formal Name"
+            }, {
+                "link": "https://duckduckgo.com/?q=#{Capital}",
+                "name": "Capital",
+                "tooltip": "Click to perform a web search for this Capital"
+            }, {
+                "name": "IANA Country Code TLD"
+            }, {
+                "name": "ITU-T Telephone Code"
+            }],
+            "dataSource": "countries",
+            "filters": {
+                "ISO 3166-1 Number": "/.*1.*/"
+            },
+            "gridHeight": 3,
+            "gridWidth": 2,
+            "sortBy": ["Type", "Sub Type", "-ISO 3166-1 Number"],
+            "theme": "gto",
+            "title": "Multiple Sort Columns",
+            "widget": "table"
+        }]
+    }, {
+        "layout": {
+            "gridColumns": 2,
+            "gridRows": 2
+        },
+        "name": "Sort Functions",
+        "widgets": [{
+            "columns": [{
+                "name": "Common Name"
+            }, {
+                "name": "Formal Name"
+            }, {
+                "link": "https://duckduckgo.com/?q=#{Capital}",
+                "name": "Capital"
+            }],
+            "dataSource": "countries",
+            "filters": {
+                "Type": "Independent State"
+            },
+            "gridHeight": 2,
+            "gridWidth": 1,
+            "sortBy": ["${Cyclotron.customSortFunction}", "Common Name"],
+            "title": "SortBy Function - US First",
+            "widget": "table"
+        }, {
+            "columns": [{
+                "name": "Common Name"
+            }, {
+                "name": "Formal Name"
+            }, {
+                "link": "https://duckduckgo.com/?q=#{Capital}",
+                "name": "Capital"
+            }],
+            "dataSource": "countries",
+            "filters": {
+                "Type": "Independent State"
+            },
+            "gridHeight": 2,
+            "gridWidth": 1,
+            "sortFunction": "ss = function (data, sortBy, defaultSortFunction) {\n    \n   /* Perform default sort with selected columns */\n    defaultSortFunction(data, sortBy);\n    \n    /* Remove US row from array */\n    var row = _.remove(data, function (row) {\n        return row['Common Name'] == 'United States';\n    });\n    \n    /* Return a new array starting with the US row */\n    return row.concat(data);\n}",
+            "title": "Custom Sort Function - US First",
+            "widget": "table"
+        }]
+    }],
+    "scripts": [{
+        "name": "Cyclotron.customSortFunction",
+        "text": "Cyclotron.customSortFunction = function(r1, r2, defaultSort) { \n    if (r1['Common Name'] == 'United States') {\n        return -1; \n    } else if (r2['Common Name'] == 'United States') { \n        return 1; \n    } else { \n        return 0; \n    }\n}    "
+    }],
+    "theme": "light"
+}

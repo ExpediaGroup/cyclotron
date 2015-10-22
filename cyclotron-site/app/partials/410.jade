@@ -1,0 +1,16 @@
+.modal-header
+    h3.modal-title
+        i.fa.fa-trash-o
+        |  Deleted Dashboard
+
+.modal-body
+    p The Dashboard you're looking for has been deleted. 
+        | It can be undeleted in the Dashboard Editor.
+
+.modal-footer
+    button.btn(ng-click='goEditor()')
+        i.fa.fa-pencil-square-o
+        span  Edit
+    button.btn.btn-primary(ng-click='goHome()')
+        i.fa.fa-home
+        span  Home

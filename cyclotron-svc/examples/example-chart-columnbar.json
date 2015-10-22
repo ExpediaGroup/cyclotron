@@ -1,0 +1,156 @@
+{
+    "dataSources": [{
+        "format": "object",
+        "name": "mock",
+        "query": "SOURCE=mock",
+        "type": "mock"
+    }, {
+        "name": "worldpop",
+        "type": "json",
+        "url": "http://pastebin.com/raw.php?i=bCYyj12n"
+    }, {
+        "name": "worldpop2",
+        "type": "json",
+        "url": "http://pastebin.com/raw.php?i=bZS5GVxx"
+    }, {
+        "format": "pie",
+        "name": "mock_pie",
+        "type": "mock"
+    }],
+    "description": "Examples of the Chart widget with column and bar series",
+    "disableAnalytics": true,
+    "name": "example-chart-columnbar",
+    "pages": [{
+        "layout": {
+            "gridColumns": 2,
+            "gridRows": 2
+        },
+        "name": "Column Charts",
+        "widgets": [{
+            "dataSource": "worldpop",
+            "highchart": {
+                "series": [{
+                    "name": "Year 1800",
+                    "type": "column",
+                    "x": "continent",
+                    "y": "1800"
+                }, {
+                    "name": "Year 1900",
+                    "type": "column",
+                    "x": "continent",
+                    "y": "1900"
+                }, {
+                    "name": "Year 2008",
+                    "type": "column",
+                    "x": "continent",
+                    "y": "2008"
+                }],
+                "xAxis": {
+                    "type": "category"
+                },
+                "yAxis": {
+                    "title": {
+                        "text": "Population (millions)"
+                    }
+                }
+            },
+            "title": "Column Chart",
+            "widget": "chart"
+        }, {
+            "dataSource": "worldpop2",
+            "highchart": {
+                "plotOptions": {
+                    "column": {
+                        "stacking": "normal"
+                    }
+                },
+                "series": [{
+                    "type": "column",
+                    "x": "year",
+                    "y": "*"
+                }],
+                "xAxis": {
+                    "type": "linear"
+                },
+                "yAxis": {
+                    "stackLabels": {
+                        "enabled": true,
+                        "style": {
+                            "fontWeight": "bold"
+                        }
+                    },
+                    "title": {
+                        "text": "Population (millions)"
+                    }
+                }
+            },
+            "title": "Stacked Column Chart",
+            "widget": "chart"
+        }, {
+            "dataSource": "worldpop2",
+            "highchart": {
+                "plotOptions": {
+                    "column": {
+                        "stacking": "percent"
+                    }
+                },
+                "series": [{
+                    "type": "column",
+                    "x": "year",
+                    "y": "*"
+                }],
+                "xAxis": {
+                    "type": "linear"
+                },
+                "yAxis": {
+                    "stackLabels": {
+                        "enabled": true,
+                        "style": {
+                            "fontWeight": "bold"
+                        }
+                    },
+                    "title": {
+                        "text": "Population (millions)"
+                    }
+                }
+            },
+            "title": "Stacked Percentage Column Chart",
+            "widget": "chart"
+        }, {
+            "dataSource": "mock_pie",
+            "highchart": {
+                "chart": {
+                    "margin": 75,
+                    "options3d": {
+                        "alpha": 15,
+                        "beta": 15,
+                        "depth": 50,
+                        "enabled": "true",
+                        "viewDistance": 25
+                    },
+                    "renderTo": "container",
+                    "type": "column"
+                },
+                "plotOptions": {
+                    "column": {
+                        "depth": 25
+                    }
+                },
+                "series": [{
+                    "x": "browser",
+                    "y": "percent"
+                }],
+                "title": {
+                    "text": "Chart demo"
+                }
+            },
+            "title": "3D Column chart",
+            "widget": "chart"
+        }]
+    }],
+    "scripts": [{
+        "path": "http://code.highcharts.com/4.0.4/highcharts-3d.js",
+        "text": ""
+    }],
+    "theme": "light"
+}

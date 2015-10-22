@@ -1,0 +1,35 @@
+h3 Clock Widget
+p
+    | The Clock Widget simply shows the current date and time, which is updated every second.
+h4 Properties
+p.
+    This widget has 'Format' text box. Enter the format in which you want to see the time.
+    e.g: 'dddd' in the 'Format' text box gives you only day(Monday or Tuesday etc).
+p   For more formats, refer
+     a(href='http://momentjs.com/docs/#/displaying/') this
+
+property-table(properties='config.widgets.clock.properties')
+
+
+h3 Examples
+
+h4 Basic usage
+p
+pre.code.
+    {
+        "widget": "clock"
+    }
+h4 With only Day entered
+p
+pre.code.
+    {
+        "format":"ddd",
+        "widget": "clock"
+    }
+h4 With nothing entered
+p
+pre.code.
+    {
+        "format":"",
+        "widget": "clock"
+    }

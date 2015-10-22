@@ -1,0 +1,186 @@
+{
+    "dataSources": [{
+        "name": "countries",
+        "source": "http://www.andrewpatton.com/countrylist.html",
+        "type": "json",
+        "url": "http://pastebin.com/raw.php?i=ccJKA9ph"
+    }, {
+        "name": "green-cities",
+        "source": "https://opendata.socrata.com/Government/Greenest-Cities-in-the-US/dnfk-m2dd",
+        "type": "json",
+        "url": "http://pastebin.com/raw.php?i=4yCbDza4"
+    }, {
+        "name": "uscrime",
+        "type": "json",
+        "url": "http://pastebin.com/raw.php?i=N5iDNtV3"
+    }],
+    "description": "Examples of the Table Widget with Rules enabled.",
+    "disableAnalytics": true,
+    "name": "example-table-rules",
+    "pages": [{
+        "layout": {
+            "gridColumns": 2,
+            "gridRows": 2
+        },
+        "name": "Tables with Rules",
+        "widgets": [{
+            "columns": [{
+                "label": "2009 Rank",
+                "name": "2009_rank"
+            }, {
+                "label": "Metro Area",
+                "name": "metro_area"
+            }, {
+                "label": "# of Buildings 2009",
+                "name": "buildings_2009"
+            }, {
+                "label": "Total Floor Space",
+                "name": "total_floor_space"
+            }, {
+                "label": "Emissions Prevented",
+                "name": "emissions_prevented"
+            }, {
+                "label": "Cost Savings",
+                "name": "cost_savings",
+                "numeralformat": "$ 0.0"
+            }],
+            "dataSource": "green-cities",
+            "rules": [{
+                "background-color": "#B2EC5D",
+                "rule": "#{cost_savings} > 50"
+            }, {
+                "background-color": "#FFA6C9",
+                "rule": "#{cost_savings} < 5"
+            }],
+            "title": "Most and Least Cost Savings",
+            "widget": "table"
+        }, {
+            "columns": [{
+                "name": "Common Name"
+            }, {
+                "name": "Type"
+            }, {
+                "name": "Sub Type"
+            }, {
+                "link": "https://duckduckgo.com/?q=#{Capital}",
+                "name": "Capital"
+            }],
+            "dataSource": "countries",
+            "filters": {
+                "Sub Type": "/.*/"
+            },
+            "rules": [{
+                "columns": ["Sub Type"],
+                "icon": "fa-life-ring",
+                "iconColor": "#9BDDFF",
+                "rule": "!_.isNull('#{Sub Type}'.match(/Overseas.*/gi))",
+                "tooltip": "This country is located overseas."
+            }],
+            "title": "Countries of the World",
+            "widget": "table"
+        }, {
+            "columns": [{
+                "name": "Year"
+            }, {
+                "label": "Total Crimes",
+                "name": "Total",
+                "numeralformat": "0,0"
+            }, {
+                "name": "crimeIndicator",
+                "text": ""
+            }, {
+                "label": "YOY Crime Growth",
+                "name": "YoyCrimeGrowth"
+            }, {
+                "name": "Population",
+                "numeralformat": "0,0"
+            }, {
+                "label": "Crimes per Capita",
+                "name": "CrimePerCapita",
+                "numeralformat": "0.00 %"
+            }],
+            "dataSource": "uscrime",
+            "rules": [{
+                "color": "green",
+                "columns": ["CrimePerCapita"],
+                "rule": "#{CrimePerCapita} < .02"
+            }, {
+                "color": "#CCCC00",
+                "columns": ["CrimePerCapita"],
+                "rule": "#{CrimePerCapita} >= .02 && #{CrimePerCapita} < .04"
+            }, {
+                "color": "red",
+                "columns": ["CrimePerCapita"],
+                "rule": "#{CrimePerCapita} >= .04"
+            }, {
+                "columns": ["crimeIndicator"],
+                "icon": "fa-arrow-down",
+                "iconColor": "green",
+                "rule": "#{YoyCrimeGrowth} < 0"
+            }, {
+                "columns": ["crimeIndicator"],
+                "rule": "true",
+                "text-align": "center"
+            }],
+            "sortBy": ["-Year"],
+            "title": "US Crime Over Time",
+            "widget": "table"
+        }, {
+            "columns": [{
+                "name": "Year"
+            }, {
+                "label": "Total Crimes",
+                "name": "Total",
+                "numeralformat": "0,0"
+            }, {
+                "name": "crimeIndicator",
+                "text": ""
+            }, {
+                "label": "YOY Crime Growth",
+                "name": "YoyCrimeGrowth"
+            }, {
+                "name": "Population",
+                "numeralformat": "0,0"
+            }, {
+                "label": "Crimes per Capita",
+                "name": "CrimePerCapita",
+                "numeralformat": "0.00 %"
+            }],
+            "dataSource": "uscrime",
+            "rules": [{
+                "color": "green",
+                "columns": ["CrimePerCapita"],
+                "rule": "#{CrimePerCapita} < .02"
+            }, {
+                "color": "#CCCC00",
+                "columns": ["CrimePerCapita"],
+                "rule": "#{CrimePerCapita} >= .02 && #{CrimePerCapita} < .04"
+            }, {
+                "color": "red",
+                "columns": ["CrimePerCapita"],
+                "rule": "#{CrimePerCapita} >= .04"
+            }, {
+                "columns": ["crimeIndicator"],
+                "icon": "fa-arrow-down",
+                "iconColor": "green",
+                "rule": "#{YoyCrimeGrowth} < 0"
+            }, {
+                "columns": ["crimeIndicator"],
+                "rule": "true",
+                "text-align": "center"
+            }, {
+                "columns": ["CrimePerCapita"],
+                "numeralformat": "0.00",
+                "rule": "true"
+            }, {
+                "columnsIgnored": ["CrimePerCapita", "crimeIndicator", "Year"],
+                "numeralformat": "0,0",
+                "rule": "true"
+            }],
+            "sortBy": ["-Year"],
+            "title": "US Crime Over Time (ColumnsIgnored)",
+            "widget": "table"
+        }]
+    }],
+    "theme": "light"
+}

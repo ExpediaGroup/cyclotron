@@ -1,0 +1,158 @@
+h3 Number Widget
+p.
+    The Number Widget displays one or more numbers.  Numbers can either be hardcoded in the Dashboard, or 
+    loaded from a single row of a single Data Source.  Optionally, each number can have a suffix appended, 
+    e.g. "dollars", "users" etc.  In addition, a link can be displayed on the bottom of the widget.
+
+p
+    | While this is called the Number widget, it can be used to display strings as well.  The 
+    em number 
+    | property can 
+    | take a number or string as well as variable replacments and inline JS expressions.
+    | Visually, there is no difference between the two types.
+
+p
+    | When using a Data Source, only the first row of the result set will be used.  Ideally, the Data 
+    | Source would only return one row, but the 
+    em filters/sortBy 
+    | properties can be used to manipulate the result, removing unwanted rows and ordering the correct row 
+    | at the front (ascending).  For example, if a Data Source returns daily data for the past month, sorting 
+    | by "-date" would order by date descending, causing the row with the most recent data to appear first.
+
+h4 Orientation
+
+p
+    | The 
+    em orientation 
+    |  property can be set to "horizontal" or "verical" to control how the number(s) are displayed in the Widget.  
+    | This property has different behavior depending on whether a single number is displayed, or a list of numbers:
+
+    ul
+        li If a single number is displayed in the widget, the 
+            em orientation 
+            |  controls how the prefix/suffix are displayed in relation to the number.  If "vertical", the prefix/suffix
+            | will appear above and below the main number.  If "horizontal", all three will appear on the same line
+        li When two or more numbers are displayed in the widget, the 
+            em orientation 
+            |  property controls the direction of the list of numbers.  If "vertical", each number will be stacked vertically, 
+            | and the prefix/suffix will be displayed in the same line as the number.  If "horizontal", the numbers will be arranged 
+            | in a row, wrapping if necessary, and the prefix/suffix will appear above and below each number.
+
+
+h4 Properties
+p.
+    These are the properties specific to this widget.  
+    General Cyclotron widget properties are not repeated here (e.g. layout properties).
+
+property-table(properties='config.widgets.number.properties')
+
+
+h3 Examples
+
+h4 Hard-coded Number
+
+p This widget has a single number, specified directly in the Dashboard definition.
+p This example is available on the 
+    a(href='/example-number') example-number
+    |  dashboard
+pre.code.
+    {
+        "numbers": [{
+            "number": "42"
+        }],
+        "title": "Hardcoded Number",
+        "widget": "number"
+    }
+
+h4 Prefix and Suffix
+
+p.
+    This widget displays a number from a Data Source, as well as a prefix and suffix value.  These optional 
+    properties are displayed before and after the main number, in a smaller font.
+p This example is available on the 
+    a(href='/example-number') example-number
+    |  dashboard
+pre.code.
+    {
+        "dataSource": "mock",
+        "numbers": [{
+            "number": "\#{number}",
+            "prefix": "$",
+            "suffix": "USD"
+        }],
+        "title": "Number with Prefix/Suffix",
+        "widget": "number"
+    }
+
+h4 Multiple Numbers
+
+p This example displays 3 numbers with suffixes.
+    | The Number Widget can be used to display any alphanumerical values, not only numbers.
+    | Additionally, the color property is used to change the color of one of the numbers.
+p This example is available on the 
+    a(href='/example-number') example-number
+    |  dashboard
+pre.code.
+    {
+        "dataSource": "mock",
+        "numbers": [{
+            "number": "\#{number}",
+            "prefix": "$",
+            "suffix": "USD"
+        }, {
+            "color": "\#{color}",
+            "number": "\#{color}",
+            "suffix": "color"
+        }, {
+            "number": "\#{state}",
+            "suffix": "state"
+        }],
+        "title": "Multiple Numbers",
+        "widget": "number"
+    }
+
+h4 Formatted Numbers
+
+p This example loads data from the Facebook Graph API and displays two 
+    | numbers.  It uses a format string in the \#{} notation to format the output.
+p This example is available on the 
+    a(href='/example-number') example-number
+    |  dashboard
+pre.code.
+    {
+        "dataSource": "facebook",
+        "link": "http://www.facebook.com/Expedia",
+        "numbers": [{
+            "number": "\#{likes|0,0}",
+            "suffix": "likes"
+        }, {
+            "number": "\#{talking_about_count|0,0}",
+            "suffix": "talking about"
+        }],
+        "title": "Facebook Likes",
+        "widget": "number"
+    }
+
+h4 Colored Numbers
+
+p This example loads data from the Github Status API.  It uses inline Javascript
+    | to set the color to green or red, depending on the status.  It also uses inline
+    | Javascript to convert a ISO 8601 datetime to a friendlier format.
+p This example is available on the 
+    a(href='/example-number') example-number
+    |  dashboard
+pre.code.
+    {
+        "dataSource": "github-status",
+        "noscroll": true,
+        "numbers": [{
+            "color": "${'\#{status}' == 'good' ? 'green' : 'red'}",
+            "number": "\#{status}",
+            "prefix": "health"
+        }, {
+            "number": "${moment('\#{last_updated}').fromNow()}",
+            "prefix": "last updated"
+        }],
+        "title": "Github Status",
+        "widget": "number"
+    }

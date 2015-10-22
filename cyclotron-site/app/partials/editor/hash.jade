@@ -1,0 +1,10 @@
+.well.well-sm
+    .form-group#editor-hash-item(ng-repeat='hashItem in hashItems track by $index')
+        input#editor-hash-key.form-control.inline(ng-model='hashItem.key', ng-change='updateHashKey(hashItem)', placeholder='key')
+        input#editor-hash-value.form-control.inline(ng-model='hashItem.value', ng-change='updateHashValue(hashItem)', placeholder='value')
+        i#editor-hash-remove.inline-delete-icon.fa.fa-times(ng-click='removeHashItem(hashItem)', title='Remove this item')
+
+    .horizontal-add.button-group
+        button#editor-hash-add.btn.btn-default(type='button', ng-click='addHashValue()', title='Add {{ label }}') 
+            i.fa.fa-plus
+            span  Add {{ label }}

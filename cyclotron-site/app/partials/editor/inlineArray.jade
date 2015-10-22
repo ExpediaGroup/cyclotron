@@ -1,0 +1,17 @@
+accordion(close-others='true')
+    accordion-group(ng-repeat='item in model', heading='{{ definition.singleLabel }} {{ $index }}')
+    
+        div(ng-transclude='parent')
+        
+        .button-group
+            button#editor-list-remove.btn.btn-default(type='button', ng-click='removeItem($index)', title='Remove') 
+                i.fa.fa-times
+                span  Remove {{ definition.singleLabel }}
+
+p.text-muted(ng-if='model.length == 0')
+    | There are no {{ definition.singleLabel }}s
+
+.horizontal-add.button-group
+    button#editor-list-add.btn.btn-default(type='button', ng-click='addNewObject()', title='Add New {{ definition.singleLabel }}') 
+        i.fa.fa-plus
+        span  Add {{ definition.singleLabel }}

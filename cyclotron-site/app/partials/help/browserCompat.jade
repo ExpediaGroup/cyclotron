@@ -1,0 +1,21 @@
+h3 Browser Compatibility
+
+p
+    | Cyclotron is compatible with recent versions of web browsers: Firefox, Chrome, Internet Explorer, Safari, etc.  It performs browser feature detection
+    | to check for specific features that are (generally) required to work as designed.  It is possible to bypass this test, as detailed below.
+
+p Internet Explorer 10 and up should be compatible, but Internet Explorer 8 and below are explicitly not supported.
+
+h4 Bypassing the Browser Check
+
+.bg-warning 
+    i.fa.fa-exclamation 
+    .inner While this may allow Cyclotron to run in older browsers, it does not guarantee that all features will work.  Unsupported browsers have not been tested and issues will not be fixed.  Circumventing the browser compatibility check is done at your own risk.
+
+p The browser compatibility check can be skipped by appending this option to the url:
+
+pre.code
+    a(href="/?browsercheck=false") ?browsercheck=false
+
+p This does not work in Internet Explorer 8 and older, as these browsers are unable to run the browser check.
+

@@ -1,0 +1,261 @@
+{
+    "dataSources": [{
+        "format": "object",
+        "name": "mock",
+        "query": "SOURCE=mock",
+        "type": "mock"
+    }, {
+        "name": "worldpop",
+        "type": "json",
+        "url": "http://pastebin.com/raw.php?i=bZS5GVxx"
+    }, {
+        "name": "facebook",
+        "processor": "p = function() {\n    /* Facebook graph is no longer anonymous, so generate some fake data */\n    var t = moment().valueOf();\n    var t2 = 400000 / t;\n    return [{\n        \"likes\": t / (1901 + 60 * Math.sin(t2)),\n        \"talking_about_count\": t / (3500 + 90 * Math.cos(t2))\n    }]\n}",
+        "refresh": 1,
+        "type": "javascript"
+    }, {
+        "name": "github-status",
+        "postProcessor": "p = function (result) {\n    return [result];\n}",
+        "refresh": 10,
+        "type": "json",
+        "url": "https://status.github.com/api/status.json"
+    }],
+    "description": "Examples of the Number Widget",
+    "disableAnalytics": true,
+    "name": "example-number",
+    "pages": [{
+        "layout": {
+            "gridColumns": 3,
+            "gridRows": 3
+        },
+        "name": "Numbers",
+        "widgets": [{
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "numbers": [{
+                "number": "42"
+            }],
+            "orientation": "horizontal",
+            "title": "Hardcoded Number",
+            "widget": "number"
+        }, {
+            "dataSource": "mock",
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "numbers": [{
+                "number": "#{number}",
+                "prefix": "$",
+                "suffix": "USD"
+            }],
+            "orientation": "horizontal",
+            "title": "Horizontal Number with Prefix/Suffix",
+            "widget": "number"
+        }, {
+            "dataSource": "mock",
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "numbers": [{
+                "number": "$#{number}",
+                "suffix": "USD"
+            }],
+            "orientation": "vertical",
+            "title": "Vertical Number with Prefix/Suffix",
+            "widget": "number"
+        }, {
+            "name": "Colored Text",
+            "numbers": [{
+                "color": "green",
+                "number": "OK"
+            }],
+            "orientation": "horizontal",
+            "title": "Cyclotron Status",
+            "widget": "number"
+        }, {
+            "dataSource": "facebook",
+            "name": "Facebook Likes",
+            "numbers": [{
+                "number": "#{likes|0,0}",
+                "suffix": "facebook likes",
+                "tooltip": "Likes for Expedia on Facebook"
+            }],
+            "orientation": "vertical",
+            "widget": "number"
+        }, {
+            "name": "Icon",
+            "numbers": [{
+                "icon": "fa-thumbs-o-up"
+            }],
+            "orientation": "vertical",
+            "widget": "number"
+        }, {
+            "dataSource": "facebook",
+            "name": "Number and Icon",
+            "numbers": [{
+                "icon": "fa-thumbs-o-up",
+                "number": "#{likes|0,0}",
+                "tooltip": "Likes for Expedia on Facebook"
+            }],
+            "orientation": "horizontal",
+            "widget": "number"
+        }, {
+            "name": "Colored Icon",
+            "numbers": [{
+                "icon": "fa-arrow-down",
+                "iconColor": "green",
+                "iconTooltip": "HDFS Usage decreased",
+                "number": "47.2%",
+                "prefix": "HDFS Usage",
+                "tooltip": "HDFS Usage"
+            }],
+            "orientation": "vertical",
+            "widget": "number"
+        }, {
+            "dataSource": "facebook",
+            "filters": {
+                "likes": "0"
+            },
+            "noData": "There is no data",
+            "numbers": [{
+                "number": "#{likes|0,0}",
+                "suffix": "facebook likes"
+            }],
+            "orientation": "vertical",
+            "title": "No Data",
+            "widget": "number"
+        }]
+    }, {
+        "layout": {
+            "gridColumns": 4,
+            "gridRows": 3
+        },
+        "widgets": [{
+            "dataSource": "mock",
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "numbers": [{
+                "number": "#{number}",
+                "prefix": "$",
+                "suffix": "USD"
+            }, {
+                "color": "#{color}",
+                "number": "#{color}",
+                "suffix": "color"
+            }, {
+                "number": "#{state}",
+                "suffix": "state"
+            }],
+            "title": "Multiple Numbers",
+            "widget": "number"
+        }, {
+            "dataSource": "mock",
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "numbers": [{
+                "number": "#{number}",
+                "suffix": "$ USD"
+            }, {
+                "color": "#{color}",
+                "number": "#{color}",
+                "suffix": "color"
+            }, {
+                "number": "#{state}",
+                "suffix": "state"
+            }],
+            "orientation": "horizontal",
+            "title": "Horizontal Numbers",
+            "widget": "number"
+        }, {
+            "dataSource": "worldpop",
+            "filters": {
+                "year": "${2008}"
+            },
+            "numbers": [{
+                "number": "#{Asia}",
+                "suffix": "Asia"
+            }, {
+                "number": "#{Oceania}",
+                "suffix": "Oceania"
+            }, {
+                "number": "#{Africa}",
+                "suffix": "Africa"
+            }, {
+                "number": "#{America}",
+                "suffix": "America"
+            }],
+            "title": "2008 Populations",
+            "widget": "number"
+        }, {
+            "dataSource": "facebook",
+            "link": "http://www.facebook.com/Expedia",
+            "numbers": [{
+                "number": "#{likes|0,0}",
+                "suffix": "likes"
+            }, {
+                "number": "#{talking_about_count|0,0}",
+                "suffix": "talking about"
+            }],
+            "title": "Facebook Likes",
+            "widget": "number"
+        }, {
+            "dataSource": "worldpop",
+            "filters": {
+                "year": "${2008}"
+            },
+            "gridHeight": 1,
+            "gridWidth": 2,
+            "noscroll": true,
+            "numbers": [{
+                "number": "${(#{Oceania} / #{America}).toFixed(3)}%",
+                "suffix": "Oceania"
+            }, {
+                "number": "${(#{Africa} / #{America}).toFixed(3)}%",
+                "suffix": "Africa"
+            }, {
+                "number": "${(#{Asia} / #{America}).toFixed(3)}%",
+                "suffix": "Asia"
+            }],
+            "title": "2008 Populations Relative to America (Inline JS)",
+            "widget": "number"
+        }, {
+            "dataSource": "github-status",
+            "gridHeight": 1,
+            "gridWidth": 2,
+            "noscroll": true,
+            "numbers": [{
+                "color": "${'#{status}' == 'good' ? 'green' : 'red'}",
+                "number": "#{status}",
+                "prefix": "health"
+            }, {
+                "number": "${moment('#{last_updated}').fromNow()}",
+                "prefix": "last updated"
+            }],
+            "title": "Github Status",
+            "widget": "number"
+        }, {
+            "dataSource": "mock",
+            "filters": {
+                "number": "-99"
+            },
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "layout": {},
+            "noData": "No Data Available",
+            "numbers": [{
+                "number": "#{number}",
+                "prefix": "$",
+                "suffix": "USD"
+            }, {
+                "color": "#{color}",
+                "number": "#{color}",
+                "suffix": "color"
+            }, {
+                "number": "#{state}",
+                "suffix": "state"
+            }],
+            "title": "Multiple Numbers",
+            "widget": "number"
+        }]
+    }],
+    "parameters": [],
+    "theme": "light"
+}

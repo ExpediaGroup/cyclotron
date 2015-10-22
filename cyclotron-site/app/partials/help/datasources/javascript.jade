@@ -1,0 +1,119 @@
+h3 JavaScript Data Source
+
+p The JavaScript Data Source allows any custom JavaScript code to be used as a Data Source.  Like other Data Sources,
+    | Cyclotron handles the invocation, updating Widgets when data is loaded, automatic refreshing, etc.  It supports both
+    | synchronous as well as asynchronous code. 
+
+p Possible uses for the JavaScript Data Source:
+    ul
+        li Loading data via jQuery or other 3rd-party libraries
+        li Generating data via JavaScript
+        li Combining data from other Data Sources
+
+p Like other Data Sources, the JavaScript Data Source supports built-in filters and sorting, as well as a pre-processor
+    | and post-processor function.  These are perhaps less useful for this Data Source, since the main processor function
+    | could implement all of these features directly.  However, these properties may be useful for consistency or code
+    | shared with other Data Sources.  The order of events is identical to other Data Sources:  Pre-Processor, Processor, 
+    | Filters, Sort, Post-Processor.
+
+p Examples of the JavaScript Data Source are available on the 
+    a(href='/example-datasource-javascript') example-datasource-javascript
+    |  dashboard
+
+property-table(properties='config.dashboard.properties.dataSources.options.javascript.properties')
+
+h4 Processor
+
+p The custom JavaScript code should be provided as a JavaScript function in the
+    em  processor
+    |  property.  The function can take an optional promise variable, which can be used to asynchronously return data.
+    | If the custom JavaScript is synchronous, it can either resolve the promise or directly return a 
+    | data set (array of objects).
+
+p The Promise object has two methods: `resolve(data)` and `reject(error)`.  Either can be used in either synchronous or
+    | asynchronous code.  If attemping to resolve the Promise asychronously, make sure the function does not return a 
+    | value (other than the Promise itself).  Cyclotron will only wait for the Promise if nothing is returned from the 
+    | Processor (or the Promise is returned).
+
+h4 Pre-Processor
+
+p The JavaScript Data Source supports an optional pre-processor function that will be called before
+    | the Data Source executes.  For more details, see the main Data Sources page.
+
+h4 Post-Processor
+
+p The JavaScript Data Source supports an optional post-processor function that will be called after
+    | data is loaded.  For more details, see the main Data Sources page.
+
+h3 Examples
+
+h4 jQuery AJAX Request
+p This example uses the `$.getJSON()` method to call a web service and return JSON data.  Since `$.getJSON()` is 
+    | asynchronous, this code must use the promise argument to return its data.
+
+p This example is available on the 
+    a(href='/example-datasource-javascript') example-datasource-javascript
+    |  dashboard
+pre.code.
+    /* Loads a list of Cyclotron tags using jQuery.
+     */
+    p = function (promise) {
+        /* Start asychronous AJAX call */
+        $.getJSON('/api/tags', function(data) {
+            
+            /* Resolves the result asynchronously via the provided promise */
+            promise.resolve(_.map(data, function (tag) {
+               return { 'name': tag }; 
+            })); 
+        });
+    }
+
+h4 jQuery AJAX Request
+p This example uses the `$.getJSON()` method to call a web service and return JSON data.  Since `$.getJSON()` is 
+    | asynchronous, this code must use the promise argument to return its data.
+
+p This example is available on the 
+    a(href='/example-datasource-javascript') example-datasource-javascript
+    |  dashboard
+pre.code.
+    /* Loads a list of Cyclotron tags using jQuery.
+     */
+    p = function (promise) {
+        /* Start asychronous AJAX call */
+        $.getJSON('/api/tags', function(data) {
+            
+            /* Resolves the result asynchronously via the provided promise */
+            promise.resolve(_.map(data, function (tag) {
+               return { 'name': tag }; 
+            })); 
+        });
+    }
+
+
+h4 jQuery AJAX Request
+
+p This example uses data from another Data Sources.  When this JavaScript Data Source is
+    | invoked, it gets the results from another Data Source called `dependency-datasource`.
+    | If that Data Source has finished loading, it returns the cached results immediately. 
+    | Otherwise, it attaches a callback to that Data Sources' Promise, and returns results 
+    | asynchronously.
+
+pre.code.
+    p = function (promise) {
+        var datasource = Cyclotron.dataSources['dependency-datasource'];
+        
+        var cache = datasource.getCachedData();
+        
+        if (_.isNullOrUndefined(cache)) {
+            /* Data is still loading: get the current promise */
+            var dependencyPromise = datasource.getPromise()
+            
+            /* Attach a callback to get the results */
+            dependencyPromise.then(function (result) {
+                /* Resolve this Data Source with results from the dependent data source */
+                promise.resolve(result['0'].data); 
+            });
+        } else {
+            return cache;
+        }
+    }

@@ -1,0 +1,214 @@
+/*
+ * Copyright (c) 2013-2015 the original author or authors.
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at
+ *
+ *     http://www.opensource.org/licenses/mit-license.php
+ *
+ * Unless required by applicable law or agreed to in writing, 
+ * software distributed under the License is distributed on an 
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+ * either express or implied. See the License for the specific 
+ * language governing permissions and limitations under the License. 
+ */
+
+@import 'variables.less';
+
+@bodyColor: #222;
+
+html, body { 
+    margin: 0; 
+    padding: 0;
+    -webkit-font-smoothing: antialiased; 
+
+    font-family: "Courier New", Courier, monospace;
+}
+
+h1 { font-weight: 600; font-size: 2rem; margin: 14px 0px; }
+h2 { font-weight: 300; font-size: 1.6rem; margin: 10px 0px;}
+h3 { font-weight: bold; margin-top: 32px; }
+h4 { font-weight: bold; margin-top: 0; margin-bottom: 4px;}
+
+html,
+button,
+input,
+select,
+textarea {
+    color: @bodyColor;
+}
+
+a { 
+    .aLink(@bodyColor); 
+}
+
+img {
+    vertical-align: middle;
+    border: 0;
+}
+
+fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+textarea {
+    resize: vertical;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+/* ==========================================================================
+   Helper classes
+   ========================================================================== */
+
+.invisible {
+    visibility: hidden;
+}
+
+.hidden {
+    display: none;
+}
+
+.inline {
+    display: inline;
+}
+
+/*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *    `contenteditable` attribute is included anywhere else in the document.
+ *    Otherwise it causes space to appear at the top and bottom of elements
+ *    that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *    `:before` to contain the top-margins of child elements.
+ */
+
+.clearfix:before,
+.clearfix:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+.centered
+{
+    text-align: center;
+    margin: auto;
+}
+
+.fullscreen {
+    height: 100%;
+}
+
+.superwide {
+    width: 100%;
+}
+
+.errorPage {
+    background-color: black;
+}
+
+/* Occupy space but make invisible */
+.invisible {
+    opacity: 0;
+}
+
+.code {
+    border: 1px dashed #999;
+    overflow: auto;
+    padding: 4px;
+}
+
+.ng-cloak { 
+    display: none !important; 
+}
+
+.actionable {
+    cursor: pointer;
+}
+
+#browserError {
+    width: 60%;
+    max-width: 500px;
+    margin: auto;
+    margin-top: 3rem;
+    padding: 1.7rem;
+    border: 1px dashed #999;
+    color: #777;
+
+    table {
+        width: 100%;
+        text-align: center;
+        margin-top: 2rem;
+
+        a:hover {
+            border-bottom: 0px;
+        }
+    }
+}
+
+/*
+ * Styling for the angular-tablesort directive
+ */
+ table {
+    th.tablesort-sortable {
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -o-user-select: none;
+        user-select: none;
+        cursor: pointer;
+
+        &:after{
+            content: "";
+            float: right;
+            margin-top: 7px;
+            visibility: hidden;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+
+            border-top: none;
+            border-bottom: 4px solid #000;
+        }
+    }
+
+    th.tablesort-desc:after{
+        border-top: 4px solid #000;
+        border-bottom: none;
+    }
+
+    .tablesort-sortable:hover:after, 
+    .tablesort-asc:after, 
+    .tablesort-desc:after {
+        visibility: visible;
+    }
+}
+
+/* The row is always added as the first row in a table
+   Hide it by default */
+.showIfLast {
+    display: none;
+
+    /* Only show it if it is also the last row of the table. */
+    &:last-child {
+        display: table-row;
+    }
+
+    td {
+        text-align: center;
+
+        &:after {
+            content: "No data";
+        }
+    }
+}

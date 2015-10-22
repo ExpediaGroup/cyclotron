@@ -1,0 +1,106 @@
+/*
+ * Copyright (c) 2013-2015 the original author or authors.
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at
+ *
+ *     http://www.opensource.org/licenses/mit-license.php
+ *
+ * Unless required by applicable law or agreed to in writing, 
+ * software distributed under the License is distributed on an 
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+ * either express or implied. See the License for the specific 
+ * language governing permissions and limitations under the License. 
+ */
+
+@import "../../../vendor/lesselements/_elements.less";
+
+@highlight-shadow-color: rgba(81, 203, 238, 1);
+
+/**
+ * Alertify theme for Cyclotron.
+ *
+ * Based on Alertify Default Look and Feel
+ */
+.alertify,
+.alertify-log {
+    font-family: sans-serif;
+}
+.alertify {
+    background: #FFF;
+    border: 10px solid #333; /* browsers that don't support rgba */
+    border: 10px solid rgba(0,0,0,.7);
+    border-radius: 8px;
+    box-shadow: 0 3px 3px rgba(0,0,0,.3);
+    -webkit-background-clip: padding;     /* Safari 4? Chrome 6? */
+       -moz-background-clip: padding;     /* Firefox 3.6 */
+            background-clip: padding-box; /* Firefox 4, Safari 5, Opera 10, IE 9 */
+}
+.alertify-text {
+    border: 1px solid #CCC;
+    padding: 10px;
+    border-radius: 4px;
+}
+.alertify-button {
+    border-radius: 4px;
+    color: #FFF;
+    font-weight: bold;
+    padding: 6px 15px;
+    text-decoration: none;
+    text-shadow: 1px 1px 0 rgba(0,0,0,.5);
+    box-shadow: inset 0 1px 0 0 rgba(255,255,255,.5);
+    background-image: -webkit-linear-gradient(top, rgba(255,255,255,.3), rgba(255,255,255,0));
+    background-image:    -moz-linear-gradient(top, rgba(255,255,255,.3), rgba(255,255,255,0));
+    background-image:     -ms-linear-gradient(top, rgba(255,255,255,.3), rgba(255,255,255,0));
+    background-image:      -o-linear-gradient(top, rgba(255,255,255,.3), rgba(255,255,255,0));
+    background-image:         linear-gradient(top, rgba(255,255,255,.3), rgba(255,255,255,0));
+}
+.alertify-button:hover,
+.alertify-button:focus {
+    outline: none;
+    background-image: -webkit-linear-gradient(top, rgba(0,0,0,.1), rgba(0,0,0,0));
+    background-image:    -moz-linear-gradient(top, rgba(0,0,0,.1), rgba(0,0,0,0));
+    background-image:     -ms-linear-gradient(top, rgba(0,0,0,.1), rgba(0,0,0,0));
+    background-image:      -o-linear-gradient(top, rgba(0,0,0,.1), rgba(0,0,0,0));
+    background-image:         linear-gradient(top, rgba(0,0,0,.1), rgba(0,0,0,0));
+}
+.alertify-button:focus {
+    .box-shadow(0 0 5px @highlight-shadow-color);
+    color: #FFF;
+}
+.alertify-button:active {
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05);
+}
+.alertify-button-cancel,
+.alertify-button-cancel:hover,
+.alertify-button-cancel:focus {
+    background-color: #aaa;
+    border: 1px solid #222;
+    color: #FFF;
+}
+.alertify-button-ok,
+.alertify-button-ok:hover,
+.alertify-button-ok:focus {
+    background-color: #666;
+    border: 1px solid #222;
+    color: #FFF;
+}
+
+.alertify-log {
+    border: 1px solid #000;
+    background: rgba(90,90,90,.85);
+    padding: 15px;
+    border-radius: 4px;
+    color: #FFF;
+}
+.alertify-log-error {
+    border: 1px solid #FF4040;
+    background-color: #F7ABAB;
+    color: #660000;
+    opacity: .9;
+}
+.alertify-log-success {
+    background: #47a447;
+}

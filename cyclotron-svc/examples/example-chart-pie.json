@@ -1,0 +1,100 @@
+{
+    "dataSources": [{
+        "name": "browser-data",
+        "type": "json",
+        "url": "http://pastebin.com/raw.php?i=k5MRK6R7"
+    }],
+    "description": "Examples of using the Chart widget to make Pie Charts",
+    "disableAnalytics": true,
+    "name": "example-chart-pie",
+    "pages": [{
+        "layout": {
+            "gridColumns": 2,
+            "gridRows": 2
+        },
+        "widgets": [{
+            "dataSource": "browser-data",
+            "highchart": {
+                "series": [{
+                    "name": "Browser share",
+                    "type": "pie",
+                    "x": "browser",
+                    "y": "percent"
+                }],
+                "tooltip": {
+                    "pointFormat": "{series.name}: {point.percentage:.1f}%"
+                }
+            },
+            "title": "Pie Chart",
+            "widget": "chart"
+        }, {
+            "dataSource": "browser-data",
+            "highchart": {
+                "series": [{
+                    "center": ["50%", "95%"],
+                    "endAngle": "90",
+                    "innerSize": "50%",
+                    "name": "Browser share",
+                    "startAngle": "-90",
+                    "type": "pie",
+                    "x": "browser",
+                    "y": "percent"
+                }],
+                "tooltip": {
+                    "pointFormat": "{series.name}: {point.percentage:.1f}%"
+                }
+            },
+            "title": "Semi-Circle Chart",
+            "widget": "chart"
+        }, {
+            "dataSource": "browser-data",
+            "highchart": {
+                "chart": {
+                    "options3d": {
+                        "alpha": 45,
+                        "beta": 0,
+                        "enabled": true
+                    },
+                    "type": "pie"
+                },
+                "plotOptions": {
+                    "pie": {
+                        "allowPointSelect": true,
+                        "depth": 35
+                    }
+                },
+                "series": [{
+                    "type": "pie",
+                    "x": "browser",
+                    "y": "percent"
+                }],
+                "tooltip": {
+                    "pointFormat": "{series.name}: {point.percentage:.1f}%"
+                }
+            },
+            "title": "3D Pie Chart",
+            "widget": "chart"
+        }, {
+            "dataSource": "browser-data",
+            "highchart": {
+                "series": [{
+                    "innerSize": "50%",
+                    "name": "Browser share",
+                    "type": "pie",
+                    "x": "browser",
+                    "y": "percent"
+                }],
+                "tooltip": {
+                    "pointFormat": "{series.name}: {point.percentage:.1f}%"
+                }
+            },
+            "title": "Donut Chart",
+            "widget": "chart"
+        }]
+    }],
+    "scripts": [{
+        "path": "http://code.highcharts.com/highcharts-3d.js",
+        "text": ""
+    }],
+    "theme": "light"
+}

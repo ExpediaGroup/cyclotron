@@ -1,0 +1,41 @@
+h3 Parameters
+
+p The 
+    em parameters 
+    | property is an optional list of Parameters that can be used to configure the Dashboard.  Each item in the array 
+    | defines a Parameter by name.  Each Parameter can have a 
+    em defaultValue 
+    | provided as well.
+
+pre.code.
+    "parameters": [{
+        "name": "numberOfHours"
+        "defaultValue": 4
+    }]
+
+p Parameters can be set when loading the Dashboard by using URL query parameters.  Here is an example that sets two Parameters via the URL:
+
+pre.code.
+    http://cyclotron/MyDashboard?numberOfHours=8&amp;includeFailures=true
+
+p Parameters can be consumed in the Dashboard via inline Javascript, anywhere that inline Javascript is supported.  The 
+    em Cyclotron.parameters 
+    | object is a Javascript hash of key-value pairs.  For example:
+
+pre.code.
+    "dataSources": [{
+        "name": "datasource_1",
+        "type": "graphite",
+        "from": "-${Cyclotron.parameters.numberOfHours}h",
+        "targets": ["tpsreportservice.servicefactory.reportsperminute"],
+        "url": "http://graphite"
+    }]
+
+p The 
+    em Cyclotron.parameters 
+    | object can be used to access any URL parameters, regardless of whether they are specified in the Parameters array.  
+    | The primary benefit of the Parameters array is to provide default values.
+
+h4 Properties
+
+property-table(properties='config.dashboard.properties.parameters.properties')

@@ -1,0 +1,14 @@
+.editor-view-header
+    h3 Pages
+
+    .editor-view-header-buttons
+        button#editor-pages-add.btn.btn-primary(type='button', ng-click='newPage()', title='Add New Page') 
+            i.fa.fa-plus
+            span  Add Page
+
+editor-view-object-array(model='editor.dashboard.pages', label='Page', 
+    substate='edit.page', headingfn='getPageName(item, index)')
+
+    div
+        span.label.label-default(ng-repeat='widget in item.widgets') {{ widget.widget }}
+        span.label.label-warning(ng-hide='item.widgets') No Widgets

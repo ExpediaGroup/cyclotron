@@ -1,0 +1,95 @@
+
+//- View All Dashboards and Edit them
+.home-page.container-fluid
+    div(ng-hide='showSplash')
+        include header
+
+    header(ng-show='showSplash')
+        h1 Cyclotron
+
+    section.search(ng-class='{active: !showSplash}')
+
+        ui-select(ng-model='search.query', multiple='',
+            tagging='', tagging-label='false', tagging-tokens='SPACE|ENTER')
+            ui-select-match(placeholder='Search by Name or Tags...') 
+                i.fa.fa-tag(ng-if='isTag($item)')
+                span  {{ $item }}
+            ui-select-choices(repeat='hint in search.hints | filter:$select.search | limitTo:100')
+                i.fa.fa-tag(ng-if='isTag(hint)')
+                span  {{ hint }}
+                
+    section.main-links(ng-show='showSplash')
+        a.disabled(title='You must login before creating a Dashboard', ng-if='!canEdit()', ng-click='loginAlert()')
+            i.fa.fa-file-o
+            span New Dashboard
+        a.new(ng-href='/edit/', target='_self', title='Create a new Dashboard', ng-if='canEdit()')
+            i.fa.fa-file-o
+            span New Dashboard
+        a.documentation(ui-sref='help', title='Documentation for Cyclotron')
+            i.fa.fa-question-circle
+            span Help
+        a.login(ui-sref='analytics', title='Analytics for Cyclotron')
+            i.fa.fa-bar-chart
+            span Analytics
+        a.login(requires-auth, ng-click='login()', ng-if='!isLoggedIn()', title='Login')
+            i.fa.fa-unlock
+            span Login
+        a.logout(requires-auth, ng-click='logout()', ng-if='isLoggedIn()', title='Logout')
+            i.fa.fa-lock
+            span Logout
+
+    section.results(ng-hide='showSplash')
+
+        .loading(ng-show='loading')
+            span.spinjs
+
+        .no-results.well.well-sm(ng-show='dashboards.length == 0')
+            span No matching Dashboards were found
+
+        table.table
+            tr.dashboard-item(ng-repeat='dashboard in dashboards | orderBy:"name"', ng-class='{"dashboard-item-unviewable": !dashboard._canView}')
+
+                td
+                    span.name(ng-if='!dashboard._canView') {{ dashboard.name }}
+                        i.fa.fa-lock(title="You don't have permission to edit this Dashboard.")
+                        i.fa.fa-eye-slash(title="You don't have permission to view this Dashboard.")
+
+                    a.name(ng-if='dashboard._canView', ng-href='/{{ dashboard.name }}', target='_blank', title='Open the Dashboard') {{ dashboard.name }}
+                        i.fa.fa-lock(ng-if='isLoggedIn() && !dashboard._canEdit', title="You don't have permission to edit this Dashboard.")
+                        i.fa.fa-external-link
+
+                    .description(title='Description of dashboard', ng-if='dashboard.description') 
+                        i.fa.fa-quote-left
+                        |  {{ dashboard.description }} 
+                        i.fa.fa-quote-right
+
+                    .info
+                        span(title='Latest Editor') {{ dashboard.lastUpdatedBy.name }}
+                        span(ng-if='dashboard.lastUpdatedBy.name')  - 
+                        span(title='Latest revision number') rev {{ dashboard.rev }}
+                        span  -  
+                        span(title='Latest revision date') {{ dashboard.date | date:"short" }}
+
+                    .label.label-default(ng-repeat='tag in dashboard.tags', 
+                        ng-click='selectTag(tag)', title='Add to search') {{ tag }}
+
+                td.dashboard-analytics
+                    .info
+                        a.text-muted(ng-if='dashboard.visits > 0',
+                            ui-sref='dashboardAnalytics({ dashboardName: dashboard.name })', title='View Analytics for this Dashboard')
+                            i(class='fa {{ dashboard.visitCategory.icon }}')
+                            span  {{ dashboard.visitCategory.text }} 
+                                ng-pluralize(count='dashboard.visits', when='{"one": "visit","other": "visits"}')
+
+                td.dashboard-links
+                    div
+                        a(ui-sref='edit.details({ dashboardName: dashboard.name })', title='Edit this Dashboard', ng-if='canEdit(dashboard)')
+                            i.fa.fa-edit
+                            |  Edit
+                    div
+                        a.text-muted(ng-click='delete(dashboard.name)', title='Delete this Dashboard', ng-if='canDelete(dashboard)')
+                            i.fa.fa-trash-o
+                            |  Delete
+
+    section.footer
+        include footer

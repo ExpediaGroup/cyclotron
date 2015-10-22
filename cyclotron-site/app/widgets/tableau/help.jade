@@ -1,0 +1,29 @@
+h3 Tableau Widget
+p
+    | The Tableau Widget embeds a Tableau view into a Cyclotron widget.  This is a simple 
+    | wrapper for the functionality described in 
+    a(href='http://onlinehelp.tableausoftware.com/v7.0/server/en-us/embed.htm') this page.
+
+
+h4 Properties
+p.
+    These are the properties specific to this widget.  
+    General Cyclotron widget properties are not repeated here (e.g. layout properties).
+
+property-table(properties='config.widgets.tableau.properties')
+
+h3 Examples
+
+h4 Basic Usage
+
+pre.code.
+    {
+        "params": {
+            "host_url": "http%3A%2F%2Ftableau%3A8000%2F",
+            "name": "Hadoop_Usage_Disk_and_Query/HadoopDiskUsageDashboard",
+            "site_root": "",
+            "tabs": "no",
+            "toolbar": "no"
+        },
+        "widget": "tableau"
+    }

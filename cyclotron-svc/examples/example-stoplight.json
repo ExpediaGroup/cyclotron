@@ -1,0 +1,78 @@
+{
+    "dataSources": [{
+        "format": "ducati",
+        "name": "datasource_0",
+        "refresh": 1,
+        "type": "mock"
+    }],
+    "description": "Examples of the Stoplight widget",
+    "disableAnalytics": true,
+    "name": "example-stoplight",
+    "pages": [{
+        "layout": {
+            "gridColumns": 3,
+            "gridRows": 3.5
+        },
+        "widgets": [{
+            "allowFullscreen": false,
+            "gridHeight": 0.5,
+            "gridWidth": 1,
+            "html": "<h2><center>Hardcoded Stoplights</center></h2>",
+            "noscroll": true,
+            "widget": "html"
+        }, {
+            "gridHeight": 2.5,
+            "gridWidth": 1,
+            "rules": {
+                "green": "${true}",
+                "red": "${false}",
+                "yellow": "${false}"
+            },
+            "title": "Stoplight with Title",
+            "widget": "stoplight"
+        }, {
+            "dataSource": "datasource_0",
+            "gridHeight": 3.5,
+            "gridWidth": 1,
+            "rules": {
+                "green": "${true /* Else */}",
+                "red": "${#{roomnightcount} >= 150}",
+                "yellow": "${#{roomnightcount} >= 100}"
+            },
+            "title": "Random Stoplight",
+            "widget": "stoplight"
+        }, {
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "rules": {
+                "red": "${true}"
+            },
+            "widget": "stoplight"
+        }, {
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "rules": {
+                "yellow": "${true}"
+            },
+            "widget": "stoplight"
+        }, {
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "rules": {
+                "green": "${true}"
+            },
+            "widget": "stoplight"
+        }, {
+            "dataSource": "datasource_0",
+            "filters": {
+                "roomnightcount": "-1"
+            },
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "noData": "There is no data",
+            "title": "No Data",
+            "widget": "stoplight"
+        }]
+    }],
+    "theme": "light"
+}

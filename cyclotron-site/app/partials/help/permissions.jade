@@ -1,0 +1,101 @@
+h3 Permissions
+
+p.
+    Cyclotron has integration with LDAP or Active Directory for user authentication.
+    Users can login with their domain username/password.  Sessions are kept active by using Cyclotron, 
+    but will periodically expire for security reasons.
+
+p.
+    Dashboards are unsecured by default, but can optionally be secured to a list of Editors and/or Viewers.  
+    These are both optional, and if omitted, allow everyone to edit and view, respectively.  
+    Viewing of Dashboards cannot be restricted unless editing has also been restricted.
+
+h4 Permission model
+
+p Both Editor and Viewer permissions are based on LDAP/Active Directory Users and/or Groups.  In both cases, one or more Users and/or Groups can be added to the 
+    | Dashboard, restricting permissions to the specific Users listed, or Users that are members of the specific Groups listed.  Nested Groups are not supported!
+
+p There are several types of Groups: Security Groups, Distribution Lists, Groups.  Any of them can be used interchangeably in Cyclotron.
+
+
+h4 Edit Permissions
+
+p Creating and Editing Dashboards requires the current user to be logged in.  This is for audit purposes and tracking who made which Dashboard changes.
+    | By default, Dashboards can be edited by any logged-in user.  This refers specifically to saving changes to a Dashboard, not merely viewing the Dashboard
+    | definition in the Editor (which falls under View Permissions)
+
+p Editing can be restricted by adding one or more
+    strong  Editors
+    |  to the
+    em  Edit Permissions
+    |  box on the Details page of the Dashboard Editor.  Auto-complete is enabled after typing three characters.
+
+h4 View Permissions
+
+p View Permissions covers the ability to see a Dashboard, including viewing the Dashboard definition, exporting the Dashboard, etc.  By default, all users 
+    | have view permission for all Dashboards, even if they cannot edit the Dashboards.
+
+p Viewing can be restricted by adding one or more
+    strong  Viewers
+    |  to the
+    em  View Permissions
+    |  box on the Details page of the Dashboard Editor.  Auto-complete is enabled after typing three characters.
+
+p Anyone with 
+    em  Edit Permissions
+    |  automatically inherits 
+    em  View Permissions
+    | .  Note that this means
+    em  View Permissions
+    |  are ignored unless
+    em  Edit Permissions
+    |  are set, as everyone can edit by default, and thus everyone can view as well.
+
+h4 Summary of Actions
+
+table
+    thead
+        tr
+            th Action
+            th Requires Login
+            th Default Permission
+            th Possible Permission
+    tbody
+        tr
+            td Searching for Dashboards
+            td 
+            td Everyone
+            td N/A
+        tr
+            td Creating a Dashboard
+            td 
+                i.fa.fa-check
+            td Logged In
+            td N/A
+        tr
+            td Editing a Dashboard (Saving Changes)
+            td 
+                i.fa.fa-check
+            td Everyone
+            td Users and/or Groups
+        tr
+            td Viewing Dashboard Editor
+            td Only if View restricted
+            td Everyone
+            td Users and/or Groups
+        tr
+            td Viewing a Dashboard
+            td Only if View restricted
+            td Everyone
+            td Users and/or Groups
+        tr
+            td Exporting a Dashboard
+            td Only if View restricted
+            td Everyone
+            td Users and/or Groups
+
+h4 REST API
+
+p.
+    The REST API implements the same permission model as the UI, 
+    requiring login and session keys on all endpoints requiring authentication.

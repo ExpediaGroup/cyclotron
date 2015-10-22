@@ -1,0 +1,113 @@
+{
+    "dataSources": [{
+        "from": "-60min",
+        "name": "carbon-metrics-received",
+        "postProcessor": "",
+        "targets": ["carbon.agents.*.metricsReceived"],
+        "type": "graphite",
+        "url": "http://graphite"
+    }, {
+        "from": "-24h",
+        "name": "carbon-cpuUsage",
+        "postProcessor": "",
+        "targets": ["alias(summarize(avg(carbon.agents.*.cpuUsage),\"10min\",\"max\"),\"Max CPU Used\")", "alias(summarize(avg(carbon.agents.*.cpuUsage),\"10min\",\"min\"),\"Min CPU Used\")"],
+        "type": "graphite",
+        "until": "now",
+        "url": "http://graphite"
+    }, {
+        "from": "-24h",
+        "name": "carbon-committedpoints-10min-movingAverage",
+        "postProcessor": "",
+        "targets": ["movingAverage(summarize(carbon.agents.*.committedPoints,\"1min\",\"avg\"),\"10min\")"],
+        "type": "graphite",
+        "until": "now",
+        "url": "http://graphite"
+    }],
+    "description": "Examples with the Graphite data source",
+    "disableAnalytics": true,
+    "name": "example-datasource-graphite",
+    "pages": [{
+        "layout": {
+            "gridColumns": 2,
+            "gridRows": 2
+        },
+        "name": "Graphite Tables",
+        "widgets": [{
+            "dataSource": "carbon-metrics-received",
+            "highchart": {
+                "plotOptions": {
+                    "series": {
+                        "connectNulls": true
+                    }
+                },
+                "series": [{
+                    "name": "${function(name) { return name.replace('carbon.agents.',''); }}",
+                    "x": "_time",
+                    "y": "*"
+                }],
+                "xAxis": {
+                    "type": "datetime"
+                },
+                "yAxis": {
+                    "title": {
+                        "text": "Metrics"
+                    }
+                }
+            },
+            "title": "Carbon: Metrics Received",
+            "widget": "chart"
+        }, {
+            "dataSource": "carbon-cpuUsage",
+            "highchart": {
+                "plotOptions": {
+                    "series": {
+                        "connectNulls": true
+                    }
+                },
+                "series": [{
+                    "x": "_time",
+                    "y": "*"
+                }],
+                "xAxis": {
+                    "type": "datetime"
+                },
+                "yAxis": {
+                    "max": 100,
+                    "min": 0,
+                    "title": {
+                        "text": "CPU % Used"
+                    }
+                }
+            },
+            "title": "Carbon: CPU Usage, 10 minute intervals",
+            "widget": "chart"
+        }, {
+            "dataSource": "carbon-committedpoints-10min-movingAverage",
+            "gridHeight": 1,
+            "gridWidth": 2,
+            "highchart": {
+                "plotOptions": {
+                    "series": {
+                        "connectNulls": true
+                    }
+                },
+                "series": [{
+                    "name": "${function() { return 'Committed Points'; }}",
+                    "x": "_time",
+                    "y": "*"
+                }],
+                "xAxis": {
+                    "type": "datetime"
+                },
+                "yAxis": {
+                    "title": {
+                        "text": "Metrics"
+                    }
+                }
+            },
+            "title": "Carbon: Committed Points, 10 minute moving average",
+            "widget": "chart"
+        }]
+    }],
+    "theme": "light"
+}

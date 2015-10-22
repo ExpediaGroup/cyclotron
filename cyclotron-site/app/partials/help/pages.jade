@@ -1,0 +1,32 @@
+h3 Pages
+
+p In Cyclotron, Dashboards are composed of Pages.  A Page is a full-screen display of one or more Widgets.  
+    | Each Dashboard can have one or more Pages.
+p
+    | To add a Page to a Dashboard, first click on the Pages section of the Dashboard Editor, and click 
+    strong.no-wrap
+        i.fa.fa-plus
+        |  Add Page
+    |  at the top of the editor.  Click on the new Page to open its editor.
+
+p The order of Pages is significant: the first Page will be loaded by default when the Dashboard loads.  Dashboard
+    | controls allow the user to scroll forwards or backwards through the pages in a linear fashion.  The Pages page 
+    | allows easy reordering of the list of Pages in the Dashboard.
+
+h4 Page Name
+p
+    | The 
+    em name 
+    | is displayed in the URL when viewing this page.  It is optional&mdash;a default name
+    | will be generated from the page number (e.g.
+    em  /page-1)
+    |  if this property is omitted.  If the first page does not have a
+    em  name
+    |  , the URL will simply refer to the Dashboard without a page name or number, since the first page is the default.
+
+h4 Common Properties
+
+p These properties apply to each Page.  Several of them are overrides for Dashboard properties, from which 
+    | a Page will inherit if the properties are not overridden at the Page level.
+
+property-table(properties='config.dashboard.properties.pages.properties')

@@ -1,0 +1,35 @@
+# Bower
+bower_components
+
+# Build
+_public
+
+# Karma: Coverage
+coverage/
+coverage-PhantomJS*
+
+# Maven
+log/
+target/
+
+# Node.js
+npm-debug.log
+node_modules
+
+# Sublime Text
+*.sublime-*
+/bin
+
+# Eclipse
+.classpath
+.project
+.metadata
+.settings/
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store

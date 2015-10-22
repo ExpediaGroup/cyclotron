@@ -1,0 +1,20 @@
+
+.help-page.container-fluid
+    include header
+
+    .row
+        .sidebar.col-sm-4
+            h2 Documentation
+            collapse-menu(items='menu', select-item='selectItem(item)')
+
+
+        .col-sm-8
+            section.help-content
+
+                div(ng-include='selectedItem.path', ng-if='selectedItem.path != null')
+
+                .no-help(ng-if='selectedItem.path == null')
+                    i.fa.fa-exclamation-triangle
+                    | No help is available for this topic
+
+    .row.footer

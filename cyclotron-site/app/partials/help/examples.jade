@@ -1,0 +1,26 @@
+h3 Examples
+
+p There are many example Dashboards available with the tag
+    a(href='/?q=cyclotron-examples')
+        strong  cyclotron-examples
+    |.  Each Widget's help page also includes relevent snippets of the examples.
+
+p Under the covers, the Cyclotron editor constructors the Dashboard definition in JSON.  Here's a brief example:
+    pre.code.
+        {
+            "description": "This is an example",
+            "name": "example-dashboard",
+            "pages": [{
+                "duration": 60,
+                "frequency": 1,
+                "layout": {
+                    "gridColumns": 2,
+                    "gridRows": 2
+                },
+                "widgets": [{
+                    "widget": "clock"
+                }]
+            }],
+            "theme": "dark"
+        }
+

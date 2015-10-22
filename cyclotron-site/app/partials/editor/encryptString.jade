@@ -1,0 +1,23 @@
+.modal-header
+    h3.modal-title Encrypt String
+
+.modal-body
+    p This dialog encrypts a plaintext string.  The encrypted form can be copied and used in certain Data Source properties.
+    p
+    p This encryption is one-way, and the original value cannot be retrieved from Cyclotron. Store it externally if needed.
+    p
+    form(ng-submit='encrypt()')
+
+        p
+            input.superwide(type='value', ng-model='fields.value', placeholder='Original String')
+        div.centered
+            p
+                button.btn.btn-primary#editor-encrypt-encrypt(ng-click='encrypt()') Encrypt
+        p
+            input.superwide(type='value', ng-model='fields.encryptedValue', placeholder='Encrypted String')
+
+        //- Hidden input for ng-submit to work
+        input(type='submit', style='position: absolute; left: -9999px')
+
+.modal-footer
+    button.btn#editor-encrypt-cancel(ng-click='cancel()') Close

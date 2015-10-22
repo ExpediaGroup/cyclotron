@@ -1,0 +1,105 @@
+/*
+ * Copyright (c) 2013-2015 the original author or authors.
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at
+ *
+ *     http://www.opensource.org/licenses/mit-license.php
+ *
+ * Unless required by applicable law or agreed to in writing, 
+ * software distributed under the License is distributed on an 
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+ * either express or implied. See the License for the specific 
+ * language governing permissions and limitations under the License. 
+ */
+
+@import "../../../vendor/lesselements/_elements.less";
+@import "../common/variables.less";
+
+.export-page {
+
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: .9rem;
+
+    .box-sizing(border-box);
+    * {
+        .box-sizing(border-box);
+    }
+    *:before,
+    *:after {
+        .box-sizing(border-box);
+    }
+
+    .header {
+        .well { padding: 15px; padding-top: 20px; }
+        .button-bar { float: right; }
+        h1 {
+            display: inline-block;
+            margin-top: 0;
+            margin-right: 4rem;
+        }
+    }
+
+    h5 {
+        font-weight: bold;
+        font-size: 1rem;
+        clear: both;
+        padding-top: 2rem;
+    }
+
+    form.row {
+        .form-control {
+            width: 90%;
+            padding: 6px;
+            display: inline-block;
+        }
+
+        input.form-control {
+            height: 2.1rem;
+
+            &.inline {
+                width: 43.6%;
+            }
+        }
+
+        .fa-times {
+            color: #999;
+        }
+
+        .inline-delete-icon {
+            display: inline-block;
+            cursor: pointer;
+            padding: 4px;
+            margin-left: 4px;
+
+            &:focus,&:hover {
+                color: #000;
+                cursor: pointer;
+                opacity: .5;
+                filter: alpha(opacity=50)
+            }
+        }
+    }
+
+    .resultType {
+        float: left;
+        display: inline-block;
+        width: 3.5rem;
+
+        i { font-size: 3rem; }
+        span { display: block; font-size: 80%; }
+    }
+
+    .footer {
+        margin-top: 20px;
+    }
+
+    .form-control {
+        height: 2.2rem;
+        width: 10rem;
+        margin-right: 1rem;
+    }
+
+
+}

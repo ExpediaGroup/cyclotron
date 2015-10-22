@@ -1,0 +1,34 @@
+doctype
+html(lang='en', ng-app='cyclotronApp', ng-strict-di='')
+    head
+        title(ng-bind='$root.page_title')
+        meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1.0')
+        meta(name='description', content='Cyclotron')
+        meta(name='keywords', content='Cyclotron dashboards dashboard Expedia')
+        meta(name='author', content='Dave Bauman <dbauman@expedia.com>')
+        meta(http-equiv='ClearType', content='on')
+
+        link(rel='icon', type='image/png' href='/img/favicon16.png' sizes='16x16')
+        link(rel='icon', type='image/png' href='/img/favicon32.png' sizes='32x32')
+        link(rel='stylesheet', href='/css/app.common.css')
+        link(rel='stylesheet', href='/css/vendor.css')
+
+        <!--[if gte IE 9]><!-->   
+        //- Application Scripts
+        script(src='/js/vendor.js')
+        script(src='/js/app.common.js')
+        script(src='/js/conf/configService.js')
+        <!--<![endif]-->
+
+    body.ng-cloak
+        include partials/browserCompat
+        <!--[if gte IE 9]><!-->
+        section#appcontents(ui-view)
+        <!--<![endif]-->
+
+        
+        <!--[if lte IE 8]><!-->
+        script(src='/js/ie8.js')
+        <!--<![endif]-->

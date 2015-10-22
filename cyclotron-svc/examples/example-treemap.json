@@ -1,0 +1,267 @@
+{
+    "dataSources": [{
+        "name": "datasource_0",
+        "processor": "f = function() {\n    return [{\n      \"children\": [\n        {\n          \"children\": [\n            {\n              \"rate\": -0.4066358024691358,\n              \"value\": 769,\n              \"name\": \"Black or African American, Non-Hispanic\"\n            },\n            {\n              \"rate\": -0.35092180546726004,\n              \"value\": 1021,\n              \"name\": \"Hispanic or Latino\"\n            },\n            {\n              \"rate\": -0.44886363636363635,\n              \"value\": 291,\n              \"name\": \"White, Non-Hispanic\"\n            },\n            {\n              \"rate\": -0.4716981132075472,\n              \"value\": 28,\n              \"name\": \"American Indian or Alaska Native, Non-Hispanic\"\n            },\n            {\n              \"rate\": -0.234860883797054,\n              \"value\": 935,\n              \"name\": \"Asian or Pacific Islander, Non-Hispanic\"\n            }\n          ],\n          \"rate\": -0.348458904109589,\n          \"name\": \"25-44 years\"\n        },\n        {\n          \"children\": [\n            {\n              \"rate\": -0.36470588235294116,\n              \"value\": 324,\n              \"name\": \"Black or African American, Non-Hispanic\"\n            },\n            {\n              \"rate\": -0.06147540983606557,\n              \"value\": 458,\n              \"name\": \"Hispanic or Latino\"\n            },\n            {\n              \"rate\": -0.3368055555555556,\n              \"value\": 573,\n              \"name\": \"White, Non-Hispanic\"\n            },\n            {\n              \"rate\": 0.14285714285714285,\n              \"value\": 32,\n              \"name\": \"American Indian or Alaska Native, Non-Hispanic\"\n            },\n            {\n              \"rate\": 0.010443864229765013,\n              \"value\": 774,\n              \"name\": \"Asian or Pacific Islander, Non-Hispanic\"\n            }\n          ],\n          \"rate\": -0.18637048192771086,\n          \"name\": \"65+ years\"\n        },\n        {\n          \"children\": [\n            {\n              \"rate\": -0.4,\n              \"value\": 72,\n              \"name\": \"Black or African American, Non-Hispanic\"\n            },\n            {\n              \"rate\": -0.4645669291338583,\n              \"value\": 68,\n              \"name\": \"Hispanic or Latino\"\n            },\n            {\n              \"rate\": -0.20833333333333334,\n              \"value\": 19,\n              \"name\": \"White, Non-Hispanic\"\n            },\n            {\n              \"rate\": 1.4,\n              \"value\": 12,\n              \"name\": \"American Indian or Alaska Native, Non-Hispanic\"\n            },\n            {\n              \"rate\": 0.18604651162790697,\n              \"value\": 51,\n              \"name\": \"Asian or Pacific Islander, Non-Hispanic\"\n            }\n          ],\n          \"rate\": -0.30407523510971785,\n          \"name\": \"5-14 years\"\n        },\n        {\n          \"children\": [\n            {\n              \"rate\": -0.5954198473282443,\n              \"value\": 53,\n              \"name\": \"Black or African American, Non-Hispanic\"\n            },\n            {\n              \"rate\": -0.5423076923076923,\n              \"value\": 119,\n              \"name\": \"Hispanic or Latino\"\n            },\n            {\n              \"rate\": -0.575,\n              \"value\": 17,\n              \"name\": \"White, Non-Hispanic\"\n            },\n            {\n              \"rate\": 0.75,\n              \"value\": 7,\n              \"name\": \"American Indian or Alaska Native, Non-Hispanic\"\n            },\n            {\n              \"rate\": 0.2391304347826087,\n              \"value\": 57,\n              \"name\": \"Asian or Pacific Islander, Non-Hispanic\"\n            }\n          ],\n          \"rate\": -0.47401247401247404,\n          \"name\": \"0-4 years\"\n        },\n        {\n          \"children\": [\n            {\n              \"rate\": -0.39619651347068147,\n              \"value\": 762,\n              \"name\": \"Black or African American, Non-Hispanic\"\n            },\n            {\n              \"rate\": -0.1719260065288357,\n              \"value\": 761,\n              \"name\": \"Hispanic or Latino\"\n            },\n            {\n              \"rate\": -0.2727272727272727,\n              \"value\": 608,\n              \"name\": \"White, Non-Hispanic\"\n            },\n            {\n              \"rate\": -0.23809523809523808,\n              \"value\": 48,\n              \"name\": \"American Indian or Alaska Native, Non-Hispanic\"\n            },\n            {\n              \"rate\": -0.05090137857900318,\n              \"value\": 895,\n              \"name\": \"Asian or Pacific Islander, Non-Hispanic\"\n            }\n          ],\n          \"rate\": -0.2358936117325379,\n          \"name\": \"45-64 years\"\n        },\n        {\n          \"children\": [\n            {\n              \"rate\": -0.3829268292682927,\n              \"value\": 253,\n              \"name\": \"Black or African American, Non-Hispanic\"\n            },\n            {\n              \"rate\": -0.46920821114369504,\n              \"value\": 362,\n              \"name\": \"Hispanic or Latino\"\n            },\n            {\n              \"rate\": -0.3368421052631579,\n              \"value\": 63,\n              \"name\": \"White, Non-Hispanic\"\n            },\n            {\n              \"rate\": 0.6363636363636364,\n              \"value\": 18,\n              \"name\": \"American Indian or Alaska Native, Non-Hispanic\"\n            },\n            {\n              \"rate\": -0.06116207951070336,\n              \"value\": 307,\n              \"name\": \"Asian or Pacific Islander, Non-Hispanic\"\n            }\n          ],\n          \"rate\": -0.3422950819672131,\n          \"name\": \"15-24 years\"\n        }\n      ],\n      \"rate\": -0.28656039777712783,\n      \"name\": \"2006 to 2012\"\n    }];\n}",
+        "type": "javascript"
+    }, {
+        "name": "datasource_1",
+        "processor": "f = function() {\n    return [{\n      \"children\": [\n        {\n          \"children\": [\n            {\n              \"rate\": -0.4066358024691358,\n              \"cases\": 769,\n              \"description\": \"Black or African American, Non-Hispanic\"\n            },\n            {\n              \"rate\": -0.35092180546726004,\n              \"cases\": 1021,\n              \"description\": \"Hispanic or Latino\"\n            },\n            {\n              \"rate\": -0.44886363636363635,\n              \"cases\": 291,\n              \"description\": \"White, Non-Hispanic\"\n            },\n            {\n              \"rate\": -0.4716981132075472,\n              \"cases\": 28,\n              \"description\": \"American Indian or Alaska Native, Non-Hispanic\"\n            },\n            {\n              \"rate\": -0.234860883797054,\n              \"cases\": 935,\n              \"description\": \"Asian or Pacific Islander, Non-Hispanic\"\n            }\n          ],\n          \"rate\": -0.348458904109589,\n          \"description\": \"25-44 years\"\n        },\n        {\n          \"children\": [\n            {\n              \"rate\": -0.36470588235294116,\n              \"cases\": 324,\n              \"description\": \"Black or African American, Non-Hispanic\"\n            },\n            {\n              \"rate\": -0.06147540983606557,\n              \"cases\": 458,\n              \"description\": \"Hispanic or Latino\"\n            },\n            {\n              \"rate\": -0.3368055555555556,\n              \"cases\": 573,\n              \"description\": \"White, Non-Hispanic\"\n            },\n            {\n              \"rate\": 0.14285714285714285,\n              \"cases\": 32,\n              \"description\": \"American Indian or Alaska Native, Non-Hispanic\"\n            },\n            {\n              \"rate\": 0.010443864229765013,\n              \"cases\": 774,\n              \"description\": \"Asian or Pacific Islander, Non-Hispanic\"\n            }\n          ],\n          \"rate\": -0.18637048192771086,\n          \"description\": \"65+ years\"\n        },\n        {\n          \"children\": [\n            {\n              \"rate\": -0.4,\n              \"cases\": 72,\n              \"description\": \"Black or African American, Non-Hispanic\"\n            },\n            {\n              \"rate\": -0.4645669291338583,\n              \"cases\": 68,\n              \"description\": \"Hispanic or Latino\"\n            },\n            {\n              \"rate\": -0.20833333333333334,\n              \"cases\": 19,\n              \"description\": \"White, Non-Hispanic\"\n            },\n            {\n              \"rate\": 1.4,\n              \"cases\": 12,\n              \"description\": \"American Indian or Alaska Native, Non-Hispanic\"\n            },\n            {\n              \"rate\": 0.18604651162790697,\n              \"cases\": 51,\n              \"description\": \"Asian or Pacific Islander, Non-Hispanic\"\n            }\n          ],\n          \"rate\": -0.30407523510971785,\n          \"description\": \"5-14 years\"\n        },\n        {\n          \"children\": [\n            {\n              \"rate\": -0.5954198473282443,\n              \"cases\": 53,\n              \"description\": \"Black or African American, Non-Hispanic\"\n            },\n            {\n              \"rate\": -0.5423076923076923,\n              \"cases\": 119,\n              \"description\": \"Hispanic or Latino\"\n            },\n            {\n              \"rate\": -0.575,\n              \"cases\": 17,\n              \"description\": \"White, Non-Hispanic\"\n            },\n            {\n              \"rate\": 0.75,\n              \"cases\": 7,\n              \"description\": \"American Indian or Alaska Native, Non-Hispanic\"\n            },\n            {\n              \"rate\": 0.2391304347826087,\n              \"cases\": 57,\n              \"description\": \"Asian or Pacific Islander, Non-Hispanic\"\n            }\n          ],\n          \"rate\": -0.47401247401247404,\n          \"description\": \"0-4 years\"\n        },\n        {\n          \"children\": [\n            {\n              \"rate\": -0.39619651347068147,\n              \"cases\": 762,\n              \"description\": \"Black or African American, Non-Hispanic\"\n            },\n            {\n              \"rate\": -0.1719260065288357,\n              \"cases\": 761,\n              \"description\": \"Hispanic or Latino\"\n            },\n            {\n              \"rate\": -0.2727272727272727,\n              \"cases\": 608,\n              \"description\": \"White, Non-Hispanic\"\n            },\n            {\n              \"rate\": -0.23809523809523808,\n              \"cases\": 48,\n              \"description\": \"American Indian or Alaska Native, Non-Hispanic\"\n            },\n            {\n              \"rate\": -0.05090137857900318,\n              \"cases\": 895,\n              \"description\": \"Asian or Pacific Islander, Non-Hispanic\"\n            }\n          ],\n          \"rate\": -0.2358936117325379,\n          \"description\": \"45-64 years\"\n        },\n        {\n          \"children\": [\n            {\n              \"rate\": -0.3829268292682927,\n              \"cases\": 253,\n              \"description\": \"Black or African American, Non-Hispanic\"\n            },\n            {\n              \"rate\": -0.46920821114369504,\n              \"cases\": 362,\n              \"description\": \"Hispanic or Latino\"\n            },\n            {\n              \"rate\": -0.3368421052631579,\n              \"cases\": 63,\n              \"description\": \"White, Non-Hispanic\"\n            },\n            {\n              \"rate\": 0.6363636363636364,\n              \"cases\": 18,\n              \"description\": \"American Indian or Alaska Native, Non-Hispanic\"\n            },\n            {\n              \"rate\": -0.06116207951070336,\n              \"cases\": 307,\n              \"description\": \"Asian or Pacific Islander, Non-Hispanic\"\n            }\n          ],\n          \"rate\": -0.3422950819672131,\n          \"description\": \"15-24 years\"\n        }\n      ],\n      \"rate\": -0.28656039777712783,\n      \"description\": \"2006 to 2012\"\n    }];\n}",
+        "type": "javascript"
+    }, {
+        "name": "nodata",
+        "processor": "p = function() {\n    return [];\n}",
+        "type": "javascript"
+    }, {
+        "name": "simple-dataset",
+        "processor": "p = function () {\n    return [{\n        \"name\": \"Level 1\",\n        \"children\": [{\n            \"name\": \"Level 2: A\",\n            \"value\": 60\n        }, {\n            \"name\": \"Level 2: B\",\n            \"value\": 30\n        }, {\n            \"name\": \"Level 2: C\",\n            \"value\": 10\n        }]\n    }];\n}",
+        "type": "javascript"
+    }, {
+        "name": "complex-dataset",
+        "processor": "p = function () {\n    return [{\n        \"name\": \"Level 1\",\n        \"children\": [{\n            \"name\": \"Level 2: A\",\n            \"children\": [{\n                \"name\": \"Level 3: A.a\",\n                \"value\": 15\n            },{\n                \"name\": \"Level 3: A.b\",\n                \"value\": 10\n            },{\n                \"name\": \"Level 3: A.c\",\n                \"value\": 35,\n                \"children\": [{\n                    \"name\": \"Level 4: A.c.1\",\n                    \"value\": 20,\n                    \"children\": [{\n                        \"name\": \"Level 5: A.c.1.1\",\n                        \"value\": 20\n                    }]\n                },{\n                    \"name\": \"Level 4: A.c.2\",\n                    \"value\": 13\n                },{\n                    \"name\": \"Level 4: A.c.3\",\n                    \"value\": 2\n                }]\n            }]\n        }, {\n            \"name\": \"Level 2: B\",\n            \"children\": [{\n                \"name\": \"Level 3: B.a\",\n                \"value\": 15\n            },{\n                \"name\": \"Level 3: B.b\",\n                \"value\": 15\n            }]\n        }, {\n            \"name\": \"Level 2: C\",\n            \"children\": [{\n                \"name\": \"Level 3: C.a\",\n                \"value\": 1\n            },{\n                \"name\": \"Level 3: C.b\",\n                \"value\": 2\n            },{\n                \"name\": \"Level 3: C.c\",\n                \"value\": 2\n            },{\n                \"name\": \"Level 3: C.d\",\n                \"value\": 3\n            },{\n                \"name\": \"Level 3: C.e\",\n                \"value\": 2\n            }]\n        }, {\n            \"name\": \"Level 2: D\",\n            \"children\": [{\n                \"name\": \"Level 3: D.a\",\n                \"value\": 1\n            },{\n                \"name\": \"Level 3: D.b\",\n                \"value\": 22\n            },{\n                \"name\": \"Level 3: D.c\",\n                \"value\": 2\n            },{\n                \"name\": \"Level 3: D.d\",\n                \"value\": 3\n            },{\n                \"name\": \"Level 3: D.e\",\n                \"value\": 2\n            }]\n        }]\n    }];\n}",
+        "type": "javascript"
+    }, {
+        "name": "population",
+        "postProcessor": "pp = function(data) {\n    // Sources:\n    //\n    // https://simple.wikipedia.org/wiki/List_of_U.S._states_by_GDP\n    // https://simple.wikipedia.org/wiki/List_of_U.S._states_by_population\n    //\n    // Collected July 29, 2015\n}",
+        "type": "json",
+        "url": "http://pastebin.com/raw.php?i=aSVHXdP5"
+    }],
+    "description": "Examples of the Treemap widget.",
+    "disableAnalytics": true,
+    "name": "example-treemap",
+    "pages": [{
+        "layout": {
+            "gridColumns": 1,
+            "gridRows": 2
+        },
+        "name": "Default Settings",
+        "widgets": [{
+            "dataSource": "simple-dataset",
+            "title": "Simple Data Set",
+            "widget": "treemap"
+        }, {
+            "dataSource": "datasource_0",
+            "name": "Default Settings",
+            "title": "Changes in Tuberculosis Cases from 2006 to 2012",
+            "widget": "treemap"
+        }]
+    }, {
+        "layout": {
+            "gridColumns": 1,
+            "gridRows": 2
+        },
+        "name": "With Some Color",
+        "widgets": [{
+            "colorFormat": "0,0%",
+            "colorProperty": "rate",
+            "colorStops": [{
+                "color": "red",
+                "value": "-0.6"
+            }, {
+                "color": "white",
+                "value": "-0.2"
+            }, {
+                "color": "steelblue",
+                "value": ".6"
+            }],
+            "dataSource": "datasource_0",
+            "showLegend": true,
+            "valueFormat": "0,0.[0]",
+            "widget": "treemap"
+        }, {
+            "colorProperty": "rate",
+            "colorStops": [{
+                "color": "Green",
+                "value": "-0.6"
+            }, {
+                "color": "LightGreen",
+                "value": "-0.2"
+            }, {
+                "color": "White",
+                "value": ".6"
+            }],
+            "dataSource": "datasource_0",
+            "name": "Alternate Color Stops",
+            "showLegend": true,
+            "title": "Changes in Tuberculosis Cases from 2006 to 2012",
+            "valueProperty": "value",
+            "widget": "treemap"
+        }]
+    }, {
+        "layout": {
+            "gridColumns": 1,
+            "gridRows": 2
+        },
+        "name": "Legend Settings",
+        "widgets": [{
+            "colorProperty": "rate",
+            "colorStops": [{
+                "color": "Red",
+                "value": "-0.6"
+            }, {
+                "color": "white",
+                "value": "-0.2"
+            }, {
+                "color": "steelblue",
+                "value": ".6"
+            }],
+            "dataSource": "datasource_0",
+            "showLegend": false,
+            "title": "No Legend",
+            "valueProperty": "value",
+            "widget": "treemap"
+        }, {
+            "colorProperty": "rate",
+            "colorStops": [{
+                "color": "#7ebf6e",
+                "value": "-0.6"
+            }, {
+                "color": "#6e90bf",
+                "value": "-0.2"
+            }, {
+                "color": "#af6ebf",
+                "value": "0"
+            }, {
+                "color": "#bf6e72",
+                "value": "0.2"
+            }, {
+                "color": "#bfb36e",
+                "value": "0.6"
+            }],
+            "dataSource": "datasource_0",
+            "legendHeight": "50",
+            "showLegend": true,
+            "title": "Tall Legend",
+            "valueProperty": "value",
+            "widget": "treemap"
+        }]
+    }, {
+        "layout": {
+            "gridColumns": 1,
+            "gridRows": 1
+        },
+        "name": "Properties",
+        "widgets": [{
+            "colorDescription": "Rate of Change",
+            "colorFormat": "0,0%",
+            "colorProperty": "rate",
+            "colorStops": [{
+                "color": "lightgreen",
+                "value": "-0.6"
+            }, {
+                "color": "white",
+                "value": "0.0"
+            }, {
+                "color": "#ff8888",
+                "value": "0.6"
+            }],
+            "dataSource": "datasource_1",
+            "labelProperty": "description",
+            "name": "Alternate properties",
+            "showLegend": true,
+            "title": "Changes in Tuberculosis Cases from 2006 to 2012",
+            "valueDescription": "TB Cases",
+            "valueProperty": "cases",
+            "widget": "treemap"
+        }]
+    }, {
+        "layout": {
+            "gridColumns": 1,
+            "gridRows": 2
+        },
+        "name": "Colorless",
+        "widgets": [{
+            "colorFormat": "0,0%",
+            "colorProperty": "rate",
+            "dataSource": "datasource_0",
+            "showLegend": true,
+            "title": "No Color Stops",
+            "valueFormat": "0,0.[0]",
+            "widget": "treemap"
+        }, {
+            "colorFormat": "0,0%",
+            "colorProperty": "rate",
+            "colorStops": [{
+                "color": "Red",
+                "value": "-0.6"
+            }],
+            "dataSource": "datasource_0",
+            "showLegend": true,
+            "title": "Only One Color Stop",
+            "valueFormat": "0,0.[0]",
+            "widget": "treemap"
+        }]
+    }, {
+        "layout": {
+            "gridColumns": 1,
+            "gridRows": 1
+        },
+        "name": "No Data",
+        "widgets": [{
+            "dataSource": "nodata",
+            "noData": "There is no Data",
+            "title": "No Data",
+            "widget": "treemap"
+        }]
+    }, {
+        "layout": {
+            "gridColumns": 1,
+            "gridRows": 1
+        },
+        "name": "Complex Dataset",
+        "widgets": [{
+            "colorProperty": "value",
+            "colorStops": [{
+                "color": "#99effc",
+                "value": "0"
+            }, {
+                "color": "#16a2b7",
+                "value": "60"
+            }],
+            "dataSource": "complex-dataset",
+            "title": "Complex Dataset",
+            "widget": "treemap"
+        }]
+    }, {
+        "layout": {
+            "gridColumns": 1,
+            "gridRows": 8
+        },
+        "name": "Population",
+        "widgets": [{
+            "colorDescription": "${Cyclotron.getPopulationColorDescription()}",
+            "colorFormat": "${Cyclotron.getPopulationColorFormat()}",
+            "colorProperty": "${Cyclotron.getPopulationColor()}",
+            "colorStops": "${Cyclotron.getPopulationColorStops()}",
+            "dataSource": "population",
+            "gridHeight": 7,
+            "labelProperty": "state",
+            "showLegend": true,
+            "valueDescription": "${Cyclotron.getPopulationValueDescription()}",
+            "valueProperty": "${Cyclotron.getPopulationValue()}",
+            "widget": "treemap"
+        }, {
+            "allowFullscreen": false,
+            "html": "<form id=\"xx\" style=\"display: inline\" action='/example-treemap' method='get'>\n    <span>Size: </span>    \n    <select  id='xsize' name='size'>\n        <option value='population'>Population</option>\n        <option value='gdp_millions'>GDP (millions)</option>\n    </select>\n    <span>Color: </span>    \n    <select id='xcolor' name='color'>\n        <option value='growth_rate'>Growth Rate</option>\n        <option value='gdp_millions'>GDP (millions)</option>\n        <option value='population'>Population</option>\n        <option value=''>None</option>\n    </select>\n</form>\n<script>\n    $('#xsize option[value=\"${Cyclotron.parameters.pop_valueproperty}\"]').attr(\"selected\", \"selected\");\n    $('#xcolor option[value=\"${Cyclotron.parameters.pop_colorproperty}\"]').attr(\"selected\", \"selected\");\n    \n    $('#xx > select').change(function() {\n        Cyclotron.parameters.pop_valueproperty = $('#xsize').val();\n        Cyclotron.parameters.pop_colorproperty = $('#xcolor').val();\n        Cyclotron.dataSources.population.execute(true);\n    });\n</script>",
+            "layout": {},
+            "theme": "lightborderless",
+            "widget": "html"
+        }]
+    }],
+    "parameters": [{
+        "defaultValue": "growth_rate",
+        "name": "pop_colorproperty",
+        "showInUrl": true
+    }, {
+        "defaultValue": "population",
+        "name": "pop_valueproperty",
+        "showInUrl": true
+    }],
+    "scripts": [{
+        "text": "Cyclotron.getPopulationValue = function () {\n    switch (Cyclotron.parameters.pop_valueproperty.toLowerCase()) {\n        case 'gdp_millions':\n            return 'gdp_millions'\n        case 'population':\n            return 'population';\n        default:\n            return 'population';\n    }\n}\nCyclotron.getPopulationValueDescription = function () {\n    switch (Cyclotron.parameters.pop_valueproperty.toLowerCase()) {\n        case 'gdp_millions':\n            return 'GDP (millions)'\n        case 'population':\n            return 'population';\n        default:\n            return 'population';\n    }\n}\nCyclotron.getPopulationColor = function () {\n    switch (Cyclotron.parameters.pop_colorproperty.toLowerCase()) {\n        case 'growth_rate':\n            return 'growth_rate';\n        case 'population':\n            return 'population'\n        case 'gdp_millions':\n            return 'gdp_millions'\n        default:\n            return 'growth_rate';\n    }\n}\nCyclotron.getPopulationColorFormat = function () {\n    switch (Cyclotron.parameters.pop_colorproperty.toLowerCase()) {\n        case 'growth_rate':\n            return '0.00';\n        case 'population':\n            return '0a'\n        case 'gdp_millions':\n            return '0a'\n        default:\n            return '0.00';\n    }\n}\nCyclotron.getPopulationColorDescription = function () {\n    switch (Cyclotron.parameters.pop_colorproperty.toLowerCase()) {\n        case 'growth_rate':\n            return 'growth rate';\n        case 'population':\n            return 'population'\n        case 'gdp_millions':\n            return 'GDP (millions)'\n        case '':\n            return '';\n        default:\n            return 'growth';\n    }\n}\nCyclotron.getPopulationColorStops = function () {\n    switch (Cyclotron.parameters.pop_colorproperty.toLowerCase()) {\n        case '': \n            return null;\n        case 'population':\n            return [{\n                \"value\": \"0\",\n                \"color\": \"white\"\n            }, {\n                \"color\": \"#688398\",\n                \"value\": 10000000\n            }, {\n                \"value\": 40000000,\n                \"color\": \"#4D5A6D\"\n            }];\n        case 'gdp_millions':\n            return [{\n                \"value\": \"0\",\n                \"color\": \"white\"\n            }, {\n                \"color\": \"#E5FCC2\",\n                \"value\": 100000\n            }, {\n                \"value\": 1000000,\n                \"color\": \"#9DE0AD\"\n            }, {\n                \"value\": 5000000,\n                \"color\": \"#45ADA8\"\n            }, {\n                \"value\": 15000000,\n                \"color\": \"#547980\"\n            }];\n        default:\n            // growth rate\n            return [{\n                \"color\": \"#995351\",\n                \"value\": -1\n            }, {\n                \"color\": \"#d3d339\",\n                \"value\": 8\n            }, {\n                \"color\": \"#529951\",\n                \"value\": 35\n            }];\n    }\n}"
+    }],
+    "styles": [{
+        "name": "xx",
+        "text": "form#xx {\n    font-size: 1rem;\n}\n\nform#xx select {\n    margin-right: 2rem;\n}"
+    }],
+    "theme": "light"
+}

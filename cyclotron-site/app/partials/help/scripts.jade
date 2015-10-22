@@ -1,0 +1,55 @@
+h3 Scripts
+
+p The 
+    em scripts 
+    | property is an optional list of Javascript code to run when the Dashboard is being initialized.  
+    | Each item in the array either points to an externally-hosted Javascript file, or it contains inline Javascript.  
+    | In both cases, the list of scripts will be executed top-down when the dashboard loads.  Specifically, the scripts
+    | load after the Cyclotron code and vendor files (e.g. jQuery) are loaded, but before any of the Widgets start to render.
+
+p This example shows two scripts: the first is an external Javascript library, D3.js.  The second is a fragment of Javascript 
+    | code that uses D3.js to create a color gradient function.  This could be used in a Chart widget to apply a 
+    | gradient color to each point, also shown below:
+
+pre.code.
+    "scripts": [{
+        "path": "http://d3js.org/d3.v3.min.js"
+    }, {
+        "text": "colorGradient=d3.scale.linear().domain([0, 500, 1000]).range(['green', 'yellow', 'red']);"
+    }]
+
+pre.code.
+    "widgets": [{
+        "dataSource": "world-traffic",
+        "gridHeight": 1,
+        "gridWidth": 1,
+        "highchart": {
+            "series": [{
+                "name": "Countries",
+                "point": {
+                    "color": "${colorGradient(Math.log(parseFloat(#{EdgeHits}))/22.3)}",
+                    "x": "#{RegionName}",
+                    "y": "#{EdgeHits}"
+                }
+            }]
+        },
+        "title": "Chart Widget",
+        "widget": "chart"
+    }]
+
+h4 Single-Load
+
+p By default, Cyclotron refreshes the Dashboard definition every minute (or every second in Preview mode).  When this happens, Pages,
+    |  Widgets, Styles, and Scripts are updated to keep the Dashboard up-to-date.  Inline Scripts (with a
+    em  text
+    |  property) are automatically re-executed.  This is ideal if they contain helper functions or lookup datasets, but can be a problem if
+    |  they perform other actions like loading data.  In this case, the
+    em  singleLoad
+    |  property can be set true, so that the Script will only be run once, the first time the Dashboard is opened in the browser.
+
+p Scripts loaded from a
+    em  path
+    |  property are always considered single-load scripts and the value of this property will be ignored.
+
+h4 Properties
+property-table(properties='config.dashboard.properties.scripts.properties')

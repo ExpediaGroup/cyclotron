@@ -1,0 +1,20 @@
+.editor-view-header
+    h3 {{ getPageName(editor.selectedPage, editor.selectedPageIndex) }}
+
+    .editor-view-header-buttons
+        button#editor-widgets-add.btn.btn-primary(type='button', ng-click='newWidget(null, editor.selectedPageIndex)', title='Add New Widget')
+            i.fa.fa-plus
+            span  Add Widget
+
+        button#editor-page-remove.btn.btn-default(type='button', ng-click='removePage(editor.selectedPageIndex); goToSubState("edit.pages", editor.dashboard.pages)', title='Remove') 
+            i.fa.fa-times
+            span  Remove Page
+div
+    .form-group
+        label Widgets
+
+        editor-view-object-array(model='editor.selectedPage.widgets', label='Widget', 
+            substate='edit.widget', headingfn='getWidgetName(item, index)')
+
+    .editor-property-set(model='editor.selectedPage', excludes='pageExcludes', definition='dashboardProperties.pages.properties')
+        

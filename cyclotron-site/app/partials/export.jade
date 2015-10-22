@@ -1,0 +1,57 @@
+
+.export-page.container-fluid
+    include header
+
+    .row.header
+        .well.well-sm
+            .button-bar
+                a(ng-href='/{{ dashboardName }}')
+                    button.btn.btn-default
+                        i.fa.fa-angle-left
+                        |  Return to Dashboard
+
+            h1 Export Dashboard
+    form.row.well.well-sm
+        .col-md-3.col-md-offset-1
+            .form-group
+                label.control-label Dashboard Name
+                input.form-control(type='text', ng-model='dashboardName', placeholder='Dashboard Name', required)
+
+            .form-group
+                label.control-label Format
+                select.form-control(ng-options='format.label for format in exportFormats', ng-model='exportFormat')
+
+            .form-group
+                button.btn.btn-primary(type='submit', ng-click='export()', ng-disabled='exporting') Export
+
+        .col-md-6
+            .form-group
+                label.control-label Dashboard Parameters
+                editor-view-hash(model='parameters')
+
+    .row
+        .col-md-7.col-md-offset-1
+            .results(ng-if='exportStatus')
+
+                .pull-left
+                    i.fa.fa-refresh(ng-show='exportStatus.status == "running"')
+                    i.fa.fa-check.text-success(ng-show='exportStatus.status == "complete"')
+                    span  Status: {{ exportStatus.status }}
+
+                .pull-right {{ exportStatus.duration / 1000 }} seconds
+
+                div(ng-show='exportStatus.png.length > 0')
+                    h5 Images
+                    .resultType(ng-repeat='png in exportStatus.png')
+                        a(ng-href='{{ png }}', target='_blank')
+                            i.fa.fa-file-image-o
+                            span Page {{ $index + 1 }}
+
+                div(ng-show='exportStatus.pdf.length > 0')
+                    h5 PDF
+
+                    .resultType(ng-repeat='pdf in exportStatus.pdf')
+                        a(ng-href='{{ pdf }}', target='_blank')
+                            i.fa.fa-file-pdf-o
+
+    .row.footer

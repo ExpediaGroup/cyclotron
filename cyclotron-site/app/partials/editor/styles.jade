@@ -1,0 +1,10 @@
+.editor-view-header
+    h3 Styles
+
+    .editor-view-header-buttons
+        button#editor-styles-add.btn.btn-primary(type='button', ng-click='newStyle()', title='Add New Style') 
+            i.fa.fa-plus
+            span  Add Style
+
+editor-view-object-array(model='editor.dashboard.styles', label='Style', 
+    substate='edit.style', headingfn='getScriptOrStyleName(item, index, label)')

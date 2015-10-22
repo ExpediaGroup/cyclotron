@@ -1,0 +1,315 @@
+h3 Quick Start
+
+p Before you start building a Dashboard with Cyclotron, make sure you know two things:
+ol
+    li What data do you want to display, and is it available?
+    li How do you want to visualize it?
+
+p Knowing the answer to these questions will make it easier to get started with Cyclotron and avoid
+    | unnecessary effort.  It's also recommended to review the
+    a(href='/?q=cyclotron-examples')  Example Dashboards
+    | , to get a idea of what Cyclotron's capabilities are.
+
+
+h4 Creating a Dashboard
+
+p(ng-if='config.authentication.enable')
+    | Before creating a Dashboard, you must login.  Click on the
+    strong  Login
+    |  button on the home page, or on the top-right of the header.  After logging in, 
+    | the header will show the login status, and display your
+    a(href='https://en.gravatar.com/', target='_blank')  Gravatar
+    |  image (if configured).
+
+p
+    | Click on the
+    strong  New Dashboard
+    |  button on the home page, or on the top-right of the header.  The Dashboard Editor 
+    | will open with an empty configuration.
+
+h5 Name 
+
+.bg-warning
+    i.fa.fa-warning 
+    .inner
+        span Dashboards cannot be renamed after they have been created.  Choose a name wisely.
+p
+    | Enter a name for the dashboard in the 
+    em  Name
+    |  textbox.  This name will be used in the URL to access the Dashboard. The name must be
+    | unique and alphanumeric&mdash;special characters are not allowed, and spaces will be 
+    | converted automatically into dashes.
+
+h5 Tags
+p 
+    | Tags are keywords used to organize and search for Dashboards.  For example, example Cyclotron
+    | dashboards are all tagged with 
+    strong  cyclotron-examples
+    |  so they can be easily discovered.  In the 
+    em  Tags
+    |  box, select one or more existing Tags, or enter a new Tag.  This step is optional, and 
+    | more tags can be added or removed later.
+
+div(ng-if='config.authentication.enable')
+    h5 Edit Permissions and View Permissions
+    p
+        | By default, Cyclotron dashboards are open to everyone for viewing and editing.  These two 
+        | properties provide the means to restrict editing or viewing to specific user(s) and group(s).  
+        | For more information, see the help section 
+        strong  Permissions
+        | .
+
+h5 Description
+p
+    | The
+    em  description
+    |  property is an optional note displayed in search results and at the top of the Dashboard editor.
+
+h5 Theme
+p
+    | Several predefined themes are available, which change the color and styling of the 
+    | Dashboard and Widgets.  If left unset, Cyclotron will use the default theme
+    strong  ({{ config.dashboard.properties.theme.default }})
+    | . Pages and Widgets can override the 
+    | Dashboard theme, but will inherit this property by default.
+
+h5 Additional Properties
+p 
+    | Cyclotron has many optional properties, so the
+    em  Additional Properties
+    |  dropdown contains those less-frequently needed.  Selecting any of the properties in this
+    | dropdown adds to the Dashboard so it can be configured.
+
+
+h4 Saving the Dashboard
+
+p
+    | At this point, click the green 
+    strong.no-wrap
+        i.fa.fa-check-square-o
+        |  Save
+    |  button at the top of the page.  This will create the first revision of the new Dashboard.  At
+    | this point, the Dashboard is available for anyone to view.  Click the blue 
+    strong.no-wrap
+        i.fa.fa-external-link
+        |  Preview
+    |  button to open the Dashboard in a new window.
+
+h5 Revisions
+p
+    | Each time the Dashboard is modified and saved, the Revision number increments.  This is displayed 
+    | at the top of the Dashboard Editor. A copy of the Dashboard is saved as well, so older Revisions
+    | can be viewed or restored.  To view older Revisions, click on the
+    strong  Revision number
+    |  link at the top of the Dashboard Editor.  This enables scrolling backward/forward through the
+    | Revision history.  The 
+    strong.no-wrap
+        i.fa.fa-external-link
+        |  Preview
+    |  button will preview the currently selected Revision as well.
+
+p
+    | To restore an older Revision, scroll backwards in the history to select the correct Revision, then
+    | click 
+    strong.no-wrap
+        i.fa.fa-check-square-o
+        |  Save
+    | . This will save a copy of the older Revision as a newer Revision, and increment the Revision number.
+
+
+h4 Viewing the Dashboard
+
+p The Dashboard can be viewed in several ways:
+
+ul
+    li Searching for the Dashboard by name or Tags, and selecting the Dashboard
+    li Clicking the 
+        strong.no-wrap 
+            i.fa.fa-external-link
+            |  Preview
+        |  link in the Dashboard Editor
+    li Directly navigating to the Dashboard URL
+
+p
+    | Dashboard navigation controls are available by hovering the mouse over the bottom center of the screen.
+    | If a Dashboard has more than one page, pages can be scrolled through using the
+    strong  left
+    |  and
+    strong  right
+    |  arrow buttons.
+
+.bg-info
+    i.fa.fa-info-circle 
+    .inner
+        span  The Dashboard can be saved and previewed at any time during development, and as frequently as needed.
+
+h4 Adding a Data Source
+
+p
+    | Before the Dashboard will display anything, it needs to load some data via 
+    | a Data Source.  Open the Dashboard Editor and click on 
+    strong.no-wrap
+        i.fa.fa-cloud-download
+        |  Data Sources
+    |  in the sidebar.
+
+p
+    | This page lists all the Data Sources in the Dashboard. Click 
+    strong.no-wrap
+        i.fa.fa-plus
+        |  Add Data Source
+    |  to create a new, empty Data Source.  The Data Source type and name
+    | will be shown in the list on this page.  The sidebar also lists each Data Source for 
+    | rapid navigation.
+
+p
+    | Data Sources can also be cloned or removed, and moved up
+    | and down.  The order of Data Sources does not have any
+    | effect on the Dashboard and is cosmetic only.
+
+p
+    | To edit the new Data Source, click on its name, or select it in the sidebar menu.
+
+h5 Type
+p 
+    | The
+    em  type
+    |  property has a dropdown with all supported Data Source types.  Changing the 
+    | selected type will change what properties are available in the editor.  Select the
+    strong  json
+    |  Data Source type, which is used to load JSON documents.
+
+p
+    | The
+    em  url
+    |  property is required, and specifies the web location to download; it can be a static 
+    | file or a web service.  Here's a sample JSON file: 
+    a(href='http://pastebin.com/raw.php?i=4yCbDza4', target='_blank')
+        | http://pastebin.com/raw.php?i=4yCbDza4
+
+p
+    | This sample JSON file can be used without any other configuration, as it is already
+    | in the correct format and does not require authentication.  Enter this URL in the
+    em  url
+    |  property.
+
+h5 Name
+p 
+    | The name is used by Widgets to reference this Data Source, so it should be a 
+    | unique, meaningful name.
+
+h5 Data Source Configuration
+p
+    | The remaining configuration will be largely specific to which Data Source type is
+    | selected.  For more information on Data Sources, refer to the help section on 
+    strong  Data Sources
+
+h4 Adding a Page
+
+p After the Data Source is added, a new Page must be added to display the data.  In the 
+    | Dashboard Editor, click on 
+    strong.no-wrap
+        i.fa.fa-file-o
+        |  Pages
+    |  in the sidebar.
+
+p
+    | This page lists all the Pages in the Dashboard. Click 
+    strong.no-wrap
+        i.fa.fa-plus
+        |  Add Page
+    |  to create a new, empty Page.  The Page name and list of widgets
+    | will be shown in the list on this page.  The sidebar also lists each Page for 
+    | rapid navigation.
+
+p
+    | Pages can also be cloned or removed, and moved up
+    | and down.  The order of Pages determines the order they are displayed when
+    | viewing the Dashboard.
+
+p
+    | To edit the new Page, click on its name, or select it in the sidebar menu.
+
+h5 Name
+p
+    | The name is displayed in URL when viewing this page.  It is optional&mdash;a default name
+    | will be generated from the page number if omitted.
+
+h5 Layout
+p
+    | The Page Layout is important for determining how Widgets appear on the Dashboard.  Cyclotron
+    | uses a grid-based layout, so each page has a configurable number of rows and columns.  
+    | Widgets can span one or more rows/columns, and thesize of each row and column will be 
+    | adjusted to fit in the browser. 
+
+p
+    | The Page Layour defaults to a
+    strong  2x2
+    |  grid, which can contain 4 1x1-sized Widgets.  Change
+    em  Grid Columns
+    |  to 1, and
+    em  Grid rows
+    |  to 1 as well.  This will fit a single Widget.
+
+
+h5 Widgets
+p
+    | By default, the Page has no Widgets on it.  Click the blue 
+    strong.no-wrap
+        i.fa.fa-plus
+        |  Add Widget
+    |  to create a new Widget on this page.  The Widget type (and title) will be shown in 
+    | the list on this page.  The sidebar also lists each Widget in the current Page for 
+    | rapid navigation.
+
+p
+    | To edit the new Widget, click on its name, or select it in the sidebar menu.
+
+h4 Adding a Widget
+
+h5 Type
+p
+    | Each Widget on the Dashboard must be one of several supported Widget Types. By default, 
+    | a Widget has no Type.  In the Widget Type dropdown, select
+    strong  Table
+    | .  Changing the 
+    | selected Widget Type will change what properties are available in the editor.
+
+p
+    strong Table
+    |  is a good Widget to begin with, because its default behavior is to show all
+    | the rows and columns of the Data Source, without needing any configuration. 
+
+h5 Data Source
+p
+    | To reference the Data Source created earlier, select the Data Source name from the
+    em  Data Source
+    |  property dropdown.  This connects the Widget to the results from the Data Source.
+
+h5 Layout
+p
+    | Each Widget has a layout configuration, which is used in conjection with the Page
+    | Layout to determine the size of the Widget.  The default Widget size is 1x1.
+    | Since the Page Layout is set to
+    strong  1x1
+    | , set this Widget to
+    strong  1x1
+    |  to match (or leave it unset to use the default).
+
+h5 Save and Preview Dashboard
+
+p
+    | At this point, the Dashboard should have a Data Source and a connected Table Widget. 
+    | Save and Preview the Dashboard now, to see the result.
+
+h4 Continuing Development
+
+p
+    | This was a basic introduction to creating a very simple Dashboard.  From here, more Data
+    | Sources or Widgets can be added and configured.
+
+p
+    | For more information on Widgets in general or specific Widgets, 
+    | refer to the help section on 
+    strong  Widgets
+    | .

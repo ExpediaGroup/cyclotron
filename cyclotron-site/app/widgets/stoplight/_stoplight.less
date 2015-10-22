@@ -1,0 +1,106 @@
+/*
+ * Copyright (c) 2013-2015 the original author or authors.
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at
+ *
+ *     http://www.opensource.org/licenses/mit-license.php
+ *
+ * Unless required by applicable law or agreed to in writing, 
+ * software distributed under the License is distributed on an 
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+ * either express or implied. See the License for the specific 
+ * language governing permissions and limitations under the License. 
+ */
+
+.stoplight-widget {
+    overflow: hidden;
+    height: 100%;
+    box-sizing: border-box;
+
+    * {
+        user-select: none;
+        outline:none;
+        box-sizing: border-box;
+    }
+
+    @trafficlight-color: #333;
+
+    .transparent {
+        opacity: .3;
+    }
+
+    .trafficlight {
+        height: 100%;
+        margin: auto;
+        position: relative;
+    }
+
+    .trafficlight-inner {
+        background-color: @trafficlight-color;
+        border: solid 5px #000;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: 100;
+    }
+
+    .protector {
+        background: transparent;
+        position: absolute;
+        width: 180px;
+        height: 0;
+        top: 20px;
+        left: -35px;
+        border-right: solid 30px transparent;
+        border-left: solid 30px transparent;
+        border-top: solid 90px #111;
+        border-radius: 10px;
+    }
+
+    .light {
+        background-size: 5px 5px; 
+        border-radius: 50%;
+        border: dotted 2px;
+        margin: auto;
+        opacity: .20;
+
+        &.active {
+            opacity: 1;
+        }
+    }
+
+    .red {
+        background-color: red;
+        background-image: radial-gradient(brown, transparent);
+        border-color: red;
+        box-shadow: 
+            0 0 20px #111 inset,
+            0 0 10px red;
+    }
+
+    .yellow{
+        background-color: #CCCC00;
+        background-image: radial-gradient(yellow, transparent);
+        border-color: yellow;
+        box-shadow: 
+            0 0 20px #111 inset,
+            0 0 10px yellow;
+    }
+
+    .green{
+        background-color: green;
+        background-image: radial-gradient(lime, transparent);
+        border-color: lime;
+        box-shadow: 
+            0 0 20px #111 inset,
+            0 0 10px lime;
+    }
+
+
+    &.widget-noscroll {
+        overflow-y: hidden;
+        overflow-x: hidden;
+    }
+}

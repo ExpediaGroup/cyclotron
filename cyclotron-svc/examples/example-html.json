@@ -1,0 +1,81 @@
+{
+    "dataSources": [{
+        "name": "cyclotron-datasource-types",
+        "processor": "p = function() {\n    return [\n        { \"type\": \"Graphite\" },\n        { \"type\": \"HTML\" },\n        { \"type\": \"JavaScript\" },\n        { \"type\": \"JSON\" },\n    ];\n}",
+        "type": "javascript"
+    }, {
+        "name": "green-cities",
+        "type": "json",
+        "url": "http://pastebin.com/raw.php?i=4yCbDza4"
+    }],
+    "description": "Examples of the HTML widget",
+    "disableAnalytics": true,
+    "name": "example-html",
+    "pages": [{
+        "layout": {
+            "gridColumns": 2,
+            "gridRows": 9
+        },
+        "widgets": [{
+            "allowFullscreen": false,
+            "gridHeight": 1,
+            "gridWidth": 2,
+            "html": "<h1>Example HTML Dashboard</h1>",
+            "name": "Header",
+            "noscroll": true,
+            "theme": "lightborderless",
+            "widget": "html"
+        }, {
+            "gridHeight": 2,
+            "gridWidth": 1,
+            "html": "<br>\n<ul>\n    <li>Chart</li>\n    <li>HTML</li>\n    <li>Number</li>\n    <li>Table</li>\n</ul>",
+            "name": "Hard-coded list",
+            "title": "Type of Widgets:",
+            "widget": "html"
+        }, {
+            "dataSource": "cyclotron-datasource-types",
+            "gridHeight": 2,
+            "gridWidth": 1,
+            "html": "    <li>#{type}</li>",
+            "name": "Dynamic List",
+            "postHtml": "</ul>",
+            "preHtml": "<br>\n<ul>",
+            "title": "Type of Data Sources:",
+            "widget": "html"
+        }, {
+            "allowFullscreen": false,
+            "gridHeight": 1,
+            "gridWidth": 2,
+            "html": "<button id='btn-1'>Click Me</button>\n<div id='output-dv'>\n    <i class='fa fa-exclamation'></i>\n    <span>You clicked the button!</span>\n</div>",
+            "name": "JavaScript",
+            "postHtml": "<script>\n    $('#btn-1').click(function() {\n        $('#output-dv').toggle();\n    });\n</script>",
+            "widget": "html"
+        }, {
+            "dataSource": "green-cities",
+            "gridHeight": 5,
+            "gridWidth": 2,
+            "html": "<div class=\"green-city-box\">\n    <div class=\"name\">#{metro_area}</div>\n    <div class=\"emissions\" data-emissions=\"#{emissions_prevented}\">Emissions Prevented: ${numeral(#{emissions_prevented}).format('000,0')}</div>\n</div>",
+            "postHtml": "<div id=\"green-cities-source\"><a href=\"https://opendata.socrata.com/Government/Greenest-Cities-in-the-US/dnfk-m2dd\"><i class=\"fa fa-external-link\"></i> Source</a></div>\n<script>\n    $('.green-city-box').each(function(index, element) {\n        var emissions = _.parseInt($(element).find('.emissions').data('emissions'));\n        $(element).css('background-color', '#' + rainbow.colourAt(emissions));\n    });\n</script>",
+            "preHtml": "<br>",
+            "sortBy": ["-emissions_prevented"],
+            "title": "Green Cities",
+            "widget": "html"
+        }]
+    }],
+    "parameters": [],
+    "scripts": [{
+        "path": "https://rawgit.com/anomal/RainbowVis-JS/master/rainbowvis.js",
+        "text": ""
+    }, {
+        "name": "rainbow-initialization",
+        "text": "rainbow = new Rainbow();\nrainbow.setNumberRange(0, 55000);\nrainbow.setSpectrum('red', 'yellow', 'green');"
+    }],
+    "styles": [{
+        "name": "clickMe",
+        "text": "#output-dv {\n    display: none;;\n    padding: .3rem;\n    border: 1px dotted #787;\n    width: 80%;\n    margin: auto;\n    float: right;\n}\n\n#output-dv > i {\n    margin: .4rem;\n    color: green;\n}"
+    }, {
+        "name": "green-cities",
+        "text": "#green-cities-source {\n    font-variant: small-caps;\n    color: #777;\n    clear: both;\n    padding-top: 1rem;\n}\n\n#green-cities-source i {\n    margin-right: .3rem;\n}\n\n.green-city-box {\n    float: left;\n    margin-right: .4rem;\n    margin-bottom: .4rem;\n    padding: .3rem;\n    width: 16rem;\n}\n\n.green-city-box .name {\n    font-weight: 300;\n    font-size: 1.3rem;\n}"
+    }],
+    "theme": "light"
+}

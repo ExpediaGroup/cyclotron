@@ -1,0 +1,66 @@
+h3 About
+p
+    | Cyclotron is a browser-based platform for creating dashboards.  
+    | It provides standard boilerplate and plumbing, allowing non-programmers to easily create 
+    | and edit dashboards using customizable components.  It has a built-in dashboard editor, 
+    | and hosts the dashboards directly.
+
+p
+    | Dashboards are defined declaratively as a JSON document, which contains all the properties 
+    | required to render the Dashboard. 
+
+div(ng-repeat='message in selectedItem.messages', 
+    class='bg-{{ message.type || info }}')
+    i.fa(ng-class='message.icon || fa-info-circle')
+    .inner(data-ng-bind-html='message.html')
+
+
+h4 Terminology
+ul
+    li
+        strong Dashboard
+        | : a series of Pages, as well as Data Sources, Scripts, Styles, and other configurations; stored as a JSON document, it contains all the properties required to render itself
+
+    li
+        strong Page
+        | : one or more Widgets combined in various sizes and layout; one Page is displayed at a time
+
+    li
+        strong Widget
+        | : reusable component that displays on the Dashboard; different types are available
+
+    li
+        strong Data Source
+        | : reusable component that retrieves data for use by Widgets; different types are available
+
+
+h4 Features
+ul
+    li Declarative definition of Dashboards, requiring no HTML or JavaScript (although it's optionally available)
+    li Included Widgets: chart, table, number, html, javascript, iframe, stoplight
+    li Included Data Sources: JSON, Graphite, Splunk, JavaScript
+    li Built-in data loading, filtering, and sorting
+    li LDAP/Active Directory Integration
+    li Permissions for viewing and editing Dashboards
+    li Mobile support
+    li REST API access
+
+
+h4 When Should I Use Cyclotron?
+
+p.
+    Cyclotron is best thought of as an alternative to custom, light-weight websites that visualize data.  It provides the web hosting,
+    page layout, data loading, and assorted widgets&mdash;all without writing code.  In contrast, building a comparable website 
+    from scratch would require provisioning a server/VM, choosing the appropriate web frameworks and libraries, and writing 
+    the code for the site.  Using Cyclotron simplifies this process dramatically, making it ideal for rapid prototyping.
+p.
+    However, Cyclotron implements a limited set of widgets, although the HTML and Javascript widgets do allow for a wide degree
+    of customization with some coding.  Cyclotron works best with minimally-interactive dashboards, as it lacks more robust 
+    interaction features like dependent widgets and triggers.
+p.
+    Cyclotron has no data backend and doesn't store any Dashboard data.  Through Crunch, Cyclotron can pull data from databases, web services, 
+    file shares, Hadoop/Hive, etc.  Crunch can do light processing and transformations, but is not a replacement for
+    a scheduled ETL process.  In this regard, Cyclotron is ideal as a front-end for an existing database or web service.
+p.
+    Finally, Cyclotron has automatic page rotation and data-refreshing features, making it well-suited to hosting status boards and monitoring dashboards.  It is less suitable for generating 
+    reports (although PDF export is available).

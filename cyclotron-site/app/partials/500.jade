@@ -1,0 +1,21 @@
+.modal-header
+    h3.modal-title
+        i.fa.fa-exclamation-triangle
+        |  Internal Server Error
+
+.modal-body
+    div(ng-show='hasError')
+        p Something went wrong:
+        p {{ errorMessage }}
+    div(ng-hide='hasError')
+        p Something went wrong.
+
+    p Please try again, or contact support for assistance.
+
+.modal-footer
+    button.btn(ng-click='reload()')
+        i.fa.fa-refresh
+        span  Reload
+    button.btn.btn-primary(ng-click='goHome()')
+        i.fa.fa-home
+        span  Home

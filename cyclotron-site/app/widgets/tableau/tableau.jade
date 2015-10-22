@@ -1,0 +1,6 @@
+.tableau-widget(ng-controller='TableauWidget')
+    script(src='http://public.tableau.com/javascripts/api/viz_v1.js')
+    .tableauPlaceholder(style='height: {{ actualHeight }}, width: {{ actualWidth }}')
+        object.tableauViz(height='{{ actualHeight }}', width='{{ actualWidth }}', style='display:none;')
+            param(ng-repeat='param in params', name='{{ param.name }}', value='{{ param.value }}')
+           

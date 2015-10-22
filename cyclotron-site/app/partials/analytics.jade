@@ -1,0 +1,247 @@
+.analytics-page
+    include header
+
+    h1 Cyclotron Analytics
+    .sidebar
+        h2 Dashboards
+        dl(title='Total number of Dashboards, including deleted Dashboards')
+            dt {{ statistics.dashboards.total.count | numeraljs:'0,0' }} 
+            dd total 
+                ng-pluralize(count='statistics.dashboards.total.count', when='{"one": "Dashboard", "other": "Dashboards"}')
+        dl(title='Total number of non-deleted Dashboards')
+            dt {{ statistics.dashboards.undeletedDashboards.count | numeraljs:'0,0' }} 
+            dd active 
+                ng-pluralize(count='statistics.dashboards.undeletedDashboards.count', when='{"one": "Dashboard", "other": "Dashboards"}')
+        dl(title='Total number of deleted Dashboards')
+            dt {{ statistics.dashboards.deletedDashboards.count | numeraljs:'0,0' }} 
+            dd deleted 
+                ng-pluralize(count='statistics.dashboards.deletedDashboards.count', when='{"one": "Dashboard", "other": "Dashboards"}')
+        dl(title='Total number of Dashboards modified within the last day')
+            dt {{ statistics.dashboards.total.editedPastDayCount | numeraljs:'0,0' }} 
+            dd modified in the past day
+        dl(title='Total number of Dashboards modified within the last 6 months')
+            dt {{ statistics.dashboards.total.editedPastSixMonthsCount | numeraljs:'0,0' }} 
+            dd modified in the last 6 months
+        
+        //-dl(title='Total number of Dashboards with limited viewing permissions')
+            dt {{ statistics.dashboards.total.restrictedViewingCount | numeraljs:'0,0' }} 
+            dd private  
+                ng-pluralize(count='statistics.dashboards.total.restrictedViewingCount', when='{"one": "Dashboard", "other": "Dashboards"}')
+        //-dl(title='Average number of tags assigned per Dashboard')
+            dt {{ statistics.dashboards.total.avgTagsCount | numeraljs:'0.00' }} 
+            dd tags per Dashboard  
+        dl(title='Total number of Revisions, including those for deleted Dashboards')
+            dt {{ statistics.revisions.count | numeraljs:'0,0' }} 
+            dd total 
+                ng-pluralize(count='statistics.revisions.count', when='{"one": "Revision", "other": "Revisions"}')
+        
+        dl(title='Average number of Revisions per Dashboard, including those for deleted Dashboards')
+            dt {{ statistics.revisions.avgRevisionCount | numeraljs:'0.0' }} 
+            dd  
+                ng-pluralize(count='statistics.revisions.avgRevisionCount', when='{"one": "Revision", "other": "Revisions"}')
+                |  per Dashboard
+        
+        h2 Visits
+        dl(title='Total number of times any Dashboard was visited')
+            dt {{ statistics.pageViews.totalVisits | numeraljs:'0,0' }}
+            dd total Visits
+        dl(title='Total number of times a Page in any Dashboard was viewed')
+            dt {{ statistics.pageViews.totalPageViews | numeraljs:'0,0' }}
+            dd total Page Views
+        dl(title='Average number of Pages viewed during each Visit')
+            dt {{ statistics.pageViews.avgPageViewsPerVisit | numeraljs:'0.0' }}
+            dd Page Views per Visit
+        dl(title='Average number of Visits by each UID')
+            dt {{ statistics.pageViews.avgVisitsPerUid | numeraljs:'0.0' }}
+            dd Visits per UID
+        dl(title='Average number of Pages viewed by each UID')
+            dt {{ statistics.pageViews.avgPageViewsPerUid | numeraljs:'0.0' }}
+            dd Page Views per UID
+
+        h2 Users
+        dl(title='Number of unique logged-in users')
+            dt {{ statistics.users.count | numeraljs:'0,0' }}
+            dd authenticated
+                ng-pluralize(count='statistics.users.count', when='{"one": "user", "other": "users"}')
+        dl(title='Number of users who have logged in during the last 24 hours')
+            dt {{ statistics.users.activePastDayCount | numeraljs:'0,0' }}
+            dd active 
+                ng-pluralize(count='statistics.users.activePastDayCount', when='{"one": "user", "other": "users"}')
+                |  (1 day)
+        dl(title='Number of users who have logged in during the last month')
+            dt {{ statistics.users.activePastMonthCount | numeraljs:'0,0' }}
+            dd active 
+                ng-pluralize(count='statistics.users.activePastMonthCount', when='{"one": "user", "other": "users"}')
+                |  (1 month)
+        dl(title='Average number of times users have logged in')
+            dt {{ statistics.users.avgLoginsPerUser | numeraljs: '0.0' }}
+            dd logins per user 
+        dl(title='Number of users who have edited a Dashboard')
+            dt {{ statistics.users.editingUserCount | numeraljs: '0,0' }}
+            dd  
+                ng-pluralize(count='statistics.users.editingUserCount', when='{"one": "user", "other": "users"}')
+                |  have modified a Dashboard
+        dl(title='Number of unique user cookies (may not be authenticated)')
+            dt {{ statistics.pageViews.uniqueUids | numeraljs:'0,0' }}
+            dd unique 
+                ng-pluralize(count='statistics.pageViews.uniqueUids', when='{"one": "UID", "other": "UIDs"}')
+        dl(title='Number of user sessions currently active')
+            dt {{ statistics.sessions.activeSessions | numeraljs:'0,0' }}
+            dd active 
+                ng-pluralize(count='statistics.sessions.activeSessions', when='{"one": "session", "other": "sessions"}')
+    .content
+        .container-fluid
+            .row
+                .col-xs-12
+                    .time-controls.btn-group
+                        .btn.btn-default(ng-model='selectedTimespan', btn-radio='"year"') Year
+                        .btn.btn-default(ng-model='selectedTimespan', btn-radio='"month"') Month
+                        .btn.btn-default(ng-model='selectedTimespan', btn-radio='"3_day"') 3-Days
+                        .btn.btn-default(ng-model='selectedTimespan', btn-radio='"day"') Day
+                        .btn.btn-default(ng-model='selectedTimespan', btn-radio='"hour"') Hour
+
+            .row
+                .col-sm-6
+                    h2 Active Visits Over Time
+                    div.metrics-graphics(data='visits', options='visitsOptions')
+
+                .col-sm-6
+                    h2 Page Views Over Time
+                    div.metrics-graphics(data='pageViews', options='pageViewsOptions')
+
+            .row
+                .col-sm-6.right-border
+                    span.more(ng-click='toggleLimit("topDashboardsLimit")', ng-show='topDashboardsLimit == smallLimit')
+                        i.fa.fa-plus-square-o
+                        |  more
+                    span.more(ng-click='toggleLimit("topDashboardsLimit")', ng-show='topDashboardsLimit == largeLimit')
+                        i.fa.fa-minus-square-o
+                        |  less
+                    h2 Most Visited Dashboards
+                    table.table(ts-wrapper)
+                        thead
+                            tr
+                                th(ts-criteria='name|lowercase') Name
+                                th(ts-criteria='visits|parseInt') Visits
+                                th(ts-criteria='pageViews|parseInt') Page Views
+                        tbody
+                            tr(ng-repeat='dashboard in topDashboards | tablesort | limitTo:topDashboardsLimit', ts-repeat)
+                                td 
+                                    a(href='/{{ dashboard.name }}', target='_blank', title='Open this Dashboard in a new window') {{ dashboard.name }}
+                                td {{ dashboard.visits | numeraljs:'0,0' }}
+                                td {{ dashboard.pageViews | numeraljs:'0,0' }}
+
+                .col-sm-6
+                    span.more(ng-click='toggleLimit("uniqueVisitorLimit")', ng-show='uniqueVisitorLimit == smallLimit')
+                        i.fa.fa-plus-square-o
+                        |  more
+                    span.more(ng-click='toggleLimit("uniqueVisitorLimit")', ng-show='uniqueVisitorLimit == largeLimit')
+                        i.fa.fa-minus-square-o
+                        |  less
+                    h2 Most Frequent Visitors
+                    table.table(ts-wrapper)
+                        thead
+                            tr
+                                th(ts-criteria='user.name|lowercase') User
+                                th(ts-criteria='pageViews|parseInt') Page Views
+                        tbody
+                            tr(ng-repeat='visitor in uniqueVisitors | tablesort | limitTo:uniqueVisitorLimit', ts-repeat)
+                                td {{ visitor.user.name || 'Anonymous' }}
+                                td {{ visitor.pageViews | numeraljs:'0,0' }}
+
+            .row
+                .col-md-4.col-sm-6
+                    h2 Data Sources Used
+                    div.c3chart(data='dataSourcesPie', options='dataSourceTypesOptions')
+                .col-md-4.col-sm-6
+                    h2 Widgets Used
+                    div.c3chart(data='widgetsPie', options='widgetOptions')
+                .col-md-4.col-sm-6
+                    h2 Browser Usage
+                    div.c3chart(data='browsersPie', options='browserOptions')
+            
+            .row
+                .col-md-4.col-sm-6.right-border
+                    span.more(ng-click='toggleLimit("dataSourceTypeLimit")', ng-show='dataSourceTypeLimit == smallLimit')
+                        i.fa.fa-plus-square-o
+                        |  more
+                    span.more(ng-click='toggleLimit("dataSourceTypeLimit")', ng-show='dataSourceTypeLimit == largeLimit')
+                        i.fa.fa-minus-square-o
+                        |  less
+                    h2 Top Data Source Types Used
+                    table.table(ts-wrapper)
+                        thead
+                            tr
+                                th(ts-criteria='dataSourceType|lowercase') Data Source Type
+                                th(ts-criteria='count|parseInt') Executions
+                                th(ts-criteria='successRate|parseFloat') Success Rate
+                        tbody
+                            tr(ng-repeat='dataSource in dataSourcesByType | tablesort | limitTo:dataSourceTypeLimit', ts-repeat)
+                                td {{ dataSource.dataSourceType }}
+                                td {{ dataSource.count | numeraljs:'0,0' }}
+                                td {{ dataSource.successRate | numeraljs:'0.0%' }}
+
+                .col-md-4.col-sm-6.right-border
+                    span.more(ng-click='toggleLimit("widgetTypeLimit")', ng-show='widgetTypeLimit == smallLimit')
+                        i.fa.fa-plus-square-o
+                        |  more
+                    span.more(ng-click='toggleLimit("widgetTypeLimit")', ng-show='widgetTypeLimit == largeLimit')
+                        i.fa.fa-minus-square-o
+                        |  less
+                    h2 Top Widgets Used
+                    table.table(ts-wrapper)
+                        thead
+                            tr
+                                th(ts-criteria='widget|lowercase') Widget Type
+                                th(ts-criteria='widgetViews|parseInt') Views
+                        tbody
+                            tr(ng-repeat='widget in widgets | tablesort | limitTo:widgetTypeLimit', ts-repeat)
+                                td {{ widget.widget }}
+                                td {{ widget.widgetViews | numeraljs:'0,0' }}
+
+                .col-md-4.col-sm-6
+                    span.more(ng-click='toggleLimit("browserLimit")', ng-show='browserLimit == smallLimit')
+                        i.fa.fa-plus-square-o
+                        |  more
+                    span.more(ng-click='toggleLimit("browserLimit")', ng-show='browserLimit == largeLimit')
+                        i.fa.fa-minus-square-o
+                        |  less
+                    h2 Top Browsers Used
+                    table.table(ts-wrapper)
+                        thead
+                            tr
+                                th(ts-criteria='nameVersion|lowercase') Browser
+                                th(ts-criteria='pageViews|parseInt') Page Views
+                        tbody
+                            tr(ng-repeat='browser in browsers | tablesort | limitTo:browserLimit', ts-repeat)
+                                td {{ browser.nameVersion }}
+                                td {{ browser.pageViews | numeraljs:'0,0' }}
+
+            .row
+                .col-md-12
+                    span.more(ng-click='toggleLimit("dataSourcesLimit")', ng-show='dataSourcesLimit == smallLimit')
+                        i.fa.fa-plus-square-o
+                        |  more
+                    span.more(ng-click='toggleLimit("dataSourcesLimit")', ng-show='dataSourcesLimit == largeLimit')
+                        i.fa.fa-minus-square-o
+                        |  less
+                    h2 Most Executed Data Sources
+                    table.table(ts-wrapper)
+                        thead
+                            tr
+                                th(ts-criteria='dashboardName|lowercase') Dashboard
+                                th(ts-criteria='dataSourceName|lowercase') Name
+                                th(ts-criteria='dataSourceType|lowercase') Type
+                                th(ts-criteria='count|parseInt') Executions
+                                th(ts-criteria='successRate|parseFloat') Success Rate
+                                th(ts-criteria='avgDuration|parseFloat') Duration (ms)
+                        tbody
+                            tr(ng-repeat='dataSource in dataSources | tablesort | limitTo:dataSourcesLimit', ts-repeat)
+                                td 
+                                    a(href='/{{ dataSource.dashboard.name }}', target='_blank', title='Open this Dashboard in a new window') {{ dataSource.dashboard.name }}
+                                td {{ dataSource.dataSourceName }}
+                                td {{ dataSource.dataSourceType }}
+                                td {{ dataSource.count | numeraljs:'0,0' }}
+                                td {{ dataSource.successRate | numeraljs:'0.0%' }}
+                                td {{ dataSource.avgDuration | numeraljs:'0.0' }}
+            

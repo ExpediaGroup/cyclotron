@@ -1,0 +1,21 @@
+.modal-header
+    h3.modal-title Push Dashboard
+
+.modal-body
+    p Select a Cyclotron environment to push this Dashboard to.  If the Dashboard already exists in
+        | that environment, it will be overwritten.
+
+    form(ng-submit='push()')
+        .push-dashboard.well.well-sm
+            select#editor-push-environment(ng-model='fields.pushLocation', ng-options='environment.name for environment in environmentsForPush')
+
+        div(ng-if='fields.pushLocation.requiresAuth === true')
+            input(type='text', ng-model='fields.username', focus-me='focusUsername', placeholder='Username')
+            input(type='password', ng-model='fields.password', focus-me='focusPassword', placeholder='Password')
+
+        //- Hidden input for ng-submit to work
+        input(type='submit', style='position: absolute; left: -9999px')
+
+.modal-footer
+    button.btn#editor-push-cancel(ng-click='cancel()') Cancel
+    button.btn.btn-primary#editor-push-push(ng-click='push()') Push

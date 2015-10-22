@@ -1,0 +1,12 @@
+.editor-view-header
+    h3 JSON Editor
+
+    .editor-view-header-buttons
+        a#editor-jsonEditor-return(ng-show='$state.name=="edit.json"', ng-click='returnFromJsonEditor()')
+            button.btn.btn-default
+                i.fa.fa-reply
+                |  Return
+            
+.editor-json
+    div(jsonedit, model='editor.selectedItem')
+        

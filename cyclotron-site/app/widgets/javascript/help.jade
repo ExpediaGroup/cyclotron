@@ -1,0 +1,123 @@
+h3 Javascript Widget
+p.
+    The Javascript Widget is ideal for embedding D3.js or other Javascript libraries
+    into Cyclotron.  It provides an empty &lt;DIV&gt; element, positioned and sized with the 
+    rest of the dashboard, and invokes custom Javascript code.  A Data Source can be used
+    with it, and the loaded data will be passed into the Javascript function.
+
+p.
+    It overlaps in its ability slightly with the HTML Widget, but as its name implies,
+    the Javascript Widget is best suited for making Javascript-heavy custom Widgets.  In 
+    the event that the HTML Widget is not flexible enough to generate the desired output,
+    the Javascript Widget can be used to dynamically create the HTML elements and add them
+    to the page.
+
+h4 Properties
+p.
+    These are the properties specific to this widget.  
+    General Cyclotron widget properties are not repeated here (e.g. layout properties).
+
+property-table(properties='config.widgets.javascript.properties')
+
+
+h4 Javascript Function
+
+p
+    | The only required property, 
+    em functionName
+    |, must point to a Javascript function defined in the Scripts section of the Dashboard.  The 
+    | script can either be specified inline, or included from an external script.  Either way, the
+    | scripts will be loaded while the Dashboard is rendering, before the Widget is initialized.
+    | The best practice is to attach the function to the 
+    em Cyclotron 
+    | or 
+    em Cyclotron.user 
+    | object to avoid name collisions.
+
+p.
+    The function takes one argument: the actual Widget object.  This allows a reusable Javascript Widget
+    function to be created, since parameters can be passed in the Widget definition.  The UI editor
+    doesn't provide a way to edit such parameters currently, so they must be specified directly in the 
+    JSON Editor.
+
+p
+    | The function must return a Javascript hash, with key/values as event handlers.  They are all optional,
+    | depending on whether or not the event needs to be handled.  Cyclotron will invoke the 
+    em functionName 
+    | and save the returned hash.  This allows multiple copies of the same Javascript Widget function on a 
+    | single Dashboard, since each one is a separate instance.
+
+table
+    tr
+        th Name
+        th Arguments
+        th Usage
+    tr
+        td onCreate
+        td element
+        td Invoked once when the Widget is created 
+    tr
+        td onResize
+        td element, data
+        td Invoked whenever the Widget dimensions change.  It is throttled slightly to avoid overcalling.
+    tr
+        td onData
+        td element, data
+        td If a Data Source is provided, this function will be invoked whenever it changes.  
+            | This includes the initial load, as well as updates if the Data Source has a 
+            em refresh 
+            | configured.  It is also invoked if the Widget's own 
+            em refresh 
+            | property is configured, and no 
+            em onRefresh 
+            | function is provided.
+    tr
+        td onRefresh
+        td element, data
+        td If the Javascript Widget's 
+            em refresh 
+            | property is set, this method will be invoked at the defined interval.  If this 
+            | method is not defined, 
+            em onData 
+            | will be invoked instead.
+
+p As mentioned before, none of these events are required, and will be ignored if not provided.  There
+    | are usually several ways to achieve the same functionality.  For example, it's generally easier
+    | to clear and start over rather than resize existing HTML elements; the same may apply when loading 
+    | new data.  Both the 
+    em onData 
+    | and 
+    em onResize 
+    | properties can point to a common method defined at the top of the function, which does exactly that.
+    | While easier to code, it may suffer from flicker or slow performance.
+
+
+p Here is a template for the function:
+
+pre.code.
+    Cyclotron.myJavascriptWidget = function(widget) {
+
+        // Widget variables
+        // Common methods
+        
+        return {
+            onCreate: function (element) {
+                // initialization
+                // create HTML
+            },
+
+            onResize: function(element, data) {
+                // resize or update the layout
+            },
+
+            onData: function(element, data) {
+                // do something with data
+            }
+        }
+    };
+
+
+
+h3 Examples
+
+p TBD
