@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Cyclotron: a web application for constructing dashboards.">
+    <meta name="keywords" content="Cyclotron dashboards dashboard Expedia">
+    <meta name="author" content="Dave Bauman &lt;dbauman@expedia.com&gt;">
+    <meta name="copyright" content="Copyright 2015, Expedia, Inc.">
+    <meta http-equiv="ClearType" content="on">
+    <title>Cyclotron | About</title>
+    <link rel="icon" type="image/png" href="img/favicon16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="img/favicon32.png" sizes="32x32">
+    <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/vendor.css">
+    <link rel="stylesheet" href="css/app.css">
+    <script src="js/vendor.js"></script>
+  </head>
+  <body>
+    <header role="banner" class="navigation">
+      <div class="navigation-wrapper"><a href="index.html" class="logo"> <img src="img/favicon64.png">
+          <p>Cyclotron</p></a><a id="js-mobile-menu" class="navigation-menu-button"><i class="fa fa-bars"></i></a>
+        <nav role="navigation">
+          <ul id="js-navigation-menu" class="navigation-menu show">
+            <li class="nav-link"><a href="index.html">Home</a></li>
+            <li class="nav-link"><a href="about.html">About</a></li>
+            <li class="nav-link"><a href="gettingstarted.html">Getting Started</a></li>
+            <li class="nav-link"><a href="faq.html">FAQ</a></li>
+            <li class="nav-link"><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron"><i class="fa fa-github"></i> GitHub</a></li>
+          </ul>
+        </nav>
+      </div><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron" class="fork-me"><img src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+    </header>
+    <script>
+      $(document).ready(function() {
+          var menuToggle = $('#js-mobile-menu').unbind();
+          $('#js-navigation-menu').removeClass("show");
+      
+          menuToggle.on('click', function(e) {
+              e.preventDefault();
+              $('#js-navigation-menu').slideToggle(function(){
+                if($('#js-navigation-menu').is(':hidden')) {
+                  $('#js-navigation-menu').removeAttr('style');
+                }
+              });
+          });
+      });
+    </script>
+    <main>
+      <div class="container padded">
+        <h1>About</h1>
+        <section class="about">
+          <p>
+            Cyclotron is a browser-based platform for creating and viewing dashboards.  
+            It provides standard boilerplate and plumbing, allowing non-programmers to easily 
+            create and edit dashboards using customizable components.  
+            
+          </p>
+          <p>
+            Dashboards are specified as a JSON document containing all the properties 
+            required to render itself.  Cyclotron has a built-in editor for creating and modifying 
+            Dashboards directly in the browser.
+            
+          </p>
+          <h2>Terminology</h2>
+          <ul class="bullets">
+            <li class="bullet">
+              <div class="bullet-icon"><i class="fa fa-desktop"></i></div>
+              <div class="bullet-content">
+                <h3>Dashboard</h3>
+                <p>A series of Pages, as well as Data Sources, Scripts, Styles, etc.  Rendered as a web page.</p>
+              </div>
+            </li>
+            <li class="bullet">
+              <div class="bullet-icon"><i class="fa fa-file-o"></i></div>
+              <div class="bullet-content">
+                <h3>Page</h3>
+                <p>One or more Widgets arranged and sized on the screen; one Page is displayed at a time</p>
+              </div>
+            </li>
+            <li class="bullet">
+              <div class="bullet-icon"><i class="fa fa-cloud-download"></i></div>
+              <div class="bullet-content">
+                <h3>Data Source</h3>
+                <p>Reusable component that retrieves data for Widgets</p>
+              </div>
+            </li>
+            <li class="bullet">
+              <div class="bullet-icon"><i class="fa fa-cog"></i></div>
+              <div class="bullet-content">
+                <h3>Widget</h3>
+                <p>Reusable component that displays data on the Dashboard</p>
+              </div>
+            </li>
+          </ul>
+          <h2>Architecture</h2>
+          <p>
+            Cyclotron is composed of two parts:
+            
+          </p>
+          <ol class="with-bullets">
+            <li>A Node.js service that connects to MongoDB and provides a REST API</li>
+            <li>A single-page application (SPA) website</li>
+          </ol>
+          <p>The website is a single-page application written with <a href="https://angularjs.org/">Angular.js</a>. All of the Dashboard rendering is performed in client-side JavaScript, rather than 
+            on the server.  The website itself compiles into a static website, 
+            so any web server can be used to host it.
+          </p>
+          <p>
+            The REST API manages the storage and retrieval of Dashboards, as well as permissions, 
+            authentication, and analytics.  Other clients could
+            be written to interface with it&mdash;to automatically deploy dashboards, for example.
+            
+          </p>
+        </section>
+        <aside class="sidebar"> 
+          <div> 
+            <h2>Data Sources</h2>
+            <ul class="with-bullets">
+              <li>Graphite</li>
+              <li>JavaScript</li>
+              <li>JSON</li>
+              <li>Splunk</li>
+            </ul>
+          </div>
+          <div> 
+            <h2>Widgets</h2>
+            <ul class="with-bullets">
+              <li>Chart</li>
+              <li>HTML</li>
+              <li>iframe</li>
+              <li>JavaScript</li>
+              <li>Number</li>
+              <li>Stoplight</li>
+              <li>Table</li>
+              <li>Treemap</li>
+            </ul>
+          </div>
+          <div> 
+            <h2>Requirements</h2>
+            <ul class="with-bullets">
+              <li>Node.js</li>
+              <li>MongoDB</li>
+              <li>
+                 
+                Web Server (Nginx, Apache, IIS, etc)<span class="badge-notice">Optional</span>
+              </li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </main>
+    <footer>
+      <div class="footer-logo"><img src="img/favicon64.png"></div>
+      <div class="footer-links">
+        <ul>
+          <li>
+            <h3>About</h3>
+          </li>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="gettingstarted.html">Getting Started</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+        </ul>
+        <ul>
+          <li>
+            <h3>Contact</h3>
+          </li>
+          <li><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron"><i class="fa fa-github"></i> GitHub</a></li>
+          <li><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron/issues"><i class="fa fa-github-alt"></i> Report a Bug</a></li>
+        </ul>
+        <ul>
+          <li>
+            <h3>More</h3>
+          </li>
+          <li><a href="http://www.expedia.com">Expedia.com</a></li>
+          <li><a href="http://www.lifeatexpedia.com/">Jobs</a></li>
+        </ul>
+      </div>
+      <hr>
+      <p>© 2015 Expedia, Inc.</p>
+    </footer>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      
+      ga('create', 'UA-69147212-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </body>
+</html>

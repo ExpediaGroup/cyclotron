@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Cyclotron: a web application for constructing dashboards.">
+    <meta name="keywords" content="Cyclotron dashboards dashboard Expedia">
+    <meta name="author" content="Dave Bauman &lt;dbauman@expedia.com&gt;">
+    <meta name="copyright" content="Copyright 2015, Expedia, Inc.">
+    <meta http-equiv="ClearType" content="on">
+    <title>Cyclotron | FAQ</title>
+    <link rel="icon" type="image/png" href="img/favicon16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="img/favicon32.png" sizes="32x32">
+    <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/vendor.css">
+    <link rel="stylesheet" href="css/app.css">
+    <script src="js/vendor.js"></script>
+  </head>
+  <body>
+    <header role="banner" class="navigation">
+      <div class="navigation-wrapper"><a href="index.html" class="logo"> <img src="img/favicon64.png">
+          <p>Cyclotron</p></a><a id="js-mobile-menu" class="navigation-menu-button"><i class="fa fa-bars"></i></a>
+        <nav role="navigation">
+          <ul id="js-navigation-menu" class="navigation-menu show">
+            <li class="nav-link"><a href="index.html">Home</a></li>
+            <li class="nav-link"><a href="about.html">About</a></li>
+            <li class="nav-link"><a href="gettingstarted.html">Getting Started</a></li>
+            <li class="nav-link"><a href="faq.html">FAQ</a></li>
+            <li class="nav-link"><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron"><i class="fa fa-github"></i> GitHub</a></li>
+          </ul>
+        </nav>
+      </div><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron" class="fork-me"><img src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+    </header>
+    <script>
+      $(document).ready(function() {
+          var menuToggle = $('#js-mobile-menu').unbind();
+          $('#js-navigation-menu').removeClass("show");
+      
+          menuToggle.on('click', function(e) {
+              e.preventDefault();
+              $('#js-navigation-menu').slideToggle(function(){
+                if($('#js-navigation-menu').is(':hidden')) {
+                  $('#js-navigation-menu').removeAttr('style');
+                }
+              });
+          });
+      });
+    </script>
+    <main>
+      <div class="container padded">
+        <h1>FAQ</h1>
+        <div class="scroll-on-page">
+          <aside id="top"><a href="#why-cyclotron" class="scroll-on-page-link">Why Cyclotron?</a><a href="#what-does-cyclotron-provide" class="scroll-on-page-link">What Does Cyclotron Provide?</a><a href="#what-exactly-is-a-dashboard" class="scroll-on-page-link">What Exactly Is a Dashboard?</a><a href="#how-is-a-dashboard-created" class="scroll-on-page-link">How is a Dashboard Created?</a><a href="#cyclotron-vs-custom" class="scroll-on-page-link">Why Use Cyclotron vs. Building a Custom Dashboard?</a><a href="#is-cyclotron-extensible" class="scroll-on-page-link">Is Cyclotron Extensible?</a><a href="#how-many-dashboards" class="scroll-on-page-link">How Many Dashboards Can One Cyclotron Instance Support?</a><a href="#how-many-users" class="scroll-on-page-link">How Many Users Can One Cyclotron Instance Support?</a><a href="#load-balancing" class="scroll-on-page-link">Can Cyclotron be Load-Balanced?</a><a href="#authentication" class="scroll-on-page-link">Does Cyclotron Support Authentication and Permissions?</a><a href="#internet-use" class="scroll-on-page-link">Can I Use Cyclotron to Host Dashboards on the Internet?</a><a href="#without-mongodb" class="scroll-on-page-link">Can Cyclotron Be Used Without MongoDB?</a><a href="#operating-systems" class="scroll-on-page-link">What Operating Systems are Supported?</a><a href="#in-the-cloud" class="scroll-on-page-link">Can I Deploy in the Cloud?</a><a href="#fancy-url" class="scroll-on-page-link">Can I Host My Dashboard on a Separate Domain?</a><a href="#highcharts" class="scroll-on-page-link">Do I Need a Highcharts License?</a><a href="#can-cyclotron-create-websites" class="scroll-on-page-link">Can I Use Cyclotron to Create Web Sites?</a><a href="#i-dont-need-all-this-stuff" class="scroll-on-page-link">I Don't Need All These Widgets and Data Sources</a><a href="#contributing" class="scroll-on-page-link">Can I Contribute?</a></aside>
+          <article>
+            <section>
+              <h4 id="why-cyclotron">Why Cyclotron?</h4>
+              <p>
+                Cyclotron was inspired by the repetitive nature of building dashboard websites.  As a platform,
+                Cyclotron provides common scaffolding and plumbing that many dashboards can leverage.
+                
+              </p>
+              <p>
+                Instead of spending time evaluating web frameworks and configuring Grunt/Gulp/Webpack/Browserify, 
+                you can skip straight to creating a dashboard.
+                
+              </p>
+            </section>
+            <section>
+              <h4 id="what-does-cyclotron-provide">What Does Cyclotron Provide?</h4>
+              <p>Here's a short list:
+                <ul class="with-bullets">
+                  <li>Web server: all dashboards are hosted within Cyclotron</li>
+                  <li>Layout engine: Cyclotron arranges and sizes Widgets in a dashboard, and scales to the browser</li>
+                  <li>Data Sources: Built-in components for loading data, with optional filtering/sorting, refresh</li>
+                  <li>Widgets: Build-in components for visualizing data (e.g. chart, table, etc)</li>
+                </ul>
+              </p>
+            </section>
+            <section>
+              <h4 id="what-exactly-is-a-dashboard">What Exactly Is a Dashboard?</h4>
+              <p>According to <a href="https://en.wikipedia.org/wiki/Dashboard_%28disambiguation%29">Wikipedia</a> , a dashboard is "a management tool used to get an overview of enterprise health."</p>
+              <p>
+                In Cyclotron terms, a dashboard is a web page that can be configured to load and display 
+                data.  The "what", "where", and "how" is up to the user&mdash;at minimum, Cyclotron
+                provides a URL and a blank web page.  Widgets and Data Sources can be added and configured,
+                along with other commonly required functionality.
+                
+              </p>
+            </section>
+            <section>
+              <h4 id="how-is-a-dashboard-created">How is a Dashboard Created?</h4>
+              <p>
+                A dashboard is declaratively defined as a JSON document, which contains all the
+                properties needed for Cyclotron to render the dashboard.  Cyclotron has an editor
+                that knows all the available properties, and creates this JSON document automatically.
+                
+              </p>
+            </section>
+            <section>
+              <h4 id="cyclotron-vs-custom">Why Use Cyclotron vs. Building a Custom Dashboard?</h4>
+              <p>
+                Taking advantage of the built-in features of Cyclotron can make it faster and easier
+                to create dashboards without starting from scratch.  However, Cyclotron may not be a 
+                good fit for all dashboards. We believe that Cyclotron is a good fit for a wide range 
+                of use cases, but its feature set cannot offer the same flexibility that custom 
+                development can afford.                        
+                
+              </p>
+            </section>
+            <section>
+              <h4 id="is-cyclotron-extensible">Is Cyclotron Extensible?</h4>
+              <p>Yes, Cyclotron exposes many extension points for dashboards:
+                <ul class="with-bullets">
+                  <li>JavaScript and CSS stylesheets can be linked or embedded directly in dashboards.</li>
+                  <li>Inline JavaScript can be used directly in many properties to dynamically generate content</li>
+                  <li>HTML and JavaScript widgets provide a means of embedding custom content or visualizations</li>
+                </ul>In addition, custom Widgets, Data Sources, or Themes could be developed and integrated with 
+                Cyclotron, for reuse across dashboards.
+              </p>
+            </section>
+            <section>
+              <h4 id="how-many-dashboards">How Many Dashboards Can One Cyclotron Instance Support?</h4>
+              <p>
+                One instance of Cyclotron can contain virtually any number of dashboards, provided
+                MongoDB has enough space to store them.  Aside from storage requirements, each additional
+                Dashboard does not increase the load on Cyclotron.  Increasing users will put additional load
+                on Cyclotron, but the client-side rendering of dashboards offloads most of the work.
+                
+              </p>
+            </section>
+            <section>
+              <h4 id="how-many-users">How Many Users Can One Cyclotron Instance Support?</h4>
+              <p>
+                Cyclotron was designed to allow multiple users to create and view dashboards; there's
+                no real limit to the number of users.  As mentioned above, increasing concurrent users will
+                put additional load on Cyclotron, but this should be negligible.
+                
+              </p>
+              <p>
+                As the number of users grows, Tags can be assigned to dashboards to help with 
+                organiziation.  And if authentication is enabled, permissions can be set to 
+                restrict editing or viewing of dashboards.
+                
+              </p>
+            </section>
+            <section>
+              <h4 id="load-balancing">Can Cyclotron be Load-Balanced? </h4>
+              <p>
+                Yes, the REST API is stateless, and single MongoDB instance or replica set can be used with
+                multiple instances of the REST API.  Similarly, multiple web servers hosting the Cyclotron 
+                web site can be load-balanced together.
+                
+              </p>
+            </section>
+            <section>
+              <h4 id="authentication">Does Cyclotron Support Authentication and Permissions?</h4>
+              <p>
+                Yes, Cyclotron has (optional) support for LDAP or Active Directory integration.  If
+                enabled, permisisons can be set on dashboards to restrict editing and/or viewing
+                
+              </p>
+            </section>
+            <section>
+              <h4 id="internet-use">Can I Use Cyclotron to Host Dashboards on the Internet?</h4>
+              <p>
+                It is not recommended to deploy Cyclotron as-is in a public setting. Cyclotron was 
+                designed to be used in a corporate intranet environment, rather than for public dashboards.
+              </p>
+              <p>
+                In addition, it's possible to create malicious dashboards using the extensibility 
+                features of Cyclotron.  Allowing untrustworthy users to create dashboards is not recommended.
+                
+              </p>
+            </section>
+            <section>
+              <h4 id="without-mongodb">Can Cyclotron Be Used Without MongoDB?</h4>
+              <p>
+                Not currently; however it would be possible to reimplement the REST API using a different database,
+                without changing the front-end.
+                
+              </p>
+            </section>
+            <section>
+              <h4 id="operating-systems">What Operating Systems are Supported?</h4>
+              <p>Cyclotron's main dependencies are<a href="http://nodejs.org/"> Node.js</a> and<a href="https://www.mongodb.org/"> MongoDB</a>, so most OSes which can rnu these two products should also run Cyclotron.
+                Cyclotron has been tested succesfully on current versions of 
+                Linux (CentOS), OS X, and Windows.
+              </p>
+              <p>Check out <a href="/gettingstarted.html">Getting Started</a> for more information on installation.</p>
+            </section>
+            <section>
+              <h4 id="in-the-cloud">Can I Deploy in the Cloud?</h4>
+              <p>Yes.</p>
+            </section>
+            <section>
+              <h4 id="fancy-url">Can I Host My Dashboard on a Separate Domain?</h4>
+              <p>Meaning, use http://mydashboard instead of http://cyclotron/mydashboard.</p>
+              <p>
+                No, this isn't supported natively by Cyclotron.  The solution involves installing
+                Nginx on another server (since only one service can run on port 80), and 
+                configuring Nginx as a <a href="https://www.nginx.com/resources/admin-guide/reverse-proxy/">reverse-proxy</a>to the Cyclotron dashboard.
+              </p>
+            </section>
+            <section>
+              <h4 id="highcharts">Do I Need a Highcharts License?</h4>
+              <p>The Chart Widget has a dependency on the excellent <a href="http://www.highcharts.com/">Highcharts</a> charting library, wrapping its functionality and customization into Cyclotron.</p>
+              <p> <a href="http://www.highcharts.com/">Highcharts </a>offers both a commercial license as well as a free non-commercial license.  
+                Please review the <a href="https://shop.highsoft.com/highcharts.html">licensing options and terms</a> before using this software, as the Cyclotron license neither provides nor 
+                implies a license for Highcharts.
+              </p>
+              <p>
+                The only feature depending on Highcharts is the Chart widget, so both can be removed 
+                if necessary to avoid any licensing concerns.
+              </p>
+            </section>
+            <section>
+              <h4 id="can-cyclotron-create-websites">Can I Use Cyclotron to Create Web Sites?</h4>
+              <p>
+                Yes, Cyclotron can be used to create web sites that don't look like traditional
+                dashboards.  The HTML Widget can embed custom HTML, and custom JavaScript and CSS
+                can be loaded as well.
+                
+              </p>
+              <p>
+                Some users have taken advantage of this approach to build a completely custom UI, 
+                while still leveraging Cyclotron's Data Sources and other features.
+                
+              </p>
+            </section>
+            <section>
+              <h4 id="i-dont-need-all-this-stuff">I Don't Need All These Widgets and Data Sources</h4>
+              <p>
+                Not a problem.  It's pretty easy to remove unwanted Widget or Data Sources, 
+                with the added benefit of reducing the size of downloaded resources.  
+                Check out <code>EXTENDING.md</code> in the repository for more details.
+              </p>
+            </section>
+            <section>
+              <h4 id="contributing">Can I Contribute?</h4>
+              <p>Absolutely! Bug reports, feature requests, and pull requests are all welcome on the <a href="">GitHub page</a>.  Please refer to <code>CONTRIBUTING.md</code> in the repository for more details, especially before submitting any pull requests.</p><a href="#top" class="scroll-on-page-link">Back to top</a>
+            </section>
+          </article>
+        </div>
+      </div>
+      <script>
+        // http://refills.bourbon.io/#scroll-on-page
+        (function (jQuery) {
+            jQuery.mark = {
+                jump: function (options) {
+                    var defaults = {
+                        selector: 'a.scroll-on-page-link'
+                    };
+                    if (typeof options == 'string') {
+                        defaults.selector = options;
+                    }
+        
+                    options = jQuery.extend(defaults, options);
+                    return jQuery(options.selector).click(function (e) {
+                        var jumpobj = jQuery(this);
+                        var target = jumpobj.attr('href');
+                        var thespeed = 400;
+                        var offset = jQuery(target).offset().top;
+                        jQuery('html,body').animate({ scrollTop: offset }, thespeed, 'swing');
+                        e.preventDefault();
+                    });
+                }
+            };
+        })(jQuery);
+        
+        jQuery(function(){  
+            jQuery.mark.jump();
+        });
+      </script>
+    </main>
+    <footer>
+      <div class="footer-logo"><img src="img/favicon64.png"></div>
+      <div class="footer-links">
+        <ul>
+          <li>
+            <h3>About</h3>
+          </li>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="gettingstarted.html">Getting Started</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+        </ul>
+        <ul>
+          <li>
+            <h3>Contact</h3>
+          </li>
+          <li><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron"><i class="fa fa-github"></i> GitHub</a></li>
+          <li><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron/issues"><i class="fa fa-github-alt"></i> Report a Bug</a></li>
+        </ul>
+        <ul>
+          <li>
+            <h3>More</h3>
+          </li>
+          <li><a href="http://www.expedia.com">Expedia.com</a></li>
+          <li><a href="http://www.lifeatexpedia.com/">Jobs</a></li>
+        </ul>
+      </div>
+      <hr>
+      <p>© 2015 Expedia, Inc.</p>
+    </footer>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      
+      ga('create', 'UA-69147212-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </body>
+</html>

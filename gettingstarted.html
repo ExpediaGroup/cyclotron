@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Cyclotron: a web application for constructing dashboards.">
+    <meta name="keywords" content="Cyclotron dashboards dashboard Expedia">
+    <meta name="author" content="Dave Bauman &lt;dbauman@expedia.com&gt;">
+    <meta name="copyright" content="Copyright 2015, Expedia, Inc.">
+    <meta http-equiv="ClearType" content="on">
+    <title>Cyclotron | Getting Started</title>
+    <link rel="icon" type="image/png" href="img/favicon16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="img/favicon32.png" sizes="32x32">
+    <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/vendor.css">
+    <link rel="stylesheet" href="css/app.css">
+    <script src="js/vendor.js"></script>
+  </head>
+  <body>
+    <header role="banner" class="navigation">
+      <div class="navigation-wrapper"><a href="index.html" class="logo"> <img src="img/favicon64.png">
+          <p>Cyclotron</p></a><a id="js-mobile-menu" class="navigation-menu-button"><i class="fa fa-bars"></i></a>
+        <nav role="navigation">
+          <ul id="js-navigation-menu" class="navigation-menu show">
+            <li class="nav-link"><a href="index.html">Home</a></li>
+            <li class="nav-link"><a href="about.html">About</a></li>
+            <li class="nav-link"><a href="gettingstarted.html">Getting Started</a></li>
+            <li class="nav-link"><a href="faq.html">FAQ</a></li>
+            <li class="nav-link"><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron"><i class="fa fa-github"></i> GitHub</a></li>
+          </ul>
+        </nav>
+      </div><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron" class="fork-me"><img src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+    </header>
+    <script>
+      $(document).ready(function() {
+          var menuToggle = $('#js-mobile-menu').unbind();
+          $('#js-navigation-menu').removeClass("show");
+      
+          menuToggle.on('click', function(e) {
+              e.preventDefault();
+              $('#js-navigation-menu').slideToggle(function(){
+                if($('#js-navigation-menu').is(':hidden')) {
+                  $('#js-navigation-menu').removeAttr('style');
+                }
+              });
+          });
+      });
+    </script>
+    <main>
+      <div class="container padded">
+        <h1>Getting Started</h1>
+        <p>
+          This quickstart guide walks through the steps required to run Cyclotron locally.
+          
+        </p>
+        <h2>Pre-Requisites</h2>
+        <p>The following pre-requisites are required:</p>
+        <ul class="with-bullets">
+          <li>MongoDB</li>
+          <li>Node.js</li>
+        </ul>
+        <p>
+          Node.js and MongoDB are available on Linux, OS X, and Windows.  It's 
+          possible to run Cyclotron on any of these platforms, 
+          although the specific steps may vary.
+          
+        </p>
+        <h3>MongoDB</h3>
+        <p>Installing <a href="https://www.mongodb.org/">MongoDB</a> is out of the scope of this guide, but <a href="http://docs.mongodb.org/manual/installation/">detailed instructions</a> are available for most operating systems.</p>
+        <p>
+          MongoDB does not have to be installed on the same system as Cyclotron.  The connection string in
+          the REST API configuration file must be updated accordingly.  Replica sets and authentication 
+          are also supported by the MongoDB connection string.
+          
+        </p>
+        <p>
+          If installing MongoDB locally, ensure it is running before continuing:
+          
+        </p>
+        <pre class="code">mongod --config /usr/local/etc/mongod.conf
+</pre>
+        <h3>Node.js</h3>
+        <ol class="with-bullets extra-space">
+          <li>Install the latest stable version of <a href="http://nodejs.org/">Node.js</a> for your system.  This should install <a href="https://www.npmjs.com/">npm</a> as well.</li>
+          <div class="flash-notice">
+            <div class="title">OS X</div>OS X users can install Node.js via <a href="http://brew.sh/">Homebrew</a>:
+            <pre class="code">brew install node
+</pre>
+          </div>
+          <p>Other OSes and package managers may also have packages available for easy installation.</p>
+          <li>Ensure node and npm are both available before continuing:
+            <pre class="code">node -v
+npm -v
+</pre>
+          </li>
+        </ol>
+        <h2>Downloading</h2>
+        <p>
+          Start by cloning the Cyclotron git repository locally onto your computer.  
+          If you don't have git installed, GitHub has a nice guide: <a href="https://help.github.com/articles/set-up-git/">Set Up Git</a>.  On Windows, <a href="https://windows.github.com/">GitHub for Windows</a> is an easy way to install git.
+        </p>
+        <p>Alternatively, download a ZIP archive of the repository contents and extract it.</p>
+        <h2>Running the API</h2>
+        <p>The REST API is located in the <code>cyclotron-svc/</code> folder.</p>
+        <ol class="with-bullets extra-space">
+          <li>Open the <code>cyclotron-svc/</code> folder in the shell</li>
+          <li>Install dependencies using <a href="https://www.npmjs.com/">npm</a>
+            <pre class="code">npm install</pre>
+            <div class="flash-alert">
+              <div class="title">Windows:</div>This may need to be run as an Administrator.  Open the Node.js Command Prompt as an Administrator 
+              and run the command there.
+            </div>
+          </li>
+          <li>Create a configuration file at <code>cyclotron-svc/config/config.js</code>.  A sample configuration file <code>sample.config.js</code> is provided in the same folder:
+            <pre class="code">cp config/sample.config.js config/config.js</pre>
+            <p>
+              The sample config defaults to using a local MongoDB instance, with authentication disabled.  
+              If using a remote MongoDB server or cluster, update the <code>mongodb</code> property accordingly.
+            </p>
+            <p>If using Active Directory or LDAP, ensure that the property <code>enableAuth</code> is set to true, and that all the <code>ldap</code> properties are filled in correctly, including the service account username and password.</p>
+          </li>
+          <li>Start the service in node:
+            <pre class="code">node app.js</pre>
+          </li>
+          <li>Open the API documentation in a browser at <a href="http://localhost:8077">http://localhost:8077</a></li>
+        </ol>
+        <p>For more information on the REST API and its configuration, please refer to <code>cyclotron-svc/README.md</code>.</p>
+        <h2>Running the Website</h2>
+        <p>The Cyclotron website is located in the <code>cyclotron-site/</code> folder.</p>
+        <ol class="with-bullets extra-space">
+          <li>Open the <code>cyclotron-site/</code> folder in the shell</li>
+          <li>Install dependencies using <a href="https://www.npmjs.com/">npm</a>
+            <pre class="code">npm install</pre>
+            <div class="flash-alert">
+              <div class="title">Windows:</div>This may need to be run as an Administrator.  Open the Node.js Command Prompt as an Administrator 
+              and run the command there.
+            </div>
+          </li>
+          <li>Install <a href="http://gulpjs.com">Gulp</a> globally.  This is the build system for the website, and only has to be installed once.
+            <pre class="code">npm install --global gulp</pre>
+            <div class="flash-alert">
+              <div class="title">Windows/Linux/OS X:</div>This may need to be run as an Administrator or with sudo priviledges.
+            </div>
+          </li>
+          <li>Build the website and start a web server:
+            <pre class="code">gulp server</pre>
+            <p>This compiles the website into the <code>_public</code> folder and starts a local development web server.
+               The website should automatically open in a browser: <a href="http://localhost:8080">http://localhost:8080</a>.
+            </p>
+            <div class="flash-error">
+              <div class="title">"unable to connect to github.com":</div>This may be due to a firewall blocking the *git://* protocol. 
+              Run this command to use https instead:
+              <pre class="code">git config --global url."https://".insteadOf git://</pre>
+            </div>
+            <div class="flash-alert">
+              <div class="title">Windows:</div>Git must be in the PATH to successfully build the website. 
+              If using GitHub for Windows, click the Git Shell button to launch a Command Prompt
+              with the updated PATH.
+            </div>
+          </li>
+          <li> 
+            <p>Update the configuration file at <code>_public/js/conf/configService.js</code> as needed.  This file was automatically created from <code>sample.configService.js</code> the first time the project is built.</p>
+            <p>
+              This sample config defaults to a local Cyclotron-svc instance, with authentication disabled.
+              If authentication has been enabled in the REST API, it must be enabled in this config as well.
+            </p>
+          </li>
+        </ol>
+        <p>For more information on the Cyclotron website and its configuration, please refer to <code>cyclotron-site/README.md</code>.</p>
+        <h2>Using Cyclotron</h2>
+        <p>For more information on creating Dashboards with Cyclotron, click on the <i class="fa fa-question-circle"></i><strong> Help</strong> button on the home page, or in the site header.</p>
+      </div>
+    </main>
+    <footer>
+      <div class="footer-logo"><img src="img/favicon64.png"></div>
+      <div class="footer-links">
+        <ul>
+          <li>
+            <h3>About</h3>
+          </li>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="gettingstarted.html">Getting Started</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+        </ul>
+        <ul>
+          <li>
+            <h3>Contact</h3>
+          </li>
+          <li><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron"><i class="fa fa-github"></i> GitHub</a></li>
+          <li><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron/issues"><i class="fa fa-github-alt"></i> Report a Bug</a></li>
+        </ul>
+        <ul>
+          <li>
+            <h3>More</h3>
+          </li>
+          <li><a href="http://www.expedia.com">Expedia.com</a></li>
+          <li><a href="http://www.lifeatexpedia.com/">Jobs</a></li>
+        </ul>
+      </div>
+      <hr>
+      <p>© 2015 Expedia, Inc.</p>
+    </footer>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      
+      ga('create', 'UA-69147212-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </body>
+</html>
