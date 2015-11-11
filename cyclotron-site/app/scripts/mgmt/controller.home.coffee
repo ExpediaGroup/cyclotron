@@ -96,7 +96,10 @@ cyclotronApp.controller 'HomeController', ($scope, $location, $modal, configServ
         # Confirmation dialog
         modalInstance = $modal.open {
             templateUrl: '/partials/editor/delete.html'
-            scope: $scope
+            controller: 'DeleteDashboardController'
+            resolve: {
+                dashboardName: -> dashboardName
+            }
         }
 
         modalInstance.result.then ->

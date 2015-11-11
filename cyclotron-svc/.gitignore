@@ -1,2 +1,6 @@
+# Configuration
+config/config.js
+
 # Exports
 export/*
+

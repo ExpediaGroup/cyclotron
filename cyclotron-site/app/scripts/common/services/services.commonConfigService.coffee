@@ -26,7 +26,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
     exports = {
 
-        version: '1.21.0-SNAPSHOT'
+        version: '1.22.0'
 
         authentication:
             loginMessage: 'Please login using your LDAP username and password.'
@@ -901,13 +901,22 @@ cyclotronServices.factory 'commonConfigService', ->
                         required: true
                         options: datasourceOptions
                         order: 10
+                    drilldownDataSource:
+                        label: 'Drilldown Data Source'
+                        description: 'The name of the Data Source providing drilldown data for this Widget.'
+                        placeholder: 'Data Source name'
+                        type: 'string'
+                        required: false
+                        defaultHidden: true
+                        options: datasourceOptions
+                        order: 11
                     highchart:
                         label: 'Highchart Definition'
                         description: 'Contains all the options for the chart, in the format expected by Highcharts. Any valid Highcharts properties can be set under this property and will be applied to the chart.'
                         type: 'json'
                         inlineJs: true
                         required: true
-                        order: 11
+                        order: 12
                     filters: 
                         label: 'Filters'
                         description: 'Optional, but if provided, specifies name-value pairs used to filter the data source\'s result set. Each key specifies a column in the data source, and the value specifies either a single value (string) or a set of values (array of strings). Only rows which have the specifies value(s) will be permitted'
@@ -915,7 +924,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         inlineJsKey: true
                         inlineJsValue: true
                         required: false
-                        order: 12
+                        order: 13
                     sortBy: 
                         label: 'Sort By'
                         description: 'Optional, specifies the field(s) to sort the data by. If the value is a string, it will sort by that single field. If it is an array of strings, multiple fields will be used to sort, with left-to-right priority. The column name can be prefixed with a + or a - sign to indicate the direction or sort. + is ascending, while - is descending. The default sort direction is ascending, so the + sign does not need to be used. If this property is omitted, the original sort order of the data will be used'
@@ -923,14 +932,14 @@ cyclotronServices.factory 'commonConfigService', ->
                         inlineJs: true
                         required: false
                         placeholder: 'Column name'
-                        order: 13
+                        order: 14
                     addShiftPoints:
                         label: 'Add/Shift Points'
                         description: 'If true, identifies new points on each data reload and appends them to the right side of the chart, shifting points off of the left side. This is ideal for rolling time-series charts with a fixed number of points. The default is false, which forces a complete redraw of all points.'
                         type: 'boolean'
                         default: false
                         required: false
-                        order: 14
+                        order: 15
                 sample:
                     highchart:
                         series: [{
@@ -939,6 +948,7 @@ cyclotronServices.factory 'commonConfigService', ->
                             }
                         ]
                         xAxis: [{
+                                type: 'linear'
                             }
                         ]
                         yAxis: [{
@@ -951,6 +961,10 @@ cyclotronServices.factory 'commonConfigService', ->
                         chart:
                             style:
                                 fontFamily: '"Open Sans", sans-serif'
+                        drilldown:
+                            activeAxisLabelStyle:
+                                color: '#333'
+                                textDecoration: 'none'
                         plotOptions: 
                             series: 
                                 shadow: false
@@ -1069,6 +1083,13 @@ cyclotronServices.factory 'commonConfigService', ->
                             style:
                                 fontFamily: '"Open Sans", sans-serif'
                                 color: '#FFF'
+                        drilldown:
+                            activeAxisLabelStyle:
+                                color: '#999'
+                                textDecoration: 'none'
+                            activeDataLabelStyle:
+                                color: '#999'
+                                textDecoration: 'none'
                         title: 
                             style: 
                                 color: '#FFF'
@@ -1132,12 +1153,20 @@ cyclotronServices.factory 'commonConfigService', ->
                                 color: '#FFF'
                         plotOptions:
                             series: 
+                                dataLabels:
+                                    style:
+                                        color: '#999'
+                                        textShadow: false
                                 shadow: true
                                 marker:
                                     enabled: false
                                     states:
                                         hover:
                                             enabled: true
+                                dataLabels:
+                                    style:
+                                        color: '#999'
+                                        textShadow: false
                             bar:
                                 borderWidth: 0
                             column:
@@ -1273,6 +1302,13 @@ cyclotronServices.factory 'commonConfigService', ->
                             style: 
                                 fontFamily: '"Open Sans", sans-serif'
                                 color: '#FFF'
+                        drilldown:
+                            activeAxisLabelStyle:
+                                color: '#999'
+                                textDecoration: 'none'
+                            activeDataLabelStyle:
+                                color: '#999'
+                                textDecoration: 'none'
                         title: 
                             style: 
                                 color: '#FFF'
@@ -1344,6 +1380,10 @@ cyclotronServices.factory 'commonConfigService', ->
                                     states:
                                         hover:
                                             enabled: true
+                                dataLabels:
+                                    style:
+                                        color: '#999'
+                                        textShadow: false
                             bar:
                                 borderWidth: 0
                             column:
@@ -1474,30 +1514,6 @@ cyclotronServices.factory 'commonConfigService', ->
                 name: 'html'
                 icon: 'fa-html5'
                 properties:
-                    html:
-                        label: 'HTML'
-                        description: 'Contains HTML markup to be displayed. If dataSource is set, this HTML will be repeated for each row in the result.'
-                        type: 'editor'
-                        editorMode: 'html'
-                        required: false
-                        default: ''
-                        order: 10
-                    preHtml:
-                        label: 'Pre-HTML'
-                        description: 'Optional, contains HTML markup which is displayed before the main body of HTML.'
-                        type: 'editor'
-                        editorMode: 'html'
-                        required: false
-                        default: ''
-                        order: 11
-                    postHtml:
-                        label: 'Post-HTML'
-                        description: 'Optional, contains HTML markup which is displayed after the main body of HTML.'
-                        type: 'editor'
-                        editorMode: 'html'
-                        required: false
-                        default: ''
-                        order: 12
                     dataSource:
                         label: 'Data Source'
                         description: 'Optional; the name of the Data Source providing data for this Widget. If set, the `html` property will be used as a repeater and rendered once for each row.'
@@ -1505,7 +1521,30 @@ cyclotronServices.factory 'commonConfigService', ->
                         type: 'string'
                         required: false
                         options: datasourceOptions
-
+                        order: 10
+                    html:
+                        label: 'HTML'
+                        description: 'Contains HTML markup to be displayed. If dataSource is set, this HTML will be repeated for each row in the result.'
+                        type: 'editor'
+                        editorMode: 'html'
+                        required: false
+                        default: ''
+                        order: 11
+                    preHtml:
+                        label: 'Pre-HTML'
+                        description: 'Optional, contains HTML markup which is displayed before the main body of HTML.'
+                        type: 'editor'
+                        editorMode: 'html'
+                        required: false
+                        default: ''
+                        order: 12
+                    postHtml:
+                        label: 'Post-HTML'
+                        description: 'Optional, contains HTML markup which is displayed after the main body of HTML.'
+                        type: 'editor'
+                        editorMode: 'html'
+                        required: false
+                        default: ''
                         order: 13
                     filters: 
                         label: 'Filters'
@@ -1548,20 +1587,6 @@ cyclotronServices.factory 'commonConfigService', ->
                 name: 'javascript'
                 icon: 'fa-cogs'
                 properties:
-                    functionName:
-                        label: 'Function Name'
-                        description: 'JavaScript function name used to create a controller instance. Supports namespaces/drilldown using periods, e.g. Cyclotron.functions.scatterPlot'
-                        placeholder: 'Function Name'
-                        type: 'string'
-                        required: true
-                        order: 10
-                    refresh: 
-                        label: 'Refresh'
-                        description: 'Optional; enables re-invoking the javascript object periodically every N seconds.'
-                        placeholder: 'Seconds'
-                        type: 'integer'
-                        required: false
-                        order: 11
                     dataSource:
                         label: 'Data Source'
                         description: 'Optional; the name of the Data Source providing data for this Widget. If set, the data source will be called and the result will be passed to the JavaScript function.'
@@ -1569,6 +1594,20 @@ cyclotronServices.factory 'commonConfigService', ->
                         type: 'string'
                         required: false
                         options: datasourceOptions
+                        order: 10
+                    functionName:
+                        label: 'Function Name'
+                        description: 'JavaScript function name used to create a controller instance. Supports namespaces/drilldown using periods, e.g. Cyclotron.functions.scatterPlot'
+                        placeholder: 'Function Name'
+                        type: 'string'
+                        required: true
+                        order: 11
+                    refresh: 
+                        label: 'Refresh'
+                        description: 'Optional; enables re-invoking the javascript object periodically every N seconds.'
+                        placeholder: 'Seconds'
+                        type: 'integer'
+                        required: false
                         order: 12
                     filters: 
                         label: 'Filters'
@@ -1591,6 +1630,14 @@ cyclotronServices.factory 'commonConfigService', ->
                 name: 'number'
                 icon: 'fa-cog'
                 properties:
+                    dataSource:
+                        label: 'Data Source'
+                        description: 'Optional, but required to use data expressions e.g. "#{columnName}". The name of the Data Source providing data for this Widget.'
+                        placeholder: 'Data Source Name'
+                        type: 'string'
+                        required: false
+                        options: datasourceOptions
+                        order: 10
                     numbers:
                         label: 'Numbers'
                         singleLabel: 'number'
@@ -1598,7 +1645,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         type: 'propertyset[]'
                         required: true
                         default: []
-                        order: 10
+                        order: 11
                         properties:
                             number:
                                 label: 'Number'
@@ -1670,7 +1717,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                 value: 'vertical'
                             horizontal:
                                 value: 'horizontal'
-                        order: 11
+                        order: 12
                     link:
                         label: 'Link'
                         description: 'Optional, specifies a URL that will be displayed at the bottom of the widget as a link.'
@@ -1678,14 +1725,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         type: 'url'
                         required: false
                         order: 13
-                    dataSource:
-                        label: 'Data Source'
-                        description: 'Optional, but required to use data expressions e.g. "#{columnName}". The name of the Data Source providing data for this Widget.'
-                        placeholder: 'Data Source Name'
-                        type: 'string'
-                        required: false
-                        options: datasourceOptions
-                        order: 14
+
                     filters: 
                         label: 'Filters'
                         description: "Optional, but if provided, specifies name-value pairs used to filter the data source's result set. This has no effect if the dataSource property is not set.\nOnly the first row of the data source is used to get data, so this property can be used to narrow down on the correct row"
@@ -1707,12 +1747,20 @@ cyclotronServices.factory 'commonConfigService', ->
                 name: 'stoplight'
                 icon: 'fa-cog'
                 properties:
+                    dataSource:
+                        label: 'Data Source'
+                        description: 'The name of the Data Source providing data for this Widget.'
+                        placeholder: 'Data Source Name'
+                        type: 'string'
+                        required: false
+                        options: datasourceOptions
+                        order: 10
                     rules:
                         label: 'Rules'
                         description: 'Contains rule expressions for the different states of the Stoplight. The rules will be evaluated from red to green, and only the first rule that returns true will be enabled'
                         type: 'propertyset'
                         required: true
-                        order: 10
+                        order: 11
                         properties:
                             green:
                                 label: 'Green'
@@ -1735,14 +1783,6 @@ cyclotronServices.factory 'commonConfigService', ->
                                 placeholder: 'Rule Expression'
                                 inlineJs: true
                                 order: 1
-                    dataSource:
-                        label: 'Data Source'
-                        description: 'The name of the Data Source providing data for this Widget.'
-                        placeholder: 'Data Source Name'
-                        type: 'string'
-                        required: false
-                        options: datasourceOptions
-                        order: 14
                     filters: 
                         label: 'Filters'
                         description: "Optional, but if provided, specifies name-value pairs used to filter the data source's result set. This has no effect if the dataSource property is not set.\nOnly the first row of the data source is used to get data, so this property can be used to narrow down on the correct row"

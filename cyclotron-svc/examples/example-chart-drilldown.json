@@ -1,0 +1,120 @@
+{
+    "dataSources": [{
+        "name": "example",
+        "processor": "p = function() {\n    return  [{\n        name: 'Animals',\n        count: 5,\n        type: 'animals'\n    }, {\n        name: 'Fruits',\n        count: 2,\n        type: 'fruits'\n    }, {\n        name: 'Cars',\n        count: 4,\n        type: 'cars'\n    }];\n}",
+        "type": "javascript"
+    }, {
+        "name": "example-drilldown",
+        "processor": "p = function() {\n    return  [\n        {type: 'animals', name: 'Cats', count: 4},\n        {type: 'animals', name: 'Dogs', count: 2},\n        {type: 'animals', name: 'Cows', count: 1},\n        {type: 'animals', name: 'Sheep', count: 2},\n        {type: 'animals', name: 'Pigs', count: 1},\n        {type: 'fruits', name: 'Apples', count: 4},\n        {type: 'fruits', name: 'Oranges', count: 2},\n        {type: 'cars', 'name': 'Toyota', count: 4},\n        {type: 'cars', 'name': 'Opel', count: 2},\n        {type: 'cars', 'name': 'Volkswagen', count: 2}\n    ];\n}",
+        "type": "javascript"
+    }, {
+        "name": "uscrime",
+        "query": "source=mock",
+        "type": "json",
+        "url": "http://pastebin.com/raw.php?i=YGN7gWWG"
+    }, {
+        "name": "uscrime-drilldown",
+        "type": "json",
+        "url": "http://pastebin.com/raw.php?i=juY5tmVh"
+    }],
+    "name": "example-chart-drilldown",
+    "description": "Examples of using drilldown in the Chart Widget.",
+    "disableAnalytics": true,
+    "pages": [{
+        "frequency": 1,
+        "layout": {
+            "gridColumns": 1,
+            "gridRows": 1
+        },
+        "name": "Highcharts Example",
+        "theme": "light",
+        "widgets": [{
+            "dataSource": "example",
+            "drilldownDataSource": "example-drilldown",
+            "highchart": {
+                "chart": {
+                    "type": "column"
+                },
+                "drilldown": {
+                    "series": [{
+                        "key": "#{type}",
+                        "x": "name",
+                        "y": "count"
+                    }]
+                },
+                "legend": {
+                    "enabled": false
+                },
+                "plotOptions": {
+                    "series": {
+                        "borderWidth": 0,
+                        "dataLabels": {
+                            "enabled": "${true}"
+                        }
+                    }
+                },
+                "series": [{
+                    "colorByPoint": "${true}",
+                    "name": "Things",
+                    "point": {
+                        "drilldown": "#{type}",
+                        "name": "#{name}",
+                        "y": "#{count}"
+                    }
+                }],
+                "xAxis": {
+                    "type": "category"
+                }
+            },
+            "title": "Basic drilldown",
+            "widget": "chart"
+        }]
+    }, {
+        "frequency": 1,
+        "layout": {
+            "gridColumns": 1,
+            "gridRows": 1
+        },
+        "widgets": [{
+            "dataSource": "uscrime",
+            "drilldownDataSource": "uscrime-drilldown",
+            "highchart": {
+                "drilldown": {
+                    "series": [{
+                        "categories": ["Murder"],
+                        "key": "#{Year}",
+                        "name": "Crimes by Type",
+                        "type": "pie",
+                        "x": "Type",
+                        "y": "CrimesCommitted"
+                    }]
+                },
+                "series": [{
+                    "name": "Total Crimes",
+                    "point": {
+                        "drilldown": "#{Year}",
+                        "x": "#{Year}",
+                        "y": "#{Total}"
+                    },
+                    "type": "line"
+                }],
+                "subtitle": {
+                    "text": "Source: <a href=\"http://www.disastercenter.com/crime/uscrime.htm\">http://www.disastercenter.com</a>",
+                    "verticalAlign": "bottom"
+                },
+                "xAxis": {
+                    "type": "linear"
+                },
+                "yAxis": [{
+                    "min": 0,
+                    "title": {
+                        "text": "Crimes Committed"
+                    }
+                }]
+            },
+            "title": "US Crimes over Time",
+            "widget": "chart"
+        }]
+    }],
+    "theme": "dark"
+}

@@ -43,6 +43,10 @@ cyclotronApp.controller 'ChartWidget', ($scope, dashboardService, dataService) -
     dsDefinition = dashboardService.getDataSource($scope.dashboard, $scope.widget)
     $scope.dataSource = dataService.get(dsDefinition)
 
+    # Load drilldown data source (optional)
+    drilldownDataSourceDefinition = dashboardService.getDataSource($scope.dashboard, $scope.widget, 'drilldownDataSource')
+    $scope.drilldownDataSource = dataService.get(drilldownDataSourceDefinition)
+
     getChart = ->
         defaults =
             credits:
@@ -58,7 +62,7 @@ cyclotronApp.controller 'ChartWidget', ($scope, dashboardService, dataService) -
         chart = _.compile(chart, {}, ['series'], true)
         return chart
 
-    getSeries = (series) ->
+    getSeries = (series, seriesData = $scope.rawData) ->
 
         # Compile top-level properties
         series = _.compile series, [], [], false
@@ -82,7 +86,7 @@ cyclotronApp.controller 'ChartWidget', ($scope, dashboardService, dataService) -
 
         # If point is provided, use it's properties to create point objects
         if series.point?
-            series.data = _.map $scope.rawData, (row) ->
+            series.data = _.map seriesData, (row) ->
                 point = _.cloneDeep(series.point)
 
                 # Pull in series x/y/z unless they are defined on the point
@@ -100,6 +104,10 @@ cyclotronApp.controller 'ChartWidget', ($scope, dashboardService, dataService) -
                 if point.x? && xTransform?
                     point.x = xTransform(point.x)
 
+                # Optional Drilldown
+                if point.drilldown?
+                    point.drilldown = point.drilldown.toString()
+
                 return point
 
             # Remove series-level properties since all data has been pulled into the data array
@@ -114,7 +122,7 @@ cyclotronApp.controller 'ChartWidget', ($scope, dashboardService, dataService) -
 
         # Handle different combinations of x/y/z
         else if series.x? && series.y? && series.z?
-            series.data = _.map $scope.rawData, (row) ->
+            series.data = _.map seriesData, (row) ->
                 xValue = row[series.x] ? null
                 yValue = row[series.y] ? null
                 zValue = row[series.z] ? null
@@ -125,7 +133,7 @@ cyclotronApp.controller 'ChartWidget', ($scope, dashboardService, dataService) -
                 return [xValue, yValue, zValue]
 
         else if series.x? && series.y?
-            series.data = _.map $scope.rawData, (row) ->
+            series.data = _.map seriesData, (row) ->
                 xValue = row[series.x] ? null
                 yValue = row[series.y] ? null
 
@@ -136,12 +144,12 @@ cyclotronApp.controller 'ChartWidget', ($scope, dashboardService, dataService) -
 
         # Y only
         else if !series.x? && series.y?
-            series.data = _.map $scope.rawData, (row) ->
+            series.data = _.map seriesData, (row) ->
                 return row[series.y] ? null
 
         # X only
         else if !series.y? && series.x?
-            series.data = _.map $scope.rawData, (row) ->
+            series.data = _.map seriesData, (row) ->
                 xValue = row[series.x] ? null
 
                 # Optionally format the x axis
@@ -232,10 +240,31 @@ cyclotronApp.controller 'ChartWidget', ($scope, dashboardService, dataService) -
                 aSeries.name = aSeries.name(aSeries.y)
 
         # Expand each series with the actual data and apply to the chart
-        chart.series = _.map series, getSeries
+        chart.series = _.map series, (s) -> getSeries(s, $scope.rawData)
+
+        # Optional drilldown
+        if chart.drilldown?
+            # Expand each drilldown series
+            expandedSeries = _.map chart.drilldown.series, (drilldownSeries) ->
+                # Group the drilldown data by the series key
+                groups = _.groupBy $scope.drilldownData, (row) ->
+                    _.compile drilldownSeries.key, row
+
+                _.map groups, (group, key) ->
+                    s = getSeries _.cloneDeep(drilldownSeries), group
+                    s.id = key.toString()
+                    return s
+
+            # Flatten and replace
+            chart.drilldown.series = _.flatten expandedSeries
 
         # Set the highcharts object so the directive picks it up.
         $scope.highchart = chart
+
+    $scope.loadDrilldownData = ->
+        $scope.drilldownDataSource.getData drilldownDataSourceDefinition, (data) ->
+            $scope.drilldownData = data
+            $scope.createChart()
 
     # Load data from the data source
     $scope.loadData = ->
@@ -291,5 +320,8 @@ cyclotronApp.controller 'ChartWidget', ($scope, dashboardService, dataService) -
         $scope.dataSource.execute(true)
 
     # Initialize
+    if not _.isUndefined(drilldownDataSourceDefinition)
+        $scope.loadDrilldownData()
+
     if not _.isUndefined(dsDefinition)
         $scope.loadData()

@@ -477,13 +477,13 @@ cyclotronServices.factory 'dashboardService', ($resource, $q, configService, use
     #
     # Supports dashboard shared data sources: if DataSourceDefinition is a string, 
     # the named Dashboard Data Source with the same name will be returned.
-    service.getDataSource = (dashboard, widget) ->
+    service.getDataSource = (dashboard, widget, propertyName = 'dataSource') ->
 
         return if _.isNullOrUndefined(widget)
         return if _.isNullOrUndefined(dashboard)
-        return if not widget.dataSource?
+        return if not widget[propertyName]?
 
-        dataSourceDefinition = widget.dataSource
+        dataSourceDefinition = widget[propertyName]
 
         # Retrieve common dataSources if it is a string
         if _.isString(dataSourceDefinition) && dashboard.dataSources?

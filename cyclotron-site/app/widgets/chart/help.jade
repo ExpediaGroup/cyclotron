@@ -142,7 +142,7 @@ h3 Examples
 h4 Basic Line Chart
 p This example is available on the 
     a(href='/example-chart-line') example-chart-line
-    |  dashboard
+    |  dashboard.
 pre.code.
     {
         "dataSource": "mock",
@@ -162,7 +162,7 @@ p This uses the mock Data Source and displays a simple line chart, with time as 
 
 p This example is available on the 
     a(href='/example-chart-line') example-chart-line
-    |  dashboard
+    |  dashboard.
 pre.code.
     {
         "dataSource": "timeseries",
@@ -189,7 +189,7 @@ p This example displays a column chart with categories on the x-axis.
 
 p This example is available on the 
     a(href='/example-chart-columnbar') example-chart-columnbar
-    |  dashboard
+    |  dashboard.
 pre.code.
     {
         "dataSource": "worldpop",
@@ -230,7 +230,7 @@ p This example displays multiple series in a stack, with
 
 p This example is available on the 
     a(href='/example-chart-columnbar') example-chart-columnbar
-    |  dashboard
+    |  dashboard.
 pre.code.
     {
         "dataSource": "worldpop2",
@@ -270,7 +270,7 @@ p.
     
 p This example is available on the 
     a(href='/example-chart-columnbar') example-chart-columnbar
-    |  dashboard
+    |  dashboard.
 pre.code.
     {
         "dataSource": "timeseries2",
@@ -316,7 +316,7 @@ p Instead of hardcoding a series for each column in the data source, series will
 
 p This example is available on page 2 of the 
     a(href='/example-chart-line') example-chart-line
-    |  dashboard    
+    |  dashboard.
 
 pre.code.
     {
@@ -357,7 +357,7 @@ p Additionally, this chart has a inline JS function to set the series name
 
 p This example is available on page 2 of the 
     a(href='/example-chart-line') example-chart-line
-    |  dashboard    
+    |  dashboard.
 
 pre.code.
     {
@@ -393,7 +393,7 @@ p This example displays a pie chart from percentage data.
 
 p This example is available on the 
     a(href='/example-chart-pie') example-chart-pie
-    |  dashboard
+    |  dashboard.
 pre.code.
     {
         "dataSource": "mock_pie",
@@ -416,7 +416,7 @@ h4 Semi-Circle Pie Chart
 p This example is a modified version of the pie chart, using the start/endAngle properties to display only half a circle.
 p This example is available on the 
     a(href='/example-chart-pie') example-chart-pie
-    |  dashboard
+    |  dashboard.
 pre.code.
     {
         "series": [{
@@ -438,7 +438,7 @@ h4 Y-Axis Plot Lines
 p This example displays two constant plot lines on a chart, indicating Warning and Critical thresholds.
 p This example is available on page 3 of the 
     a(href='/example-chart-line?page=3') example-chart-line
-    |  dashboard
+    |  dashboard.
 pre.code.
     {
         "series": [{
@@ -471,5 +471,60 @@ pre.code.
                 "value": 3500,
                 "width": 2
             }]
+        }
+    }
+
+h4 Drilldown
+p This example allows each series to be "drilled into", effectively replacing the chart with another chart of related data based on the selection.
+p This example is available on the 
+    a(href='/example-chart-drilldown') example-chart-drilldown
+    |  dashboard.
+
+p There's an optional second Data Source property on the Chart Widget: "drilldownDataSource":
+pre.code.
+    "dataSource": "example",
+    "drilldownDataSource": "example-drilldown"
+
+p This second Data Source is used to provide drilldown data for the primary Data Source.  The "drilldown" section below
+    | contains one or more series of data from the Drilldown Data Source.  Each point on the main series has a "drilldown" key,
+    | which is used to match the "key" property on of the drilldown series.  
+
+p In this example, both Data Sources have a "type" column, so when a point is selected, 
+    | the chart drills down into matching data from the Drilldown Data Source.
+
+p Please note, the main series must use the "point" notation rather than "x"/"y".
+pre.code.
+    {
+        "chart": {
+            "type": "column"
+        },
+        "drilldown": {
+            "series": [{
+                "key": "#{type}",
+                "x": "name",
+                "y": "count"
+            }]
+        },
+        "legend": {
+            "enabled": false
+        },
+        "plotOptions": {
+            "series": {
+                "borderWidth": 0,
+                "dataLabels": {
+                    "enabled": "${true}"
+                }
+            }
+        },
+        "series": [{
+            "name": "Things",
+            "point": {
+                "drilldown": "#{type}",
+                "name": "#{name}",
+                "y": "#{count}"
+            }
+        }],
+        "xAxis": {
+            "type": "category"
         }
     }

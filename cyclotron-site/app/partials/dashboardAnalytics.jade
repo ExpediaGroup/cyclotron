@@ -63,7 +63,7 @@
                     tr
                         th(ts-criteria='dataSourceName|lowercase') Name
                         th(ts-criteria='dataSourceType|lowercase') Type
-                        th(ts-criteria='count|parseInt') Executions
+                        th(ts-criteria='count|parseInt', ts-default='descending') Executions
                         th(ts-criteria='successRate|parseFloat') Success Rate
                         th(ts-criteria='avgDuration|parseFloat') Duration (ms)
                 tbody
@@ -79,12 +79,12 @@
             table.table(ts-wrapper)
                 thead
                     tr
-                        th(ts-criteria='pageViews|parseInt') Page views
                         th(ts-criteria='user.name|lowercase') User
+                        th(ts-criteria='pageViews|parseInt', ts-default='descending') Page views
                 tbody
                     tr(ng-repeat='visitor in uniqueVisitors | tablesort | limitTo:20', ts-repeat)
-                        td {{ visitor.pageViews }}
                         td {{ visitor.user.name || 'Anonymous' }}
+                        td {{ visitor.pageViews }}
 
     .row
         .col-sm-4

@@ -292,7 +292,10 @@ cyclotronApp.controller 'GuiEditorController', ($scope, $state, $stateParams, $l
         # Confirmation dialog
         modalInstance = $modal.open {
             templateUrl: '/partials/editor/delete.html'
-            scope: $scope
+            controller: 'DeleteDashboardController'
+            resolve: {
+                dashboardName: -> $scope.editor.dashboardWrapper.name
+            }
         }
 
         modalInstance.result.then ->

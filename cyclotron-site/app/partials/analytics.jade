@@ -122,7 +122,7 @@
                         thead
                             tr
                                 th(ts-criteria='name|lowercase') Name
-                                th(ts-criteria='visits|parseInt') Visits
+                                th(ts-criteria='visits|parseInt', ts-default='descending') Visits
                                 th(ts-criteria='pageViews|parseInt') Page Views
                         tbody
                             tr(ng-repeat='dashboard in topDashboards | tablesort | limitTo:topDashboardsLimit', ts-repeat)
@@ -143,7 +143,7 @@
                         thead
                             tr
                                 th(ts-criteria='user.name|lowercase') User
-                                th(ts-criteria='pageViews|parseInt') Page Views
+                                th(ts-criteria='pageViews|parseInt', ts-default='descending') Page Views
                         tbody
                             tr(ng-repeat='visitor in uniqueVisitors | tablesort | limitTo:uniqueVisitorLimit', ts-repeat)
                                 td {{ visitor.user.name || 'Anonymous' }}
@@ -173,7 +173,7 @@
                         thead
                             tr
                                 th(ts-criteria='dataSourceType|lowercase') Data Source Type
-                                th(ts-criteria='count|parseInt') Executions
+                                th(ts-criteria='count|parseInt', ts-default='descending') Executions
                                 th(ts-criteria='successRate|parseFloat') Success Rate
                         tbody
                             tr(ng-repeat='dataSource in dataSourcesByType | tablesort | limitTo:dataSourceTypeLimit', ts-repeat)
@@ -193,7 +193,7 @@
                         thead
                             tr
                                 th(ts-criteria='widget|lowercase') Widget Type
-                                th(ts-criteria='widgetViews|parseInt') Views
+                                th(ts-criteria='widgetViews|parseInt', ts-default='descending') Views
                         tbody
                             tr(ng-repeat='widget in widgets | tablesort | limitTo:widgetTypeLimit', ts-repeat)
                                 td {{ widget.widget }}
@@ -211,7 +211,7 @@
                         thead
                             tr
                                 th(ts-criteria='nameVersion|lowercase') Browser
-                                th(ts-criteria='pageViews|parseInt') Page Views
+                                th(ts-criteria='pageViews|parseInt', ts-default='descending') Page Views
                         tbody
                             tr(ng-repeat='browser in browsers | tablesort | limitTo:browserLimit', ts-repeat)
                                 td {{ browser.nameVersion }}
@@ -232,7 +232,7 @@
                                 th(ts-criteria='dashboardName|lowercase') Dashboard
                                 th(ts-criteria='dataSourceName|lowercase') Name
                                 th(ts-criteria='dataSourceType|lowercase') Type
-                                th(ts-criteria='count|parseInt') Executions
+                                th(ts-criteria='count|parseInt', ts-default='descending') Executions
                                 th(ts-criteria='successRate|parseFloat') Success Rate
                                 th(ts-criteria='avgDuration|parseFloat') Duration (ms)
                         tbody
