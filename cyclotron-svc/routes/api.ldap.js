@@ -64,7 +64,18 @@ var ldapSearch = function(categoryName, dn, filter, scope) {
 
     var searchOptions = {
         filter: filter,
-        attributes: ['distinguishedName', 'name', 'displayName', 'sAMAccountName', 'objectCategory', 'description', 'memberOf', 'department', 'mail'],
+        attributes: [
+            'distinguishedName', 
+            'name', 
+            'displayName', 
+            'sAMAccountName', 
+            'objectCategory', 
+            'description', 
+            'memberOf', 
+            'department', 
+            'division',
+            'mail'
+        ],
         scope: scope
     };
 

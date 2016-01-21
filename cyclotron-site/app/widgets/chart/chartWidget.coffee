@@ -75,11 +75,11 @@ cyclotronApp.controller 'ChartWidget', ($scope, dashboardService, dataService) -
         xTransform = null
         if series.xFormat?
             xTransform = switch series.xFormat
-                when "epoch" then (d) ->
+                when 'epoch' then (d) ->
                     moment.unix(d).valueOf()
-                when "epochmillis" then _.identity
+                when 'epochmillis' then _.identity
                     # Highcharts handles natively
-                when "string" then (d) ->
+                when 'string' then (d) ->
                     moment(d).valueOf()
 
                 else _.identity

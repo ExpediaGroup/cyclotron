@@ -54,6 +54,8 @@ var createSession = function (user, ip) {
             distinguishedName: user.distinguishedName,
             givenName: user.givenName || user.displayName,
             title: user.title || null,
+            department: user.department || null,
+            division: user.division || null,
             lastLogin: new Date(),
             memberOf: userMemberOf
         }, 

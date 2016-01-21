@@ -162,6 +162,7 @@ exports.deleteAnalyticsForDashboard = function (req, res) {
 /* Gets 100 most-recent Page View analytics records */
 exports.getRecentPageViews = function (req, res) {
     var query = null;
+
     if (_.isUndefined(req.query.dashboard)) {
         query = Analytics.find();
     } else {
@@ -169,7 +170,7 @@ exports.getRecentPageViews = function (req, res) {
     }
 
     query.sort('-date')
-        .limit(100)
+        .limit(req.query.max || 100)
         .populate('dashboard', 'name')
         .populate('user', 'sAMAccountName')
         .exec(_.wrap(res, api.getCallback));
@@ -185,7 +186,7 @@ exports.getRecentDataSources = function (req, res) {
     }
 
     query.sort('-date')
-        .limit(100)
+        .limit(req.query.max || 100)
         .populate('dashboard', 'name')
         .exec(_.wrap(res, api.getCallback));
 };
@@ -195,7 +196,7 @@ exports.getTopDashboards = function (req, res) {
     Dashboards.find({ deleted: false })
         .select('-dashboard -editors -viewers')
         .sort('-visits')
-        .limit(100)
+        .limit(req.query.max || 100)
         .exec(_.wrap(res, api.getCallback));
 };
 
@@ -461,8 +462,6 @@ exports.getUniqueVisitors = function (req, res) {
         }
     }, {
         $sort: { pageViews: -1 }
-    }, {
-        $limit: 100
     });
 
     var authPipeline = pipeline.concat({
@@ -474,9 +473,17 @@ exports.getUniqueVisitors = function (req, res) {
         }
     }, {
         $sort: { pageViews: -1 }
-    }, {
-        $limit: 100
     });
+
+    var max = parseInt(req.query.max);
+    if (max != 0) {
+        anonymousPipeline.push({
+            $limit: max || 100
+        });
+        authPipeline.push({
+            $limit: max || 100
+        });
+    }
 
     var anonymousPromise = new Promise(function (resolve, reject) {
         Analytics.aggregate(anonymousPipeline).exec(function (err, results) {
@@ -523,7 +530,14 @@ exports.getUniqueVisitors = function (req, res) {
 
     Promise.join(anonymousPromise, authPromise,
         function (anonymousUsers, authenticatedUsers) {
-            res.send(_.sortBy(_.union(anonymousUsers, authenticatedUsers), 'pageViews').reverse());
+            var results = _.sortBy(_.union(anonymousUsers, authenticatedUsers), 'pageViews').reverse();
+
+            /* Limit results */
+            if (!_.isNull(max) && max > 0) {
+                results = _.take(results, max);
+            }
+
+            res.send(results);
         })
     .catch(function (err) {
         return res.status(500).send(err);
@@ -546,9 +560,12 @@ exports.getBrowserStats = function (req, res) {
         }
     }, {
         $sort: { pageViews: -1 }
-    }, {
-        $limit: 100
     });
+
+    var max = parseInt(req.query.max);
+    if (max != 0) {
+        pipeline.push({ $limit: max || 100 });
+    }
 
     Analytics.aggregate(pipeline).exec(function (err, results) {
         if (err) {
@@ -615,9 +632,12 @@ exports.getPageViewsByPage = function (req, res) {
         }
     }, {
         $sort: { _id: 1 }
-    }, {
-        $limit: 100
     });
+
+    var max = parseInt(req.query.max);
+    if (max != 0) {
+        pipeline.push({ $limit: max || 100 });
+    }
 
     Analytics.aggregate(pipeline).exec(function (err, results) {
         if (err) {
@@ -686,8 +706,9 @@ exports.getDataSourcesByType = function (req, res) {
     });
 
     /* Match all dashboards, limit results */
-    if (_.isUndefined(req.query.dashboard)) {
-        pipeline.push({ $limit: 20 });
+    var max = parseInt(req.query.max);
+    if (_.isUndefined(req.query.dashboard) && max != 0) {
+        pipeline.push({ $limit: max || 20 });
     }
 
     aggregateDataSources(pipeline, res);
@@ -723,8 +744,9 @@ exports.getDataSourcesByName = function (req, res) {
     });
 
     /* Match all dashboards, limit results */
-    if (_.isUndefined(req.query.dashboard)) {
-        pipeline.push({ $limit: 100 });
+    var max = parseInt(req.query.max);
+    if (_.isUndefined(req.query.dashboard) && max != 0) {
+        pipeline.push({ $limit: max || 100 });
     }
 
     aggregateDataSources(pipeline, res);
@@ -757,8 +779,9 @@ exports.getDataSourcesByErrorMessage = function (req, res) {
     });
 
     /* Match all dashboards, limit results */
-    if (_.isUndefined(req.query.dashboard)) {
-        pipeline.push({ $limit: 20 });
+    var max = parseInt(req.query.max);
+    if (_.isUndefined(req.query.dashboard) && max != 0) {
+        pipeline.push({ $limit: max || 20 });
     }
 
     aggregateDataSources(pipeline, res);

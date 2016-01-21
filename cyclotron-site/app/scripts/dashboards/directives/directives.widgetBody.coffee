@@ -25,7 +25,7 @@ cyclotronDirectives.directive 'widgetBody', ($timeout) ->
             sizer = ->
                 $title = $widget.find('.title')
                 $footer = $widget.find('.widget-footer')
-                widgetBodyHeight = $widget.height() - $title.height() - $footer.height()
+                widgetBodyHeight = $widget.outerHeight() - $title.outerHeight() - $footer.outerHeight()
                 $widgetBody.height(Math.floor(widgetBodyHeight))
 
             # Update on window resizing

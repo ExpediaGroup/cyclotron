@@ -69,6 +69,8 @@ var userSchema = mongoose.Schema({
     distinguishedName  : {type: String, required: true, unique: true},
     givenName          : {type: String},
     title              : {type: String},
+    department         : {type: String},
+    division           : {type: String},
     firstLogin         : {type: Date, required: true},
     lastLogin          : {type: Date, required: true},
     timesLoggedIn      : {type: Number, required: true, default: 0},

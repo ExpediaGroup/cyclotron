@@ -26,7 +26,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
     exports = {
 
-        version: '1.22.0'
+        version: '1.23.0'
 
         authentication:
             loginMessage: 'Please login using your LDAP username and password.'
@@ -391,7 +391,7 @@ cyclotronServices.factory 'commonConfigService', ->
                             order: 101
                         sortBy: 
                             label: 'Sort By'
-                            description: 'Optional, specifies the field(s) to sort the data by. If the value is a string, it will sort by that single field. If it is an array of strings, multiple fields will be used to sort, with left-to-right priority. The column name can be prefixed with a + or a - sign to indicate the direction or sort. + is ascending, while - is descending. The default sort direction is ascending, so the + sign does not need to be used. If this property is omitted, the original sort order of the data will be used'
+                            description: 'Optional, specifies the field(s) to sort the data by. If the value is a string, it will sort by that single field. If it is an array of strings, multiple fields will be used to sort, with left-to-right priority. The column name can be prefixed with a + or a - sign to indicate the direction or sort. + is ascending, while - is descending. The default sort direction is ascending, so the + sign does not need to be used. If this property is omitted, the original sort order of the data will be used.'
                             type: 'string[]'
                             inlineJs: true
                             required: false
@@ -889,6 +889,259 @@ cyclotronServices.factory 'commonConfigService', ->
 
         # Widget settings
         widgets:
+            annotationChart:
+                name: 'annotationChart'
+                icon: 'fa-bar-chart-o'
+                properties:
+                    dataSource:
+                        label: 'Data Source'
+                        description: 'The name of the Data Source providing data for this Widget.'
+                        placeholder: 'Data Source name'
+                        type: 'string'
+                        required: true
+                        options: datasourceOptions
+                        order: 10
+                    xAxis:
+                        label: 'X-Axis'
+                        description: 'Configuration of the X-axis.'
+                        type: 'propertyset'
+                        required: true
+                        properties:
+                            column:
+                                label: 'Column Name'
+                                description: 'Name of the column in the Data Source used for the x-axis.'
+                                placeholder: 'Column Name'
+                                inlineJs: true
+                                type: 'string'
+                                order: 1
+                            format: 
+                                label: 'Format'
+                                description: 'Specifies which format the incoming datetime data is in.'
+                                type: 'string'
+                                options:
+                                    date:
+                                        value: 'date'
+                                    epoch:
+                                        value: 'epoch'
+                                    epochmillis:
+                                        value: 'epochmillis'
+                                    string:
+                                        value: 'string'
+                                order: 2
+                            formatString:
+                                label: 'Format String'
+                                description: 'Used with the String format to specify how the string should be parsed.'
+                                type: 'string'
+                                order: 3
+                        order: 11
+                    series:
+                        label: 'Series'
+                        singleLabel: 'series'
+                        description: 'One or more series to display in the annotation chart.'
+                        type: 'propertyset[]'
+                        required: true
+                        default: []
+                        order: 12
+                        properties:
+                            column:
+                                label: 'Column Name'
+                                description: 'Name of the column in the Data Source to use as the y-axis value for this series.'
+                                placeholder: 'Column Name'
+                                inlineJs: true
+                                type: 'string'
+                                order: 1
+                            label:
+                                label: 'Label'
+                                description: 'Display label for the series; if omitted, the column name will be used.'
+                                placeholder: 'Label'
+                                inlineJs: true
+                                type: 'string'
+                                order: 2
+                            annotationTitleColumn:
+                                label: 'Annotation Title Column Name'
+                                description: 'Name of the column in the Data Source to use as the title of annotations corresponding to each point.'
+                                placeholder: 'Column Name'
+                                inlineJs: true
+                                type: 'string'
+                                order: 3
+                            annotationTextColumn:
+                                label: 'Annotation Text Column Name'
+                                description: 'Name of the column in the Data Source to use as the text of annotations corresponding to each point.'
+                                placeholder: 'Column Name'
+                                inlineJs: true
+                                type: 'string'
+                                order: 4
+                            secondaryAxis:
+                                label: 'Secondary Axis'
+                                description: 'If true, places the series on a second axis on the left of the chart.'
+                                inlineJs: true
+                                type: 'boolean'
+                                order: 5
+                    options:
+                        label: 'Options'
+                        description: 'Additional options for the Google Annotation chart.  Any supported option is allowed here.'
+                        type: 'propertyset'
+                        required: false
+                        inlineJs: true
+                        properties:
+                            allValuesSuffix: 
+                                label: 'All Values Suffix'
+                                description: 'A suffix to be added to all values in the legend and tick labels in the vertical axes.'
+                                placeholder: 'Suffix'
+                                type: 'string'
+                                inlineJs: true
+                                defaultHidden: true
+                            annotationsWidth: 
+                                label: 'Annotations Width'
+                                description: 'The width (in percent) of the annotations area, out of the entire chart area. Must be a number in the range 5-80.'
+                                type: 'number'
+                                inlineJs: true
+                                defaultHidden: true
+                            displayAnnotations: 
+                                label: 'Display Annotations'
+                                description: 'Controls whether annotations are displayed along with the chart.'
+                                type: 'boolean'
+                                inlineJs: true
+                                default: true
+                                defaultHidden: true
+                            displayAnnotationsFilter: 
+                                label: 'Display Annotations Filter'
+                                description: 'If set to true, the chart will display a filter control to filter annotations.'
+                                type: 'boolean'
+                                inlineJs: true
+                                default: false
+                                defaultHidden: true
+                            displayDateBarSeparator: 
+                                label: 'Display Date Bar Separator'
+                                description: 'If set to true, the chart will display a small bar separator ( | ) between the series values and the date in the legend.'
+                                type: 'boolean'
+                                inlineJs: true
+                                default: false
+                                defaultHidden: true
+                            displayLegendDots: 
+                                label: 'Display Legend Dots'
+                                description: 'If set to true, the chart will display dots next to the values in the legend text.'
+                                type: 'boolean'
+                                inlineJs: true
+                                defaultHidden: true
+                            displayLegendValues: 
+                                label: 'Display Legend Values'
+                                description: 'If set to true, the chart will display the highlighted values in the legend.'
+                                type: 'boolean'
+                                inlineJs: true
+                                defaultHidden: true
+                            displayRangeSelector: 
+                                label: 'Display Range Selector'
+                                description: 'If set to true, the chart will display the zoom range selection area (the area at the bottom of the chart).'
+                                type: 'boolean'
+                                inlineJs: true
+                                defaultHidden: true
+                            displayZoomButtons: 
+                                label: 'Display Zoom Buttons'
+                                description: 'If set to true, the chart will display the zoom buttons ("1d 5d 1m" etc).'
+                                type: 'boolean'
+                                inlineJs: true
+                                defaultHidden: true
+                            fill:
+                                label: 'Fill'
+                                description: 'A number from 0—100 (inclusive) specifying the alpha of the fill below each line in the line graph. 100 means 100% opaque, and 0 means no fill at all. The fill color is the same color as the line above it.'
+                                type: 'integer'
+                                inlineJs: true
+                                defaultHidden: true
+                            legendPosition:
+                                label: 'Legend Position'
+                                description: 'Determines whether the legend is put on the same row as the zoom buttons, or a new row.'
+                                type: 'string'
+                                inlineJs: true
+                                defaultHidden: true
+                                options:
+                                    sameRow:
+                                        value: 'sameRow'
+                                    newRow:
+                                        value: 'newRow'
+                            max:
+                                label: 'Maximum'
+                                description: 'The maximum value to show on the Y-axis. If the maximum data point is less than this value, this setting will be ignored.'
+                                type: 'number'
+                                inlineJs: true
+                                defaultHidden: true
+                            min:
+                                label: 'Minimum'
+                                description: 'The minimum value to show on the Y-axis. If the minimum data point is less than this value, this setting will be ignored.'
+                                type: 'number'
+                                inlineJs: true
+                                defaultHidden: true
+                            scaleFormat:
+                                label: 'Scale Format'
+                                description: 'Number format to be used for the axis tick labels.  Format reference: https://developers.google.com/chart/interactive/docs/customizing_axes#number-formats.'
+                                placeholder: 'Format'
+                                type: 'string'
+                                inlineJs: true
+                                defaultHidden: true
+                            scaleType:
+                                label: 'Scale Type'
+                                description: 'Sets the maximum and minimum values shown on the Y-axis.  Reference: https://developers.google.com/chart/interactive/docs/gallery/annotationchart.'
+                                type: 'string'
+                                inlineJs: true
+                                defaultHidden: true
+                                options:
+                                    maximized:
+                                        value: 'maximized'
+                                    fixed:
+                                        value: 'fixed'
+                                    allmaximized:
+                                        value: 'allmaximized'
+                                    allfixed:
+                                        value: 'allfixed'
+                            thickness:
+                                label: 'Thickness'
+                                description: 'A number from 0—10 (inclusive) specifying the thickness of the lines, where 0 is the thinnest.'
+                                placeholder: 'Thickness'
+                                type: 'integer'
+                                inlineJs: true
+                                defaultHidden: true
+                            zoomStartTime:
+                                label: 'Zoom Start Time'
+                                description: 'Sets the initial start datetime of the selected zoom range. Should be provided as a JavaScript Date.'
+                                placeholder: 'Date Time'
+                                type: 'datetime'
+                                inlineJs: true
+                                defaultHidden: true
+                            zoomEndTime:
+                                label: 'Zoom End Time'
+                                description: 'Sets the initial end datetime of the selected zoom range. Should be provided as a JavaScript Date.'
+                                placeholder: 'Date Time'
+                                type: 'datetime'
+                                inlineJs: true
+                                defaultHidden: true
+                        order: 13   
+                    filters: 
+                        label: 'Filters'
+                        description: 'Optional, but if provided, specifies name-value pairs used to filter the data source\'s result set. Each key specifies a column in the data source, and the value specifies either a single value (string) or a set of values (array of strings). Only rows which have the specifies value(s) will be permitted.'
+                        type: 'hash'
+                        inlineJsKey: true
+                        inlineJsValue: true
+                        required: false
+                        order: 20
+                    sortBy: 
+                        label: 'Sort By'
+                        description: 'Optional, specifies the field(s) to sort the data by. If the value is a string, it will sort by that single field. If it is an array of strings, multiple fields will be used to sort, with left-to-right priority. The column name can be prefixed with a + or a - sign to indicate the direction or sort. + is ascending, while - is descending. The default sort direction is ascending, so the + sign does not need to be used. If this property is omitted, the original sort order of the data will be used.'
+                        type: 'string[]'
+                        inlineJs: true
+                        required: false
+                        placeholder: 'Column name'
+                        order: 20
+                
+                # Common options
+                options:
+                    displayAnnotations: true
+
+                # Theme-specific options
+                themes:
+                    dark:
+                        options:
+                            dbackgroundColor: '#222222'
+
             chart:
                 name: 'chart'
                 icon: 'fa-bar-chart-o'
@@ -919,7 +1172,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         order: 12
                     filters: 
                         label: 'Filters'
-                        description: 'Optional, but if provided, specifies name-value pairs used to filter the data source\'s result set. Each key specifies a column in the data source, and the value specifies either a single value (string) or a set of values (array of strings). Only rows which have the specifies value(s) will be permitted'
+                        description: 'Optional, but if provided, specifies name-value pairs used to filter the data source\'s result set. Each key specifies a column in the data source, and the value specifies either a single value (string) or a set of values (array of strings). Only rows which have the specifies value(s) will be permitted.'
                         type: 'hash'
                         inlineJsKey: true
                         inlineJsValue: true
@@ -927,7 +1180,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         order: 13
                     sortBy: 
                         label: 'Sort By'
-                        description: 'Optional, specifies the field(s) to sort the data by. If the value is a string, it will sort by that single field. If it is an array of strings, multiple fields will be used to sort, with left-to-right priority. The column name can be prefixed with a + or a - sign to indicate the direction or sort. + is ascending, while - is descending. The default sort direction is ascending, so the + sign does not need to be used. If this property is omitted, the original sort order of the data will be used'
+                        description: 'Optional, specifies the field(s) to sort the data by. If the value is a string, it will sort by that single field. If it is an array of strings, multiple fields will be used to sort, with left-to-right priority. The column name can be prefixed with a + or a - sign to indicate the direction or sort. + is ascending, while - is descending. The default sort direction is ascending, so the + sign does not need to be used. If this property is omitted, the original sort order of the data will be used.'
                         type: 'string[]'
                         inlineJs: true
                         required: false

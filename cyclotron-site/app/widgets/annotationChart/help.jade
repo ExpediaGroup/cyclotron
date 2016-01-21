@@ -1,0 +1,108 @@
+h3 Annotation Chart Widget
+p
+    | The Annotation Chart Widget wraps the excellent 
+    a(href='https://developers.google.com/chart/interactive/docs/gallery/annotationchart', target="_blank") Google Charts Annotation Chart
+    |  library.  Most of the available options in the underlying library are supported.
+    
+p.
+    While it supports annotations on the data series, these are optional and the Widget can be used without any annotations.  The other notable feature is a date range selector at the bottom of the chart, which lets the user zoom in and out across the data set.  This features is commonly found in stock price charts.
+
+p.
+    This widget requires a Data Source, indicating where the data will come from.  Due to 
+    its nature, it requires time-series data, and thus the Data Source must have a date/time
+    column.
+
+h4 Properties
+p.
+    These are the properties specific to this widget.  
+    General Cyclotron widget properties are not repeated here (e.g. layout properties).
+
+property-table(properties='config.widgets.annotationChart.properties')
+
+h4 X-Axis
+
+p These properies relate to the X-axis and how it maps to the Data Source.
+
+property-table(properties='config.widgets.annotationChart.properties.xAxis.properties')
+
+h4 Series
+
+p These properties relate to the series and how they map the Data Source.  Multiple series are supported.
+
+p Each series can use up to three different columns of data in the Data Source.  These are
+    | mapped by the
+    em  column
+    | ,
+    em  annotationTitleColumn
+    | , and
+    em  annotationTextColumn
+    |  properties.
+    em  column
+    |  stores the actual values of the series, as plotted against the Y-axis, and is the 
+    | only required property.  The other two are used to generate annotations along the 
+    | line.  An annotation will be created for any non-undefined/null values on this 
+    | series. In other words, the
+    em  annotationTitleColumn
+    |  and
+    em  annotationTextColumn
+    |  should be undefined or null if there is no annotation for the current value.
+
+p Each series can have no more than one annotation at a single x-value.
+
+property-table(properties='config.widgets.annotationChart.properties.series.properties')
+
+h4 Options
+
+p
+    | These options correspond to options provided by the Google Charts Annotation Chart.  
+    | For more information, refer to 
+    a(href='https://developers.google.com/chart/interactive/docs/gallery/annotationchart#configuration-options', target='_blank')
+
+property-table(properties='config.widgets.annotationChart.properties.options.properties')
+
+h4 Configuring the Zoom Buttons
+
+p The Zoom Buttons can be customized using undocumented options of the Annotation Chart.
+    |  There are two options available:
+    em zoomButtons
+    |  and
+    em  zoomButtonsOrder
+    | . An example is available Page 4 of the 
+    a(href='/example-annotation-chart/us-crime-2') example-annotation-chart
+    |  dashboard.  This is not available via the UI&mdash;it must be configured via JSON mode.
+
+p For more details, please refer to: 
+    a(href='https://groups.google.com/forum/#!topic/google-visualization-api/pzZoRUn5oLA', target='_blank') "Hiding few Zoom buttons in Annotation Chart"
+
+h3 Examples
+
+p Examples of this Widget are available on the 
+    a(href='/example-annotation-chart') example-annotation-chart
+    |  dashboard.
+
+h4 Example from Google
+p This is an example from Google, adopted for Cyclotron.  The example is available on the 
+    a(href='/example-annotation-chart') example-annotation-chart
+    |  dashboard.
+pre.code.
+    {
+        "dataSource": "google-example",
+        "series": [{
+            "annotationTextColumn": "keplertext",
+            "annotationTitleColumn": "keplertitle",
+            "column": "kepler",
+            "label": "Kepler-22b mission"
+        }, {
+            "annotationTextColumn": "gliesetext",
+            "annotationTitleColumn": "gliesetitle",
+            "column": "gliese",
+            "label": "Gliese 163 mission"
+        }],
+        "title": "Annotation Chart: Example from Google",
+        "widget": "annotationChart",
+        "xAxis": {
+            "column": "date",
+            "format": "date"
+        }
+    }
+

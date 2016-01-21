@@ -143,9 +143,11 @@ cyclotronDirectives.directive 'highchart', (configService) ->
             #
             resizeFunction = -> 
                 scope.$apply ->
-                    _.debounce(resize, 200)
+                    _.delay(resize, 100)
+                    _.delay(resize, 450)
 
             $(window).on 'resize', resizeFunction
+
 
             #
             # Cleanup

@@ -79,6 +79,7 @@ exports.get = function (req, res) {
         Dashboards
             .find({ deleted: false })
             .select('-dashboard')
+            .populate('createdBy lastUpdatedBy', 'name')
             .exec(_.wrap(res, api.getCallback));    
     }
     else {

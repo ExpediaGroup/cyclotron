@@ -1,3 +1,23 @@
+# 1.23.0 (01/21/2016)
+
+## Features
+
+ - Annotation Chart Widget: New Widget added, based on Google's Annotation Chart control.  Great for creating time-series line charts with or without annotated labels on the data.
+
+ - Analytics API Improvements: added ?max property to most of the endpoints.
+
+ - User API Improvements: collecting Department/Division property from Active Directory.
+
+ - Highcharts upgraded to 4.2.0
+
+## Bug Fixes
+
+ - Fullscreen Graphs Won’t Scale Vertically
+
+ - Chart Widget: Highcharts Property Linked Across Widgets
+
+ - Login Fails for Service Accounts without Department/Division
+
 # 1.22.0 (11/12/2015)
 
 ## Features

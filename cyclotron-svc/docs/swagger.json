@@ -826,7 +826,7 @@
         "/analytics/pageviews/recent": {
             "get": {
                 "summary": "Get Recent Page Views",
-                "description": "Gets the 100 most-recent Page View Analytics records.",
+                "description": "Gets the most-recent Page View Analytics records. Defaults to the top 100 records; this can be modified via the ?max parameter.",
                 "tags": [
                     "Analytics"
                 ],
@@ -837,6 +837,12 @@
                         "description": "Optional Dashboard ID; filters page views to the specified Dashboard.",
                         "required": false,
                         "type": "string"
+                    }, {
+                        "name": "max",
+                        "in": "query",
+                        "description": "Optionally limits the results to the top N. A value of 0 returns all results.",
+                        "required": false,
+                        "type": "integer"
                     }
                 ],
                 "responses": {
@@ -886,7 +892,7 @@
         "/analytics/datasources/recent": {
             "get": {
                 "summary": "Get Recent Data Source executions",
-                "description": "Gets the 100 most-recent Data Source Analytics records.",
+                "description": "Gets the most-recent Data Source Analytics records. Defaults to the top 100 records; this can be modified via the ?max parameter.",
                 "tags": [
                     "Analytics"
                 ],
@@ -897,6 +903,12 @@
                         "description": "Optional Dashboard ID; filters data sources to the specified Dashboard.",
                         "required": false,
                         "type": "string"
+                    }, {
+                        "name": "max",
+                        "in": "query",
+                        "description": "Optionally limits the results to the top N. A value of 0 returns all results.",
+                        "required": false,
+                        "type": "integer"
                     }
                 ],
                 "responses": {
@@ -1038,7 +1050,7 @@
         "/analytics/uniquevisitors": {
             "get": {
                 "summary": "Page Views by Unique Visitors",
-                "description": "Aggregates Page Views by Unique Visitor, with optional time and dashboard filters.",
+                "description": "Aggregates Page Views by Unique Visitor, with optional time and dashboard filters. Defaults to the top 100 Users; this can be modified via the ?max parameter.",
                 "tags": [
                     "Analytics"
                 ],
@@ -1084,7 +1096,7 @@
         "/analytics/browers": {
             "get": {
                 "summary": "Page Views by Browser",
-                "description": "Aggregates Page Views by Browser, with optional time and dashboard filters.",
+                "description": "Aggregates Page Views by Browser, with optional time and dashboard filters. Defaults to the top 100 browsers and versions; this can be modified via the ?max parameter.",
                 "tags": [
                     "Analytics"
                 ],
@@ -1109,6 +1121,12 @@
                         "required": false,
                         "type": "string",
                         "format": "date-time"
+                    }, {
+                        "name": "max",
+                        "in": "query",
+                        "description": "Optionally limits the results to the top N. A value of 0 returns all results.",
+                        "required": false,
+                        "type": "integer"
                     }
                 ],
                 "responses": {
@@ -1155,6 +1173,12 @@
                         "required": false,
                         "type": "string",
                         "format": "date-time"
+                    }, {
+                        "name": "max",
+                        "in": "query",
+                        "description": "Optionally limits the results to the top N. A value of 0 returns all results.",
+                        "required": false,
+                        "type": "integer"
                     }
                 ],
                 "responses": {
@@ -1176,7 +1200,7 @@
         "/analytics/datasourcesbytype": {
             "get": {
                 "summary": "Data Sources by Type",
-                "description": "Aggregates Data Sources by Type, with optional time and dashboard filters.",
+                "description": "Aggregates Data Sources by Type, with optional time and dashboard filters. When filtering by Dashboard, all Data Sources are displayed by default; without a Dashboard filter, it defaults to the top 20 records; this can be modified via the ?max parameter.",
                 "tags": [
                     "Analytics"
                 ],
@@ -1201,6 +1225,12 @@
                         "required": false,
                         "type": "string",
                         "format": "date-time"
+                    }, {
+                        "name": "max",
+                        "in": "query",
+                        "description": "Optionally limits the results to the top N. A value of 0 returns all results.",
+                        "required": false,
+                        "type": "integer"
                     }
                 ],
                 "responses": {
@@ -1222,7 +1252,7 @@
         "/analytics/datasourcesbyname": {
             "get": {
                 "summary": "Data Sources by Name",
-                "description": "Aggregates Data Sources by Name, with optional time and dashboard filters.",
+                "description": "Aggregates Data Sources by Name, with optional time and dashboard filters. When filtering by Dashboard, all Data Sources are displayed by default; without a Dashboard filter, it defaults to the top 100 records; this can be modified via the ?max parameter.",
                 "tags": [
                     "Analytics"
                 ],
@@ -1247,6 +1277,12 @@
                         "required": false,
                         "type": "string",
                         "format": "date-time"
+                    }, {
+                        "name": "max",
+                        "in": "query",
+                        "description": "Optionally limits the results to the top N. A value of 0 returns all results.",
+                        "required": false,
+                        "type": "integer"
                     }
                 ],
                 "responses": {
@@ -1265,12 +1301,73 @@
                 }
             }
         },
+        "/analytics/datasourcesbyerrormessage": {
+            "get": {
+                "summary": "Data Sources by Error Message",
+                "description": "Aggregates Data Sources by Error Message, with optional time and dashboard filters. When filtering by Dashboard, all Data Sources are displayed by default; without a Dashboard filter, it defaults to the top 20 records; this can be modified via the ?max parameter.",
+                "tags": [
+                    "Analytics"
+                ],
+                "parameters": [
+                    {
+                        "name": "dashboard",
+                        "in": "query",
+                        "description": "Optional Dashboard ID; filters visits to the specified Dashboard.",
+                        "required": false,
+                        "type": "string"
+                    }, {
+                        "name": "startDate",
+                        "in": "query",
+                        "description": "Specifies the starting time for the aggregation.",
+                        "required": false,
+                        "type": "string",
+                        "format": "date-time"
+                    }, {
+                        "name": "endDate",
+                        "in": "query",
+                        "description": "Specifies the ending time for the aggregation.",
+                        "required": false,
+                        "type": "string",
+                        "format": "date-time"
+                    }, {
+                        "name": "max",
+                        "in": "query",
+                        "description": "Optionally limits the results to the top N. A value of 0 returns all results.",
+                        "required": false,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An array of aggregated results.",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/DataSourcesByErrorMessage"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        },
         "/analytics/topdashboards": {
             "get": {
                 "summary": "Top Dashboards",
-                "description": "Top-Visited Dashboards",
+                "description": "Returns a list of the most-visited Dashboards. Defaults to the top 100; this can be modified via the ?max parameter.",
                 "tags": [
                     "Analytics"
+                ],
+                "parameters": [
+                    {
+                        "name": "max",
+                        "in": "query",
+                        "description": "Optionally limits the results to the top N. A value of 0 returns all results.",
+                        "required": false,
+                        "type": "integer"
+                    }
                 ],
                 "responses": {
                     "200": {
@@ -1660,6 +1757,11 @@
                     "type": "string",
                     "required": true
                 },
+                "division": {
+                    "description": "The User's division.",
+                    "type": "string",
+                    "required": true
+                },
                 "name": {
                     "description": "Formal name of the User.",
                     "type": "string",
@@ -1691,6 +1793,14 @@
                 },
                 "title": {
                     "description": "The User's current title.",
+                    "type": "string"
+                },
+                "department": {
+                    "description": "The User's department.",
+                    "type": "string"
+                },
+                "division": {
+                    "description": "The User's division.",
                     "type": "string"
                 },
                 "firstLogin": {
@@ -2020,6 +2130,23 @@
                 },
                 "avgDuration": {
                     "description": "The average duration of all executions of this Data Source.",
+                    "type": "number",
+                    "format": "double"
+                }
+            }
+        },
+        "DataSourcesByErrorMessage": {
+            "properties": {                
+                "errorMessage": {
+                    "description": "The error message text.",
+                    "type": "string"
+                },
+                "count": {
+                    "description": "The total number of Data Source executions with this error message.",
+                    "type": "integer"
+                },
+                "avgDuration": {
+                    "description": "The average duration of all executions with this error message.",
                     "type": "number",
                     "format": "double"
                 }

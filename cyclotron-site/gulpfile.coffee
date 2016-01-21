@@ -23,6 +23,7 @@ output = require 'gulp-output'
 plumber = require 'gulp-plumber'
 rename = require 'gulp-rename'
 sequence = require 'gulp-sequence'
+watch = require 'gulp-watch'
 merge = require 'merge-stream'
 
 fs = require 'fs'
@@ -266,10 +267,10 @@ gulp.task 'minify', ->
     return merge(js, css)
 
 gulp.task 'watch', ->
-    gulp.watch 'app/assets/**/*', ['assets']
-    gulp.watch 'app/**/*.jade', ['jade']
-    gulp.watch 'app/**/*.less', ['styles']
-    gulp.watch 'app/**/*.coffee', ['scripts']
+    watch 'app/assets/**/*', -> gulp.start ['assets']
+    watch 'app/**/*.jade', -> gulp.start ['jade']
+    watch 'app/**/*.less', -> gulp.start ['styles']
+    watch 'app/**/*.coffee', -> gulp.start ['scripts']
 
 gulp.task 'webserver', ->
     confFolder = '_public/js/conf'

@@ -50,6 +50,7 @@ cyclotronApp = angular.module 'cyclotronApp', [
     'drahak.hotkeys'
     'LocalForageModule'
     'tableSort'
+    'googlechart'
 ]
 
 cyclotronDirectives = angular.module 'cyclotronApp.directives', []

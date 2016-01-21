@@ -26,6 +26,8 @@ var config = require('../config/config'),
     request = require('request'),
     crypto = require('crypto');
 
+var pool = { maxSockets: Infinity };
+
 /* Crypto-process request options */
 var decrypter = function (req) {
     var decrypt = function (value) {
@@ -49,6 +51,7 @@ var decrypter = function (req) {
 
 var sendRequest = function (req, callback) {
     var proxyRequest = decrypter(req);
+    proxyRequest.pool = pool;
 
     request(proxyRequest, function (err, proxyResponse, body) {
         if (err) {
@@ -81,8 +84,8 @@ var sendRequest = function (req, callback) {
 
 /* Generic HTTP Proxy */
 exports.proxy = function (req, res) {
-    /* Increase connection timeout: 15 minutes */
-    req.connection.setTimeout(900*1000);
+    /* Increase connection timeout: 5 minutes */
+    req.connection.setTimeout(300*1000);
 
     if (req.body == null) {
         return res.status(400).send('Missing body in request.');

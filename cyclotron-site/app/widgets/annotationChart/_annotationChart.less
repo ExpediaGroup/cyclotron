@@ -14,8 +14,37 @@
  * language governing permissions and limitations under the License. 
  */
 
-.chart-widget {
+.annotation-chart-widget {
     overflow-y: hidden;
     overflow-x: hidden;
     height: 100%;
+    box-sizing: border-box;
+
+    * {
+        user-select: none;
+        outline:none;
+        box-sizing: border-box;
+    }
+
+
+    .the-chart {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Overrides to Google styles */
+    .google-visualization-atl .border {
+        border: none;
+    }
+
+    .google-visualization-atl .annotationsTdContainer {
+        border-left: 0px;
+    }
+
+    .google-visualization-atl .border {
+        //border: 1px solid #808080;
+        background-color: @widgetBackgroundColor;
+    }
 }

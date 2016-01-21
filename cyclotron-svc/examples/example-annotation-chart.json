@@ -1,0 +1,215 @@
+{
+    "dataSources": [{
+        "name": "google-example",
+        "processor": "p = function() {\n    return [\n        {\n            date: new Date(2314, 2, 15),\n            kepler: 12400, \n            keplertitle: undefined,\n            keplertext: undefined,\n            gliese: 10645, \n            gliesetitle: undefined, \n            gliesetext: undefined\n        }, {\n            date: new Date(2314, 2, 16),\n            kepler: 24045, \n            keplertitle: 'Lalibertines', \n            keplertext: 'First encounter',\n            gliese: 12374, \n            gliesetitle: undefined, \n            gliesetext: undefined\n        }, {\n            date: new Date(2314, 2, 17),\n            kepler: 35022, \n            keplertitle: 'Lalibertines', \n            keplertext: 'They are very tall',\n            gliese: 15766, \n            gliesetitle: 'Gallantors', \n            gliesetext: 'First Encounter'\n        }, {\n            date: new Date(2314, 2, 18),\n            kepler: 12284,\n            keplertitle: 'Lalibertines', \n            keplertext: 'Attack on our crew!',\n            gliese: 34334, \n            gliesetitle: 'Gallantors', \n            gliesetext: 'Statement of shared principles'\n        }, {\n            date: new Date(2314, 2, 19),\n            kepler: 8476, \n            keplertitle: 'Lalibertines', \n            keplertext: 'Heavy casualties',\n            gliese: 66467, \n            gliesetitle: 'Gallantors', \n            gliesetext: 'Mysteries revealed'\n        }, {\n            date: new Date(2314, 2, 20),\n            kepler: 0, \n            keplertitle: 'Lalibertines', \n            keplertext: 'All crew lost',\n            gliese: 79463, \n            gliesetitle: 'Gallantors', \n            gliesetext: 'Omniscience achieved'\n        }\n    ];\n}",
+        "type": "javascript"
+    }, {
+        "name": "timeseries2",
+        "type": "json",
+        "url": "http://pastebin.com/raw.php?i=fcNhMQDL"
+    }, {
+        "name": "uscrime",
+        "type": "json",
+        "url": "http://pastebin.com/raw.php?i=YGN7gWWG"
+    }, {
+        "name": "uscrime-2",
+        "postProcessor": "pp = function (data) {\n    // Annotation data could be loaded from another source\n    // Here, it's just hardcoded..\n    var y1981 = _.find(data, { Year: 1981 });\n    y1981.ViolentAnnotation = 'Minor peak of violent crimes';\n    \n    var y1983 = _.find(data, { Year: 1983 });\n    y1983.ViolentAnnotation = 'Brief slump in violent crimes';\n    \n    var y1992 = _.find(data, { Year: 1992 });\n    y1992.ViolentAnnotation = 'Peak of violent crimes';\n    \n    var y1991 = _.find(data, { Year: 1991 });\n    y1991.RobberyAnnotation = 'Peak of robberies';\n    y1991.MurderAnnotation = 'Peak of murders';\n    \n}",
+        "type": "json",
+        "url": "http://pastebin.com/raw.php?i=YGN7gWWG"
+    }],
+    "description": "Examples of the Annotation Chart widget.",
+    "disableAnalytics": true,
+    "name": "example-annotation-chart",
+    "pages": [{
+        "layout": {
+            "gridColumns": 1,
+            "gridRows": 2
+        },
+        "name": "Google Example",
+        "widgets": [{
+            "dataSource": "google-example",
+            "options": {},
+            "series": [{
+                "annotationTextColumn": "keplertext",
+                "annotationTitleColumn": "keplertitle",
+                "column": "kepler",
+                "label": "Kepler-22b mission"
+            }, {
+                "annotationTextColumn": "gliesetext",
+                "annotationTitleColumn": "gliesetitle",
+                "column": "gliese",
+                "label": "Gliese 163 mission"
+            }],
+            "title": "Annotation Chart: Example from Google",
+            "widget": "annotationChart",
+            "xAxis": {
+                "column": "date",
+                "format": "date"
+            }
+        }, {
+            "dataSource": "google-example",
+            "displayAnnotations": false,
+            "options": {
+                "displayAnnotations": false
+            },
+            "series": [{
+                "annotationTextColumn": "keplertext",
+                "annotationTitleColumn": "keplertitle",
+                "column": "kepler",
+                "label": "Kepler-22b mission"
+            }, {
+                "annotationTextColumn": "gliesetext",
+                "annotationTitleColumn": "gliesetitle",
+                "column": "gliese",
+                "label": "Gliese 163 mission"
+            }],
+            "title": "Annotation Chart: Example from Google",
+            "widget": "annotationChart",
+            "xAxis": {
+                "column": "date",
+                "format": "date"
+            }
+        }]
+    }, {
+        "layout": {
+            "gridColumns": 1,
+            "gridRows": 1
+        },
+        "widgets": [{
+            "dataSource": "timeseries2",
+            "series": [{
+                "column": "dollars",
+                "secondaryAxis": true
+            }, {
+                "column": "bookings",
+                "label": "Bookings"
+            }],
+            "title": "Bookings vs Dollars",
+            "widget": "annotationChart",
+            "xAxis": {
+                "column": "date",
+                "format": "string"
+            }
+        }]
+    }, {
+        "layout": {
+            "gridColumns": 1,
+            "gridRows": 1
+        },
+        "name": "US Crime",
+        "widgets": [{
+            "dataSource": "uscrime",
+            "options": {
+                "scaleFormat": "short",
+                "zoomStartTime": "${moment().year(1985).startOf('year').toDate()}"
+            },
+            "series": [{
+                "column": "Total"
+            }],
+            "title": "US Crime Over Time",
+            "widget": "annotationChart",
+            "xAxis": {
+                "column": "Year",
+                "format": "string",
+                "formatString": "YYYY"
+            }
+        }]
+    }, {
+        "layout": {
+            "gridColumns": 1,
+            "gridRows": 1
+        },
+        "name": "US Crime 2",
+        "widgets": [{
+            "dataSource": "uscrime-2",
+            "options": {
+                "displayAnnotationsFilter": true,
+                "fill": 50,
+                "scaleFormat": "long",
+                "scaleType": "allfixed",
+                "zoomButtons": {
+                    "5-years": {
+                        "label": "5y",
+                        "offset": [5, 0, 0, 0, 0, 0, 0]
+                    },
+                    "10-years": {
+                        "label": "10y",
+                        "offset": [10, 0, 0, 0, 0, 0, 0]
+                    },
+                    "20-years": {
+                        "label": "20y",
+                        "offset": [20, 0, 0, 0, 0, 0, 0]
+                    }
+                },
+                "zoomButtonsOrder": ["1-year", "5-years", "10-years", "20-years", "max"]
+            },
+            "series": [{
+                "annotationTitleColumn": "MurderAnnotation",
+                "column": "Murder"
+            }, {
+                "annotationTitleColumn": "RobberyAnnotation",
+                "column": "Robbery"
+            }, {
+                "annotationTitleColumn": "ViolentAnnotation",
+                "column": "Violent"
+            }],
+            "title": "US Crime Over Time",
+            "widget": "annotationChart",
+            "xAxis": {
+                "column": "Year",
+                "format": "string",
+                "formatString": "YYYY"
+            }
+        }]
+    }, {
+        "layout": {
+            "gridColumns": 1,
+            "gridRows": 1
+        },
+        "name": "US Crime - Dark",
+        "theme": "dark",
+        "widgets": [{
+            "dataSource": "uscrime-2",
+            "options": {
+                "displayAnnotationsFilter": true,
+                "fill": 50,
+                "scaleFormat": "long",
+                "scaleType": "allfixed",
+                "zoomButtons": {
+                    "5-years": {
+                        "label": "5y",
+                        "offset": [5, 0, 0, 0, 0, 0, 0]
+                    },
+                    "10-years": {
+                        "label": "10y",
+                        "offset": [10, 0, 0, 0, 0, 0, 0]
+                    },
+                    "20-years": {
+                        "label": "20y",
+                        "offset": [20, 0, 0, 0, 0, 0, 0]
+                    }
+                },
+                "zoomButtonsOrder": ["1-year", "5-years", "10-years", "20-years", "max"]
+            },
+            "series": [{
+                "annotationTitleColumn": "MurderAnnotation",
+                "column": "Murder"
+            }, {
+                "annotationTitleColumn": "RobberyAnnotation",
+                "column": "Robbery"
+            }, {
+                "annotationTitleColumn": "ViolentAnnotation",
+                "column": "Violent"
+            }],
+            "title": "US Crime Over Time",
+            "widget": "annotationChart",
+            "xAxis": {
+                "column": "Year",
+                "format": "string",
+                "formatString": "YYYY"
+            }
+        }]
+    }],
+    "parameters": [],
+    "theme": "light"
+}

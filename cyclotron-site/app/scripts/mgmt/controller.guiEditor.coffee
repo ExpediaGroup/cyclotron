@@ -199,7 +199,7 @@ cyclotronApp.controller 'GuiEditorController', ($scope, $state, $stateParams, $l
         return name
 
     $scope.selectWidget = ->
-        sample = $scope.widgets[$scope.editor.selectedItem.widget].sample
+        sample = _.cloneDeep $scope.widgets[$scope.editor.selectedItem.widget].sample
         if sample?
             $scope.editor.selectedItem = _.defaults $scope.editor.selectedItem, sample
 
