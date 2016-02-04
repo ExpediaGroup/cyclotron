@@ -27,24 +27,35 @@
                 title='{{ editor.dashboardWrapper.visits }} total visits, {{ editor.dashboardWrapper.pageViews }} total page views')
                 i(class='fa {{ getVisitCategory().icon }}')
                 span  {{ getVisitCategory().text }} 
-                    ng-pluralize(count='getVisitCategory().text', when='{"one": "visit","other": "visits"}')
+                    ng-pluralize(count='getVisitCategory().text', when='{"one": "visit", "other": "visits"}')
 
-            h4.small.text-muted(ng-show='editor.dashboard.description')
+            h2.text-muted.likes-control(requires-auth, 
+                ng-hide='editor.isNew || !isLatestRevision() || !editor.likeCount', 
+                title='{{ editor.likeCount }} likes')
+                i.fa.fa-thumbs-up
+                span  {{ editor.likeCount }} 
+                    ng-pluralize(count='editor.likeCount', when='{1: "like", "other": "likes"}')
+
+            h4.small.text-muted(ng-if='editor.dashboard.description')
                 i.fa.fa-quote-left
                 |  {{ editor.dashboard.description }}
                 i.fa.fa-quote-right
 
-            h4.small.text-danger(ng-show='editor.dashboardWrapper.deleted')
+            h4.small.text-danger(ng-if='editor.dashboardWrapper.deleted')
                 i.fa.fa-exclamation-triangle
                 |  This Dashboard has been deleted.  Saving a new revision will undelete it.
 
-            h4.small.text-warning(ng-show='!isLoggedIn()')
+            h4.small.text-warning(ng-if='!isLoggedIn()')
                 i.fa.fa-exclamation-triangle
                 |  Dashboards cannot be created or edited without being logged in.
 
-            h4.small.text-warning(ng-show='isLoggedIn() && !editor.hasEditPermission')
+            h4.small.text-warning(ng-if='isLoggedIn() && !editor.hasEditPermission')
                 i.fa.fa-exclamation-triangle
                 |  You don't have permission to edit this Dashboard.
+
+            h4.small.text-warning(ng-if='hasDuplicateDataSourceName()')
+                i.fa.fa-exclamation-triangle
+                |  One or more Data Source names has been repeated.  All Data Source names must be unique to the Dashboard.
 
     .row
         .sidebar.col-sm-4
@@ -66,6 +77,7 @@
                     a(ng-click='goToSubState("edit.dataSource", dataSource, $index)', id='editor-dataSource-{{ dataSource.name }}')
                         i.fa.fa-angle-right
                         |  {{ getDataSourceName(dataSource) }}
+                        i.fa.fa-exclamation-triangle.right-hand-icon(ng-if='isDuplicateDataSourceName(dataSource)', title='This Data Source has a conflicting Name property.')
 
                 li(ng-class='{active: editor.currentEditor=="edit.pages"}')
                     a#editor-pages(ng-click='goToSubState("edit.pages", editor.dashboard.pages)')

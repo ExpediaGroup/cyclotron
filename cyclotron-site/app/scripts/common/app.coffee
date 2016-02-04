@@ -341,8 +341,7 @@ cyclotronApp.run ($rootScope, $urlRouter, $location, $state, $stateParams, $moda
         # Prevent $urlRouter's default handler from firing
         event.preventDefault()
 
-        currentName = $state.current.name
-        if currentName != 'dashboard' and currentName.substring(0,5) != 'edit.'
+        if $state.current.name != 'dashboard'
             $urlRouter.sync()
 
     $rootScope.$on '$stateChangeError', (event, toState, toParams, fromState, fromParams, error) ->

@@ -121,6 +121,7 @@ cyclotronServices.factory 'analyticsService', ($http, $q, $localForage, $locatio
 
         uidLoaded.resolve()
 
+    # Record a Page View (occurance of a page being viewed)
     exports.recordPageView = (dashboard, pageIndex, newVisit = false) ->
         return unless configService.enableAnalytics
 
@@ -151,15 +152,12 @@ cyclotronServices.factory 'analyticsService', ($http, $q, $localForage, $locatio
                 if userService.cachedUserId?
                     req.user = userService.cachedUserId
                 
-            #console.log '---- PAGE VIEW ANALYTICS ----'
-            #console.log req
-
             $http.post(configService.restServiceUrl + '/analytics/pageviews?newVisit=' + newVisit + '&' + 'exporting=' + exports.isExporting, req)
 
-    exports.recordDataSource = (dataSource, success, duration, details) ->
+    # Record the execution of a Data Source
+    exports.recordDataSource = (dataSource, success, duration, details = {}) ->
         return unless configService.enableAnalytics and not exports.isExporting
 
-        details ?= {}
         details = _.merge(details, _.pick(dataSource, [ 'url', 'proxy', 'refresh' ]))
         
         req = 
@@ -173,9 +171,27 @@ cyclotronServices.factory 'analyticsService', ($http, $q, $localForage, $locatio
             duration: duration
             details: details
 
-        #console.log '---- DATA SOURCE ANALYTICS ----'
-        #console.log req
-
         $http.post(configService.restServiceUrl + '/analytics/datasources', req)
+
+    # Generic schema for recording events
+    exports.recordEvent = (type, details = {}) ->
+        return unless configService.enableAnalytics
+        req = 
+            eventType: type
+            visitId: exports.visitId
+            details: details
+
+        uidLoaded.promise.then ->
+            if (userService.authEnabled && userService.isLoggedIn())
+                req.user = userService.currentUser()._id
+            else
+                # Anonymous: track the UID
+                req.uid = exports.uid 
+
+                # Also send cached UserId if it exists
+                if userService.cachedUserId?
+                    req.user = userService.cachedUserId
+
+            $http.post(configService.restServiceUrl + '/analytics/events', req)
 
     return exports

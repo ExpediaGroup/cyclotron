@@ -40,6 +40,23 @@
             dd  
                 ng-pluralize(count='statistics.revisions.avgRevisionCount', when='{"one": "Revision", "other": "Revisions"}')
                 |  per Dashboard
+
+        h2 Likes
+        dl(title='Total number of Dashboard Likes')
+            dt {{ statistics.likes.count | numeraljs:'0,0' }} 
+            dd total Likes
+        dl(title='Total number of Dashboard Likes within the last day')
+            dt {{ statistics.likes.occurredPastDayCount | numeraljs:'0,0' }} 
+            dd Likes in the last day
+        dl(title='Total number of Dashboard Likes within the last week')
+            dt {{ statistics.likes.occurredPastWeekCount | numeraljs:'0,0' }} 
+            dd Likes in the last week
+        dl(title='Total number of Dashboard Likes within the last 6 months')
+            dt {{ statistics.likes.occurredPastSixMonthsCount | numeraljs:'0,0' }} 
+            dd Likes in the last 6 months
+        dl(title='Total number of Dashboard Unlikes')
+            dt {{ statistics.unlikes.count | numeraljs:'0,0' }} 
+            dd total Unlikes
         
         h2 Visits
         dl(title='Total number of times any Dashboard was visited')

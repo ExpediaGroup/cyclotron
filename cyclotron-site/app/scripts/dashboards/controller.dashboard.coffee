@@ -17,7 +17,7 @@
 #
 # Home controller.
 #
-cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location, $timeout, $window, $q, $modal, configService, logService, dashboardService, dataService, loadService, analyticsService) ->
+cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location, $timeout, $window, $q, $modal, analyticsService, configService, dashboardService, dataService, loadService, logService, userService) ->
 
     preloadTimer = null
     rotateTimer = null
@@ -127,8 +127,8 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location,
         # Preload the next page
         $scope.preload() unless $scope.currentPage.length > 1
 
-        # Rotate to the next page after a short delay
-        _.delay(_.ngApply($scope, $scope.rotate), 100)
+        # Rotate to the next page
+        $scope.rotate()
 
     $scope.moveBack = ->
         return unless $scope.canMoveBack()
@@ -172,6 +172,14 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location,
         else
             $scope.pause()
 
+    $scope.toggleLike = ->
+        if $scope.isLiked
+            dashboardService.unlike($scope.dashboardWrapper).then ->
+                $scope.isLiked = false
+        else
+            dashboardService.like($scope.dashboardWrapper).then ->
+                $scope.isLiked = true
+
     #
     # Initialization methods
     #
@@ -192,9 +200,11 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location,
 
             # The dashboard wrapper contains the rev, date, author, etc.
             $scope.dashboardWrapper = Cyclotron.dashboard = dashboardWrapper
+            $scope.isLiked = userService.likesDashboard dashboardWrapper
 
             # Set defaults then save to the scope
-            dashboard = dashboardWrapper.dashboard
+            dashboard = dashboardWrapper.dashboard            
+
             dashboardService.setDashboardDefaults(dashboard)
             $scope.dashboard = dashboard
 

@@ -44,6 +44,9 @@ cyclotronServices.factory 'layoutService', ->
                 originalGridRows: dashboardPage.layout.gridRows
                 originalGridColumns: dashboardPage.layout.gridColumns
 
+                # Enable/disable vertical scrolling
+                scrolling: dashboardPage.layout.scrolling
+
             if (dashboardPage.style == 'fullscreen')
                 # No margin on the fullscreen dashboards
                 layout.margin = 0

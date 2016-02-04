@@ -73,6 +73,11 @@ exports.bindRoutes = function (app) {
     app.get('/dashboards/:name/revisions/:rev', revisions.getSingle);
     app.all('/dashboards/:name/revisions/:rev', notAllowed);
 
+    app.get('/dashboards/:name/likes', dashboards.getLikes);
+    app.post('/dashboards/:name/likes', requiresAuth, dashboards.likeDashboard);
+    app.delete('/dashboards/:name/likes', requiresAuth, dashboards.unlikeDashboard);
+    app.all('/dashboards/:name/likes', notAllowed);
+
     app.get('/dashboardnames', dashboards.getNames);
     app.all('/dashboardnames', notAllowed);
 
@@ -115,6 +120,9 @@ exports.bindRoutes = function (app) {
 
     app.post('/analytics/datasources', analytics.recordDataSource);
     app.get('/analytics/datasources/recent', analytics.getRecentDataSources);
+
+    app.post('/analytics/events', analytics.recordEvent);
+    app.get('/analytics/events/recent', analytics.getRecentEvents);
 
     app.get('/analytics/pageviewsovertime', analytics.getPageViewsOverTime);
     app.get('/analytics/visitsovertime', analytics.getVisitsOverTime);

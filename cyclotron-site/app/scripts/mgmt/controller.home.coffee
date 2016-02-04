@@ -29,13 +29,20 @@ cyclotronApp.controller 'HomeController', ($scope, $location, $modal, configServ
     $scope.showSplash = true
     $scope.loading = false
 
+    $scope.sortByField = 'name'
+    $scope.sortByReverse = false
+
     $scope.search = 
         allTags: []
+        allHints: []
         hints: []
         query: []
 
     $scope.isTag = (hint) -> 
         _.contains $scope.search.allTags, hint
+
+    $scope.isAdvanced = (hint) ->
+        _.contains $scope.search.advanced, hint
 
     $scope.selectTag = (tag) ->
         # Only used when selecting tags from the Search Results
@@ -44,7 +51,18 @@ cyclotronApp.controller 'HomeController', ($scope, $location, $modal, configServ
     # Load search autocomplete
     $scope.getSearchHints = ->
         tagService.getSearchHints (searchHints) ->
-            $scope.search.hints = searchHints
+            $scope.search.allHints = searchHints
+            $scope.getAdvancedSearchHints()
+
+    $scope.getAdvancedSearchHints = ->
+        $scope.search.advanced = ['is:deleted', 'include:deleted']
+
+        if userService.authEnabled and userService.isLoggedIn()
+            username = userService.currentUser().sAMAccountName
+            $scope.search.advanced.push 'likedby:' + username
+            $scope.search.advanced.push 'lastupdatedby:' + username
+
+        $scope.search.hints = $scope.search.advanced.concat $scope.search.allHints
 
     $scope.canEdit = (dashboard) -> 
         return true unless $scope.isLoggedIn()
@@ -67,8 +85,7 @@ cyclotronApp.controller 'HomeController', ($scope, $location, $modal, configServ
         p = dashboardService.getDashboards $scope.search.query.join(',')
         p.then (dashboards) ->
             $scope.dashboards = dashboards
-            $scope.updateDashboardVisits()
-            $scope.updateDashboardPermissions()
+            $scope.augmentDashboards()
             $scope.loading = false
 
         p.catch (response) ->
@@ -81,16 +98,30 @@ cyclotronApp.controller 'HomeController', ($scope, $location, $modal, configServ
                     keyboard: false
                 }
 
-    $scope.updateDashboardVisits = ->
+    $scope.augmentDashboards = ->
         _.each $scope.dashboards, (dashboard) ->
-            dashboard.visitCategory = dashboardService.getVisitCategory dashboard
-            return
-
-    $scope.updateDashboardPermissions = ->
-        _.each $scope.dashboards, (dashboard) ->
+            # Update permissions based on current user
             dashboard._canEdit = userService.hasEditPermission dashboard
             dashboard._canView = userService.hasViewPermission dashboard
+
+            # Update Liked status and total count
+            dashboard._liked = userService.likesDashboard dashboard
+            dashboard.likeCount = dashboard.likes.length
+
+            # Assign a category based on number of visits
+            dashboard.visitCategory = dashboardService.getVisitCategory dashboard
+            
             return
+
+    $scope.toggleLike = (dashboard) ->
+        if dashboard._liked
+            dashboardService.unlike(dashboard).then ->
+                dashboard._liked = false
+                dashboard.likeCount--
+        else
+            dashboardService.like(dashboard).then ->
+                dashboard._liked = true
+                dashboard.likeCount++
 
     $scope.delete = (dashboardName) ->
         # Confirmation dialog
@@ -115,7 +146,20 @@ cyclotronApp.controller 'HomeController', ($scope, $location, $modal, configServ
         $scope.search.query = if _.isEmpty q 
             [] 
         else 
-            _.uniq q.split(',')
+            _.uniq q.split ','
+
+    $scope.tagSorter = (dashboard) ->
+        if _.isEmpty dashboard.tags
+            '~'
+        else
+            dashboard.tags.join '.'
+
+    $scope.sortBy = (field, descending) ->
+        if $scope.sortByField == field
+            $scope.sortByReverse = !$scope.sortByReverse
+        else
+            $scope.sortByField = field
+            $scope.sortByReverse = descending
 
     #
     # Initialization
@@ -153,7 +197,9 @@ cyclotronApp.controller 'HomeController', ($scope, $location, $modal, configServ
     $scope.getSearchHints()
 
     # Update displayed permissions after logging in/out
-    $scope.$watch 'isLoggedIn()', $scope.updateDashboardPermissions
+    $scope.$watch 'isLoggedIn()', ->
+        $scope.augmentDashboards()
+        $scope.getAdvancedSearchHints()
 
     # Update search.query after using the back/forward buttons
     $scope.$watch (-> $location.search()), (newSearch, oldSearch) ->

@@ -53,7 +53,7 @@ cyclotronDirectives.directive 'dashboardPage', ($compile, $window, $timeout, con
 
                 return unless $dashboardControls? and controlOffset?
 
-                {
+                scope.controlTarget = {
                     top: controlOffset.top - padY
                     bottom: controlOffset.top + controlHeight + padY
                     left: controlOffset.left - padX
@@ -86,12 +86,14 @@ cyclotronDirectives.directive 'dashboardPage', ($compile, $window, $timeout, con
             #
             # Configure Dashboard Controls
             #
-            scope.controlTarget = calculateMouseTarget()
+            calculateMouseTarget()
 
             #
             # Bind mousemove event for entire document (remove during $destroy)
             #
             $(document).on 'mousemove', controlHitTest
+
+            $(document).on 'scroll', calculateMouseTarget
 
             #
             # Watch the dashboard page and update the layout
@@ -112,8 +114,19 @@ cyclotronDirectives.directive 'dashboardPage', ($compile, $window, $timeout, con
                     if !_.isNullOrUndefined(scope.layout.margin)
                         $element.css('padding', scope.layout.margin + 'px')
 
+                    $dashboardPageInner.css({ 
+                        marginRight: '-' + scope.layout.gutter + 'px'
+                        marginBottom: '-' + scope.layout.gutter + 'px'
+                    })
+
+                    # Enable/disable scrolling of the dashboard page
+                    if !scope.layout.scrolling
+                        $element.parents().addClass 'fullscreen'
+                    else 
+                        $element.parents().removeClass 'fullscreen'
+
                     # Store updated hit target for the dashboard controls
-                    scope.controlTarget = calculateMouseTarget()
+                    calculateMouseTarget()
 
 
                 # Update everything
@@ -136,7 +149,7 @@ cyclotronDirectives.directive 'dashboardPage', ($compile, $window, $timeout, con
                 themeSettings = configService.dashboard.properties.theme.options[newValue.theme]
                 if newValue.theme? and themeSettings?
                     color = themeSettings.dashboardBackgroundColor
-                    $('.dashboard').css('background-color', color)
+                    $('.dashboard, html').css('background-color', color)
 
                 return
 
@@ -145,6 +158,7 @@ cyclotronDirectives.directive 'dashboardPage', ($compile, $window, $timeout, con
             #
             scope.$on '$destroy', ->
                 $(document).off 'mousemove', controlHitTest
+                $(document).off 'scroll', calculateMouseTarget
 
                 # Cancel timer
                 $timeout.cancel(scope.controlTimer) if scope.controlTimer?

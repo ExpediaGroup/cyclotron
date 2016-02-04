@@ -33,14 +33,14 @@ cyclotronDirectives.directive 'tableFixedHeader', ($window, configService) ->
 
             $container.css({
                 'overflow': 'hidden'
-                'position': 'fixed'
-                'top': $table.offset().top
-                'left': $table.offset().left
+                'position': 'absolute'
+                'top': 0
+                'left': $table.position().left
             }).hide()
 
             pos =
-                originalTop: $parent.offset().top
-                originalLeft: $parent.offset().left
+                originalTop: 0
+                originalLeft: $table.position().left
 
             $clonedTable = $table.clone().empty()
 
@@ -56,7 +56,7 @@ cyclotronDirectives.directive 'tableFixedHeader', ($window, configService) ->
                 $tableHeaders = $table.find('thead')
                 $headerRows = $tableHeaders.find('tr')
                 pos.originalTop = $parent.offset().top
-                pos.originalLeft = $parent.offset().left
+                pos.originalLeft = $table.position().left
 
                 $container.css({
                     width: $parent[0].clientWidth
@@ -87,18 +87,17 @@ cyclotronDirectives.directive 'tableFixedHeader', ($window, configService) ->
                 diff = pos.originalTop - elementTop
 
                 if (diff > 0 && scrollTop > diff && scrollTop <= (diff + $table.height() - $tableHeaders.height()))
-                    $container.css({
-                        'top': pos.originalTop
-                        'left': pos.originalLeft
-                    })
-
                     $clonedTable.css({
                         'left': -$parent.scrollLeft()
                     })
 
-                    $container.show()
+                    if not scope.visible
+                        resize()
+                        $container.show()
+                        scope.visible = true
                 else
                     $container.hide()
+                    scope.visible = false
 
             #
             # Cleanup

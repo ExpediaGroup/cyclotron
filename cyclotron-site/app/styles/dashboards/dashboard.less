@@ -44,11 +44,11 @@
     .dashboard-controls {
         .user-select(none);
         z-index: 999;
-        position: absolute;
+        position: fixed;
         bottom: 1rem;
         left: 50%;
-        width: 16rem;
-        margin-left: -8rem;
+        width: 18rem;
+        margin-left: -9rem;
         .opacity(0);
         transition: opacity 1s ease-in-out;
         text-align: center;
@@ -59,6 +59,7 @@
             width: 2.3rem;
             display: inline-block;
             margin: 10px 10px;
+            cursor: pointer;
 
             &.disabled {
                 .opacity(.3);
@@ -68,6 +69,10 @@
         &.active {
             .opacity(1);
         }
+    }
+
+    .dashboard-pages {
+        position: relative;
     }
 
     .dashboard-page {
@@ -92,6 +97,14 @@
             @media only screen and (orientation:portrait) and (max-width: @phonePortraitMaxWidth) { 
                 height: auto; 
             }             
+        }
+
+        /* Hide preloaded-pages until they are rotated into view */
+        &:not(:first-child) {
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
         }
 
         .widget-fullscreen {

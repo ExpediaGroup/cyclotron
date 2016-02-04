@@ -115,8 +115,6 @@ cyclotronApp.controller 'AnnotationChartWidget', ($scope, configService, dashboa
         $scope.chartObject.data = chartData
         _.merge $scope.chartObject.options, _.compile($scope.widget.options, {})
 
-        console.log $scope.chartObject
-
     # Load data from the data source
     $scope.loadData = ->
         # Reset scope variables

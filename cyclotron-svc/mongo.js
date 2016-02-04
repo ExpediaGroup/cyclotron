@@ -36,11 +36,12 @@ var dashboardSchema = mongoose.Schema({
     dashboard     : {type: mongoose.Schema.Types.Mixed, required: true},
     createdBy     : {type: mongoose.Schema.Types.ObjectId, required: false, ref: 'user'},
     lastUpdatedBy : {type: mongoose.Schema.Types.ObjectId, required: false, ref: 'user'},
-    editors       : {type: [mongoose.Schema.Types.Mixed], required: false},
-    viewers       : {type: [mongoose.Schema.Types.Mixed], required: false},
+    editors       : [{type: mongoose.Schema.Types.Mixed, required: false}],
+    viewers       : [{type: mongoose.Schema.Types.Mixed, required: false}],
     pageViews     : {type: Number, required: false, default: 0},
     visits        : {type: Number, required: false, default: 0},
-    exports       : {type: Number, required: false, default: 0}
+    exports       : {type: Number, required: false, default: 0},
+    likes         : [{type: mongoose.Schema.Types.ObjectId, required: false, ref: 'user'}]
 });
 
 /* Dashboard Revision Schema: Contains all revisions of all
@@ -117,6 +118,26 @@ var dsAnalyticsSchema = mongoose.Schema({
     details        : {type: {}, required: false}
 });
 
+/* Event Analytics Schema: contains records of various events */
+var eventAnalyticsSchema = mongoose.Schema({
+    date           : {type: Date, required: true},
+    eventType      : {type: String, required: true},
+    visitId        : {type: String, required: true},
+    uid            : {type: String, required: false},
+    user           : {type: mongoose.Schema.Types.ObjectId, required: false, ref: 'user'},
+    details        : {type: {}, required: false}
+});
+
+/* Event Analytics Schema: contains records of various events */
+var eventAnalyticsSchema = mongoose.Schema({
+    date           : {type: Date, required: true},
+    eventType      : {type: String, required: true},
+    visitId        : {type: String, required: true},
+    uid            : {type: String, required: false},
+    user           : {type: mongoose.Schema.Types.ObjectId, required: false, ref: 'user'},
+    details        : {type: {}, required: false}
+});
+
 /* Models */
 
 var dashboardModel = mongoose.model('dashboard2', dashboardSchema, 'dashboard2s');
@@ -125,6 +146,7 @@ var userModel = mongoose.model('user', userSchema);
 var sessionModel = mongoose.model('session', sessionSchema);
 var analyticsModel = mongoose.model('analytics', analyticsSchema);
 var dsAnalyticsModel = mongoose.model('dataSourceAnalytics', dsAnalyticsSchema);
+var eventAnalyticsModel = mongoose.model('eventAnalytics', eventAnalyticsSchema);
 
 /* Promisify APIs */
 Promise.promisifyAll(userModel);

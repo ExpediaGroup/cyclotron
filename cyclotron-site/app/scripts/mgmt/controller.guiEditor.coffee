@@ -74,7 +74,8 @@ cyclotronApp.controller 'GuiEditorController', ($scope, $state, $stateParams, $l
         # and the dashboard must have been modified.
         $scope.editor.initialized and
             $scope.editor.hasEditPermission and
-            $scope.isDirty()
+            $scope.isDirty() and
+            !$scope.hasDuplicateDataSourceName()
 
     $scope.canExport = ->
         !$scope.editor.isNew and $scope.isLatestRevision()
@@ -98,6 +99,22 @@ cyclotronApp.controller 'GuiEditorController', ($scope, $state, $stateParams, $l
     $scope.canJsonEdit = ->
         not ($state.current.data.editJson == false)
 
+    $scope.hasDuplicateDataSourceName = ->
+        dataSources = $scope.editor.dashboard.dataSources
+        return false unless dataSources?
+
+        groups = _.groupBy dataSources, (dataSource) -> dataSource.name?.toLowerCase()
+
+        _.any groups, (values, key) ->
+            values.length > 1
+    
+    $scope.isDuplicateDataSourceName = (dataSource) ->
+        name = dataSource.name?.toLowerCase()
+        duplicates = _.filter $scope.editor.dashboard.dataSources, (ds) ->
+            ds.name?.toLowerCase() == name
+
+        return duplicates.length > 1
+
     $scope.previewUrl = ->
         url = '/' + $scope.editor.dashboard.name + '?live=true'
         if !$scope.isLatestRevision()
@@ -111,13 +128,7 @@ cyclotronApp.controller 'GuiEditorController', ($scope, $state, $stateParams, $l
             'Preview Revision #' + $scope.editor.revision
 
     $scope.getVisitCategory = ->
-        return null unless $scope.editor.dashboardWrapper?
-        visits = $scope.editor.dashboardWrapper.visits
-        if visits >= 10000 then return { text: '10000+', icon: 'fa-users' }
-        if visits >= 1000 then return { text: '1000+', icon: 'fa-user' }
-        if visits >= 100 then return { text: '100+', icon: 'fa-user' }
-        if visits >= 10 then return { text: '10+', icon: 'fa-user' }
-        return { text: visits, icon: 'fa-user' }
+        dashboardService.getVisitCategory $scope.editor.dashboardWrapper
 
     # Loads a dashboard into the editor
     $scope.loadDashboard = (dashboardWrapper) ->
@@ -127,6 +138,7 @@ cyclotronApp.controller 'GuiEditorController', ($scope, $state, $stateParams, $l
         $scope.editor.isDirty = false
         $scope.editor.isNew = false
         $scope.editor.hasEditPermission = userService.hasEditPermission(dashboardWrapper)
+        $scope.editor.likeCount = dashboardWrapper.likes?.length
         $scope.ldapSearch.editors.results = dashboardWrapper.editors
         $scope.ldapSearch.viewers.results = dashboardWrapper.viewers
 

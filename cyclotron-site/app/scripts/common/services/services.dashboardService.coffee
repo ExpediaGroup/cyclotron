@@ -14,7 +14,7 @@
 # language governing permissions and limitations under the License. 
 ###
 
-cyclotronServices.factory 'dashboardService', ($resource, $q, configService, userService) ->
+cyclotronServices.factory 'dashboardService', ($resource, $q, analyticsService, configService, userService) ->
 
     baseUrl = configService.restServiceUrl.replace(/:(?!\/\/)/gi, '\\:')
 
@@ -23,6 +23,9 @@ cyclotronServices.factory 'dashboardService', ($resource, $q, configService, use
             method: 'GET'
         save:
             method: 'POST'
+        save2:
+            method: 'POST'
+            isArray: true
         update:
             method: 'PUT'
         updateArray:
@@ -35,12 +38,16 @@ cyclotronServices.factory 'dashboardService', ($resource, $q, configService, use
             method: 'DELETE'
         'delete':
             method: 'DELETE'
+        'delete2':
+            method: 'DELETE'
+            isArray: true
 
     dashboardResource = $resource(baseUrl + '/dashboards/:name', {}, defaultActions)
     revisionsResource = $resource(baseUrl + '/dashboards/:name/revisions', {}, defaultActions)
     revisionResource = $resource(baseUrl + '/dashboards/:name/revisions/:rev', {}, defaultActions)
     tagsResource = $resource(baseUrl + '/dashboards/:name/tags', {}, defaultActions)
-
+    likesResource = $resource(baseUrl + '/dashboards/:name/likes', {}, defaultActions)
+    
     beautifyOptions = {
         indent_size: 4
     }
@@ -141,7 +148,7 @@ cyclotronServices.factory 'dashboardService', ($resource, $q, configService, use
 
         p = (if _.isEmpty(rev)
             dashboardResource.get {
-                name: dashboardName,
+                name: dashboardName
                 session: userService.currentSession()?.key
             }
         else
@@ -232,7 +239,7 @@ cyclotronServices.factory 'dashboardService', ($resource, $q, configService, use
         deferred = $q.defer()
 
         p = dashboardResource.delete({ 
-            name: name,
+            name: name
             session: userService.currentSession()?.key
         }).$promise
 
@@ -253,6 +260,44 @@ cyclotronServices.factory 'dashboardService', ($resource, $q, configService, use
             deferred.reject(error)
 
         return deferred.promise
+
+    service.like = (dashboard) ->
+        p = likesResource.save2({ 
+            name: dashboard.name
+            session: userService.currentSession()?.key
+        }, null).$promise
+
+        p.then ->
+            analyticsService.recordEvent 'like', { dashboardName: dashboard.name }
+            alertify.log('Liked Dashboard', 2500)
+            return
+
+        p.catch (error) ->
+            switch error.status
+                when 401
+                    alertify.error('Session expired, please login again')
+                    userService.setLoggedOut()
+                else
+                    alertify.error(error.data, 2500)
+
+    service.unlike = (dashboard) ->
+        p = likesResource.delete2({ 
+            name: dashboard.name
+            session: userService.currentSession()?.key
+        }).$promise
+
+        p.then ->
+            analyticsService.recordEvent 'unlike', { dashboardName: dashboard.name }
+            alertify.log('Unliked Dashboard', 2500)
+            return
+
+        p.catch (error) ->
+            switch error.status
+                when 401
+                    alertify.error('Session expired, please login again')
+                    userService.setLoggedOut()
+                else
+                    alertify.error(error.data, 2500)
 
     #
     # Push the dashboard to any specified Cyclotron endpoint.
@@ -546,8 +591,8 @@ cyclotronServices.factory 'dashboardService', ($resource, $q, configService, use
             else visits
 
         return {
-            text: visits
-            icon: 'fa-user'
+            text: text
+            icon: icon
         }
 
     return service

@@ -181,4 +181,12 @@ cyclotronServices.factory 'userService', ($http, $q, $localForage, configService
             return (currentSession.user.distinguishedName == viewer.dn) || 
                 _.contains(currentSession.user.memberOf, viewer.dn)
 
+    exports.likesDashboard = (dashboard) ->
+        return false unless configService.authentication.enable
+        
+        # Must be logged in to like a dashboard
+        return false unless exports.isLoggedIn()
+
+        return _.contains dashboard.likes, currentSession.user._id
+
     return exports

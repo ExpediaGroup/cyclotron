@@ -336,6 +336,98 @@
                 }
             }
         },
+        "/dashboards/{name}/likes": {
+            "get": {
+                "summary": "Get Dashboard Likes",
+                "description": "The Like Dashboard endpoint retrieves the list of users who have 'liked' this Dashboard.",
+                "tags": [
+                    "Dashboards"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "The Dashboard name.",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The list of Users who like the Dashboard."
+                    },
+                    "401": {
+                        "description": "Authentication required: session key not provided."
+                    },
+                    "404": {
+                        "description": "Dashboard not found."
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            },
+            "post": {
+                "summary": "Like Dashboard",
+                "description": "The Like Dashboard endpoint adds the current user to the list of users who like the Dashboard.",
+                "tags": [
+                    "Dashboards"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "The Dashboard name.",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The updated list of Users who like the Dashboard."
+                    },
+                    "401": {
+                        "description": "Authentication required: session key not provided."
+                    },
+                    "404": {
+                        "description": "Dashboard not found."
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Unlike Dashboard",
+                "description": "The Unlike Dashboard endpoint removes the current user from the list of users who like the Dashboard.",
+                "tags": [
+                    "Dashboards"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "The Dashboard name.",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The updated list of Users who like the Dashboard."
+                    },
+                    "401": {
+                        "description": "Authentication required: session key not provided."
+                    },
+                    "404": {
+                        "description": "Dashboard not found."
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            }
+        },
         "/dashboardnames": {
             "get": {
                 "summary": "Get Dashboard Names",
@@ -1466,6 +1558,14 @@
                     "type": "integer",
                     "format": "int32",
                     "readOnly": true
+                },
+                "likes": {
+                    "description": "Contains a list of users who 'like' this Dashboard.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "readOnly": true
                 }
             }
         },
@@ -1536,6 +1636,14 @@
                     "description": "If Analytics is enabled, this counter records the total number of page views, or times a page in this Dashboard was viewed. Each visit may have multiple page views.  Cannot be set manually.",
                     "type": "integer",
                     "format": "int32",
+                    "readOnly": true
+                },
+                "likes": {
+                    "description": "Contains a list of users who 'like' this Dashboard.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
                     "readOnly": true
                 }
             }

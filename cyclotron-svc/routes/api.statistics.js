@@ -28,6 +28,7 @@ var config = require('../config/config'),
 var Analytics = mongoose.model('analytics'),
     Dashboards = mongoose.model('dashboard2'),
     DataSourceAnalytics = mongoose.model('dataSourceAnalytics'),
+    EventAnalytics = mongoose.model('eventAnalytics'),
     Revisions = mongoose.model('revision'),
     Sessions = mongoose.model('session'),
     Users = mongoose.model('user');
@@ -260,6 +261,43 @@ var getSessionCounts = function () {
     });
 }
 
+var getEvents = function (eventType) {
+    return new Promise(function (resolve, reject) {
+        var oneDay = moment().subtract(1, 'day'),
+            oneWeek = moment().subtract(1, 'week'),
+            oneMonth = moment().subtract(1, 'month'),
+            sixMonths = moment().subtract(6, 'month');
+
+        pipeline = [{
+            $match: { eventType: { $eq: eventType }}
+        }, {
+            $project: {
+                occurredPastDay: { $cond: [ { '$gt': [ '$date', oneDay.toDate() ] }, 1, 0]},
+                occurredPastWeek: { $cond: [ { '$gt': [ '$date', oneWeek.toDate() ] }, 1, 0]},
+                occurredPastMonth: { $cond: [ { '$gt': [ '$date', oneMonth.toDate() ] }, 1, 0]},
+                occurredPastSixMonths: { $cond: [ { '$gt': [ '$date', sixMonths.toDate() ] }, 1, 0]}
+            },
+        }, {
+            $group: {
+                _id: {},
+                count: { $sum: 1 },
+                occurredPastDayCount: { $sum: '$occurredPastDay' },
+                occurredPastWeekCount: { $sum: '$occurredPastWeek' },
+                occurredPastMonthCount: { $sum: '$occurredPastMonth' },
+                occurredPastSixMonthsCount: { $sum: '$occurredPastSixMonths' }
+            }
+        }]
+
+        EventAnalytics.aggregate(pipeline).exec(function (err, results) {
+            if (err) {
+                return reject(err);
+            }
+
+            resolve(_.omit(results[0], '_id'));
+        });
+    });
+};
+
 /* General Instance statistics */
 exports.get = function (req, res) {
 
@@ -270,13 +308,17 @@ exports.get = function (req, res) {
         getSessionCounts(),
         getUsersByRevisions(),
         getRevisions(),
-        function (dashboardCounts, analyticsCounts, userCounts, sessionCounts, usersByRevisions, revisions) {
+        getEvents('like'),
+        getEvents('unlike'),
+        function (dashboardCounts, analyticsCounts, userCounts, sessionCounts, usersByRevisions, revisions, likes, unlikes) {
             res.send({
                 dashboards: dashboardCounts,
                 pageViews: analyticsCounts,
                 revisions: revisions,
                 sessions: sessionCounts,
-                users: _.merge(userCounts, usersByRevisions)
+                users: _.merge(userCounts, usersByRevisions),
+                likes: likes,
+                unlikes: unlikes
             });
         })
     .catch(function (err) {

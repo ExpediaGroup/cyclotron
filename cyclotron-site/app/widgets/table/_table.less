@@ -18,6 +18,10 @@
     overflow-y: auto;
     overflow-x: auto;
     height: 100%;
+
+    table th, #container {
+        border-bottom: 1px dashed #999;
+    }
  
     table {
         width: 100%;
@@ -27,7 +31,6 @@
             padding: 10px 8px;
             text-align: left;
             font-weight: 400;
-            border-bottom: 1px dashed #999;
 
             background-color: @headerColor;
             color: contrast(@headerColor, @color, white);

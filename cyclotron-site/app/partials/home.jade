@@ -11,11 +11,13 @@
 
         ui-select(ng-model='search.query', multiple='',
             tagging='', tagging-label='false', tagging-tokens='SPACE|ENTER')
-            ui-select-match(placeholder='Search by Name or Tags...') 
+            ui-select-match(placeholder='Search by Name or Tags...')
                 i.fa.fa-tag(ng-if='isTag($item)')
+                i.fa.fa-filter(ng-if='isAdvanced($item)')
                 span  {{ $item }}
             ui-select-choices(repeat='hint in search.hints | filter:$select.search | limitTo:100')
                 i.fa.fa-tag(ng-if='isTag(hint)')
+                i.fa.fa-filter(ng-if='isAdvanced(hint)')
                 span  {{ hint }}
                 
     section.main-links(ng-show='showSplash')
@@ -31,10 +33,10 @@
         a.login(ui-sref='analytics', title='Analytics for Cyclotron')
             i.fa.fa-bar-chart
             span Analytics
-        a.login(requires-auth, ng-click='login()', ng-if='!isLoggedIn()', title='Login')
+        a.login(requires-auth, ng-if='!isLoggedIn()', ng-click='login()',title='Login')
             i.fa.fa-unlock
             span Login
-        a.logout(requires-auth, ng-click='logout()', ng-if='isLoggedIn()', title='Logout')
+        a.logout(requires-login, ng-click='logout()', title='Logout')
             i.fa.fa-lock
             span Logout
 
@@ -46,15 +48,38 @@
         .no-results.well.well-sm(ng-show='dashboards.length == 0')
             span No matching Dashboards were found
 
-        table.table
-            tr.dashboard-item(ng-repeat='dashboard in dashboards | orderBy:"name"', ng-class='{"dashboard-item-unviewable": !dashboard._canView}')
-
+        table.table(ng-show='dashboards.length > 0')
+            thead
+                tr
+                    th(requires-login)
+                        a(ng-click='sortBy("_liked", true)') 
+                            i.fa.fa-thumbs-up
+                    th
+                        a(ng-click='sortBy("name", false)', ng-class='{ selected: sortByField == "name" }') Name
+                        span  / 
+                        a(ng-click='sortBy(tagSorter, false)', ng-class='{ selected: sortByField == tagSorter }') Tags
+                        span  / 
+                        a(ng-click='sortBy("date", true)', ng-class='{ selected: sortByField == "date" }') Last Modified
+                    th.dashboard-analytics
+                        a(ng-click='sortBy("visits", true)', ng-class='{ selected: sortByField == "visits" }') Visits
+                        span(requires-auth)  / 
+                        a(requires-auth, ng-click='sortBy("likeCount", true)', ng-class='{ selected: sortByField == "likeCount" }') Likes
+                    th
+            tr.dashboard-item(ng-repeat='dashboard in dashboards | orderBy:sortByField:sortByReverse', 
+                ng-class='{"dashboard-item-unviewable": !dashboard._canView, "dashboard-item-deleted": dashboard.deleted }')
+                td.like(requires-login)
+                    a(ng-click='toggleLike(dashboard)')
+                        i.fa.fa-thumbs-up(ng-if='dashboard._liked', title='Unlike this Dashboard')
+                        i.fa.fa-thumbs-o-up(ng-if='!dashboard._liked', title='Like this Dashboard')
                 td
+                    span.name(ng-if='dashboard.deleted') {{ dashboard.name }}
+                        i.fa.fa-trash-o(title="This Dashboard has been deleted.")
+
                     span.name(ng-if='!dashboard._canView') {{ dashboard.name }}
                         i.fa.fa-lock(title="You don't have permission to edit this Dashboard.")
                         i.fa.fa-eye-slash(title="You don't have permission to view this Dashboard.")
 
-                    a.name(ng-if='dashboard._canView', ng-href='/{{ dashboard.name }}', target='_blank', title='Open the Dashboard') {{ dashboard.name }}
+                    a.name(ng-if='dashboard._canView && !dashboard.deleted', ng-href='/{{ dashboard.name }}', target='_blank', title='Open the Dashboard') {{ dashboard.name }}
                         i.fa.fa-lock(ng-if='isLoggedIn() && !dashboard._canEdit', title="You don't have permission to edit this Dashboard.")
                         i.fa.fa-external-link
 
@@ -74,12 +99,16 @@
                         ng-click='selectTag(tag)', title='Add to search') {{ tag }}
 
                 td.dashboard-analytics
-                    .info
-                        a.text-muted(ng-if='dashboard.visits > 0',
-                            ui-sref='dashboardAnalytics({ dashboardName: dashboard.name })', title='View Analytics for this Dashboard')
+                    .info(ng-if='dashboard.visits > 0')
+                        a(ui-sref='dashboardAnalytics({ dashboardName: dashboard.name })', 
+                            title='View Analytics for this Dashboard')
                             i(class='fa {{ dashboard.visitCategory.icon }}')
                             span  {{ dashboard.visitCategory.text }} 
                                 ng-pluralize(count='dashboard.visits', when='{"one": "visit","other": "visits"}')
+                    .info(requires-auth, ng-if='dashboard.likeCount > 0')
+                        i.fa.fa-thumbs-up
+                        span  {{ dashboard.likeCount }} 
+                                ng-pluralize(count='dashboard.likeCount', when='{"one": "like","other": "likes"}')
 
                 td.dashboard-links
                     div

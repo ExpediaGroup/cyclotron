@@ -1,3 +1,23 @@
+# 1.24.0 (02/04/2016)
+
+## Features
+
+ - Scrolling Dashboards: Dashboards now automatically scroll if the Widgets on a page exceed the size of the browser.  If the Widgets on a page fit without overflowing, the Dashboard will appear as before without any scrollbars.  This replaces the previous behavior of fitting the page to the browser window, and hiding any overflowing content.
+
+ - Likes: Added the ability for logged-in users to like (and unlike) dashboards.  Users can search for dashboards they liked, or sort search results by the number of likes
+
+ - Sortable Search Results: The Dashboard Search results can be sorted using various keys such as Name, Tags, Visits, Likes, etc.
+
+ - Advanced Search Filters: Dashboards can be searched using several new search filters: "is:deleted", "include:deleted", "likedby:<user>", "lastupdatedby:<user>".
+
+## Bug Fixes
+
+ - Data Sources must be created with unique names
+
+ - Navigating through Cyclotron pages using browser back button does not work
+ 
+ - Annotation Chart: annotationsWidth property in AnnotationChart widget should be a numerical field instead of a string
+
 # 1.23.0 (01/21/2016)
 
 ## Features

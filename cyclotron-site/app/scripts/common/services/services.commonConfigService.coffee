@@ -26,7 +26,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
     exports = {
 
-        version: '1.23.0'
+        version: '1.24.0'
 
         authentication:
             loginMessage: 'Please login using your LDAP username and password.'
@@ -68,7 +68,7 @@ cyclotronServices.factory 'commonConfigService', ->
                             dashboardBackgroundColor: 'white'
                         dark:
                             value: 'dark'
-                            dashboardBackgroundColor: 'black'
+                            dashboardBackgroundColor: '#2f2f2f'
                         dark2:
                             value: 'dark2'
                             dashboardBackgroundColor: 'black'
@@ -198,6 +198,14 @@ cyclotronServices.factory 'commonConfigService', ->
                                     required: false
                                     defaultHidden: true
                                     order: 4
+                                scrolling:
+                                    label: 'Scrolling Enabled'
+                                    description: 'Enables vertical scrolling of the page to display content longer than the current browser size.'
+                                    type: 'boolean'
+                                    default: true
+                                    required: false
+                                    defaultHidden: true
+                                    order: 5
                             order: 2
                         widgets:
                             label: 'Widgets'
@@ -994,7 +1002,7 @@ cyclotronServices.factory 'commonConfigService', ->
                             annotationsWidth: 
                                 label: 'Annotations Width'
                                 description: 'The width (in percent) of the annotations area, out of the entire chart area. Must be a number in the range 5-80.'
-                                type: 'number'
+                                type: 'integer'
                                 inlineJs: true
                                 defaultHidden: true
                             displayAnnotations: 

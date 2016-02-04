@@ -24,7 +24,8 @@ var _ = require('lodash'),
     auth = require('./auth');
     
 var Dashboards = mongoose.model('dashboard2'),
-    Revisions = mongoose.model('revision');
+    Revisions = mongoose.model('revision'),
+    Users = mongoose.model('user');
 
 var createRevision = function(dashboard) {
     /* Create new record in the Revision collection */
@@ -71,6 +72,90 @@ exports.getNames = function(req, res) {
         });
 };
 
+var searchDashboards = function (res, filters, searchItems) {
+    Dashboards
+        .find(filters)
+        .select('-dashboard')
+        .populate('createdBy lastUpdatedBy', 'name')
+        .exec(function(err, obj) {
+            if (err) {
+                console.log(err);
+                return res.status(500).send(err);
+            } else if (_.isUndefined(obj) || _.isNull(obj)) {
+                return res.status(404).send('Dashboard not found.');
+            }
+
+            /* Create hash of regex objects */
+            var searchRegexes = {};
+            try {
+                _.each(searchItems, function(item) {
+                    searchRegexes[item] = new RegExp(".*" + item + ".*");
+                });
+            } catch (e) {
+                /* Bad input, return empty */
+                return res.send([]); 
+            }
+
+            var filteredResults = _.filter(obj, function(dashboard) {
+                return _.every(searchItems, function(searchItem) {
+                    if (searchRegexes[searchItem].test(dashboard.name))
+                        return true;
+                    if (_.any(dashboard.tags, function(tag) {
+                        return tag.toLowerCase() === searchItem;
+                    }))
+                        return true;
+
+                    /* No match */
+                    return false;
+                });
+            });
+
+            res.send(filteredResults);
+        });
+};
+
+var searchDashboards = function (res, filters, searchItems) {
+    Dashboards
+        .find(filters)
+        .select('-dashboard')
+        .populate('createdBy lastUpdatedBy', 'name')
+        .exec(function(err, obj) {
+            if (err) {
+                console.log(err);
+                return res.status(500).send(err);
+            } else if (_.isUndefined(obj) || _.isNull(obj)) {
+                return res.status(404).send('Dashboard not found.');
+            }
+
+            /* Create hash of regex objects */
+            var searchRegexes = {};
+            try {
+                _.each(searchItems, function(item) {
+                    searchRegexes[item] = new RegExp(".*" + item + ".*");
+                });
+            } catch (e) {
+                /* Bad input, return empty */
+                return res.send([]); 
+            }
+
+            var filteredResults = _.filter(obj, function(dashboard) {
+                return _.every(searchItems, function(searchItem) {
+                    if (searchRegexes[searchItem].test(dashboard.name))
+                        return true;
+                    if (_.any(dashboard.tags, function(tag) {
+                        return tag.toLowerCase() === searchItem;
+                    }))
+                        return true;
+
+                    /* No match */
+                    return false;
+                });
+            });
+
+            res.send(filteredResults);
+        });
+};
+
 exports.get = function (req, res) {
 
     var search = req.query.q
@@ -83,49 +168,50 @@ exports.get = function (req, res) {
             .exec(_.wrap(res, api.getCallback));    
     }
     else {
+        var dashboardFilter = { deleted: false }
+        var searchItems = [];
+
         /* Comma-separated search terms */
-        var query = Dashboards
-            .find({ deleted: false })
-            .select('-dashboard')
-            .populate('createdBy lastUpdatedBy', 'name')
-            .exec(function(err, obj) {
-                if (err) {
-                    console.log(err);
-                    return res.status(500).send(err);
-                } else if (_.isUndefined(obj) || _.isNull(obj)) {
-                    return res.status(404).send('Dashboard not found.');
-                }
-                
-                /* Comma-separated search terms */
-                var searchItems = req.query.q.toLowerCase().split(',');
+        var tempSearchItems = search.toLowerCase().split(',');
 
-                /* Create hash of regex objects */
-                var searchRegexes = {};
-                try {
-                    _.each(searchItems, function(item) {
-                        searchRegexes[item] = new RegExp(".*" + item + ".*");
-                    });
-                } catch (e) {
-                    /* Bad input, return empty */
-                    return res.send([]); 
-                }
+        var promises = [];
+        
+        /* Handle advanced search terms */
+        _.each(tempSearchItems, function (item) {
+            if (item == 'is:deleted') {
+                dashboardFilter.deleted = true;
+            } else if (item == 'include:deleted') {
+                delete dashboardFilter.deleted;
+            } else if (item.indexOf('likedby:') == 0) {
+                promises.push(Users.findOne({ sAMAccountName: item.substring(8) }).exec().then(function (user) {
+                    if (_.isNull(user)) {  return { none: 'none' }; }
+                    return {
+                        likes: { $elemMatch: { $eq: user._id } }
+                    };
+                }));
+            } else if (item.indexOf('lastupdatedby:') == 0) {
+                promises.push(Users.findOne({ sAMAccountName: item.substring(14) }).exec().then(function (user) {
+                    if (_.isNull(user)) {  return { none: 'none' }; }
+                    return {
+                        lastUpdatedBy: user._id
+                    };
+                }));
+            } else {
+                searchItems.push(item);
+            }
+        });
 
-                var filteredResults = _.filter(obj, function(dashboard) {
-                    return _.every(searchItems, function(searchItem) {
-                        if (searchRegexes[searchItem].test(dashboard.name))
-                            return true;
-                        if (_.any(dashboard.tags, function(tag) {
-                            return tag.toLowerCase() === searchItem;
-                        }))
-                            return true;
-
-                        /* No match */
-                        return false;
-                    });
+        /* Resolve all promises and update the dashboard filters accordingly */
+        if (promises.length > 0) {
+            Promise.all(promises).then(function(resolved) {
+                _.each(resolved, function (r) {
+                    dashboardFilter = _.merge(dashboardFilter, r);
                 });
-
-                res.send(filteredResults);
-            });
+                searchDashboards(res, dashboardFilter, searchItems);
+            })
+        } else {
+            searchDashboards(res, dashboardFilter, searchItems);
+        }
     }
 };
 
@@ -270,7 +356,7 @@ exports.deleteSingle = function (req, res) {
 
     var name = req.params.name.toLowerCase();
 
-    Dashboards.findOne({ name: name}, function (err, existingDashboard) {
+    Dashboards.findOne({ name: name }, function (err, existingDashboard) {
         if (err) {
             res.status(500).send(err);
         } else if (_.isUndefined(existingDashboard) || _.isNull(existingDashboard)) {
@@ -292,6 +378,71 @@ exports.deleteSingle = function (req, res) {
             })
             .populate('createdBy lastUpdatedBy', 'sAMAccountName name email')
             .exec(_.wrap(res, updateCallback));
+        }
+    });
+};
+
+exports.getLikes = function (req, res) {
+
+    var name = req.params.name.toLowerCase();
+    Dashboards
+        .findOne({ name: name })
+        .select('likes')
+        .populate('likes', 'sAMAccountName name email')
+        .exec(function(err, dashboard) {
+            if (err) {
+                console.log(err);
+                return res.status(500).send(err);
+            } else if (_.isUndefined(dashboard) || _.isNull(dashboard)) {
+                return res.status(404).send('Dashboard not found.');
+            }
+
+            res.send(dashboard.likes);
+        });
+};
+
+exports.likeDashboard = function (req, res) {
+    if (_.isUndefined(req.params.name)) {
+        return res.status(400).send('Missing Dashboard name.');
+    }
+
+    var name = req.params.name.toLowerCase();
+
+    /* Add user to Likes on Dashboard */
+    Dashboards.findOneAndUpdate({ name: name }, {
+        $addToSet: { 
+            likes: auth.getUserId(req)
+        }
+    }).exec(function (err, dashboard) {
+        if (err) {
+            res.status(500).send(err);
+        } else if (_.isUndefined(dashboard) || _.isNull(dashboard)) {
+            res.status(404).send('Dashboard not found.');
+        } else {
+            res.status(200).send(dashboard.likes);
+        }
+    });
+};
+
+exports.unlikeDashboard = function (req, res) {
+    if (_.isUndefined(req.params.name)) {
+        return res.status(400).send('Missing Dashboard name.');
+    }
+
+    var name = req.params.name.toLowerCase();
+
+    /* Remove user from Likes on Dashboard */
+    Dashboards.findOneAndUpdate({ name: name }, {
+        $pull: { 
+            likes: auth.getUserId(req)
+        }
+    }).exec(function (err, dashboard) {
+        if (err) {
+            res.status(500).send(err);
+        } else if (_.isUndefined(dashboard) || _.isNull(dashboard)) {
+            res.status(404).send('Dashboard not found.');
+        } else {
+            res.status(200).send(dashboard.likes);
         }
     });
 };

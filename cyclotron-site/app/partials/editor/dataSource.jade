@@ -12,6 +12,9 @@
     select.form-control(ng-model='dataSource.type', title='{{ dashboardProperties.dataSources.properties.type.description }}')
         option(ng-repeat='(optionKey, optionValue) in dashboardProperties.dataSources.options') {{ optionValue.value }}
 
-.bg-info(ng-show='dataSourceMessage()', ng-bind-html='dataSourceMessage()')
+.bg-info(ng-if='dataSourceMessage()', ng-bind-html='dataSourceMessage()')
+
+.bg-danger(ng-if='isDuplicateDataSourceName(dataSource)')
+    | The Data Source name must be unique to the Dashboard.
 
 .editor-property-set(model='dataSource', definition='combinedDataSourceProperties(dataSource)', ng-if='dataSource.type')

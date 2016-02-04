@@ -48,6 +48,10 @@
         
         input.form-control(ng-model='model[value.name]', 
             ng-required='{{ value.required }}', placeholder='{{ value.placeholder }}',
+            type='number', ng-switch-when='number')
+
+        input.form-control(ng-model='model[value.name]', 
+            ng-required='{{ value.required }}', placeholder='{{ value.placeholder }}',
             type='{{ value.inputType || "text" }}', ng-switch-default)
 
     select.form-control(ng-model='model[value.name]', ng-if='value.options', title='{{ value.description }}'
