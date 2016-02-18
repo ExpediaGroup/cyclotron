@@ -9,7 +9,7 @@
             .fa.fa-exclamation-triangle
             span  {{ nodata }}
 
-        .trafficlight(ng-if='!dataSourceError', active-color='activeColor', ng-class='{transparent: nodata}')
+        .trafficlight(ng-if='!loading && !dataSourceError', active-color='activeColor', ng-class='{transparent: nodata}')
             .protector
             .protector
             .protector

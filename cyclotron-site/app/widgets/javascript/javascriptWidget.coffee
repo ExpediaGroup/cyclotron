@@ -34,59 +34,59 @@ cyclotronApp.controller 'JavascriptWidget', ($scope, dashboardService, dataServi
     $scope.dataSourceError = false
     $scope.dataSourceErrorMessage = null
 
-    $scope.widgetTitle = -> _.jsExec($scope.widget.title)
-
-    # Load data source
-    dsDefinition = dashboardService.getDataSource($scope.dashboard, $scope.widget)
-    $scope.dataSource = dataService.get(dsDefinition)
-
     $scope.data = null
 
-    # Create user-defined Javascript Object
     $scope.jsObject = _.executeFunctionByName($scope.widget.functionName, window, $scope.widget)
+    $scope.widgetTitle = -> _.jsExec($scope.widget.title)
 
-    $scope.initialLoad = ->
-        # Reset scope variables
+    $scope.reload = ->
+        $scope.dataSource.execute(true)
+
+    # Load Data Source
+    dsDefinition = dashboardService.getDataSource $scope.dashboard, $scope.widget
+    $scope.dataSource = dataService.get dsDefinition
+    
+    # Initialize
+    if $scope.dataSource?
+        $scope.dataVersion = 0
         $scope.loading = true
-        $scope.dataSourceError = false
-        $scope.dataSourceErrorMessage = null
 
-        $scope.dataSource.getData dsDefinition, (data, headers, isUpdate) ->
+        # Data Source (re)loaded
+        $scope.$on 'dataSource:' + dsDefinition.name + ':data', (event, eventData) ->
+            return unless eventData.version > $scope.dataVersion
+            $scope.dataVersion = eventData.version
 
             $scope.dataSourceError = false
             $scope.dataSourceErrorMessage = null
+
+            data = eventData.data[dsDefinition.resultSet].data
 
             # Always ignore empty data sets, even on update
             if _.isEmpty(data)
                 $scope.loading = false
                 return
 
-            # Filter the data with the widget filters if needed
+            # Filter the data if the widget has "filters"
             if $scope.widget.filters?
                 data = dataService.filter(data, $scope.widget.filters)
 
-            # Sort the data if the widget has sortBy
+            # Sort the data if the widget has "sortBy"
             if $scope.widget.sortBy?
                 data = dataService.sort(data, $scope.widget.sortBy)
 
             $scope.data = data
             $scope.loading = false
 
-        , (errorMessage, status) ->
-            # Error callback
-            $scope.loading = false
+        # Data Source error
+        $scope.$on 'dataSource:' + dsDefinition.name + ':error', (event, data) ->
             $scope.dataSourceError = true
-            $scope.dataSourceErrorMessage = errorMessage
-            $scope.data = null
-        , ->
-            # Loading callback
+            $scope.dataSourceErrorMessage = data.error
+            $scope.nodata = null
+            $scope.loading = false
+
+        # Data Source loading
+        $scope.$on 'dataSource:' + dsDefinition.name + ':loading', ->
             $scope.loading = true
-
-    $scope.reload = ->
-        $scope.dataSource.execute(true)
-
-    # Initialize
-    if _.isUndefined(dsDefinition)
-        $scope.data = null
-    else
-        $scope.initialLoad()
+        
+        # Initialize the Data Source
+        $scope.dataSource.init dsDefinition 

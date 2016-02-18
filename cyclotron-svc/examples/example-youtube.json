@@ -1,0 +1,48 @@
+{
+    "dataSources": [],
+    "description": "Examples of the YouTube widget",
+    "disableAnalytics": true,
+    "name": "example-youtube",
+    "pages": [{
+        "layout": {
+            "gridColumns": 1,
+            "gridRows": 1
+        },
+        "name": "Single Video",
+        "style": "fullscreen",
+        "widgets": [{
+            "videoId": "MlrzLYqIsE8",
+            "widget": "youtube"
+        }]
+    }, {
+        "layout": {
+            "gridColumns": 1,
+            "gridRows": 2
+        },
+        "name": "Two Videos",
+        "widgets": [{
+            "videoId": "MlrzLYqIsE8",
+            "widget": "youtube"
+        }, {
+            "videoId": "iPWbVDj_mTE",
+            "widget": "youtube"
+        }]
+    }, {
+        "layout": {
+            "gridColumns": 2,
+            "gridRows": 1
+        },
+        "name": "Lists",
+        "widgets": [{
+            "layout": {},
+            "title": "Comma-Separated List",
+            "videoId": "cS-hFKC_RKI,pnN2BNrSrXY,72__Mdioty8",
+            "widget": "youtube"
+        }, {
+            "title": "Playlist",
+            "videoId": "PLdgCSoJzrmKGadxAc1WHfukyzxFII2_-u",
+            "widget": "youtube"
+        }]
+    }],
+    "parameters": []
+}

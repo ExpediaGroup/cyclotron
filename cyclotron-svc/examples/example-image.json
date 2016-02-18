@@ -1,0 +1,165 @@
+{
+    "dataSources": [],
+    "description": "Examples of the Image widget.",
+    "disableAnalytics": true,
+    "name": "example-image",
+    "pages": [{
+        "frequency": 1,
+        "layout": {
+            "gridColumns": 1,
+            "gridRows": 1
+        },
+        "style": "fullscreen",
+        "widgets": [{
+            "images": [{
+                "link": "https://unsplash.com/photos/X0OoHrPvgXE",
+                "tooltip": "Photo by Luca Zanon",
+                "url": "https://unsplash.com/photos/X0OoHrPvgXE/download"
+            }],
+            "widget": "image"
+        }]
+    }, {
+        "frequency": 1,
+        "layout": {
+            "gridColumns": 2,
+            "gridRows": 2
+        },
+        "widgets": [{
+            "images": [{
+                "backgroundColor": "#000",
+                "backgroundSize": "cover",
+                "link": "https://unsplash.com/photos/7BjmDICVloE",
+                "tooltip": "Hello, World",
+                "url": "https://unsplash.com/photos/7BjmDICVloE/download"
+            }],
+            "widget": "image"
+        }, {
+            "images": [{
+                "link": "https://unsplash.com/photos/X0OoHrPvgXE",
+                "tooltip": "Photo by Luca Zanon",
+                "url": "https://unsplash.com/photos/X0OoHrPvgXE/download"
+            }],
+            "widget": "image"
+        }, {
+            "images": [{
+                "link": "https://unsplash.com/photos/JibIPPrvITE",
+                "tooltip": "Photo by Micheal Hull",
+                "url": "https://unsplash.com/photos/JibIPPrvITE/download"
+            }],
+            "widget": "image"
+        }, {
+            "duration": 5,
+            "images": [{
+                "backgroundPosition": "bottom",
+                "link": "https://unsplash.com/photos/GYumuBnTqKc",
+                "tooltip": "Photo by E+N Photographies",
+                "url": "https://unsplash.com/photos/GYumuBnTqKc/download"
+            }, {
+                "link": "https://unsplash.com/photos/N6STB5KbRUU",
+                "url": "https://unsplash.com/photos/N6STB5KbRUU/download"
+            }, {
+                "link": "https://unsplash.com/photos/4xEfxMShEUM",
+                "url": "https://unsplash.com/photos/4xEfxMShEUM/download"
+            }],
+            "title": "Rotation",
+            "widget": "image"
+        }]
+    }, {
+        "frequency": 1,
+        "layout": {
+            "gridColumns": 3,
+            "gridRows": 3
+        },
+        "name": "Positioning",
+        "widgets": [{
+            "gridWidth": 2,
+            "images": [{
+                "backgroundPosition": "top",
+                "link": "https://unsplash.com/photos/GYumuBnTqKc",
+                "tooltip": "Photo by E+N Photographies",
+                "url": "https://unsplash.com/photos/GYumuBnTqKc/download"
+            }],
+            "title": "Position: top",
+            "widget": "image"
+        }, {
+            "gridHeight": 1.5,
+            "gridWidth": 1,
+            "images": [{
+                "backgroundSize": "contain",
+                "link": "https://unsplash.com/photos/GYumuBnTqKc",
+                "tooltip": "Photo by E+N Photographies",
+                "url": "https://unsplash.com/photos/GYumuBnTqKc/download"
+            }],
+            "title": "Size: contain",
+            "widget": "image"
+        }, {
+            "gridWidth": 2,
+            "images": [{
+                "backgroundPosition": "center",
+                "link": "https://unsplash.com/photos/GYumuBnTqKc",
+                "tooltip": "Photo by E+N Photographies",
+                "url": "https://unsplash.com/photos/GYumuBnTqKc/download"
+            }],
+            "layout": {},
+            "title": "Position: center",
+            "widget": "image"
+        }, {
+            "gridHeight": 1.5,
+            "gridWidth": 1,
+            "images": [{
+                "backgroundSize": "cover",
+                "link": "https://unsplash.com/photos/GYumuBnTqKc",
+                "tooltip": "Photo by E+N Photographies",
+                "url": "https://unsplash.com/photos/GYumuBnTqKc/download"
+            }],
+            "title": "Size: cover",
+            "widget": "image"
+        }, {
+            "gridWidth": 2,
+            "images": [{
+                "backgroundPosition": "bottom",
+                "link": "https://unsplash.com/photos/GYumuBnTqKc",
+                "tooltip": "Photo by E+N Photographies",
+                "url": "https://unsplash.com/photos/GYumuBnTqKc/download"
+            }],
+            "title": "Position: bottom",
+            "widget": "image"
+        }]
+    }, {
+        "frequency": 1,
+        "layout": {
+            "gridColumns": 2,
+            "gridRows": 2
+        },
+        "name": "Filters",
+        "widgets": [{
+            "images": [{
+                "filters": "grayscale(100%)",
+                "tooltip": "Photo by E+N Photographies",
+                "url": "https://unsplash.com/photos/7BjmDICVloE/download"
+            }],
+            "widget": "image"
+        }, {
+            "images": [{
+                "filters": "sepia(100%)",
+                "tooltip": "Photo by E+N Photographies",
+                "url": "https://unsplash.com/photos/7BjmDICVloE/download"
+            }],
+            "widget": "image"
+        }, {
+            "images": [{
+                "filters": "blur(2px)",
+                "tooltip": "Photo by E+N Photographies",
+                "url": "https://unsplash.com/photos/7BjmDICVloE/download"
+            }],
+            "widget": "image"
+        }, {
+            "images": [{
+                "filters": "contrast(150%) brightness(92%) saturate(150%)",
+                "tooltip": "Photo by E+N Photographies",
+                "url": "https://unsplash.com/photos/7BjmDICVloE/download"
+            }],
+            "widget": "image"
+        }]
+    }]
+}

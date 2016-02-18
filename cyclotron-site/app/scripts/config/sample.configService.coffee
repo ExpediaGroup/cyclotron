@@ -63,6 +63,10 @@ cyclotronServices.factory 'configService', (commonConfigService) ->
 
         # Enable or disable analytic tracking for dashboards
         enableAnalytics: false
+
+        # Logging settings
+        logging:
+            enableDebug: false
         
         # List of neighboring Cyclotron instances
         cyclotronEnvironments: cyclotronEnvironments

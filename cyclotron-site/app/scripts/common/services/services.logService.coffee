@@ -15,16 +15,37 @@
 ###
 
 cyclotronServices.factory 'logService', ($window, configService) ->
+
+    now = -> $window.moment().format 'HH:mm:ss'
+
     getString = (obj) ->
         if _.isObject obj
             JSON.stringify(obj)
         else
             obj
 
-    {
-        info: (obj) ->
-            $window.console.log getString(obj)
+    # Logs any number of arguments prefixed with the time
+    writeLog = (args) ->
+        $window.console.log '[' + now() + '] ' + _.map(args, getString).join ' '
 
-        time: (obj) ->
-            $window.console.log $window.moment().format() + ' ' + getString(obj)
+    service = {
+        debug: ->
+            args = Array.prototype.slice.call arguments
+            args.unshift 'DEBUG:'
+            writeLog args
+
+        info: ->
+            args = Array.prototype.slice.call arguments
+            args.unshift 'INFO:'
+            writeLog args
+        
+        error: ->
+            args = Array.prototype.slice.call arguments
+            args.unshift 'ERROR:'
+            writeLog args            
     }
+
+    if configService.logging?.enableDebug == false
+        service.debug = -> return
+
+    return service

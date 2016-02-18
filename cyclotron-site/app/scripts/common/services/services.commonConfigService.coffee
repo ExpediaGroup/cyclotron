@@ -26,10 +26,16 @@ cyclotronServices.factory 'commonConfigService', ->
 
     exports = {
 
-        version: '1.24.0'
+        version: '1.25.0'
+
+        logging: 
+            enableDebug: false
 
         authentication:
+            enable: false
             loginMessage: 'Please login using your LDAP username and password.'
+
+        enableAnalytics: false
 
         # Dashboard settings
         dashboard:
@@ -475,7 +481,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     order: 15
                                 postProcessor:
                                     label: 'Post-Processor'
-                                    description: 'Specifies an optional JavaScript function that can inspect and modify the Crunch result before it is sent to the Widgets. If this value is not an JavaScript function, it will be ignored.'
+                                    description: 'Specifies an optional JavaScript function that can inspect and modify the result before it is sent to the Widgets. If this value is not an JavaScript function, it will be ignored.'
                                     placeholder: 'JavaScript Function'
                                     type: 'editor'
                                     editorMode: 'javascript'
@@ -1838,9 +1844,131 @@ cyclotronServices.factory 'commonConfigService', ->
                         order: 10
                     refresh: 
                         label: 'Refresh'
-                        description: 'Optional; enables reloading the iframe contents periodically every N seconds.'
+                        description: 'Optional number of seconds; enables reloading the iframe contents periodically every N seconds.'
                         placeholder: 'Seconds'
                         type: 'integer'
+                        required: false
+                        order: 11
+
+            image:
+                name: 'image'
+                icon: 'fa-image-o'
+                properties:
+                    images:
+                        label: 'Images'
+                        singleLabel: 'Image'
+                        description: 'One or more Images to display in this widget.'
+                        type: 'propertyset[]'
+                        required: true
+                        default: []
+                        order: 10
+                        properties:
+                            url:
+                                label: 'URL'
+                                description: 'URL to the image to be displayed.'
+                                placeholder: 'Url'
+                                inlineJs: true
+                                required: true
+                                type: 'string'
+                                order: 1
+                            link:
+                                label: 'Link'
+                                description: 'Optional, specifies a URL that will be opened if the image is clicked on.'
+                                placeholder: 'URL'
+                                type: 'url'
+                                inlineJs: true
+                                required: false
+                                order: 13
+                            tooltip:
+                                label: 'Tooltip'
+                                description: 'Sets the tooltip of the image.'
+                                placeholder: 'Tooltip'
+                                type: 'string'
+                                inlineJs: true
+                                required: false
+                                defaultHidden: true
+                                order: 2
+                            backgroundSize:
+                                label: 'Background-Size'
+                                description: 'Specifies the CSS property background-size, which determines how the image is fit into the Widget.'
+                                type: 'string'
+                                inlineJs: true
+                                required: false
+                                defaultHidden: true
+                                options:
+                                    auto:
+                                        value: 'auto'
+                                    contain:
+                                        value: 'contain'
+                                    cover:
+                                        value: 'cover'
+                                    '100%':
+                                        value: '100%'
+                                order: 3
+                            backgroundPosition:
+                                label: 'Background Position'
+                                description: 'Specifies the CSS property background-position, which determines where the image is positioned in the Widget.'
+                                type: 'string'
+                                inlineJs: true
+                                required: false
+                                default: 'center'
+                                defaultHidden: true
+                                options:
+                                    center:
+                                        value: 'center'
+                                    top:
+                                        value: 'top'
+                                    bottom:
+                                        value: 'bottom'
+                                    left:
+                                        value: 'left'
+                                    right: 
+                                        value: 'right'
+                                order: 4
+                            backgroundColor:
+                                label: 'Background Color'
+                                description: 'Optionally specifies the CSS property background-color, which is drawn behind this image.  It may appear if the image does not cover the Widget, or if the image is not opaque.'
+                                type: 'string'
+                                inlineJs: true
+                                required: false
+                                defaultHidden: true
+                                order: 5
+                            backgroundRepeat:
+                                label: 'Background Repeat'
+                                description: 'Optionally specifies the CSS property background-repeat, which determiens if or how the image is repeated within the Widget.'
+                                type: 'string'
+                                inlineJs: true
+                                required: false
+                                default: 'no-repeat'
+                                defaultHidden: true
+                                options:
+                                    'no-repeat':
+                                        value: 'no-repeat'
+                                    'repeat':
+                                        value: 'repeat'
+                                    'repeat-x':
+                                        value: 'repeat-x'
+                                    'repeat-y':
+                                        value: 'repeat-y'
+                                    'space':
+                                        value: 'space'
+                                    'round':
+                                        value: 'round'
+                                order: 6
+                            filters:
+                                label: 'Filters'
+                                description: 'Optionally applies one or more CSS filters to the image. If provided, it should be a string containing one or more filters, separated by spaces.'
+                                type: 'string'
+                                inlineJs: true
+                                required: false
+                                defaultHidden: true
+                                order: 7
+                    duration: 
+                        label: 'Auto-Rotate Duration'
+                        description: 'Optional number of seconds; enables rotating among a set of images periodically.'
+                        placeholder: 'Seconds'
+                        type: 'integer'
+                        default: 0
                         required: false
                         order: 11
                 
@@ -1986,7 +2114,6 @@ cyclotronServices.factory 'commonConfigService', ->
                         type: 'url'
                         required: false
                         order: 13
-
                     filters: 
                         label: 'Filters'
                         description: "Optional, but if provided, specifies name-value pairs used to filter the data source's result set. This has no effect if the dataSource property is not set.\nOnly the first row of the data source is used to get data, so this property can be used to narrow down on the correct row"
@@ -2428,6 +2555,71 @@ cyclotronServices.factory 'commonConfigService', ->
                         required: false
                         defaultHidden: true
                         order: 20
+
+            youtube:
+                name: 'youtube'
+                icon: 'fa-youtube'
+                properties:
+                    videoId:
+                        label: 'Video / Playlist ID'
+                        description: 'A YouTube video ID or Playlist ID. Multiple video IDs can be separated by commas.'
+                        type: 'string'
+                        inlineJs: true
+                        placeholder: 'ID'
+                        required: true
+                        order: 10
+                    autoplay: 
+                        label: 'Auto-Play'
+                        description: 'If true, automatically plays the video when the Widget is loaded.'
+                        type: 'boolean'
+                        inlineJs: true
+                        default: true
+                        required: false
+                        order: 13
+                    loop: 
+                        label: 'Loop'
+                        description: 'If true, automatically loops the video when it completes.'
+                        type: 'boolean'
+                        inlineJs: true
+                        default: true
+                        required: false
+                        order: 14
+                    enableKeyboard: 
+                        label: 'Enable Keyboard'
+                        description: 'If true, enables keyboard controls which are disabled by default.'
+                        type: 'boolean'
+                        inlineJs: true
+                        default: false
+                        required: false
+                        defaultHidden: true
+                        order: 15
+                    enableControls: 
+                        label: 'Enable Controls'
+                        description: 'If true, enables on-screen video controls which are disabled by default.'
+                        type: 'boolean'
+                        inlineJs: true
+                        default: false
+                        required: false
+                        defaultHidden: true
+                        order: 16
+                    showAnnotations:
+                        label: 'Show Annotations'
+                        description: 'If true, displays available annotations over the video.'
+                        type: 'boolean'
+                        inlineJs: true
+                        default: false
+                        required: false
+                        defaultHidden: true
+                        order: 17
+                    showRelated: 
+                        label: 'Show Related'
+                        description: 'If true, displays related videos at the end of this video.'
+                        type: 'boolean'
+                        inlineJs: true
+                        default: false
+                        required: false
+                        defaultHidden: true
+                        order: 18
     }  
 
 

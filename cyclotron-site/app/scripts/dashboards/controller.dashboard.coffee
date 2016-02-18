@@ -63,7 +63,7 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location,
     $scope.preload = (specificIndex) ->
         # Avoid preloading twice
         return if $scope.currentPage.length > 1
-        logService.time('Preload')
+        logService.debug 'Preloading next page'
 
         # Load a specific page if provided
         # Else increment the page index and load the current page
@@ -85,8 +85,9 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location,
     # Removes the current page, so the preloaded page appears
     #
     $scope.rotate = ->          
-        logService.time('Rotate')
-        $window.Cyclotron.parameters.page = $scope.currentPageIndex + 1
+        pageNumber = $scope.currentPageIndex + 1
+        logService.debug 'Rotating to page', pageNumber
+        $window.Cyclotron.parameters.page = pageNumber
 
         # Remove the current page
         if $scope.currentPage.length > 1
@@ -122,7 +123,7 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location,
     # Move forward in the dashboard
     $scope.moveForward = ->
         return unless $scope.canMoveForward()
-        logService.time('MoveForward')
+        logService.debug 'User moving forward'
 
         # Preload the next page
         $scope.preload() unless $scope.currentPage.length > 1
@@ -132,6 +133,7 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location,
 
     $scope.moveBack = ->
         return unless $scope.canMoveBack()
+        logService.debug 'User moving backward'
 
         # Pop the current page off
         indexHistory.pop()

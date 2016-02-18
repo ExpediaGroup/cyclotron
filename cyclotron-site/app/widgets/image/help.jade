@@ -1,0 +1,77 @@
+h3 Image Widget
+p.
+    The Image Widget is used to display one or more images in a Dashboard Widget.  If multiple images
+    are configured and a duration is provided, the Widget will automatically rotate through all the images repeatedly.
+
+p.
+    Images can be configured with a tooltip that appears on hover, or a link that is opened when the image is clicked.
+
+h4 Size and Position
+
+p 
+    | The default behavior of the Image Widget is to center the image and scale to cover the entire Widget, cropping the sides as needed.  This works fairly well for many images and adjusts for various aspect ratios without distorting the image.  It may be necessary to modify the defaults for certain images or aspect ratios.  The properties follow standard CSS3 properties, so more information can be found on 
+    a(href='https://developer.mozilla.org/en-US/docs/Web/CSS/background-size', target='_blank') background-image
+    | , 
+    a(href='https://developer.mozilla.org/en-US/docs/Web/CSS/background-position', target='_blank') background-position
+    | , 
+    a(href='https://developer.mozilla.org/en-US/docs/Web/CSS/background-size', target='_blank') background-size
+    | , and 
+    a(href='https://developer.mozilla.org/en-US/docs/Web/CSS/background-repeat', target='_blank') background-repeat
+    | .  All of these properties have many possible configurations, many of which cannot be entered via Cyclotron's Editor UI.  However, editing the underlying JSON allows one to specify more complex values.
+
+p.
+    For sizing, the default value is "cover", which scales and covers the entire Widget, cropping the sides.  Alternately, "contain" will scale the image to fit the entire image in the Widget, without cropping.
+
+p.
+    Positioning may be relevent when the image is automatically cropped.  Setting a value of "top" or "bottom" will cause the crop to focus on that part of the image, which is useful if the focal point of the image is not in the center.
+
+h4 Properties
+p.
+    These are the properties specific to this widget.  
+    General Cyclotron widget properties are not repeated here (e.g. layout properties).
+
+property-table(properties='config.widgets.image.properties')
+
+h4 Image Properties
+property-table(properties='config.widgets.image.properties.images.properties')
+
+
+h3 Examples
+
+h4 Basic Usage
+
+p At its most basic, this Widget displays an image:
+pre.code.
+    "widgets": [{
+        images": [{
+            "url": "https://unsplash.com/photos/7BjmDICVloE/download"
+        }],
+        "widget": "image"
+    }]
+
+h4 Sizing and Positioning
+p See above for more information on the size and position features of this Widget.
+
+pre.code.
+    {
+        "images": [{
+            "backgroundPosition": "top",
+            "backgroundSize": "contain",
+            "url": "https://unsplash.com/photos/GYumuBnTqKc/download"
+        }],
+        "widget": "image"
+    }
+
+h4 Filters
+
+p Various CSS filters are available for modifying the display of the images, and can be combined together. See 
+    a(href='https://developer.mozilla.org/en-US/docs/Web/CSS/filter', target='_blank') here
+    |  for more information, including browser compatibility.
+pre.code.
+    "widgets": [{
+        images": [{
+            "filters": "contrast(150%) brightness(92%) saturate(150%)",
+            "url": "https://unsplash.com/photos/7BjmDICVloE/download"
+        }],
+        "widget": "image"
+    }]

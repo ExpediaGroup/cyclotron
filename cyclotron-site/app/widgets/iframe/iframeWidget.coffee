@@ -18,12 +18,13 @@
 # Iframe Widget
 #
 cyclotronApp.controller 'IframeWidget', ($scope) ->
+    
     $scope.getUrl = ->
         return '' if _.isEmpty($scope.widget.url)
 
         url = $scope.widget.url
 
-        if $scope.widget.url.indexOf('http') != 0
+        if url.indexOf('http') != 0
             url = 'http://' + url
 
         return $scope.$sce.trustAsResourceUrl(url)

@@ -2,12 +2,10 @@ h3 Data Sources
 
 p.
     Cyclotron provides several Data Source Types, each of which connects to an external service to 
-    pull in data for the Dashboard.  Most Data Sources and Widgets consume a common row/column interface, so Widgets and 
-    Data Sources are interchangeable.  Each Data Source handles converting data into this format automatically.
+    pull in data for the Dashboard. Data Sources and Widgets consume a common row/column interface, so Widgets and Data Sources are interchangeable. Each Data Source handles converting data into this format automatically.
 
 p.
-    Here is an example of the tabular data format, consisting of an array of rows.
-    Each row is a JavaScript object, where the keys represent columns and the values represent the value of each column.
+    Data Sources use a simple tabular data format, consisting of an array of rows. Each row is a JavaScript object, where the keys represent columns and the values represent the value of each column.  Here's an example:
 
 pre.code.
     [
@@ -19,11 +17,9 @@ pre.code.
     ]
 
 p.
-    The easiest way to verify that a Data Source is working is to use the Table Widget.  By default, the Table 
-    Widget will display all columns and rows, so it can be used to quickly view and verify the data available 
-    from a Data Source. Be aware that the Table Widget will automatically camel-case the column headers, 
-    but the correct capitalization must be used elsewhere to reference the columns.
-
+    Cyclotron is case-sensitive, which is especially significant when working with Data Sources.  When referencing column names in the Data Source, the correct capitalization must be used to match the upstream source.  Cyclotron itself does not modify the original capitalization of columns.
+p.
+    The easiest way to verify that a Data Source is working is to use the Table Widget.  By default, the Table Widget will display all columns and rows, so it can be used to quickly view and verify the data available from a Data Source. Be aware that the Table Widget will automatically camel-case the column headers, but the correct capitalization must be used elsewhere to reference the columns.
 
 h4 Common Properties
 

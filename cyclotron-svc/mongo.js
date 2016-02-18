@@ -66,7 +66,7 @@ var revisionSchema = mongoose.Schema({
 var userSchema = mongoose.Schema({
     name               : {type: String, required: true},
     sAMAccountName     : {type: String, required: true, unique: true},
-    email              : {type: String, required: true, unique: true},
+    email              : {type: String, required: true},
     distinguishedName  : {type: String, required: true, unique: true},
     givenName          : {type: String},
     title              : {type: String},

@@ -33,14 +33,11 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
     $scope.loading = false
     $scope.dataSourceError = false
     $scope.dataSourceErrorMessage = null
+    
     $scope.columnGroups = []
-
-    $scope.widgetTitle = -> _.jsExec($scope.widget.title)
     sortFunction = _.jsEval $scope.widget.sortFunction
-
-    # Load data source
-    dsDefinition = dashboardService.getDataSource($scope.dashboard, $scope.widget)
-    $scope.dataSource = dataService.get(dsDefinition)
+    
+    $scope.widgetTitle = -> _.jsExec($scope.widget.title)
 
     $scope.linkTarget = (column) ->
         if column.openLinksInNewWindow?
@@ -251,26 +248,35 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
 
         return expandedColumns
 
-    # Load data from the data source and run the callback
-    $scope.loadData = (callback) ->
-        # Reset scope variables
-        $scope.loading = true
-        $scope.dataSourceError = false
-        $scope.dataSourceErrorMessage = null
+    $scope.reload = ->
+        $scope.dataSource.execute(true)
 
-        $scope.dataSource.getData(dsDefinition, (originalData, headers, isUpdate) ->
+    # Load Data Source
+    dsDefinition = dashboardService.getDataSource $scope.dashboard, $scope.widget
+    $scope.dataSource = dataService.get dsDefinition
+    
+    # Initialize
+    if $scope.dataSource?
+        $scope.dataVersion = 0
+        $scope.loading = true
+
+        # Data Source (re)loaded
+        $scope.$on 'dataSource:' + dsDefinition.name + ':data', (event, eventData) ->
+            return unless eventData.version > $scope.dataVersion
+            $scope.dataVersion = eventData.version
 
             $scope.dataSourceError = false
             $scope.dataSourceErrorMessage = null
 
-            # Filter the data if needed
+            data = eventData.data[dsDefinition.resultSet].data
+            isUpdate = eventData.isUpdate
+            
+            # Filter the data if the widget has "filters"
             if $scope.widget.filters?
-                data = dataService.filter(originalData, $scope.widget.filters)
-            else
-                data = originalData
+                data = dataService.filter(data, $scope.widget.filters)
 
-            # Check for no Data
-            if _.isEmpty(data)
+            # Check for no data
+            if _.isEmpty data
                 $scope.sortedRows = null
                 $scope.loading = false
 
@@ -350,32 +356,24 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
             # Save sorted rows (will be sorted later if sortBy is provided)
             $scope.sortedRows = data
 
-            callback() if _.isFunction(callback)
+            $scope.loading = false
 
-        , (errorMessage, status) ->
-            # Error callback
+        # Data Source error
+        $scope.$on 'dataSource:' + dsDefinition.name + ':error', (event, data) ->
             $scope.dataSourceError = true
-            $scope.dataSourceErrorMessage = errorMessage
+            $scope.dataSourceErrorMessage = data.error
             $scope.nodata = null
             $scope.sortedRows = null
             $scope.columns = null
-            callback() if _.isFunction(callback)
-        , ->
-            $scope.loading = true
-        )
-
-
-    $scope.initialLoad = ->
-        $scope.loadData ->
-            # Post-load initialization
             $scope.loading = false
 
-            # Watches
-            $scope.$watch('sortBy', $scope.sortRows, true)
+        # Data Source loading
+        $scope.$on 'dataSource:' + dsDefinition.name + ':loading', ->
+            $scope.loading = true
 
-    $scope.reload = ->
-        $scope.dataSource.execute(true)
+        # Watches
+        $scope.$watch('sortBy', $scope.sortRows, true)
 
-    # Initialize
-    if not _.isUndefined(dsDefinition)
-        $scope.initialLoad()
+        # Initialize the Data Source
+        $scope.dataSource.init dsDefinition
+

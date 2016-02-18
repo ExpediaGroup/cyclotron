@@ -1,0 +1,58 @@
+h3 YouTube Widget
+p.
+    The YouTube Widget is used to display one or more videos in a Dashboard Widget. It supports comma-separated lists of videos, or YouTube Playlists. By default, it will automatically begin playing when the Widget is loaded, and loop the video on completion.
+
+p.
+    In order to display videos or playlists, the video ID or playlist ID is needed. These can be found in the respective YouTube URLs. Playlist IDs always start with "PL".
+
+h4 Properties
+p.
+    These are the properties specific to this widget. 
+    General Cyclotron widget properties are not repeated here (e.g. layout properties).
+
+property-table(properties='config.widgets.youtube.properties')
+
+h3 Examples
+
+h4 Basic Usage
+
+p At its most basic, this Widget displays an YouTube video:
+pre.code.
+    "widgets": [{
+        "videoId": "uxpDa-c-4Mc",
+        "widget": "youtube"
+    }]
+
+h4 Fullscreen Playback
+
+p In order to display a video full-size on a Dashboard page without the standard border, set the "fullscreen" style on the Page:
+pre.code.
+    "pages": [{
+        "layout": {
+            "gridColumns": 1,
+            "gridRows": 1
+        },
+        "style": "fullscreen",
+        "widgets": [{
+            "videoId": "uxpDa-c-4Mc",
+            "widget": "youtube"
+        }]
+    }]
+
+h4 Multiple Videos
+
+p Multiple videos can be played in sequence by providing a comma-separated list of IDs:
+pre.code.
+    "widgets": [{
+        "videoId": "cS-hFKC_RKI,pnN2BNrSrXY,72__Mdioty8",
+        "widget": "youtube"
+    }]
+
+h4 Playlists
+
+p If a playlist ID is provided, the entire playlist will start playing.  Note that playlist IDs always start with "PL":
+pre.code.
+    "widgets": [{
+        "videoId": "PLdgCSoJzrmKGadxAc1WHfukyzxFII2_-u",
+        "widget": "youtube"
+    }]

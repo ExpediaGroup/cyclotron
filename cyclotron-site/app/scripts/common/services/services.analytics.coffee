@@ -14,7 +14,7 @@
 # language governing permissions and limitations under the License. 
 ###
 
-cyclotronServices.factory 'analyticsService', ($http, $q, $localForage, $location, userService, configService) ->
+cyclotronServices.factory 'analyticsService', ($http, $q, $localForage, $location, configService, logService, userService) ->
 
     # Helper for API methods that take optional dashboardId/startDate/endDate
     analyticsHelper = (name, endpoint, dashboardId, startDate, endDate) ->
@@ -152,6 +152,7 @@ cyclotronServices.factory 'analyticsService', ($http, $q, $localForage, $locatio
                 if userService.cachedUserId?
                     req.user = userService.cachedUserId
                 
+            logService.debug 'Page View Analytics:', req
             $http.post(configService.restServiceUrl + '/analytics/pageviews?newVisit=' + newVisit + '&' + 'exporting=' + exports.isExporting, req)
 
     # Record the execution of a Data Source
@@ -170,6 +171,8 @@ cyclotronServices.factory 'analyticsService', ($http, $q, $localForage, $locatio
             success: success
             duration: duration
             details: details
+
+        logService.debug 'Data Source Analytics:', req
 
         $http.post(configService.restServiceUrl + '/analytics/datasources', req)
 
@@ -192,6 +195,7 @@ cyclotronServices.factory 'analyticsService', ($http, $q, $localForage, $locatio
                 if userService.cachedUserId?
                     req.user = userService.cachedUserId
 
+            logService.debug 'Event Analytics:', req
             $http.post(configService.restServiceUrl + '/analytics/events', req)
 
     return exports

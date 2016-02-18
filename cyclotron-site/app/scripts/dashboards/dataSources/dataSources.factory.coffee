@@ -1,5 +1,5 @@
 ###
-# Copyright (c) 2013-2015 the original author or authors.
+# Copyright (c) 2013-2016 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
 # you may not use this file except in compliance with the License. 
@@ -29,17 +29,23 @@
 # Support multiple result sets per Data Source.  Implementations using this factory which do not
 # allow multiple result sets should return a result set named '0'.
 #
-cyclotronDataSources.factory 'dataSourceFactory', ($interval, configService, dataService, analyticsService) ->
+cyclotronDataSources.factory 'dataSourceFactory', ($rootScope, $interval, configService, dataService, analyticsService, logService) ->
 
     {
-        create: (dataSourceName, runner, analyticsDetails) ->
+        create: (dataSourceType, runner, analyticsDetails) ->
+
             {
                 initialize: (options) ->
+                    logService.debug 'Initializing Data Source:', options.name
 
                     cachedResult = null
                     q = null
                     clients = []
                     firstLoad = true
+                    dataVersion = 0
+
+                    # Shared state for each Data Source
+                    state = {}
                     
                     # Load Pre-Processor
                     preProcessor = _.jsEval options.preProcessor
@@ -49,8 +55,43 @@ cyclotronDataSources.factory 'dataSourceFactory', ($interval, configService, dat
                     postProcessor = _.jsEval options.postProcessor
                     if !_.isFunction(postProcessor) then postProcessor = null
 
+                    broadcastLoading = ->
+                        $rootScope.$broadcast('dataSource:' + options.name + ':loading')
+
+                        # Deprecated client callbacks
+                        _.each clients, (client) ->
+                            if client.loadingCallback? && _.isFunction(client.loadingCallback)
+                                client.loadingCallback()
+                            return
+
+                    broadcastError = (error) ->
+                        $rootScope.$broadcast('dataSource:' + options.name + ':error', { error: error })
+
+                        # Invoke the errorCallback for each client
+                        _.each clients, (client) -> 
+                            client.errorCallback(error) if _.isFunction(client.errorCallback)
+
+                    broadcastData = ->
+                        logService.debug 'Broadcasting Data Source:', options.name
+
+                        # Broadcast results
+                        $rootScope.$broadcast('dataSource:' + options.name + ':data', { 
+                            data: cachedResult
+                            isUpdate: !firstLoad 
+                            version: dataVersion
+                        })
+
+                        # Deprecated client callbacks
+                        _.each clients, (client) ->
+                            resultSet = client.dataSourceDefinition.resultSet
+                            client.callback(
+                                cachedResult?[resultSet]?.data, 
+                                cachedResult?[resultSet]?.columns, 
+                                !firstLoad)
+                            return
+
                     startRunner = ->
-                        console.log moment().format() + ' ' + dataSourceName + ' Data Source "' + options.name + '" Started'
+                        logService.info dataSourceType, 'Data Source "' + options.name + '" Started'
                         startTime = performance.now()
 
                         currentOptions = _.compile options, options
@@ -70,21 +111,18 @@ cyclotronDataSources.factory 'dataSourceFactory', ($interval, configService, dat
 
                         # Define failure callback
                         runnerError = (error) ->
-                            console.log moment().format() + ' ' + dataSourceName + ' Data Source "' + options.name + '" Failed'
+                            logService.error dataSourceType, 'Data Source "' + options.name + '" Failed'
                             sendAnalytics false, { errorMessage: error }
 
                             cachedResult = null
                             q = null
-                            
-                            # Invoke the errorCallback for each client
-                            _.each clients, (client) -> 
-                                client.errorCallback(error) if _.isFunction(client.errorCallback)
+
+                            broadcastError error
 
                         # Define success callback
                         # Expects: result: { resultSetName: { data: [], columns: [] } }
                         runnerSuccess = (result) ->
-
-                            console.log moment().format() + ' ' + dataSourceName + ' Data Source "' + currentOptions.name + '" Completed'
+                            logService.info dataSourceType, 'Data Source "' + currentOptions.name + '" Completed'
                             sendAnalytics true
 
                             # Save cache
@@ -116,24 +154,44 @@ cyclotronDataSources.factory 'dataSourceFactory', ($interval, configService, dat
 
                                 return 
 
-                            # Invoke the callback for each client
-                            _.each clients, (client) ->
-                                resultSet = client.dataSourceDefinition.resultSet
-                                client.callback(
-                                    cachedResult?[resultSet]?.data, 
-                                    cachedResult?[resultSet]?.columns, 
-                                    !firstLoad)
-                                return
+                            # Increment Data Version
+                            dataVersion = dataVersion + 1
+
+                            # Broadcast results
+                            broadcastData()
 
                             firstLoad = false
 
                         # Start and attach success/fail handlers
-                        q = runner(currentOptions)
+                        q = runner(currentOptions, state)
                         q.then runnerSuccess, runnerError
 
                         return q
 
                     return {
+                        # Initialization method:  called by Widgets to kick-start the Data Source
+                        #  - If data has been loaded before, re-broadcasts it
+                        #  - Starts executing, unless already loading or deferred
+                        #  - Schedules automatic refresh if configured
+                        init: (dataSourceDefinition) ->
+                            # Set the default result set if not specified
+                            dataSourceDefinition.resultSet ?= '0'
+
+                            # Check the cache for a previously-retrieved result
+                            if cachedResult?
+                                broadcastData()
+
+                            else if options.deferred == true and firstLoad == true
+                                return
+
+                            else if !q?
+                                # Start executing and return a promise
+                                startRunner()
+
+                                # Schedule refresh if needed
+                                if options.refresh?
+                                    $interval startRunner, options.refresh * 1000
+
                         # Get the latest resultset for this Data Source.  
                         # Optional resultSet can be provided, otherwise the default is used.
                         # Returns null if the data is not loaded yet.
@@ -147,14 +205,11 @@ cyclotronDataSources.factory 'dataSourceFactory', ($interval, configService, dat
 
                         execute: (toggleSpinners) ->
                             if toggleSpinners? && toggleSpinners == true
-                                # Notify each client that it is currently loading
-                                _.each clients, (client) ->
-                                    if client.loadingCallback? && _.isFunction(client.loadingCallback)
-                                        client.loadingCallback()
-                                    return
+                                broadcastLoading()
 
                             startRunner()
 
+                        # Deprecated for use by Widgets: replaced by $broadcast
                         getData: (dataSourceDefinition, callback, errorCallback, loadingCallback) ->
 
                             # Abort if the callback is not valid
@@ -194,6 +249,7 @@ cyclotronDataSources.factory 'dataSourceFactory', ($interval, configService, dat
                             # Else, the existing q will invoke all callbacks when it completes.
                             # All subsequent calls will return the cache
                             # Refresh is scheduled once and invokes all callbacks every time it completes
+
                     }
             }
     }

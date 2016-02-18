@@ -18,11 +18,14 @@
 # Stoplight Widget
 #
 cyclotronApp.controller 'StoplightWidget', ($scope, dashboardService, dataService) ->
+    
     $scope.loading = false
-
-    $scope.widgetTitle = -> _.jsExec($scope.widget.title)
+    $scope.dataSourceError = false
+    $scope.dataSourceErrorMessage = null
 
     $scope.activeColor = null
+
+    $scope.widgetTitle = -> _.jsExec($scope.widget.title)
 
     $scope.evalColors = (row) ->
         rules = $scope.widget.rules
@@ -41,31 +44,37 @@ cyclotronApp.controller 'StoplightWidget', ($scope, dashboardService, dataServic
 
         $scope.activeColor = null
 
-    $scope.loadData = ->
-        $scope.loading = true
-        $scope.dataSourceError = false
-        $scope.dataSourceErrorMessage = null
+    $scope.reload = ->
+        $scope.dataSource.execute(true)
 
-        # Load data source
-        dsDefinition = dashboardService.getDataSource($scope.dashboard, $scope.widget)
-        $scope.dataSource = dataService.get(dsDefinition)
+    # Load Data Source
+    dsDefinition = dashboardService.getDataSource $scope.dashboard, $scope.widget
+    $scope.dataSource = dataService.get dsDefinition
+    
+    # Initialize
+    if $scope.dataSource?
+        $scope.dataVersion = 0
         $scope.loading = true
 
-        # Load data from the data source
-        $scope.dataSource.getData dsDefinition, (data, headers, isUpdate) ->
+        # Data Source (re)loaded
+        $scope.$on 'dataSource:' + dsDefinition.name + ':data', (event, eventData) ->
+            return unless eventData.version > $scope.dataVersion
+            $scope.dataVersion = eventData.version
 
             $scope.dataSourceError = false
             $scope.dataSourceErrorMessage = null
 
-            # Filter the data if the widget has filters
+            data = eventData.data[dsDefinition.resultSet].data
+            
+            # Filter the data if the widget has "filters"
             if $scope.widget.filters?
                 data = dataService.filter(data, $scope.widget.filters)
 
-            # Sort the data if the widget has sortBy
+            # Sort the data if the widget has "sortBy"
             if $scope.widget.sortBy?
                 data = dataService.sort(data, $scope.widget.sortBy)
 
-            # Check for no Data
+            # Check for no data
             if _.isEmpty(data) && $scope.widget.noData?
                 $scope.nodata = _.jsExec($scope.widget.noData)
             else
@@ -76,21 +85,19 @@ cyclotronApp.controller 'StoplightWidget', ($scope, dashboardService, dataServic
 
             $scope.loading = false
 
-        , (errorMessage, status) ->
-            # Error callback
-            $scope.loading = false
+        # Data Source error
+        $scope.$on 'dataSource:' + dsDefinition.name + ':error', (event, data) ->
             $scope.dataSourceError = true
-            $scope.dataSourceErrorMessage = errorMessage
+            $scope.dataSourceErrorMessage = data.error
             $scope.nodata = null
-        , ->
-            # Loading callback
+            $scope.loading = false
+
+        # Data Source loading
+        $scope.$on 'dataSource:' + dsDefinition.name + ':loading', ->
             $scope.loading = true
+        
+        # Initialize the Data Source
+        $scope.dataSource.init dsDefinition
 
-        $scope.reload = ->
-            $scope.dataSource.execute(true)
-
-    # Data Source
-    if $scope.widget.dataSource?
-        $scope.loadData()
     else
         $scope.evalColors({})

@@ -1,3 +1,23 @@
+# 1.25.0 (02/18/2016)
+
+## Features
+
+ - Image Widget: added a new Widget for displaying images.
+
+ - YouTube Widget: added a new Widget for displaying YouTube videos.
+
+ - Data Source Broadcasting: rewrote all Data Sources and Widgets to communicate using global events.  This resolves memory leaks and performance degredation due to unremoved callbacks.
+
+ - Improved logging, and added a configurable property to enable debug logging (globally)
+
+## Bug Fixes
+
+ - Removed unique constraint on email field for Users
+
+## Breaking Changes
+
+ - The Data Source api method 'getData()' has been deprecated.  Any custom Widgets should be rewritten to follow the new event-based messaging pattern.  Any custom Data Sources which use the Data Source Factory (recommended) will automatically use the new pattern.
+
 # 1.24.0 (02/04/2016)
 
 ## Features

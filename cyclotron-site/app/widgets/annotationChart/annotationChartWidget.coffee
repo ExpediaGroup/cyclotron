@@ -23,18 +23,14 @@ cyclotronApp.controller 'AnnotationChartWidget', ($scope, configService, dashboa
     $scope.dataSourceError = false
     $scope.dataSourceErrorMessage = null
 
-    $scope.widgetTitle = -> _.jsExec $scope.widget.title
-
-    # Load data source
-    dsDefinition = dashboardService.getDataSource($scope.dashboard, $scope.widget)
-    $scope.dataSource = dataService.get(dsDefinition)
-
     widgetConfig = configService.widgets.annotationChart
     themeOptions = widgetConfig.themes[$scope.widget.theme]?.options || {}
     
     $scope.chartObject =
         type: 'AnnotationChart'
         options: _.assign _.cloneDeep(widgetConfig.options), themeOptions
+
+    $scope.widgetTitle = -> _.jsExec $scope.widget.title
 
     $scope.updateChart = (data) ->
         return unless $scope.widget.xAxis.column? and $scope.widget.series?
@@ -115,27 +111,40 @@ cyclotronApp.controller 'AnnotationChartWidget', ($scope, configService, dashboa
         $scope.chartObject.data = chartData
         _.merge $scope.chartObject.options, _.compile($scope.widget.options, {})
 
-    # Load data from the data source
-    $scope.loadData = ->
-        # Reset scope variables
-        $scope.loading = true
-        $scope.dataSourceError = false
-        $scope.dataSourceErrorMessage = null
+    $scope.reload = ->
+        $scope.dataSource.execute(true)
 
-        $scope.dataSource.getData(dsDefinition, (data, headers, isUpdate, diff) ->
+    $scope.handleError = (message) ->
+        console.log 'Annotation Chart error: ' + message
+
+    # Load Data Source
+    dsDefinition = dashboardService.getDataSource $scope.dashboard, $scope.widget
+    $scope.dataSource = dataService.get dsDefinition
+    
+    # Initialize
+    if $scope.dataSource?
+        $scope.dataVersion = 0
+        $scope.loading = true
+
+        # Data Source (re)loaded
+        $scope.$on 'dataSource:' + dsDefinition.name + ':data', (event, eventData) ->
+            return unless eventData.version > $scope.dataVersion
+            $scope.dataVersion = eventData.version
 
             $scope.dataSourceError = false
             $scope.dataSourceErrorMessage = null
 
-            # Filter the data with the widget filters if needed
+            data = eventData.data[dsDefinition.resultSet].data
+            
+            # Filter the data if the widget has "filters"
             if $scope.widget.filters?
                 data = dataService.filter(data, $scope.widget.filters)
 
-            # Sort the data if the widget has sortBy
+            # Sort the data if the widget has "sortBy"
             if $scope.widget.sortBy?
                 data = dataService.sort(data, $scope.widget.sortBy)
 
-            # Check for no Data
+            # Check for no data
             if _.isEmpty(data) && $scope.widget.noData?
                 $scope.nodata = _.jsExec($scope.widget.noData)
             else
@@ -144,23 +153,16 @@ cyclotronApp.controller 'AnnotationChartWidget', ($scope, configService, dashboa
 
             $scope.loading = false
 
-        , (errorMessage, status) ->
+        # Data Source error
+        $scope.$on 'dataSource:' + dsDefinition.name + ':error', (event, data) ->
+            $scope.dataSourceError = true
+            $scope.dataSourceErrorMessage = data.error
+            $scope.nodata = null
             $scope.loading = false
 
-            # Error callback
-            $scope.dataSourceError = true
-            $scope.dataSourceErrorMessage = errorMessage
-            $scope.nodata = null
-        , ->
+        # Data Source loading
+        $scope.$on 'dataSource:' + dsDefinition.name + ':loading', ->
             $scope.loading = true
-        )
-
-    $scope.reload = ->
-        $scope.dataSource.execute(true)
-
-    $scope.handleError = (message) ->
-        console.log 'Annotation Chart error: ' + message
-
-    # Initialize
-    if not _.isUndefined(dsDefinition)
-        $scope.loadData()
+        
+        # Initialize the Data Source
+        $scope.dataSource.init dsDefinition
