@@ -1,3 +1,13 @@
+# 1.26.0 (03/03/2016)
+
+## Features
+
+ - Like button always visible: instead of hiding when logged out, the clicking the Like button will prompt the user to login.
+
+## Bug Fixes
+
+ - Logout and Like button no longer shown when authentication is disabled
+
 # 1.25.0 (02/18/2016)
 
 ## Features

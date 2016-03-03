@@ -113,7 +113,7 @@ cyclotronApp.controller 'HomeController', ($scope, $location, $modal, configServ
             
             return
 
-    $scope.toggleLike = (dashboard) ->
+    toggleLikeHelper = (dashboard) ->
         if dashboard._liked
             dashboardService.unlike(dashboard).then ->
                 dashboard._liked = false
@@ -122,6 +122,13 @@ cyclotronApp.controller 'HomeController', ($scope, $location, $modal, configServ
             dashboardService.like(dashboard).then ->
                 dashboard._liked = true
                 dashboard.likeCount++
+
+    $scope.toggleLike = (dashboard) ->
+        if userService.authEnabled and !userService.isLoggedIn()
+            $scope.login(true).then ->
+                toggleLikeHelper(dashboard)
+        else
+            toggleLikeHelper(dashboard)
 
     $scope.delete = (dashboardName) ->
         # Confirmation dialog

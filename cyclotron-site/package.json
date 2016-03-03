@@ -1,7 +1,7 @@
 {
   "name": "cyclotron-site",
   "description": "Cyclotron: website",
-  "version": "1.24.0",
+  "version": "1.26.0",
   "author": "Dave Bauman <dbauman@expedia.com>",
   "license": "MIT",
   "private": true,

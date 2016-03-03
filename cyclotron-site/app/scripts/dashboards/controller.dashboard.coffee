@@ -174,13 +174,19 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location,
         else
             $scope.pause()
 
-    $scope.toggleLike = ->
+    toggleLikeHelper = ->
         if $scope.isLiked
             dashboardService.unlike($scope.dashboardWrapper).then ->
                 $scope.isLiked = false
         else
             dashboardService.like($scope.dashboardWrapper).then ->
                 $scope.isLiked = true
+
+    $scope.toggleLike = ->
+        if userService.authEnabled and !userService.isLoggedIn()
+            $scope.login(true).then toggleLikeHelper
+        else
+            toggleLikeHelper()
 
     #
     # Initialization methods

@@ -23,7 +23,7 @@ cyclotronDirectives.directive 'requiresLogin', (userService) ->
             $(element).hide() unless userService.authEnabled and userService.isLoggedIn()
 
             scope.$watch userService.isLoggedIn, ->
-                if userService.isLoggedIn()
+                if userService.authEnabled and userService.isLoggedIn() 
                     $(element).show()
                 else
                     $(element).hide()

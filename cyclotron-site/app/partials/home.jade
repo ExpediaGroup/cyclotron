@@ -51,7 +51,7 @@
         table.table(ng-show='dashboards.length > 0')
             thead
                 tr
-                    th(requires-login)
+                    th(requires-auth)
                         a(ng-click='sortBy("_liked", true)') 
                             i.fa.fa-thumbs-up
                     th
@@ -67,7 +67,7 @@
                     th
             tr.dashboard-item(ng-repeat='dashboard in dashboards | orderBy:sortByField:sortByReverse', 
                 ng-class='{"dashboard-item-unviewable": !dashboard._canView, "dashboard-item-deleted": dashboard.deleted }')
-                td.like(requires-login)
+                td.like(requires-auth)
                     a(ng-click='toggleLike(dashboard)')
                         i.fa.fa-thumbs-up(ng-if='dashboard._liked', title='Unlike this Dashboard')
                         i.fa.fa-thumbs-o-up(ng-if='!dashboard._liked', title='Like this Dashboard')
