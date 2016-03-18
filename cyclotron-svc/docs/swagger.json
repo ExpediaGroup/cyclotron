@@ -1476,6 +1476,368 @@
                     }
                 }
             }
+        },
+        "/data": {
+            "get": {
+                "summary": "Get Data Buckets",
+                "description": "The Data endpoint returns a list of Data Buckets.",
+                "tags": [
+                    "Data"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An array of Data Buckets (without data)",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/DataBucket"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create Data Bucket",
+                "description": "Posting to the Data endpoint creates a new Data Bucket.",
+                "tags": [
+                    "Data"
+                ],
+                "parameters": [
+                    {
+                        "name": "databucket",
+                        "in": "body",
+                        "description": "The Data Bucket to be created.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/DataBucket"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The created Data Bucket.",
+                        "schema": {
+                            "$ref": "#/definitions/DataBucket"
+                        }
+                    },
+                    "400": {
+                        "description": "Missing body or required fields."
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            }
+        },
+        "/data/{key}": {
+            "get": {
+                "summary": "Get Data Bucket",
+                "description": "Returns a given Data Bucket by key.",
+                "tags": [
+                    "Data"
+                ],
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "path",
+                        "description": "The Data Bucket key.",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A single Data Bucket, including the data",
+                        "schema": {
+                            "$ref": "#/definitions/DataBucket"
+                        }
+                    },
+                    "404": {
+                        "description": "Data Bucket not found."
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update Data Bucket",
+                "description": "Updates a Data Bucket with a modified version. The rev property will be incremented.",
+                "tags": [
+                    "Data"
+                ],
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "path",
+                        "description": "The Data Bucket key.",
+                        "required": true,
+                        "type": "string"
+                    }, {
+                        "name": "databucket",
+                        "in": "body",
+                        "description": "The Data Bucket to be created.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/DataBucket"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The updated Data Bucket.",
+                        "schema": {
+                            "$ref": "#/definitions/DataBucket"
+                        }
+                    },
+                    "400": {
+                        "description": "Missing body or required fields."
+                    },
+                    "404": {
+                        "description": "Data Bucket not found."
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete Data Bucket",
+                "description": "Deletes a Data Bucket. This is a hard delete of all data, with no recovery available.",
+                "tags": [
+                    "Data"
+                ],
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "path",
+                        "description": "The Data Bucket key.",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Missing Data Bucket key."
+                    },
+                    "404": {
+                        "description": "Data Bucket not found."
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            }
+        },
+        "/data/{key}/data": {
+            "get": {
+                "summary": "Get Data Bucket Data",
+                "description": "Returns just the data of a given Data Bucket.",
+                "tags": [
+                    "Data"
+                ],
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "path",
+                        "description": "The Data Bucket key.",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The data array for a Data Bucket",
+                        "schema": {
+                            "type": "array"
+                        }
+                    },
+                    "404": {
+                        "description": "Data Bucket not found."
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update Data Bucket Data",
+                "description": "Directly replaces the data for a Data Bucket with the provided array. The rev property will be incremented. An optional 'rev' parameter can be provided, which fails the request unless it matches the current rev in the database. This is useful for ensuring sequential updates and preventing accidental overwrites.",
+                "tags": [
+                    "Data"
+                ],
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "path",
+                        "description": "The Data Bucket key.",
+                        "required": true,
+                        "type": "string"
+                    }, {
+                        "name": "data",
+                        "in": "body",
+                        "description": "The data array for a Data Bucket",
+                        "required": true,
+                        "schema": {
+                            "type": "array"
+                        }
+                    }, {
+                        "name": "rev",
+                        "in": "query",
+                        "description": "If provided, the update will only succeed if the Data Bucket has a matching revision. Useful for ensuring sequential updates.",
+                        "required": false,
+                        "schema": {
+                            "type": "array"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The updated Data Bucket.",
+                        "schema": {
+                            "$ref": "#/definitions/DataBucket"
+                        }
+                    },
+                    "400": {
+                        "description": "Missing body or required fields."
+                    },
+                    "404": {
+                        "description": "Data Bucket not found."
+                    },
+                    "409": {
+                        "description": "Conflict; the Data Bucket revision does not match the ?rev query parameter."
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            }
+        },
+        "/data/{key}/append": {
+            "post": {
+                "summary": "Append to Data Bucket Data",
+                "description": "Appends a value or array of values to the data for a given Data Bucket. The rev property will be incremented.",
+                "tags": [
+                    "Data"
+                ],
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "path",
+                        "description": "The Data Bucket key.",
+                        "required": true,
+                        "type": "string"
+                    }, {
+                        "name": "data",
+                        "in": "body",
+                        "description": "Either a single value, or array of values.",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The updated Data Bucket.",
+                        "schema": {
+                            "$ref": "#/definitions/DataBucket"
+                        }
+                    },
+                    "400": {
+                        "description": "Missing body."
+                    },
+                    "404": {
+                        "description": "Data Bucket not found."
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            }
+        },
+        "/data/{key}/upsert": {
+            "post": {
+                "summary": "Upserts an object in the Data Bucket Data",
+                "description": "Upserts (inserts or updates) an object in the data for a given Data Bucket. The rev property will be incremented.",
+                "tags": [
+                    "Data"
+                ],
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "path",
+                        "description": "The Data Bucket key.",
+                        "required": true,
+                        "type": "string"
+                    }, {
+                        "name": "data",
+                        "in": "body",
+                        "description": "An object containing 'keys' and 'data'.",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The updated Data Bucket.",
+                        "schema": {
+                            "$ref": "#/definitions/DataBucket"
+                        }
+                    },
+                    "400": {
+                        "description": "Missing body."
+                    },
+                    "404": {
+                        "description": "Data Bucket not found."
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            }
+        },
+        "/data/{key}/remove": {
+            "post": {
+                "summary": "Removes matching objects from the Data Bucket Data",
+                "description": "Removes any object that matches all the keys in the body from the data for a given Data Bucket. The rev property will be incremented.",
+                "tags": [
+                    "Data"
+                ],
+                "parameters": [
+                    {
+                        "name": "key",
+                        "in": "path",
+                        "description": "The Data Bucket key.",
+                        "required": true,
+                        "type": "string"
+                    }, {
+                        "name": "matchingKeys",
+                        "in": "body",
+                        "description": "An object containing keys to match data.",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The updated Data Bucket.",
+                        "schema": {
+                            "$ref": "#/definitions/DataBucket"
+                        }
+                    },
+                    "400": {
+                        "description": "Missing body."
+                    },
+                    "404": {
+                        "description": "Data Bucket not found."
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -2257,6 +2619,39 @@
                     "description": "The average duration of all executions with this error message.",
                     "type": "number",
                     "format": "double"
+                }
+            }
+        },
+        "DataBucket": {
+            "description": "The container for an array of data stored within Cyclotron",
+            "properties": {
+                "key": {
+                    "type": "string",
+                    "description": "Uniquely identifying key of the Data Bucket.",
+                    "required": true
+                },
+                "createdDate": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Date/time the Data Bucket was created.",
+                    "readOnly": true
+                },
+                "lastModifiedDate": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Date/time of the last modification.",
+                    "readOnly": true
+                },
+                "rev": {
+                    "description": "Current revision number of the Dashboard.",
+                    "type": "integer",
+                    "format": "int32",
+                    "readOnly": true
+                },
+                "data": {
+                    "description": "Array of data contained in the Data Bucket.",
+                    "type": "array",
+                    "required": true
                 }
             }
         }

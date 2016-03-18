@@ -23,11 +23,16 @@
             dt {{ statistics.dashboards.total.editedPastSixMonthsCount | numeraljs:'0,0' }} 
             dd modified in the last 6 months
         
-        //-dl(title='Total number of Dashboards with limited viewing permissions')
+        dl(title='Total number of Dashboards with limited editing permissions')
+            dt {{ statistics.dashboards.total.restrictedEditingCount | numeraljs:'0,0' }} 
+            dd secured  
+                ng-pluralize(count='statistics.dashboards.total.restrictedEditingCount', when='{"one": "Dashboard", "other": "Dashboards"}')
+        dl(title='Total number of Dashboards with limited viewing permissions')
             dt {{ statistics.dashboards.total.restrictedViewingCount | numeraljs:'0,0' }} 
             dd private  
                 ng-pluralize(count='statistics.dashboards.total.restrictedViewingCount', when='{"one": "Dashboard", "other": "Dashboards"}')
-        //-dl(title='Average number of tags assigned per Dashboard')
+
+        dl(title='Average number of tags assigned per Dashboard')
             dt {{ statistics.dashboards.total.avgTagsCount | numeraljs:'0.00' }} 
             dd tags per Dashboard  
         dl(title='Total number of Revisions, including those for deleted Dashboards')
@@ -42,21 +47,24 @@
                 |  per Dashboard
 
         h2 Likes
-        dl(title='Total number of Dashboard Likes')
+        dl(title='Total number of likes for all active Dashboards (currently)')
             dt {{ statistics.likes.count | numeraljs:'0,0' }} 
-            dd total Likes
+            dd unique Likes
+        dl(title='Total number of times a Dashboard was liked')
+            dt {{ statistics.likeEvents.count | numeraljs:'0,0' }} 
+            dd all-time Likes
         dl(title='Total number of Dashboard Likes within the last day')
-            dt {{ statistics.likes.occurredPastDayCount | numeraljs:'0,0' }} 
-            dd Likes in the last day
+            dt {{ statistics.likeEvents.occurredPastDayCount | numeraljs:'0,0' }} 
+            dd times Liked in the last day
         dl(title='Total number of Dashboard Likes within the last week')
-            dt {{ statistics.likes.occurredPastWeekCount | numeraljs:'0,0' }} 
-            dd Likes in the last week
+            dt {{ statistics.likeEvents.occurredPastWeekCount | numeraljs:'0,0' }} 
+            dd times Liked in the last week
         dl(title='Total number of Dashboard Likes within the last 6 months')
-            dt {{ statistics.likes.occurredPastSixMonthsCount | numeraljs:'0,0' }} 
-            dd Likes in the last 6 months
-        dl(title='Total number of Dashboard Unlikes')
-            dt {{ statistics.unlikes.count | numeraljs:'0,0' }} 
-            dd total Unlikes
+            dt {{ statistics.likeEvents.occurredPastSixMonthsCount | numeraljs:'0,0' }} 
+            dd times Liked in the last 6 months
+        dl(title='Total number of times a Dashboard was unliked')
+            dt {{ statistics.unlikeEvents.count | numeraljs:'0,0' }} 
+            dd times Unliked
         
         h2 Visits
         dl(title='Total number of times any Dashboard was visited')
@@ -111,11 +119,11 @@
             .row
                 .col-xs-12
                     .time-controls.btn-group
-                        .btn.btn-default(ng-model='selectedTimespan', btn-radio='"year"') Year
-                        .btn.btn-default(ng-model='selectedTimespan', btn-radio='"month"') Month
-                        .btn.btn-default(ng-model='selectedTimespan', btn-radio='"3_day"') 3-Days
-                        .btn.btn-default(ng-model='selectedTimespan', btn-radio='"day"') Day
-                        .btn.btn-default(ng-model='selectedTimespan', btn-radio='"hour"') Hour
+                        .btn.btn-default(ng-model='selectedTimespan', uib-btn-radio='"year"') Year
+                        .btn.btn-default(ng-model='selectedTimespan', uib-btn-radio='"month"') Month
+                        .btn.btn-default(ng-model='selectedTimespan', uib-btn-radio='"3_day"') 3-Days
+                        .btn.btn-default(ng-model='selectedTimespan', uib-btn-radio='"day"') Day
+                        .btn.btn-default(ng-model='selectedTimespan', uib-btn-radio='"hour"') Hour
 
             .row
                 .col-sm-6

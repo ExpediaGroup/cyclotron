@@ -26,7 +26,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
     exports = {
 
-        version: '1.26.0'
+        version: '1.27.1'
 
         logging: 
             enableDebug: false
@@ -858,6 +858,7 @@ cyclotronServices.factory 'commonConfigService', ->
                     { name: 'Examples', path: '/partials/help/examples.html' }
                     { name: 'Permissions', path: '/partials/help/permissions.html' }
                     { name: 'Encrypted Strings', path: '/partials/help/encryptedStrings.html' }
+                    { name: 'CyclotronData', path: '/partials/help/cyclotrondata.html' }
                     { name: 'Browser Compatibility', path: '/partials/help/browserCompat.html' }
                     { name: '3rd Party Libraries', path: '/partials/help/3rdparty.html' }
                     { name: 'Hotkeys', path: '/partials/help/hotkeys.html' }
@@ -1062,6 +1063,18 @@ cyclotronServices.factory 'commonConfigService', ->
                                 type: 'integer'
                                 inlineJs: true
                                 defaultHidden: true
+                            focusTarget:
+                                label: 'Focus Target'
+                                description: 'Determines whether mouse hover focuses on individual points, or is shared by all series.  Defaults to category, unless Annotation editing is enabled, which forces "datum".'
+                                type: 'string'
+                                inlineJs: true
+                                defaultHidden: true
+                                default: 'category'
+                                options:
+                                    datum:
+                                        value: 'datum'
+                                    category:
+                                        value: 'category'
                             legendPosition:
                                 label: 'Legend Position'
                                 description: 'Determines whether the legend is put on the same row as the zoom buttons, or a new row.'
@@ -1129,6 +1142,21 @@ cyclotronServices.factory 'commonConfigService', ->
                                 inlineJs: true
                                 defaultHidden: true
                         order: 13   
+                    annotationEditing:
+                        label: 'Built-In Annotation Editing'
+                        description: 'Optional, but if enabled, allows users to create new annotations for points on the chart.  Annotations are stored automatically within Cyclotron.'
+                        type: 'boolean'
+                        required: false
+                        default: false
+                        order: 13
+                    annotationKey:
+                        label: 'Built-In Annotation Key'
+                        description: 'Provides a CyclotronData bucket key to be used for built-in annotation editing. This property is automatically initialized with a random UUID.'
+                        type: 'string'
+                        inlineJs: true
+                        required: false
+                        defaultHidden: true
+                        order: 14                  
                     filters: 
                         label: 'Filters'
                         description: 'Optional, but if provided, specifies name-value pairs used to filter the data source\'s result set. Each key specifies a column in the data source, and the value specifies either a single value (string) or a set of values (array of strings). Only rows which have the specifies value(s) will be permitted.'
@@ -1149,6 +1177,15 @@ cyclotronServices.factory 'commonConfigService', ->
                 # Common options
                 options:
                     displayAnnotations: true
+                    # Undocumented "chart" options
+                    chart:
+                        focusTarget: 'category'
+
+                sample: ->
+                    # Generate new Annotation Chart Widget
+                    {
+                        annotationKey: uuid.v4()
+                    }
 
                 # Theme-specific options
                 themes:

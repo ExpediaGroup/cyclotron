@@ -17,7 +17,7 @@
 #
 # EncryptString controller -- for modal dialog
 #
-cyclotronApp.controller 'EncryptStringController', ($scope, $modalInstance, cryptoService, configService) ->
+cyclotronApp.controller 'EncryptStringController', ($scope, $uibModalInstance, cryptoService, configService) ->
 
     $scope.fields = {}
 
@@ -27,4 +27,4 @@ cyclotronApp.controller 'EncryptStringController', ($scope, $modalInstance, cryp
             $scope.fields.encryptedValue = result
 
     $scope.cancel = ->
-        $modalInstance.dismiss('cancel')
+        $uibModalInstance.dismiss('cancel')

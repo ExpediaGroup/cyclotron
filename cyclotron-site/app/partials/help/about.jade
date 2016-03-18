@@ -37,8 +37,8 @@ ul
 h4 Features
 ul
     li Declarative definition of Dashboards, requiring no HTML or JavaScript (although it's optionally available)
-    li Included Widgets: chart, table, number, html, javascript, iframe, stoplight
-    li Included Data Sources: JSON, Graphite, Splunk, JavaScript
+    li Included Widgets: chart, html, iframe, image, javascript, number, stoplight, table, youtube
+    li Included Data Sources: CyclotronData, Graphite, JavaScript, JSON, Splunk
     li Built-in data loading, filtering, and sorting
     li LDAP/Active Directory Integration
     li Permissions for viewing and editing Dashboards
@@ -52,13 +52,13 @@ p.
     Cyclotron is best thought of as an alternative to custom, light-weight websites that visualize data.  It provides the web hosting,
     page layout, data loading, and assorted widgets&mdash;all without writing code.  In contrast, building a comparable website 
     from scratch would require provisioning a server/VM, choosing the appropriate web frameworks and libraries, and writing 
-    the code for the site.  Using Cyclotron simplifies this process dramatically, making it ideal for rapid prototyping.
+    the code for the site.  Using Cyclotron simplifies this process dramatically, making it ideal for rapid development and prototyping.
 p.
     However, Cyclotron implements a limited set of widgets, although the HTML and Javascript widgets do allow for a wide degree
     of customization with some coding.  Cyclotron works best with minimally-interactive dashboards, as it lacks more robust 
     interaction features like dependent widgets and triggers.
 p.
-    Cyclotron has no data backend and doesn't store any Dashboard data. In this regard, Cyclotron is ideal as a front-end for an existing database or web service.
+    Through various Data Sources, Cyclotron can pull data from databases, web services, etc. It's possible to do light data processing and massaging in Cyclotron, but it is not a replacement for ETL processes or SQL queries. In this regard, Cyclotron is ideal as a front-end for an existing database or web service. Cyclotron does have a very lightweight data backend for storing Dashboard data, but this is not a replacement for databases as it is limited in storage space and lacks any kind of processing.
 p.
     Finally, Cyclotron has automatic page rotation and data-refreshing features, making it well-suited to hosting status boards and monitoring dashboards.  It is less suitable for generating 
     reports (although PDF export is available).

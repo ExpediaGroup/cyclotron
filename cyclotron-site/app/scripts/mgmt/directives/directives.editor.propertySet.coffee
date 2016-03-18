@@ -141,7 +141,7 @@ cyclotronDirectives.directive 'editorPropertySet', (configService) ->
                 if _.isFunction(options)
                     oldOptions = $scope.optionsCache[key]
                     newOptions = options($scope.dashboard)
-                    if oldOptions? && _.isEqual(oldOptions, newOptions)
+                    if oldOptions? && angular.equals(oldOptions, newOptions)
                         return oldOptions
                     else
                         $scope.optionsCache[key] = newOptions

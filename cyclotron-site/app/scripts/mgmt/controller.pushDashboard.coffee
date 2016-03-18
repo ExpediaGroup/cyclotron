@@ -17,7 +17,7 @@
 #
 # PushDashboard controller -- for modal dialog
 #
-cyclotronApp.controller 'PushDashboardController', ($scope, $modalInstance, $q, $http, configService, dashboardService, userService) ->
+cyclotronApp.controller 'PushDashboardController', ($scope, $uibModalInstance, $q, $http, configService, dashboardService, userService) ->
 
     $scope.environmentsForPush = _.reject configService.cyclotronEnvironments, { canPush: false }
 
@@ -65,10 +65,10 @@ cyclotronApp.controller 'PushDashboardController', ($scope, $modalInstance, $q, 
             q.then ->
                 alertify.log("Pushed Dashboard to " + $scope.fields.pushLocation.name, 2500)
 
-                $modalInstance.close()
+                $uibModalInstance.close()
 
             q.catch (error) ->
                 alertify.error('Error pushing Dashboard: ' + error, 2500)
         
     $scope.cancel = ->
-        $modalInstance.dismiss('cancel')
+        $uibModalInstance.dismiss('cancel')

@@ -290,10 +290,13 @@ cyclotronApp.config ($stateProvider, $urlRouterProvider, $locationProvider, $con
     $urlRouterProvider.otherwise('/')
     $urlRouterProvider.deferIntercept()
 
-    $locationProvider.html5Mode(true)
+    $locationProvider.html5Mode {
+        enabled: true
+        requireBase: false
+    }
     $locationProvider.hashPrefix = '!'
 
-cyclotronApp.run ($rootScope, $urlRouter, $location, $state, $stateParams, $modal, userService) ->
+cyclotronApp.run ($rootScope, $urlRouter, $location, $state, $stateParams, $uibModal, userService) ->
 
     #
     # Authentication-related scope variables
@@ -311,7 +314,7 @@ cyclotronApp.run ($rootScope, $urlRouter, $location, $state, $stateParams, $moda
             options.backdrop = 'static'
             options.keyboard = false
 
-        modalInstance = $modal.open options
+        modalInstance = $uibModal.open options
         modalInstance.result
 
     $rootScope.logout = userService.logout

@@ -59,10 +59,12 @@ In regards to data, Cyclotron does not store or cache any data for Dashboards. D
 ## Requirements
 
 * Node.js
-* MongoDB
+* MongoDB (2.6+)
 * (Optional) Any web server--Nginx, Apache, IIS, etc
 
 Node.js and MongoDB are available on Linux, OS X, and Windows, so it should be possible to run Cyclotron on any of these platforms, although the specific steps may vary.
+
+MongoDB 2.6 or above is required to use all functionality of the service.
 
 ## Installation
 

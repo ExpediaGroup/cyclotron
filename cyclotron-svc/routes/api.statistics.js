@@ -59,13 +59,11 @@ var getDashboardCounts2 = function (isDeleted) {
             oneMonth = moment().subtract(1, 'month'),
             sixMonths = moment().subtract(6, 'month');
 
-        pipeline = [{
+        var pipeline = [{
             $project: {
-                /* $size is MongoDB 2.6 only -- enable after upgrade
                 editorCount: { $size: { $ifNull: ['$editors', []] } },
                 viewerCount: { $size: { $ifNull: ['$viewers', []] } },
-                tagsCount: { $size: { $ifNull: ['$tags', []] } }
-                */
+                tagsCount: { $size: { $ifNull: ['$tags', []] } },
                 editedPastDay: { $cond: [ { '$gt': [ '$date', oneDay.toDate() ] }, 1, 0]},
                 editedPastMonth: { $cond: [ { '$gt': [ '$date', oneMonth.toDate() ] }, 1, 0]},
                 editedPastSixMonths: { $cond: [ { '$gt': [ '$date', sixMonths.toDate() ] }, 1, 0]}
@@ -76,15 +74,15 @@ var getDashboardCounts2 = function (isDeleted) {
                 count: { $sum: 1 },
                 editedPastDayCount: { $sum: '$editedPastDay' },
                 editedPastMonthCount: { $sum: '$editedPastMonth' },
-                editedPastSixMonthsCount: { $sum: '$editedPastSixMonths' }
-                /*avgTagsCount: { $avg: '$tagsCount' },
+                editedPastSixMonthsCount: { $sum: '$editedPastSixMonths' },
+                avgTagsCount: { $avg: '$tagsCount' },
                 maxTagsCount: { $max: '$tagsCount' },
                 avgEditorCount: { $avg: '$editorCount' },
                 avgViewerCount: { $avg: '$viewerCount' },
                 unrestrictedEditingCount: { $sum: { $cond: [ { $eq: ['$editorCount', 0] }, 1, 0 ]}},
                 unrestrictedViewingCount: { $sum: { $cond: [ { $eq: ['$viewerCount', 0] }, 1, 0 ]}},
                 restrictedEditingCount: { $sum: { $cond: [ { $gt: ['$editorCount', 0] }, 1, 0 ]}},
-                restrictedViewingCount: { $sum: { $cond: [ { $gt: ['$viewerCount', 0] }, 1, 0 ]}}*/
+                restrictedViewingCount: { $sum: { $cond: [ { $gt: ['$viewerCount', 0] }, 1, 0 ]}}
             }
         }]
 
@@ -261,6 +259,31 @@ var getSessionCounts = function () {
     });
 }
 
+var getLikes = function () {
+    return new Promise(function (resolve, reject) {
+        Dashboards.aggregate([{
+            $match: {
+                deleted: false
+            }
+        }, {
+            $project: {
+                likeCount: { $size: { $ifNull: ['$likes', []] } }
+            }
+        }, {
+            $group: {
+                _id: {},
+                count: { $sum: '$likeCount' }
+            }
+        }]).exec(function (err, results) {
+            if (err) {
+                reject(err);
+            }
+
+            resolve(_.omit(results[0], '_id'));
+        });
+    });
+}
+
 var getEvents = function (eventType) {
     return new Promise(function (resolve, reject) {
         var oneDay = moment().subtract(1, 'day'),
@@ -308,9 +331,10 @@ exports.get = function (req, res) {
         getSessionCounts(),
         getUsersByRevisions(),
         getRevisions(),
+        getLikes(),
         getEvents('like'),
         getEvents('unlike'),
-        function (dashboardCounts, analyticsCounts, userCounts, sessionCounts, usersByRevisions, revisions, likes, unlikes) {
+        function (dashboardCounts, analyticsCounts, userCounts, sessionCounts, usersByRevisions, revisions, likes, likeEvents, unlikeEvents) {
             res.send({
                 dashboards: dashboardCounts,
                 pageViews: analyticsCounts,
@@ -318,7 +342,8 @@ exports.get = function (req, res) {
                 sessions: sessionCounts,
                 users: _.merge(userCounts, usersByRevisions),
                 likes: likes,
-                unlikes: unlikes
+                likeEvents: likeEvents,
+                unlikeEvents: unlikeEvents
             });
         })
     .catch(function (err) {

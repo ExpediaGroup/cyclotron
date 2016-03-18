@@ -5,7 +5,12 @@ p
     |  library.  Most of the available options in the underlying library are supported.
     
 p.
-    While it supports annotations on the data series, these are optional and the Widget can be used without any annotations.  The other notable feature is a date range selector at the bottom of the chart, which lets the user zoom in and out across the data set.  This features is commonly found in stock price charts.
+    While it supports annotations on the data series, these are optional and the Widget can be used without any annotations.  Annotation
+    data can be loaded from an external Data Source, or they can be created and stored directly in Cyclotron.  The Widget has built-in
+    functionality for adding annotations on a Dashboard, which are saved internally and shared with other users of the Dashboard.
+
+p.
+    The other notable feature is a date range selector at the bottom of the chart, which lets the user zoom in and out across the data set.  This features is commonly found in stock price charts.
 
 p.
     This widget requires a Data Source, indicating where the data will come from.  Due to 
@@ -50,6 +55,24 @@ p Each series can use up to three different columns of data in the Data Source. 
 p Each series can have no more than one annotation at a single x-value.
 
 property-table(properties='config.widgets.annotationChart.properties.series.properties')
+
+h4 Built-In Annotation Editing
+
+p
+    | This Widget has built-in support for adding/editing annotations while viewing the Widget.  To enable, set 
+    em  annotationEditing
+    |  to true.  Annotations will be stored in a CyclotronData bucket using the key specified in the 
+    em  annotationKey
+    |  property.  This key is initialized with a new UUID automatically, but it can be changed as needed.  To share annotations
+    |  between two charts, they should both have the same key.
+
+p
+    | After enabling Built-In Annotation Editing, view the Dashboard and click on a point in the dashboard.  A link, Add Annotation,
+    | will appear in the top-right corner of the Widget.  Add a title and/or text, and save.  The new annotation will be saved
+    | and appear on the Dashboard immediately.
+
+p
+    | Existing Annotations can be edited using the same process.  Or, annotations can be deleted by selecting them, clicking Edit Annotation, then selecting the Delete button.
 
 h4 Options
 

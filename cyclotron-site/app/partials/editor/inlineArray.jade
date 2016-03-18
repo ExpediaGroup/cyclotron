@@ -1,5 +1,5 @@
-accordion(close-others='true')
-    accordion-group(ng-repeat='item in model', heading='{{ definition.singleLabel }} {{ $index }}')
+uib-accordion(close-others='true')
+    uib-accordion-group(ng-repeat='item in model', heading='{{ definition.singleLabel }} {{ $index }}')
     
         div(ng-transclude='parent')
         

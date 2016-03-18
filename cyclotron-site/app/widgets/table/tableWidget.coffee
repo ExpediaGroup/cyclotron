@@ -60,7 +60,7 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
             if value?
                 return _.compile(value, row)
 
-        return defaultValue
+        return _.compile defaultValue, row
 
     # Load table options
     $scope.sortBy = $scope.widget.sortBy

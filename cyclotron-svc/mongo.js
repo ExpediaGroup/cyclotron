@@ -138,6 +138,15 @@ var eventAnalyticsSchema = mongoose.Schema({
     details        : {type: {}, required: false}
 });
 
+/* Cyclotron Data Schema: contains buckets of data */
+var databucketsSchema = mongoose.Schema({
+    key              : {type: String, required: true},
+    createdDate      : {type: Date, required: true},
+    lastModifiedDate : {type: Date, required: true},
+    rev              : {type: Number, required: true, default: 0},
+    data             : {type: [{}], required: true, default: []}
+});
+
 /* Models */
 
 var dashboardModel = mongoose.model('dashboard2', dashboardSchema, 'dashboard2s');
@@ -147,6 +156,7 @@ var sessionModel = mongoose.model('session', sessionSchema);
 var analyticsModel = mongoose.model('analytics', analyticsSchema);
 var dsAnalyticsModel = mongoose.model('dataSourceAnalytics', dsAnalyticsSchema);
 var eventAnalyticsModel = mongoose.model('eventAnalytics', eventAnalyticsSchema);
+var databucketsModel = mongoose.model('databucket', databucketsSchema);
 
 /* Promisify APIs */
 Promise.promisifyAll(userModel);

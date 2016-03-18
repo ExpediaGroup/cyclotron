@@ -17,7 +17,7 @@
 #
 # Gui Editor controller.
 #
-cyclotronApp.controller 'GuiEditorController', ($scope, $state, $stateParams, $location, $hotkey, $modal, $window, configService, userService, dashboardService, tagService, aceService) ->
+cyclotronApp.controller 'GuiEditorController', ($scope, $state, $stateParams, $location, $hotkey, $uibModal, $window, configService, userService, dashboardService, tagService, aceService) ->
 
     # Store some configuration settings for the Editor
     $scope.dashboardProperties = configService.dashboard.properties
@@ -213,7 +213,11 @@ cyclotronApp.controller 'GuiEditorController', ($scope, $state, $stateParams, $l
     $scope.selectWidget = ->
         sample = _.cloneDeep $scope.widgets[$scope.editor.selectedItem.widget].sample
         if sample?
-            $scope.editor.selectedItem = _.defaults $scope.editor.selectedItem, sample
+            if _.isFunction sample
+                # Execute the function to get a new sample Widget
+                $scope.editor.selectedItem = _.defaults $scope.editor.selectedItem, sample()
+            else
+                $scope.editor.selectedItem = _.defaults $scope.editor.selectedItem, sample
 
     $scope.goToSubState = (state, item, index) ->
         $scope.editor.currentEditor = state
@@ -283,7 +287,7 @@ cyclotronApp.controller 'GuiEditorController', ($scope, $state, $stateParams, $l
     $scope.push = ->
         return unless $scope.canPush()
 
-        modalInstance = $modal.open {
+        modalInstance = $uibModal.open {
             templateUrl: '/partials/editor/pushDashboard.html'
             scope: $scope
             controller: 'PushDashboardController'
@@ -292,7 +296,7 @@ cyclotronApp.controller 'GuiEditorController', ($scope, $state, $stateParams, $l
     $scope.encrypt = ->
         return unless $scope.canEncrypt()
 
-        modalInstance = $modal.open {
+        modalInstance = $uibModal.open {
             templateUrl: '/partials/editor/encryptString.html'
             scope: $scope
             controller: 'EncryptStringController'
@@ -302,7 +306,7 @@ cyclotronApp.controller 'GuiEditorController', ($scope, $state, $stateParams, $l
         return unless $scope.canDelete()
 
         # Confirmation dialog
-        modalInstance = $modal.open {
+        modalInstance = $uibModal.open {
             templateUrl: '/partials/editor/delete.html'
             controller: 'DeleteDashboardController'
             resolve: {
@@ -433,7 +437,7 @@ cyclotronApp.controller 'GuiEditorController', ($scope, $state, $stateParams, $l
                         $scope.login(true).then ->
                             initialize()
                     when 403
-                        modalInstance = $modal.open {
+                        modalInstance = $uibModal.open {
                             templateUrl: '/partials/viewPermissionDenied.html'
                             scope: $scope
                             controller: 'GenericErrorModalController'

@@ -17,7 +17,7 @@
 #
 # Home controller.
 #
-cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location, $timeout, $window, $q, $modal, analyticsService, configService, dashboardService, dataService, loadService, logService, userService) ->
+cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location, $timeout, $window, $q, $uibModal, analyticsService, configService, cyclotronDataService, dashboardService, dataService, loadService, logService, userService) ->
 
     preloadTimer = null
     rotateTimer = null
@@ -46,6 +46,7 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location,
         dataSources: {}
         functions: {}
         parameters: _.clone $location.search()
+        data: cyclotronDataService
 
     $scope.updateUrl = ->
         currentPage = $scope.dashboard.pages[$scope.currentPageIndex]
@@ -197,7 +198,7 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location,
         q.then (dashboardWrapper) ->
 
             if dashboardWrapper.deleted                
-                $modal.open {
+                $uibModal.open {
                     templateUrl: '/partials/410.html'
                     scope: $scope
                     controller: 'GenericErrorModalController'
@@ -280,7 +281,7 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location,
                         $scope.loadDashboard(deferred)
                     return
                 when 403
-                    $modal.open {
+                    $uibModal.open {
                         templateUrl: '/partials/viewPermissionDenied.html'
                         scope: $scope
                         controller: 'GenericErrorModalController'
@@ -288,7 +289,7 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location,
                         keyboard: false
                     }
                 when 404
-                    $modal.open {
+                    $uibModal.open {
                         templateUrl: '/partials/404.html'
                         scope: $scope
                         controller: 'GenericErrorModalController'
@@ -298,7 +299,7 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location,
                 else
                     if $scope.firstLoad
                         # Display error message if error occurred on the first load
-                        $modal.open {
+                        $uibModal.open {
                             templateUrl: '/partials/500.html'
                             scope: $scope
                             controller: 'GenericErrorModalController'

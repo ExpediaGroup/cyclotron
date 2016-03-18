@@ -1,0 +1,14 @@
+div
+    p {{ annotations.verb }} annotation for {{ selectedPoint.x }}:
+
+    p.form-group
+        label Title 
+        input(type='text', ng-model='annotations.newAnnotationTitle', placeholder='Annotation Title')
+    p.form-group
+        label Text 
+        input(type='text', ng-model='annotations.newAnnotationText', placeholder='Annotation Text')
+
+    p.form-group
+        button.btn.btn-primary(ng-click='saveAnnotation()') Save
+
+        button.btn.btn-danger.pull-right(ng-click='deleteAnnotation()') Delete

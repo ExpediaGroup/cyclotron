@@ -1,6 +1,14 @@
 .annotation-chart-widget(ng-controller='AnnotationChartWidget')
     h1.title(ng-if='widget.title') {{ widgetTitle() }}
 
+    .annotation-editor(ng-if='selectedPoint')
+        button.btn.btn-link(type='button', 
+        uib-popover-template='"/widgets/annotationChart/addAnnotation.html"', 
+        popover-title='Annotations',
+        popover-placement='auto bottom', 
+        popover-is-open='annotations.popoverOpen')
+            | {{ annotations.verb }} Annotation
+
     .widget-body
 
         .spinjs(ng-if='loading')
@@ -11,5 +19,6 @@
 
         .the-chart(google-chart='google-chart', chart='chartObject', 
             agc-on-error='handleError(message)',
+            agc-on-select='selectItem(selectedItem)',
             ng-if='!nodata && !dataSourceError && chartObject.data')
 

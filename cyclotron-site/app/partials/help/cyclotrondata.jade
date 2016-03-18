@@ -1,0 +1,129 @@
+h3 CyclotronData
+
+p.
+    CyclotronData is an API for storing data natively within Cyclotron. The HTTP API provides methods for writing data, so that external services or processes can push data into CyclotronData and have it surfaced via a Dashboard.  There is a built-in Data Source for retrieving data from CyclotronData, making it an easy and lightweight solution. This is provided as a convenience for small amounts of data, not as a replacement for databases.
+
+p.
+    Data is stored within buckets, which are identified via a unique alphanumerical key. Each bucket stores a single array of values (numbers, strings, object). Each bucket is limited to approximately 16MB of data storage.
+
+h4 HTTP API
+
+p This is the HTTP API for writing data into a bucket:
+
+table
+    tr
+        th URL
+        th Method
+        th Description
+    tr
+        td
+            a(href='{{config.restServiceUrl}}/data', target='_blank') {{ config.restServiceUrl }}/data
+        td GET
+        td Gets a list of all existing buckets
+    tr
+        td
+            a(href='{{config.restServiceUrl}}/data', target='_blank') {{ config.restServiceUrl }}/data
+        td POST
+        td Creates a new bucket
+    tr
+        td
+            a(href='{{config.restServiceUrl}}/data/:key', target='_blank') {{ config.restServiceUrl }}/data/:key
+        td GET
+        td Gets a single bucket, including data
+    tr
+        td
+            a(href='{{config.restServiceUrl}}/data/:key', target='_blank') {{ config.restServiceUrl }}/data/:key
+        td PUT
+        td Updates a bucket
+    tr
+        td
+            a(href='{{config.restServiceUrl}}/data/:key/data', target='_blank') {{ config.restServiceUrl }}/data/:key/data
+        td GET
+        td Gets just the data for a bucket
+    tr
+        td
+            a(href='{{config.restServiceUrl}}/data/:key/data', target='_blank') {{ config.restServiceUrl }}/data/:key/data
+        td PUT
+        td Updates the data for a bucket directly
+    tr
+        td
+            a(href='{{config.restServiceUrl}}/data/:key/append', target='_blank') {{ config.restServiceUrl }}/data/:key/append
+        td POST
+        td Appends one or more values to the end of the bucket's current data
+    tr
+        td
+            a(href='{{config.restServiceUrl}}/data/:key/upsert', target='_blank') {{ config.restServiceUrl }}/data/:key/upsert
+        td POST
+        td Inserts or updates an object in the bucket's current data. Request should contain keys by which to match, and the data to update.  This method only updates the first matching object
+    tr
+        td
+            a(href='{{config.restServiceUrl}}/data/:key/remove', target='_blank') {{ config.restServiceUrl }}/data/:key/remove
+        td POST
+        td Removes matching objects from the bucket's current data. Request should contain keys by which to match, and any matching object is removed
+
+p Any tool or programming language which can send HTTP requests can connect to this API.  Here's an example of updating a bucket using cURL:
+
+pre.code.
+    curl -X POST -d @data.json {{config.restServiceUrl}}/data/my-unique-key/data --header "Content-Type:application/json"
+
+h4 Using CyclotronData in a Dashboard
+
+p The CyclotronData Data Source makes it easy to load the contents of a bucket.  For more information, refer to the Data Source documentation.
+
+h4 JavaScript API
+
+p CyclotronData is also exposed to Dashboards through JavaScript.  The following methods can be used in a Dashboard:
+
+table
+    tr
+        th Method
+        th Description
+    tr
+        td Cyclotron.data.append(key, data, [url])
+        td Appends a value (or array of values) to the bucket; automatically creates bucket if it doesn't exist
+    tr
+        td Cyclotron.data.bucketExists(key, [url])
+        td Returns true if a bucket exists, else false
+    tr
+        td Cyclotron.data.createBucket(key, data, [url])
+        td Creates a new bucket with a key and data set
+    tr
+        td Cyclotron.data.deleteBucket(key, [url])
+        td Deletes a bucket
+    tr
+        td Cyclotron.data.getBucket(key, [url])
+        td Gets a single bucket
+    tr
+        td Cyclotron.data.getBucketData(key, [url])
+        td Gets just the data for a bucket
+    tr
+        td Cyclotron.data.getBuckets([url])
+        td Gets a list of available buckets (without data)
+    tr
+        td Cyclotron.data.remove(key, matchingKeys, [url])
+        td Removes objects which match the matching keys from the bucket; automatically creates bucket if it doesn't exist
+    tr
+        td Cyclotron.data.updateBucketData(key, data, [url])
+        td Replaces the contents of a bucket with a new data set; automatically creates bucket if it doesn't exist
+    tr
+        td Cyclotron.data.upsert(key, matchingKeys, data, [url])
+        td Performs an upsert by updating the first object with matching keys, or inserting the data if no match is found; automatically creates bucket if it doesn't exist
+    
+p Each method has an optional url parameter which can be used to change which Cyclotron instance it connects to.
+
+p This API is asynchronous, meaning it doesn't wait for a result from the Cyclotron service.  Each method returns a promise with then() and catch() methods:
+
+pre.code.
+    Cyclotron.data.getBucket('my-key').then(function (bucket) {
+        // Do something with bucket...
+    }).catch(function (error) {
+        console.log(error);
+    });
+
+h4 Sequential Updates
+
+p Race conditions exist when two processes attempt to update the same bucket at once. There are two methods available to prevent conflicts:
+
+ul
+    li POST /data/:key/append endpoint will strictly append to the end of the bucket, so data will not be lost. Order is not guaranteed if multiple processes are appending data at the same time
+    li PUT /data/:key/data takes an optional ?rev=# parameter which fails the update unless the latest revision in the database matches the provided value.  This allows the process to resolve conflicts and try again (or fail), rather than overwriting

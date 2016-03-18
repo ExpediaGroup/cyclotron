@@ -26,7 +26,6 @@
         box-sizing: border-box;
     }
 
-
     .the-chart {
         width: 100%;
         height: 100%;
@@ -46,5 +45,16 @@
     .google-visualization-atl .border {
         //border: 1px solid #808080;
         background-color: @widgetBackgroundColor;
+    }
+
+    .annotation-editor {
+        position: absolute;
+        top: 0;
+        right: 10px;
+
+        .popover.bottom > .arrow {
+            left: unset;
+            right: 3.5rem !important;
+        }
     }
 }

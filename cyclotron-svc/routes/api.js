@@ -20,6 +20,7 @@ var analytics = require('./api.analytics.js'),
     auth = require('./auth.js'),
     crypto = require('./api.crypto.js'),
     dashboards = require('./api.dashboards.js'),
+    data = require('./api.data.js'),
     exporter = require('./api.exports.js'),
     ldap = require('./api.ldap.js'),
     proxy = require('./api.proxy.js'),
@@ -143,4 +144,18 @@ exports.bindRoutes = function (app) {
     app.all('/analytics', notAllowed);
     app.all('/analytics/*', notAllowed);
 
+    app.get('/data', data.get);
+    app.post('/data', data.putPostSingle);
+    app.all('/data', notAllowed);
+
+    app.get('/data/:key', data.getSingle);
+    app.post('/data/:key', notAllowed);
+    app.put('/data/:key', data.putPostSingle);
+    app.delete('/data/:key', data.deleteSingle);
+
+    app.get('/data/:key/data', data.getSingleData);
+    app.put('/data/:key/data', data.putData);
+    app.post('/data/:key/append', data.appendData);
+    app.post('/data/:key/upsert', data.upsertData);
+    app.post('/data/:key/remove', data.removeData);
 };

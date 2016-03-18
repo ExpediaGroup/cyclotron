@@ -17,7 +17,7 @@
 #
 # Login controller -- for login modal dialog
 #
-cyclotronApp.controller 'LoginController', ($scope, $modalInstance, $localForage, configService, userService) ->
+cyclotronApp.controller 'LoginController', ($scope, $uibModalInstance, $localForage, configService, userService) ->
 
     $scope.credentials = {}
     $scope.loginError = false
@@ -43,11 +43,11 @@ cyclotronApp.controller 'LoginController', ($scope, $modalInstance, $localForage
 
         loginPromise.then (session) ->
             $scope.credentials.password = ''
-            $modalInstance.close(session)
+            $uibModalInstance.close(session)
 
         loginPromise.catch (error) ->
             $scope.loginError = true
             $scope.credentials.password = ''
 
     $scope.cancel = ->
-        $modalInstance.dismiss('cancel')
+        $uibModalInstance.dismiss('cancel')

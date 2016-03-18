@@ -17,8 +17,8 @@
 #
 # GenericErrorModalController controller -- for modal dialog
 #
-cyclotronApp.controller 'GenericErrorModalController', ($scope, $modalInstance, $state) ->
+cyclotronApp.controller 'GenericErrorModalController', ($scope, $uibModalInstance, $state) ->
 
     $scope.goHome = ->
-        $modalInstance.dismiss()
+        $uibModalInstance.dismiss()
         $state.go('home')

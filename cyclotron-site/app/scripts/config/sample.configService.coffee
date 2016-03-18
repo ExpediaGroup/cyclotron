@@ -83,6 +83,10 @@ cyclotronServices.factory 'configService', (commonConfigService) ->
             properties:
                 dataSources:
                     options:
+                        cyclotronData:
+                            properties:
+                                url:
+                                    options: proxyOptions
                         graphite:
                             properties:
                                 url:

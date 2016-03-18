@@ -17,7 +17,7 @@
 #
 # Export controller.
 #
-cyclotronApp.controller 'ExportController', ($scope, $state, $stateParams, $location, $timeout, $modal, configService, dashboardService, exportService) ->
+cyclotronApp.controller 'ExportController', ($scope, $state, $stateParams, $location, $timeout, $uibModal, configService, dashboardService, exportService) ->
 
     $scope.exportFormats = configService.exportFormats
     $scope.exportFormat = _.first $scope.exportFormats
@@ -70,7 +70,7 @@ cyclotronApp.controller 'ExportController', ($scope, $state, $stateParams, $loca
                     viewPermissionDenied()
             
     viewPermissionDenied = ->
-        modalInstance = $modal.open {
+        modalInstance = $uibModal.open {
             templateUrl: '/partials/viewPermissionDenied.html'
             scope: $scope
             controller: 'GenericErrorModalController'

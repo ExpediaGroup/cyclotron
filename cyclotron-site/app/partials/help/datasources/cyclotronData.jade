@@ -1,0 +1,35 @@
+h3 CyclotronData Data Source
+
+p The CyclotronData Data Source loads data from a CyclotronData bucket.  The bucket must already exist or an error will be displayed.  For more details, refer to the documentation on CyclotronData
+
+P Please note that it may be necessary to set the optional
+    em  url
+    |  property in the Data Source in order to connect to the correct Cyclotron instance.
+    | This property lists other Cyclotron servers.
+    | By default, this Data Source loads data from the current Cyclotron server.
+
+property-table(properties='config.dashboard.properties.dataSources.options.cyclotronData.properties')
+
+h4 Pre-Processor
+
+p The CyclotronData Data Source supports an optional pre-processor function that will be called before
+    | the Data Source executes.  For more details, see the main Data Sources page.
+
+h4 Post-Processor
+
+p The CyclotronData Data Source supports an optional post-processor function that will be called after
+    | data is loaded.  For more details, see the main Data Sources page.
+
+h3 Examples
+
+p Examples of the CyclotronData Data Source are available on the 
+    a(href='/example-datasource-cyclotrondata') example-datasource-cyclotrondata
+    |  dashboard
+
+h4 Basic Configuration
+p This is the most basic configuration, using a random GUID.
+pre.code.
+    {
+        "key": "6B4BA5A6-DFF4-11E5-8D51-4FBBDC50F6B1",
+        "type": "cyclotronData"
+    }

@@ -17,7 +17,7 @@
 #
 # Home controller - Home page containing the Dashoard list and editor
 #
-cyclotronApp.controller 'HomeController', ($scope, $location, $modal, configService, dashboardService, tagService, userService) ->
+cyclotronApp.controller 'HomeController', ($scope, $location, $uibModal, configService, dashboardService, tagService, userService) ->
 
     #
     # Scope Variables
@@ -90,7 +90,7 @@ cyclotronApp.controller 'HomeController', ($scope, $location, $modal, configServ
 
         p.catch (response) ->
             if response.status == 500
-                $modal.open {
+                $uibModal.open {
                     templateUrl: '/partials/500.html'
                     scope: $scope
                     controller: 'GenericErrorModalController'
@@ -132,7 +132,7 @@ cyclotronApp.controller 'HomeController', ($scope, $location, $modal, configServ
 
     $scope.delete = (dashboardName) ->
         # Confirmation dialog
-        modalInstance = $modal.open {
+        modalInstance = $uibModal.open {
             templateUrl: '/partials/editor/delete.html'
             controller: 'DeleteDashboardController'
             resolve: {

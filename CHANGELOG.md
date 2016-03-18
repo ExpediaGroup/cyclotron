@@ -1,3 +1,19 @@
+# 1.27.0 (03/17/2016)
+
+## Features
+
+ - Annotation Chart: built-in support for editing annotations.  Annotations are stored in CyclotronData and can be shared between different charts.
+
+ - CyclotronData: HTTP and JavaScript API for storing simple data directly in Cyclotron.  A new Data Source makes it easy to load from CyclotronData into Widgets.  Limited to 16MB
+
+ - Analytics: Add number of unique, active “likes” on the Analytics page; enable additional statistics like average number of tags, editors, viewers per Dashboard
+
+ - Angular.js upgraded to 1.4.x branch.
+
+ ## Bug Fixes
+
+  - Table Widget: numeralformat properties does not support inline JS unless used in a rule
+
 # 1.26.0 (03/03/2016)
 
 ## Features

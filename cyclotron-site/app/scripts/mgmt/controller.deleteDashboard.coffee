@@ -17,6 +17,6 @@
 #
 # Delete Dashboard controller -- for modal dialog
 #
-cyclotronApp.controller 'DeleteDashboardController', ($scope, $modalInstance, dashboardName) ->
+cyclotronApp.controller 'DeleteDashboardController', ($scope, $uibModalInstance, dashboardName) ->
 
     $scope.dashboardName = dashboardName

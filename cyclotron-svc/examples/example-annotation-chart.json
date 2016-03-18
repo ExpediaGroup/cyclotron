@@ -28,7 +28,6 @@
         "name": "Google Example",
         "widgets": [{
             "dataSource": "google-example",
-            "options": {},
             "series": [{
                 "annotationTextColumn": "keplertext",
                 "annotationTitleColumn": "keplertitle",
@@ -128,10 +127,6 @@
                 "scaleFormat": "long",
                 "scaleType": "allfixed",
                 "zoomButtons": {
-                    "5-years": {
-                        "label": "5y",
-                        "offset": [5, 0, 0, 0, 0, 0, 0]
-                    },
                     "10-years": {
                         "label": "10y",
                         "offset": [10, 0, 0, 0, 0, 0, 0]
@@ -139,6 +134,10 @@
                     "20-years": {
                         "label": "20y",
                         "offset": [20, 0, 0, 0, 0, 0, 0]
+                    },
+                    "5-years": {
+                        "label": "5y",
+                        "offset": [5, 0, 0, 0, 0, 0, 0]
                     }
                 },
                 "zoomButtonsOrder": ["1-year", "5-years", "10-years", "20-years", "max"]
@@ -176,10 +175,6 @@
                 "scaleFormat": "long",
                 "scaleType": "allfixed",
                 "zoomButtons": {
-                    "5-years": {
-                        "label": "5y",
-                        "offset": [5, 0, 0, 0, 0, 0, 0]
-                    },
                     "10-years": {
                         "label": "10y",
                         "offset": [10, 0, 0, 0, 0, 0, 0]
@@ -187,6 +182,10 @@
                     "20-years": {
                         "label": "20y",
                         "offset": [20, 0, 0, 0, 0, 0, 0]
+                    },
+                    "5-years": {
+                        "label": "5y",
+                        "offset": [5, 0, 0, 0, 0, 0, 0]
                     }
                 },
                 "zoomButtonsOrder": ["1-year", "5-years", "10-years", "20-years", "max"]
@@ -209,7 +208,81 @@
                 "formatString": "YYYY"
             }
         }]
+    }, {
+        "layout": {
+            "gridColumns": 1,
+            "gridRows": 2
+        },
+        "name": "Editing Annotations",
+        "widgets": [{
+            "annotationEditing": true,
+            "annotationKey": "example-annotation-chart-example-annotations",
+            "dataSource": "uscrime",
+            "options": {
+                "scaleFormat": "short",
+                "zoomStartTime": "${moment().year(1985).startOf('year').toDate()}"
+            },
+            "series": [{
+                "annotationTextColumn": "usCrimeAnnotationText",
+                "annotationTitleColumn": "usCrimeAnnotationTitle",
+                "column": "Total"
+            }],
+            "title": "US Crime Over Time (Combined)",
+            "widget": "annotationChart",
+            "xAxis": {
+                "column": "Year",
+                "format": "string",
+                "formatString": "YYYY"
+            }
+        }, {
+            "annotationEditing": true,
+            "annotationKey": "example-annotation-chart-example-annotations",
+            "dataSource": "uscrime-2",
+            "layout": {},
+            "options": {
+                "displayAnnotationsFilter": true,
+                "fill": 50,
+                "scaleFormat": "long",
+                "scaleType": "allfixed",
+                "zoomButtons": {
+                    "10-years": {
+                        "label": "10y",
+                        "offset": [10, 0, 0, 0, 0, 0, 0]
+                    },
+                    "20-years": {
+                        "label": "20y",
+                        "offset": [20, 0, 0, 0, 0, 0, 0]
+                    },
+                    "5-years": {
+                        "label": "5y",
+                        "offset": [5, 0, 0, 0, 0, 0, 0]
+                    }
+                },
+                "zoomButtonsOrder": ["1-year", "5-years", "10-years", "20-years", "max"]
+            },
+            "series": [{
+                "column": "Murder"
+            }, {
+                "column": "Robbery"
+            }, {
+                "annotationTextColumn": "usCrimeAnnotationText",
+                "annotationTitleColumn": "usCrimeAnnotationTitle",
+                "column": "Violent"
+            }],
+            "title": "US Crime Over Time",
+            "widget": "annotationChart",
+            "xAxis": {
+                "column": "Year",
+                "format": "string",
+                "formatString": "YYYY"
+            }
+        }]
     }],
     "parameters": [],
+    "scripts": [{
+        "name": "Init CyclotronData",
+        "singleLoad": true,
+        "text": "// Initialize annotation data for the Editing Annotations page\nvar key = 'example-annotation-chart-example-annotations';\nCyclotron.data.bucketExists(key).then(function (result) {\n    console.log('Bucket Exists: ' + result);\n    if (!result) {\n        console.log('Creating bucket...');\n        Cyclotron.data.createBucket(key, [{\"usCrimeAnnotationTitle\":\"Peak Crime\",\"x\":\"1991\"}]);\n    }\n});"
+    }],
     "theme": "light"
 }
