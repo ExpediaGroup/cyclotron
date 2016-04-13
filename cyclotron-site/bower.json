@@ -40,6 +40,7 @@
     "jquery-resize": "v1.1",
     "jquery.hotkeys": "jeresig/jquery.hotkeys#0.2.0",
     "js-beautify": "1.5.5",
+    "jsondiffpatch": "~0.1.41",
     "lato": "0.3.0",
     "lodash": "2.4.1",
     "masonry": "3.1.5",
@@ -50,6 +51,7 @@
     "numeraljs": "1.5.3",
     "open-sans-fontface": "1.4.0",
     "perfnow": "~0.0.1",
+    "qrcode.js": "qrcode-js#*",
     "script.js": "ded/script.js#2.5.7",
     "select2": "3.4.8",
     "socket.io-client": "0.9.16",
@@ -107,6 +109,11 @@
     },
     "js-beautify": {
       "main": "./js/lib/beautify.js"
+    },
+    "jsondiffpatch": {
+      "main": [
+        "public/formatters-styles/html.css"
+      ]
     },
     "lato": {
       "main": [

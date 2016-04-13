@@ -73,6 +73,7 @@ exports.bindRoutes = function (app) {
     
     app.get('/dashboards/:name/revisions/:rev', revisions.getSingle);
     app.all('/dashboards/:name/revisions/:rev', notAllowed);
+    app.get('/dashboards/:name/revisions/:rev/diff/:rev2', revisions.diff);
 
     app.get('/dashboards/:name/likes', dashboards.getLikes);
     app.post('/dashboards/:name/likes', requiresAuth, dashboards.likeDashboard);

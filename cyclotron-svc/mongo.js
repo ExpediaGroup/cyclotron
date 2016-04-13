@@ -128,16 +128,6 @@ var eventAnalyticsSchema = mongoose.Schema({
     details        : {type: {}, required: false}
 });
 
-/* Event Analytics Schema: contains records of various events */
-var eventAnalyticsSchema = mongoose.Schema({
-    date           : {type: Date, required: true},
-    eventType      : {type: String, required: true},
-    visitId        : {type: String, required: true},
-    uid            : {type: String, required: false},
-    user           : {type: mongoose.Schema.Types.ObjectId, required: false, ref: 'user'},
-    details        : {type: {}, required: false}
-});
-
 /* Cyclotron Data Schema: contains buckets of data */
 var databucketsSchema = mongoose.Schema({
     key              : {type: String, required: true},

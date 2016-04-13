@@ -26,7 +26,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
     exports = {
 
-        version: '1.27.1'
+        version: '1.28.0'
 
         logging: 
             enableDebug: false
@@ -36,6 +36,12 @@ cyclotronServices.factory 'commonConfigService', ->
             loginMessage: 'Please login using your LDAP username and password.'
 
         enableAnalytics: false
+
+        newUser:
+            enableMessage: true
+            welcomeMessage: 'It looks like you\'re new here!  Take a look at the <a href="/help"><i class="fa fa-question-circle" /> Help</a> page.'
+            iconClass: 'fa-info'
+            autoDecayDuration: 1
 
         # Dashboard settings
         dashboard:
@@ -430,7 +436,61 @@ cyclotronServices.factory 'commonConfigService', ->
                             default: false
                             defaultHidden: true
                             order: 103
+                        errorHandler:
+                            label: 'Error Handler'
+                            description: 'Specifies an optional JavaScript function that is called if an errors occurs. It can return a different or modified error message. If this value is not an JavaScript function, it will be ignored.'
+                            placeholder: 'JavaScript Function'
+                            type: 'editor'
+                            editorMode: 'javascript'
+                            required: false
+                            defaultHidden: true
+                            order: 104
                     options:
+                        cyclotronData:
+                            value: 'cyclotronData'
+                            icon: 'fa-cloud-download'
+                            message: 'Cyclotron has built-in support for a limited amount of data storage using uniquely-named buckets.  Refer to to the Documentation for more details.'
+                            properties:
+                                key:
+                                    label: 'Bucket Key'
+                                    description: 'Specifies the unique key to a Cyclotron Data bucket.'
+                                    placeholder: 'Bucket Key'
+                                    type: 'string'
+                                    inlineJs: true
+                                    required: true
+                                    order: 10
+                                refresh: 
+                                    label: 'Auto-Refresh'
+                                    description: 'Optional; specifies the number of seconds after which the Data Source reloads'
+                                    type: 'integer'
+                                    required: false
+                                    placeholder: 'Number of Seconds'
+                                    order: 14
+                                preProcessor:
+                                    label: 'Pre-Processor'
+                                    description: 'Specifies an optional JavaScript function that can inspect and modify the Data Source properties before it is executed. This method will be called before the Data Source is executed, and passed the Data Source object as an argument. This object can be modified, or a new/modified object returned. If this value is not an JavaScript function, it will be ignored.'
+                                    placeholder: 'JavaScript Function'
+                                    type: 'editor'
+                                    editorMode: 'javascript'
+                                    required: false
+                                    defaultHidden: true
+                                    order: 15
+                                postProcessor:
+                                    label: 'Post-Processor'
+                                    description: 'Specifies an optional JavaScript function that can inspect and modify the result before it is sent to the Widgets. If this value is not an JavaScript function, it will be ignored.'
+                                    placeholder: 'JavaScript Function'
+                                    type: 'editor'
+                                    editorMode: 'javascript'
+                                    required: false
+                                    order: 16
+                                url:
+                                    label: 'Cyclotron Server'
+                                    description: 'Specifies which Cyclotron server to request data from. If omitted, the default sever will be used.'
+                                    type: 'url'
+                                    inlineJs: true
+                                    required: false
+                                    defaultHidden: true
+                                    order: 11
                         json:
                             value: 'json'
                             icon: 'fa-cloud-download'
@@ -495,6 +555,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     required: false
                                     defaultHidden: true
                                     order: 11
+
                         graphite:
                             value: 'graphite'
                             icon: 'fa-cloud-download'
@@ -633,6 +694,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     required: false
                                     placeholder: 'Number of Seconds'
                                     order: 11
+
                         splunk: 
                             value: 'splunk'
                             icon: 'fa-cloud-download'
@@ -756,11 +818,18 @@ cyclotronServices.factory 'commonConfigService', ->
                             order: 1
                         showInUrl:
                             label: 'Show in URL'
-                            description: 'Determines whether or not the parameter value is displayed in the query string of the Dashboard URL.'
+                            description: 'Determines whether or not the Parameter is displayed in the query string of the Dashboard URL.'
                             type: 'boolean'
+                            default: true
                             required: false
                             order: 2
-                            defaultValue: true
+                        persistent:
+                            label: 'Persistent'
+                            description: 'If true, the value of this Parameter will be persisted in the user\'s browser across multiple sessions.'
+                            type: 'boolean'
+                            default: false
+                            required: false
+                            order: 3
                     sample:
                         name: ''
                         defaultValue: ''
@@ -852,37 +921,101 @@ cyclotronServices.factory 'commonConfigService', ->
             {
                 name: 'About'
                 path: '/partials/help/about.html'
+                tags: ['about', 'terminology', 'features']
                 children: [
-                    { name: 'Quick Start', path: '/partials/help/quickstart.html' }
-                    { name: 'JSON', path: '/partials/help/json.html' }
-                    { name: 'Examples', path: '/partials/help/examples.html' }
-                    { name: 'Permissions', path: '/partials/help/permissions.html' }
-                    { name: 'Encrypted Strings', path: '/partials/help/encryptedStrings.html' }
-                    { name: 'CyclotronData', path: '/partials/help/cyclotrondata.html' }
-                    { name: 'Browser Compatibility', path: '/partials/help/browserCompat.html' }
-                    { name: '3rd Party Libraries', path: '/partials/help/3rdparty.html' }
-                    { name: 'Hotkeys', path: '/partials/help/hotkeys.html' }
-                    { name: 'API', path: '/partials/help/api.html' }
+                    {
+                        name: 'Quick Start'
+                        path: '/partials/help/quickstart.html' 
+                        tags: ['help', 'creating', 'tags', 'theme', 'revisions', 'preview', 'data sources', 'pages', 'layout', 'widgets']
+                    }
+                    {
+                        name: 'JSON'
+                        path: '/partials/help/json.html' 
+                        tags: ['json']
+                    }
+                    {
+                        name: 'Examples'
+                        path: '/partials/help/examples.html' 
+                        tags: ['examples', 'cyclotron-examples']
+                    }
+                    {
+                        name: 'Permissions'
+                        path: '/partials/help/permissions.html' 
+                        tags: ['permissions', 'edit permission', 'view permission', 'editors', 'viewers', 'restricted', 'login', 'rest', 'api']
+                    }
+                    {
+                        name: 'Encrypted Strings'
+                        path: '/partials/help/encryptedStrings.html' 
+                        tags: ['encryption', 'encrypted', '!{', 'decrypt', 'encrypt']
+                    }
+                    {
+                        name: 'CyclotronData'
+                        path: '/partials/help/cyclotrondata.html' 
+                        tags: ['cyclotrondata', 'data', 'storage', 'bucket', 'api']
+                    }
+                    {
+                        name: 'Browser Compatibility'
+                        path: '/partials/help/browserCompat.html' 
+                        tags: ['browser', 'compatibility', 'firefox', 'chrome', 'internet explorer', 'ie', 'safari', 'browsercheck']
+                    }
+                    {
+                        name: '3rd Party Libraries'
+                        path: '/partials/help/3rdparty.html' 
+                        tags: ['libraries', 'jquery', 'moment', 'lodash', 'angular', 'numeral', 'localforage', 'uri', 'bootstrap', 'c3.js', 'd3.js', 'font awesome', 'highcharts', 'masonry', 'metricsgraphics', 'select2', 'spin.js']
+                    }
+                    { 
+                        name: 'Hotkeys'
+                        path: '/partials/help/hotkeys.html'
+                        tags: ['hotkeys', 'keys', 'shortcuts']
+                    }
+                    { 
+                        name: 'API'
+                        path: '/partials/help/api.html'
+                        tags: ['api', 'rest', 'service']
+                    }
                 ]
             }
             {
                 name: 'Dashboards'
                 path: '/partials/help/dashboards.html'
+                tags: ['dashboards', 'pages', 'dataSources', 'scripts', 'parameters']
                 children: [
-                    { name: 'Pages', path: '/partials/help/pages.html' }
-                    { name: 'Layout', path: '/partials/help/layout.html' }
-                    { name: 'Parameters', path: '/partials/help/parameters.html' }
-                    { name: 'Scripts', path: '/partials/help/scripts.html' }
-                    { name: 'Styles', path: '/partials/help/styles.html' }
+                    { 
+                        name: 'Pages'
+                        path: '/partials/help/pages.html'
+                        tags: ['pages', 'widgets']
+                    }
+                    { 
+                        name: 'Layout'
+                        path: '/partials/help/layout.html'
+                        tags: ['layout', 'grid', 'mobile', 'scrolling', 'position', 'absolute']
+                    }
+                    { 
+                        name: 'Parameters'
+                        path: '/partials/help/parameters.html'
+                        tags: ['parameters']
+                    }
+                    { 
+                        name: 'Scripts'
+                        path: '/partials/help/scripts.html'
+                        tags: ['scripts', 'javascript']
+                    }
+                    { 
+                        name: 'Styles'
+                        path: '/partials/help/styles.html'
+                        tags: ['styles', 'css']
+                    }
                 ]
             }
             {
                 name: 'Data Sources'
                 path: '/partials/help/dataSources.html'
+                tags: ['data sources', 'dataSources', 'tabular', 'post-processor', 'post processor', 'pre-processor', 'pre processor']
             }
             {
                 name: 'Widgets'
                 path: '/partials/help/widgets.html'
+                tags: ['widgets']
             }
         ]
 
@@ -1467,10 +1600,6 @@ cyclotronServices.factory 'commonConfigService', ->
                                     states:
                                         hover:
                                             enabled: true
-                                dataLabels:
-                                    style:
-                                        color: '#999'
-                                        textShadow: false
                             bar:
                                 borderWidth: 0
                             column:
@@ -1811,6 +1940,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         label: 'Format'
                         description: 'Enter time format of your choice. "http://momentjs.com/docs/#/displaying/format/" can help in choosing time formats'
                         type: 'string'
+                        default: 'dddd, MMMM Do YYYY, h:mm:ss a'
                         required: false
                         order: 10
 
@@ -2167,6 +2297,78 @@ cyclotronServices.factory 'commonConfigService', ->
                         required: false
                         placeholder: 'Column name'
                         order: 16
+
+            qrcode: 
+                name: 'qrcode'
+                icon: 'fa-cogs'
+                properties:
+                    text:
+                        label: 'Text'
+                        description: 'Text content of the generated QR code.'
+                        placeholder: 'QR Code Contents'
+                        type: 'string'
+                        required: false
+                        order: 10
+                    maxSize:
+                        label: 'Max Size'
+                        description: 'Maximum height/width of the QR code.'
+                        type: 'integer'
+                        required: false
+                        order: 11
+                    useUrl:
+                        label: 'Use URL'
+                        description: 'Overrides the text property and generates a QR code with the current Dashboard\'s URL.'
+                        type: 'boolean'
+                        default: false
+                        required: false
+                        order: 12
+                    dataSource:
+                        label: 'Data Source'
+                        description: 'Optional; specifies the name of a Dashboard data source. If set, the data source will be called and the result will be available for the QR code generation.'
+                        placeholder: 'Data Source name'
+                        type: 'string'
+                        required: false
+                        options: datasourceOptions
+                        defaultHidden: true
+                        order: 13
+                    filters: 
+                        label: 'Filters'
+                        description: 'Optional, but if provided, specifies name-value pairs used to filter the data source\'s result set.  Each key specifies a column in the data source, and the value specifies either a single value (string) or a set of values (array of strings).  Only rows which have the specifies value(s) will be permitted.'
+                        type: 'hash'
+                        inlineJsKey: true
+                        inlineJsValue: true
+                        required: false
+                        defaultHidden: true
+                        order: 14
+                    sortBy: 
+                        label: 'Sort By'
+                        description: 'Optional, specifies the field(s) to sort the data by. If the value is a string, it will sort by that single field. If it is an array of strings, multiple fields will be used to sort, with left-to-right priority. The column name can be prefixed with a + or a - sign to indicate the direction or sort. + is ascending, while - is descending. The default sort direction is ascending, so the + sign does not need to be used. If this property is omitted, the original sort order of the data will be used.'
+                        placeholder: 'Column name'
+                        type: 'string[]'
+                        inlineJs: true
+                        required: false
+                        defaultHidden: true
+                        order: 15
+                    colorDark:
+                        label: 'Dark Color'
+                        description: 'CSS color name or hex color code, used to draw the dark portions of the QR code.'
+                        placeholder: 'CSS color or hex color code'
+                        type: 'string'
+                        default: '#000000'
+                        required: false
+                        defaultHidden: true
+                        order: 16
+                    colorLight:
+                        label: 'Light Color'
+                        description: 'CSS color name or hex color code, used to draw the dark portions of the QR code.'
+                        placeholder: 'CSS color or hex color code'
+                        type: 'string'
+                        default: '#ffffff'
+                        required: false
+                        defaultHidden: true
+                        order: 17
+                sample:
+                    text: 'hello'
 
             stoplight:
                 name: 'stoplight'
@@ -2675,12 +2877,35 @@ cyclotronServices.factory 'commonConfigService', ->
     # Copy some chart themes
     exports.widgets.chart.themes.lightborderless = exports.widgets.chart.themes.light
 
-    # Add Widget and Data Source help pages
-    _.find(exports.help, { name: 'Data Sources' }).children = _.map _.sortBy(exports.dashboard.properties.dataSources.options, 'name'), (dataSource) ->
-        { name: dataSource.value, path: '/partials/help/datasources/' + dataSource.value + '.html' }
+    # Populate Help tags with properties
+    helpDashboards = _.find(exports.help, { name: 'Dashboards' })
+    helpDashboards.tags = _.union helpDashboards.tags, _.map exports.dashboard.properties, (value, name) -> name
 
-    _.find(exports.help, { name: 'Widgets' }).children = _.map _.sortBy(exports.widgets, 'name'), (widget) ->
-        { name: widget.name, path: '/widgets/' + widget.name + '/help.html' }
+    helpDataSources = _.find(exports.help, { name: 'Data Sources' })
+    helpDataSources.tags = _.union helpDataSources.tags, _.map exports.dashboard.properties.dataSources.properties, (value, name) -> name
+
+    helpWidgets = _.find(exports.help, { name: 'Widgets' })
+    helpWidgets.tags = _.union helpWidgets.tags, _.map exports.dashboard.properties.pages.properties.widgets.properties, (value, name) -> name
+
+    propertyMapHelper = (value, name) ->
+        v = _.cloneDeep value
+        v.name = name
+        v
+
+    # Add Widget and Data Source help pages
+    helpDataSources.children = _.map _.sortBy(exports.dashboard.properties.dataSources.options, 'name'), (dataSource) ->
+        { 
+            name: dataSource.value
+            path: '/partials/help/datasources/' + dataSource.value + '.html'
+            tags: _.map dataSource.properties, propertyMapHelper
+        }
+
+    helpWidgets.children = _.map _.sortBy(exports.widgets, 'name'), (widget) ->
+        { 
+            name: widget.name
+            path: '/widgets/' + widget.name + '/help.html'
+            tags: _.map widget.properties, propertyMapHelper
+        }
 
     return exports
 

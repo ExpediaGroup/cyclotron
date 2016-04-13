@@ -1,0 +1,59 @@
+{
+    "dataSources": [{
+        "name": "datasource_0",
+        "processor": "p = function() {\n    return [{ value: \"Hello World\" }];\n}",
+        "type": "javascript"
+    }, {
+        "name": "datasource_1",
+        "processor": "p = function() {\n    return [{ value: moment().format() }];\n}",
+        "refresh": 5,
+        "type": "javascript"
+    }],
+    "description": "Examples of using the QRCode widget to create QR Codes.",
+    "disableAnalytics": true,
+    "name": "example-qrcode",
+    "pages": [{
+        "frequency": 1,
+        "layout": {
+            "gridColumns": 3,
+            "gridRows": 3
+        },
+        "widgets": [{
+            "text": "Hello World",
+            "title": "Hello World",
+            "widget": "qrcode"
+        }, {
+            "maxSize": 75,
+            "text": "Hello World",
+            "title": "Max Size",
+            "widget": "qrcode"
+        }, {
+            "dataSource": "datasource_0",
+            "maxSize": 150,
+            "text": "#{value}",
+            "title": "Data Source",
+            "widget": "qrcode"
+        }, {
+            "dataSource": "datasource_1",
+            "maxSize": 150,
+            "text": "#{value}",
+            "title": "Time",
+            "widget": "qrcode"
+        }, {
+            "title": "Current URL",
+            "useUrl": true,
+            "widget": "qrcode"
+        }, {
+            "colorDark": "#252",
+            "text": "Now in Colors",
+            "title": "Colored",
+            "widget": "qrcode"
+        }, {
+            "colorLight": "#fce",
+            "text": "Now in Colors",
+            "title": "Colored 2",
+            "widget": "qrcode"
+        }]
+    }],
+    "theme": "light"
+}

@@ -1,0 +1,5 @@
+.new-user-message(ng-if='canDisplay()')
+    i.fa.left(class='{{ iconClass }}')
+    i.fa.fa-times.right(ng-click='dismiss()')
+    .inner
+        p(ng-bind-html='message')

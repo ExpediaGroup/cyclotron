@@ -1,0 +1,123 @@
+/*
+ * Copyright (c) 2013-2016 the original author or authors.
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at
+ *
+ *     http://www.opensource.org/licenses/mit-license.php
+ *
+ * Unless required by applicable law or agreed to in writing, 
+ * software distributed under the License is distributed on an 
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+ * either express or implied. See the License for the specific 
+ * language governing permissions and limitations under the License. 
+ */
+
+@import "../../../vendor/lesselements/_elements.less";
+@import "../common/variables.less";
+
+.dashboard-history-page {
+
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: .9rem;
+
+    .box-sizing(border-box);
+    * {
+        .box-sizing(border-box);
+    }
+    *:before,
+    *:after {
+        .box-sizing(border-box);
+    }
+
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+
+    h1 {
+        margin-bottom: 2rem;
+    }
+    h2 {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+    }
+
+    .header {
+        .dashboard-well {
+            min-height: 2rem;
+            margin-bottom: 20px;
+            background-color: #F5F5F5;
+            padding: 20px 15px 15px;
+            border-bottom: 1px solid #aaa;
+        }
+
+        .button-bar { 
+            float: right; 
+            .btn {
+                margin-left: .8rem;
+            }
+        }
+
+        h1 { 
+            display: inline-block; 
+            margin-top: 0;
+            margin-right: 4rem; 
+            margin-bottom: 0;
+        }
+
+    }
+
+    .row {
+        margin-bottom: 1.5rem;
+    }
+
+    td {
+        a {
+
+            > i { 
+                margin-left: .7rem;
+            }
+            margin-right: 1.4rem;
+        }
+    }
+
+    .overview {
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #999;
+        dt, dd {
+            font-size: 1.2rem;
+        }
+    }
+}
+
+.revisionDiff-modal {
+
+    .revision-controls {
+        select, label {
+            display: inline-block;
+        }
+
+        i.fa {
+            padding: 0.5rem;
+            display: inline-block;
+        }
+        
+        .fa-angle-double-right { 
+            margin-left: 0.5rem;
+        }
+    }
+    
+    .diff {
+        overflow-x: auto;
+    }
+    .jsondiffpatch-delta {
+        .jsondiffpatch-unchanged {
+            display: none;
+        }
+        .jsondiffpatch-textdiff-line {
+            white-space: pre;
+        }
+    }
+}

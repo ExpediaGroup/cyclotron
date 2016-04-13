@@ -17,7 +17,7 @@
 #
 # Home controller.
 #
-cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location, $timeout, $window, $q, $uibModal, analyticsService, configService, cyclotronDataService, dashboardService, dataService, loadService, logService, userService) ->
+cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location, $timeout, $window, $q, $uibModal, analyticsService, configService, cyclotronDataService, dashboardService, dataService, loadService, logService, parameterService, userService) ->
 
     preloadTimer = null
     rotateTimer = null
@@ -189,6 +189,63 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location,
         else
             toggleLikeHelper()
 
+    handleQueryStringChanges = (parameters, oldParameters) ->
+        _.assign($window.Cyclotron.parameters, parameters)
+
+        if parameters.page != oldParameters.page
+            $scope.goToPage(parameters.page)
+
+    handleParameterChanges = (parameters, oldParameters) ->
+
+        deletedKeys = _.difference(_.keys(oldParameters), _.keys(parameters))
+
+        # Remove deleted parameters from the URL
+        _.each deletedKeys, (key) ->
+            logService.debug 'Removing parameter from URL: ' + key
+            $location.search(key, null)
+            return
+
+        # Save any persistent parameters
+        parameterService.savePersistentParameters parameters, $scope.dashboard
+
+        exportOptions = {}
+        deeplinkOptions = {}
+
+        _.each parameters, (value, key) ->
+            parameterDefinition = _.find $scope.dashboard.parameters, { name: key }
+            defaultValue = parameterDefinition?.defaultValue
+
+            showInUrl = true
+            if parameterDefinition?.showInUrl == false then showInUrl = false
+
+            if key == 'page'
+                $location.search(key, null)
+            else if defaultValue? and _.jsExec(defaultValue).toString() == value.toString()
+                $location.search(key, null)
+                deeplinkOptions[key] = value
+            else if !showInUrl
+                $location.search(key, null)
+                deeplinkOptions[key] = value
+                exportOptions[key] = value 
+            else if key == 'live'
+                $location.search(key, value)
+                deeplinkOptions[key] = value
+            else 
+                $location.search(key, value)
+                deeplinkOptions[key] = value
+                exportOptions[key] = value 
+
+            return
+
+        # Create export options from non-default parameters
+        $scope.exportUrl = new URI('/export')
+            .segment $scope.dashboard.name
+            .search exportOptions
+            .toString()
+
+        # Save deeplink options for later
+        $scope.deeplinkOptions = deeplinkOptions
+
     #
     # Initialization methods
     #
@@ -315,124 +372,61 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location,
         return deferred.promise
 
     $scope.initialLoad = ->
-        # Load Default Values for Parameters
-        if $scope.dashboard.parameters?
-            paramsWithDefaults = _.filter $scope.dashboard.parameters, (p) ->
-                _.has p, 'defaultValue'
-
-            _.each paramsWithDefaults, (p) ->
-                $window.Cyclotron.parameters[p.name] ?= _.jsExec(p.defaultValue)
-
-        _.each $window.Cyclotron.parameters, (value, key) ->
-            console.log('Initial Parameter [' + key + ']: ' + value)
-
-        # Watch querystring for changes
-        $scope.$watch (-> $location.search()), (parameters, oldParameters) ->
-            _.assign($window.Cyclotron.parameters, parameters)
-
-            if parameters.page != oldParameters.page
-                $scope.goToPage(parameters.page)
-
-        # Watch Parameters for changes
-        $scope.$watch (-> $window.Cyclotron.parameters), (parameters, oldParameters) ->
-
-            deletedKeys = _.difference(_.keys(oldParameters), _.keys(parameters))
-            # Remove deleted parameters from the URL
-            _.each deletedKeys, (key) ->
-                $location.search(key, null)
-                return
-
-            exportOptions = {}
-            deeplinkOptions = {}
-
-            _.each parameters, (value, key) ->
-                parameterDefinition = _.find $scope.dashboard.parameters, { name: key }
-                defaultValue = parameterDefinition?.defaultValue
-
-                showInUrl = true
-                if parameterDefinition?.showInUrl == false then showInUrl = false
-
-                if key == 'page'
-                    $location.search(key, null)
-                else if defaultValue? and _.jsExec(defaultValue).toString() == value.toString()
-                    $location.search(key, null)
-                    deeplinkOptions[key] = value
-                else if !showInUrl
-                    $location.search(key, null)
-                    deeplinkOptions[key] = value
-                    exportOptions[key] = value 
-                else if key == 'live'
-                    $location.search(key, value)
-                    deeplinkOptions[key] = value
-                else 
-                    $location.search(key, value)
-                    deeplinkOptions[key] = value
-                    exportOptions[key] = value 
-
-                return
-
-            # Create export options from non-default parameters
-            $scope.exportUrl = new URI('/export')
-                .segment $scope.dashboard.name
-                .search exportOptions
-                .toString()
-
-            # Save deeplink options for later
-            $scope.deeplinkOptions = deeplinkOptions
-        , true
 
         # Load theme css(s) 
-        themes = dashboardService.getThemes($scope.dashboard)
+        themes = dashboardService.getThemes $scope.dashboard
         _.each themes, (theme) ->
             loadService.loadCssUrl('/css/app.themes.' + theme + '.css', true)
 
-        # Preload any data sources with preload: true
-        preloadDataSources = _.filter $scope.dashboard.dataSources, { preload: true }
+        # Intialize parameters
+        parameterService.initializeParameters($scope.dashboard).then ->
 
-        _.each preloadDataSources, (dataSourceDefinition) ->
-            console.log('Preloading data source ' + dataSourceDefinition.name)
-            dataSource = dataService.get(dataSourceDefinition)
-            dataSource.getData(dataSourceDefinition, _.noop, _.noop, _.noop)
-            return
+            # Watch querystring for changes
+            $scope.$watch (-> $location.search()), handleQueryStringChanges
 
+            # Watch Parameters for changes
+            $scope.$watch (-> $window.Cyclotron.parameters), handleParameterChanges, true
+            
+            # Preload any data sources with preload: true
+            preloadDataSources = _.filter $scope.dashboard.dataSources, { preload: true }
 
-        # Only load if there are any pages
-        if $scope.dashboard.pages.length > 0
-            # Navigate to a particular page if specified
-            if $window.Cyclotron.parameters.page?
-                $scope.goToPage parseInt($window.Cyclotron.parameters.page)
-            else if !_.isEmpty $scope.originalDashboardPageName
-                pageNames = _.pluck $scope.dashboard.pages, 'name'
-                pageIndex = _.findIndex pageNames, (name) ->
-                    name? and _.slugify(name) == $scope.originalDashboardPageName
+            _.each preloadDataSources, (dataSourceDefinition) ->
+                logService.info 'Preloading data source', dataSourceDefinition.name
+                dataSource = dataService.get(dataSourceDefinition)
+                dataSource.getData(dataSourceDefinition, _.noop, _.noop, _.noop)
+                return
 
-                if pageIndex >= 0
-                    $scope.goToPage 1 + pageIndex
-                else if $scope.originalDashboardPageName.match(/page-\d+$/)
-                    $scope.goToPage parseInt($scope.originalDashboardPageName.substring(5))
+            # Only load if there are any pages
+            if $scope.dashboard.pages.length > 0
+                # Navigate to a particular page if specified
+                if $window.Cyclotron.parameters.page?
+                    $scope.goToPage parseInt($window.Cyclotron.parameters.page)
+                else if !_.isEmpty $scope.originalDashboardPageName
+                    pageNames = _.pluck $scope.dashboard.pages, 'name'
+                    pageIndex = _.findIndex pageNames, (name) ->
+                        name? and _.slugify(name) == $scope.originalDashboardPageName
+
+                    if pageIndex >= 0
+                        $scope.goToPage 1 + pageIndex
+                    else if $scope.originalDashboardPageName.match(/page-\d+$/)
+                        $scope.goToPage parseInt($scope.originalDashboardPageName.substring(5))
+                    else
+                        $scope.goToPage 1
                 else
                     $scope.goToPage 1
-            else
-                $scope.goToPage 1
 
-            $scope.updateUrl()
+                $scope.updateUrl()
 
-        startRotate = ->
-            # Only enable rotation if there are multiple pages
-            if $scope.dashboard.pages.length > 1
-                $scope.paused = false
-                $scope.rotate()
-        
-        # ?autoRotate=true/false will override the dashboard setting.
-        if $window.Cyclotron.parameters.autoRotate? 
-            if $window.Cyclotron.parameters.autoRotate == "true"
-                startRotate()
-
-        # There is also a dashboard property which can disable rotation.
-        else if $scope.dashboard.autoRotate == true
-            startRotate()
-
-        $scope.firstLoad = false
+            # Start Dashboard Rotation            
+            if $window.Cyclotron.parameters.autoRotate == "true" or $scope.dashboard.autoRotate == true
+                # ?autoRotate=true/false will override the dashboard setting.
+                # There is also a dashboard property which can disable rotation.
+                # Only enable rotation if there are multiple pages
+                if $scope.dashboard.pages.length > 1
+                    $scope.paused = false
+                    $scope.rotate()
+            
+            $scope.firstLoad = false
 
     # Initial load - load dashboard and initialize rotation
     $scope.reloadInterval = if $window.Cyclotron.parameters.live == 'true' then 1500 else 60000

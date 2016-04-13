@@ -67,6 +67,12 @@ cyclotronServices.factory 'configService', (commonConfigService) ->
         # Logging settings
         logging:
             enableDebug: false
+
+        # New Users
+        newUser:
+            # Enables/disables welcome message for new users
+            enableMessage: true
+
         
         # List of neighboring Cyclotron instances
         cyclotronEnvironments: cyclotronEnvironments

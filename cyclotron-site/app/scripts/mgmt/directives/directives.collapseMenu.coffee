@@ -14,11 +14,13 @@
 # language governing permissions and limitations under the License. 
 ###
 
-cyclotronDirectives.directive 'collapseMenu', ($parse) -> 
+cyclotronDirectives.directive 'collapseMenu', (filterFilter) -> 
     {
         restrict: 'EAC'
         scope: 
             items: '='
+            filter: '='
+            initialSelection: '='
             selectItem: '&'
 
         templateUrl: '/partials/help/collapseMenu.html'
@@ -43,9 +45,42 @@ cyclotronDirectives.directive 'collapseMenu', ($parse) ->
                 child.selected = true
                 section.expanded = true
                 $scope.selectItem {'item': child}
+
+            $scope.$watch 'filter', (filter) ->
+                $scope.isFiltered = not _.isEmpty filter
+
+            $scope.$on 'feelingLucky', ->
+                # Select the first item that matches the current filter
+                # Use filterFilter to apply the filter to the items
+                matchingSections = filterFilter($scope.items, $scope.filter)
+                if matchingSections?.length > 0
+                    firstSection = _.first matchingSections
+
+                    # Check to see if the Section matches on its own, or because of a Child
+                    # Remove children and run filter again.
+                    firstSectionSolo = _.cloneDeep firstSection
+                    delete firstSectionSolo.children
+                    if filterFilter([firstSectionSolo], $scope.filter).length > 0
+                        $scope.selectSection firstSection
+                    else
+                        # Parent section didn't match, so check children
+                        matchingChildren = filterFilter(firstSection.children, $scope.filter)
+                        if matchingChildren?.length > 0
+                            $scope.selectChild _.first(matchingChildren), firstSection
            
             # Initialize
-            $scope.selectSection _.first $scope.items
+            if $scope.initialSelection?
+                _.each $scope.items, (section) ->
+                    if section.name == $scope.initialSelection
+                        $scope.selectSection section
+                        return false
+
+                    child = _.find section.children, { name: $scope.initialSelection }
+                    if child?
+                        $scope.selectChild child, section
+                        return false
+            else
+                $scope.selectSection _.first $scope.items
         
         link: (scope, element, attrs) ->
             return

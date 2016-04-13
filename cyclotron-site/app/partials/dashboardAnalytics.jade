@@ -5,10 +5,9 @@
     .row.header
         .dashboard-well
             .button-bar
-                a(ui-sref='edit.details({ dashboardName: dashboard.name })')
-                    button.btn(title='Edit this Dashboard')
-                        i.fa.fa-edit
-                        |  Edit Dashboard
+                a.btn.btn-default(ui-sref='edit.details({ dashboardName: dashboard.name })', title='Edit this Dashboard')
+                    i.fa.fa-edit
+                    |  Edit Dashboard
 
             h1 {{ dashboard.name }}
 

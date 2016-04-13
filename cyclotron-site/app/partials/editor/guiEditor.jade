@@ -7,10 +7,19 @@
                 button.btn(ng-class='{"btn-default": !canSave(), "btn-success": canSave()}', ng-click='save()')
                     i.fa.fa-check-square-o
                     |  Save
-                a(ng-if='canPreview()', ng-href='{{ previewUrl() }}', target='cyclotron-preview', title='Live Preview')
-                    button.btn.btn-primary
+
+                .btn-group(uib-dropdown, ng-if='canPreview()')
+                    a.btn.btn-primary(ng-href='{{ dashboardUrl(true) }}', target='cyclotron-preview', title='View Dashboard with Live mode enabled')
                         i.fa.fa-external-link
                         |  {{ previewButtonText() }}
+                        
+                    button.btn.btn-primary(type='button', uib-dropdown-toggle)
+                        i.fa.fa-caret-down
+                    ul.pull-right(role='menu', uib-dropdown-menu)
+                        li(role='menuitem')
+                            a(ng-href='{{ dashboardUrl(false) }}', target='cyclotron-preview', title='View Dashboard without Live mode')
+                                i.fa.fa-external-link
+                                |  View Dashboard
 
             h1(ng-show='editor.dashboard.name') {{ editor.dashboard.name }}
             h1(ng-hide='$stateParams.dashboardName || editor.dashboard.name') New Dashboard
@@ -166,6 +175,11 @@
                         |  Encrypt ...
 
                 li.divider
+                li
+                    a#editor-history(ui-sref='dashboardHistory({ dashboardName: editor.dashboard.name })', title='View Dashboard History')
+                        i.fa.fa-clock-o
+                        |  History
+                
                 li
                     a#editor-analytics(ui-sref='dashboardAnalytics({ dashboardName: editor.dashboard.name })', title='View Dashboard Analytics')
                         i.fa.fa-bar-chart

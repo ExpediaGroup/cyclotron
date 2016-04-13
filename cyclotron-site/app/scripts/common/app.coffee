@@ -173,7 +173,7 @@ cyclotronApp.config ($stateProvider, $urlRouterProvider, $locationProvider, $con
                 session: loadExistingSession
                 deps: lazyLoad ['/js/app.mgmt.js'], ['/css/app.mgmt.css']
                 dashboard: ['$q', '$stateParams', 'dashboardService', ($q, $stateParams, dashboardService) ->
-                    dashboardService.getDashboard($stateParams.dashboardName)
+                    dashboardService.getDashboard $stateParams.dashboardName
                 ]
         })
         .state('export', {
@@ -273,6 +273,16 @@ cyclotronApp.config ($stateProvider, $urlRouterProvider, $locationProvider, $con
             templateUrl: '/partials/editor/style.html'
             data:
                 title: 'Cyclotron | Edit | Styles'
+        })
+        .state('dashboardHistory', {
+            url: '/history/{dashboardName:.*}'
+            templateUrl: '/partials/dashboardHistory.html'
+            controller: 'DashboardHistoryController'
+            data:
+                title: 'Cyclotron | Dashboard History'
+            resolve:
+                session: loadExistingSession
+                deps: lazyLoad ['/js/app.mgmt.js'], ['/css/app.mgmt.css']
         })
         .state('dashboard', {
             url: '/{dashboard:.+}'

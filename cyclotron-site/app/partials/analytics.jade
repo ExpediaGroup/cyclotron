@@ -110,6 +110,11 @@
             dt {{ statistics.pageViews.uniqueUids | numeraljs:'0,0' }}
             dd unique 
                 ng-pluralize(count='statistics.pageViews.uniqueUids', when='{"one": "UID", "other": "UIDs"}')
+        dl(title='Number of unique user cookies active over the past month (may not be authenticated)')
+            dt {{ statistics.users.uidsPastMonthCount | numeraljs:'0,0' }}
+            dd active 
+                ng-pluralize(count='statistics.users.uidsPastMonthCount', when='{"one": "UID", "other": "UIDs"}')
+                |  (1 month)
         dl(title='Number of user sessions currently active')
             dt {{ statistics.sessions.activeSessions | numeraljs:'0,0' }}
             dd active 

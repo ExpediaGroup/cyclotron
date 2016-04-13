@@ -1,3 +1,35 @@
+# 1.28.0 (04/14/2016)
+
+## Features
+
+ - Persistent Parameters: added an option to persist the value of a parameter in the browser's storage. Any value changes are persisted automatically, and will be restored the next time the user opens the Dashboard
+ 
+ - Search: added sort parameters to URL, paging for results
+
+ - Browse Dashboards: added a new link to see the top liked dashboards; new search filter "is:liked"
+
+ - Dashboard History: shows revision history and compares different revisions against each other
+
+ - Dashboard Editor: Added button to view Dashboard without enabling Live mode
+
+ - Data Sources: Added Error Handler option; able to modify errors messages that occur before displaying them to the user
+
+ - Example JavaScript Data Source Dashboard: new example dashboard added
+
+ - Clock Widget: improved presentation; fixed bug with Live mode
+
+ - QR Code Widget: Generate and display QR codes
+
+ - New User Welcome Message: added a configurable message that appears on a user's first visit to the Home/Search Results pages
+
+ - Help page: added search, deeplinks to specific topics
+
+ - Analytics: now displays the number of unique UIDs used in the past month to view Dashboards
+
+## Bug Fixes
+
+ - Table Widget: "sortBy" property doesn't work
+
 # 1.27.0 (03/17/2016)
 
 ## Features

@@ -1,0 +1,49 @@
+.dashboard-history-page.container-fluid
+    include header
+
+    .row.header
+        .dashboard-well
+            .button-bar
+                a.btn.btn-default(ui-sref='edit.details({ dashboardName: dashboardName })', title='Edit this Dashboard')
+                    i.fa.fa-edit
+                    |  Edit Dashboard
+
+            h1 {{ dashboardName }}
+
+            h4.small.text-muted(ng-show='dashboard.dashboard.description')
+                i.fa.fa-quote-left
+                |  {{ dashboard.dashboard.description }} 
+                i.fa.fa-quote-right
+
+    .row
+        .col-xs-12
+            h2 Revision History
+            table.table
+                tr
+                    th Rev #
+                    th
+                    th Date
+                    th Author
+                    th
+                tr.revision(ng-repeat='revision in revisions | orderBy:rev:false | limitTo:itemsPerPage:(currentPage-1)*itemsPerPage') 
+                    td 
+                        a(ng-href='/edit/{{ dashboardName }}?rev={{ revision.rev }}') {{ revision.rev }}
+                        a(ng-click='diffWithLatest(revision.rev)', ng-if='revision.rev > 1 && revision.deleted == false', title='Compare this revision to the previous revision') Diff
+                            i.fa.fa-search
+                    td
+                        i.fa.fa-trash-o(ng-if='revision.deleted', title='The Dashboard is deleted for this revision.')
+                    td {{ revision.date | date:'yyyy-MM-dd HH:mm' }}
+                    td
+                        span(title='{{ revision.lastUpdatedBy.email }}') {{ revision.lastUpdatedBy.name }}
+                    td
+                        a(ng-href='/{{ dashboardName }}?rev={{ revision.rev }}', target='cyclotron-preview')
+                            | View
+                            i.fa.fa-external-link
+                        a(ng-href='/edit/{{ dashboardName }}?rev={{ revision.rev }}', target='cyclotron-preview')
+                            | Edit
+                            i.fa.fa-edit
+                        
+
+            .paging
+                uib-pagination.pagination-sm(total-items='revisionsCount', ng-model='currentPage', 
+                    items-per-page='itemsPerPage', max-size='5', boundary-links='true')

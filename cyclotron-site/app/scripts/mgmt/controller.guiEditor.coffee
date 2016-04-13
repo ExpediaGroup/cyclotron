@@ -115,10 +115,18 @@ cyclotronApp.controller 'GuiEditorController', ($scope, $state, $stateParams, $l
 
         return duplicates.length > 1
 
-    $scope.previewUrl = ->
-        url = '/' + $scope.editor.dashboard.name + '?live=true'
+    $scope.dashboardUrl = (preview = false) ->
+        params = []
+        url = '/' + $scope.editor.dashboard.name 
+        if preview == true
+            params.push 'live=true'
         if !$scope.isLatestRevision()
-            url += '&rev=' + $scope.editor.revision
+            params.push 'rev=' + $scope.editor.revision
+
+        # Join params to URL
+        if params.length > 0
+            url = url + '?' + params.join('&')
+
         url
 
     $scope.previewButtonText = ->

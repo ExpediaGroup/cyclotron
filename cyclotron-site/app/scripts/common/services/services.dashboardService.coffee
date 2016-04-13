@@ -14,7 +14,7 @@
 # language governing permissions and limitations under the License. 
 ###
 
-cyclotronServices.factory 'dashboardService', ($resource, $q, analyticsService, configService, userService) ->
+cyclotronServices.factory 'dashboardService', ($http, $resource, $q, analyticsService, configService, userService) ->
 
     baseUrl = configService.restServiceUrl.replace(/:(?!\/\/)/gi, '\\:')
 
@@ -260,6 +260,42 @@ cyclotronServices.factory 'dashboardService', ($resource, $q, analyticsService, 
             deferred.reject(error)
 
         return deferred.promise
+
+    service.getRevisions = (dashboardName) ->
+        deferred = $q.defer()
+
+        p = revisionsResource.query({name: dashboardName}).$promise
+
+        p.then (dashboards) ->
+            deferred.resolve(dashboards)
+
+        p.catch (error) ->
+            alertify.error(error?.data || 'Cannot connect to cyclotron-svc (getRevisions)', 2500)
+            deferred.reject(error)
+
+        return deferred.promise
+
+    service.getRevisionDiff = (dashboardName, rev1, rev2) ->
+        deferred = $q.defer()
+
+        url = configService.restServiceUrl + '/dashboards/' + dashboardName + '/revisions/' + rev1 + '/diff/' + rev2
+        $http.get(url).then (response) ->
+            # Returns formatted HTML diff
+            deferred.resolve(response.data)
+        .catch (error) ->
+            alertify.error(error?.data || 'Cannot connect to cyclotron-svc (getRevisionDiff)', 2500)
+            deferred.reject(error)
+
+        return deferred.promise
+
+    service.getRevision = (dashboardName, rev, callback) ->
+        revisionResource.get {
+            name: dashboardName
+            rev: rev
+            session: userService.currentSession()?.key 
+        }, (revision) ->
+            if _.isFunction callback
+                callback(revision)
 
     service.like = (dashboard) ->
         p = likesResource.save2({ 
@@ -554,20 +590,6 @@ cyclotronServices.factory 'dashboardService', ($resource, $q, analyticsService, 
     service.updateTags = (dashboardName, tags) ->
         tagsResource.updateArray({name: dashboardName}, tags)
 
-    service.getRevisions = (dashboardName, callback) ->
-        revisionsResource.query {name: dashboardName}, (revisions) ->
-            if _.isFunction callback
-                callback(revisions)
-
-    service.getRevision = (dashboardName, rev, callback) ->
-        revisionResource.get {
-            name: dashboardName
-            rev: rev
-            session: userService.currentSession()?.key 
-        }, (revision) ->
-            if _.isFunction callback
-                callback(revision)
-        
     service.getPageName = (page, index) ->
         if page?.name?
             pageName = page.name.trim()

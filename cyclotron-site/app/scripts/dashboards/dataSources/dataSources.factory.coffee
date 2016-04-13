@@ -55,6 +55,10 @@ cyclotronDataSources.factory 'dataSourceFactory', ($rootScope, $interval, config
                     postProcessor = _.jsEval options.postProcessor
                     if !_.isFunction(postProcessor) then postProcessor = null
 
+                    # Load Error Handler
+                    errorHandler = _.jsEval options.errorHandler
+                    if !_.isFunction(errorHandler) then errorHandler = null
+
                     broadcastLoading = ->
                         $rootScope.$broadcast('dataSource:' + options.name + ':loading')
 
@@ -113,6 +117,16 @@ cyclotronDataSources.factory 'dataSourceFactory', ($rootScope, $interval, config
                         runnerError = (error) ->
                             logService.error dataSourceType, 'Data Source "' + options.name + '" Failed'
                             sendAnalytics false, { errorMessage: error }
+
+                            if errorHandler?
+                                # Invoke error handler and if it returns a new string, make that the error message
+                                try
+                                    newError = errorHandler(error)
+                                    if _.isString newError
+                                        error = newError
+                                catch e
+                                    # Error handler throwing an error, make that the error message
+                                    error = e
 
                             cachedResult = null
                             q = null

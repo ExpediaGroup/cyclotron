@@ -5,8 +5,13 @@
     .row
         .sidebar.col-sm-4
             h2 Documentation
-            collapse-menu(items='menu', select-item='selectItem(item)')
-
+            form.search(ng-submit='feelingLucky()')
+                .form-group
+                    .input-group
+                        input.form-control(type='text', ng-model='search', placeholder='Search')
+                        span.input-group-addon
+                            i.fa.fa-search
+            collapse-menu(items='menu', filter='search', initial-selection='q', select-item='selectItem(item)')
 
         .col-sm-8
             section.help-content
@@ -15,6 +20,6 @@
 
                 .no-help(ng-if='selectedItem.path == null')
                     i.fa.fa-exclamation-triangle
-                    | No help is available for this topic
+                    |  No help is available for this topic
 
     .row.footer

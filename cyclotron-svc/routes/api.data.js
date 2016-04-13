@@ -39,14 +39,14 @@ exports.deleteSingle = function (req, res) {
     DataBuckets
         .findOne({ key: req.params.key })
         .remove()
-        .exec(_.wrap(res, api.getCallback));
-};
-
-exports.deleteSingle = function (req, res) {
-    DataBuckets
-        .findOne({ key: req.params.key })
-        .remove()
-        .exec(_.wrap(res, api.getCallback));
+        .exec(function (err) {
+          if (err) {
+              console.log(err);
+              return res.status(500).send(err);
+          }else{
+              return res.send("Data Bucket deleted.");
+          }
+        });
 };
 
 exports.getSingleData = function (req, res) {

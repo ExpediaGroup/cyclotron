@@ -141,29 +141,6 @@ exports.recordEvent = function (req, res) {
     analytic.save();
 };
 
-/* Log an Event*/
-exports.recordEvent = function (req, res) {
-    
-    /* Defaults */
-    var record = req.body;
-    record.date = new Date();
-
-    if (record.eventType == null) {
-        return res.status(400).send('Missing Event type.');
-    } else if (record.visitId == null) {
-        return res.status(400).send('Missing Visit ID.');
-    } else if (record.user == null && record.uid == null) {
-        return res.status(400).send('Missing User or UID.');
-    }
-
-    /* Send 200 OK as soon as possible */
-    res.send();
-
-    /* Create new record in the Event Analytics collection */
-    var analytic = new EventAnalytics(record);
-    analytic.save();
-};
-
 exports.deleteAnalyticsForDashboard = function (req, res) {
 
     if (!auth.isAdmin(req)) {
@@ -235,20 +212,6 @@ exports.getRecentDataSources = function (req, res) {
     query.sort('-date')
         .limit(req.query.max || 100)
         .populate('dashboard', 'name')
-        .exec(_.wrap(res, api.getCallback));
-};
-
-/* Gets 100 most-recent Event analytics records */
-exports.getRecentEvents = function (req, res) {
-    var query = null;
-    if (_.isUndefined(req.query.type)) {
-        query = EventAnalytics.find();
-    } else {
-        query = EventAnalytics.find({ type: req.query.type });
-    }
-
-    query.sort('-date')
-        .limit(req.query.max || 100)
         .exec(_.wrap(res, api.getCallback));
 };
 

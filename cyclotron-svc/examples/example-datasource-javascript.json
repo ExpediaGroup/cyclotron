@@ -1,0 +1,183 @@
+{
+    "dataSources": [{
+        "name": "jquery-ajax",
+        "processor": "/* Loads a list of Cyclotron tags using jQuery.\n   Could be done with the JSON Data Source as well.\n */\np = function (promise) {\n    /* Start asychronous AJAX call */\n    $.getJSON('http://cyclotrondev.karmalab.net/api/tags', function(data) {\n        \n        /* Resolves the result asynchronously via the provided promise */\n        promise.resolve(_.map(data, function (tag) {\n           return { 'name': tag }; \n        })); \n    });\n}",
+        "type": "javascript"
+    }, {
+        "name": "modernizr",
+        "processor": "/* Returns a list of browser features that Modernizr detected \n   http://modernizr.com/ \n */\np = function(promise) {\n    /* Convert from an object to a list of key/values */\n    var pairs = _.pairs(Modernizr);\n\n    var list = _.map(pairs, function (pair) {\n        if (_.isFunction(pair[1])) { return null; }\n        return { name: pair[0], value: pair[1] };\n    })\n    \n    /* Return list synchronously */\n    return _.compact(list);\n}",
+        "type": "javascript"
+    }, {
+        "name": "primes",
+        "processor": "/* Generates a list of prime numbers */\np = function(promise) {\n    var isPrime = function (n) {\n        for (var i = 2; i < n; i++) {\n            if (n % i === 0) {\n                return false;\n            }\n        }\n        return true;\n    };\n\n    var result = [2];\n    for (var i = 3; i < Cyclotron.parameters.maxPrime; i+=2) {\n        if (isPrime(i)) {\n            result.push(i);\n        }\n    }\n    \n    /* Return list synchronously */\n    return _.map(result, function (prime, index) {\n        return { prime: prime, index: index };\n    });\n}",
+        "type": "javascript"
+    }, {
+        "deferred": true,
+        "name": "green-cities",
+        "preload": true,
+        "source": "https://opendata.socrata.com/Government/Greenest-Cities-in-the-US/dnfk-m2dd",
+        "type": "json",
+        "url": "http://pastebin.com/raw.php?i=4yCbDza4"
+    }, {
+        "name": "dependent-datasource",
+        "processor": "/* Depends on the results from another Data Source.  This Data Source     \n   triggers its dependency and waits for results using a promise.\n */\np = function (promise) {\n    Cyclotron.dataSources['green-cities'].execute()\n    .then(function(result) {\n        /* Result contains the data for the dependency */\n        /* '0' is the default ResultSet name */\n        var data = result['0'].data;\n        \n        /* Resolve this data source asynchronously */\n        promise.resolve(data);\n    });\n}",
+        "type": "javascript"
+    }, {
+        "name": "green-cities-preloaded",
+        "postProcessor": "function (data) {\n    /* Initiate downstream dependency */\n    Cyclotron.dataSources['dependent-datasource-preloaded'].execute(false);\n}",
+        "preload": true,
+        "source": "https://opendata.socrata.com/Government/Greenest-Cities-in-the-US/dnfk-m2dd",
+        "type": "json",
+        "url": "http://pastebin.com/raw.php?i=4yCbDza4"
+    }, {
+        "deferred": true,
+        "name": "dependent-datasource-preloaded",
+        "preload": true,
+        "processor": "/* Depends on the results from another Data Source. \n   The dependency should have \"preload\": true, and its Post-Processor\n   should execute this Data Source.\n   \n   This Data Source needs to have the following options set:\n       \"preload\": true\n       \"deferred\": true\n */\np = function (promise) {\n    console.log('dependent-datasource-preloaded running!');\n    return Cyclotron.dataSources['green-cities-preloaded'].getCachedData();\n}",
+        "type": "javascript"
+    }, {
+        "name": "dependent-datasource-getPromise",
+        "processor": "/* Depends on the results from another Data Source.  This Data Source     \n   waits for results from another Data Source using a promise.  This is\n   ideal for depending on a Data Source which is executing independently.\n */\np = function (promise) {\n    /* Get promise for the dependency result */\n    var p = Cyclotron.dataSources['green-cities-preloaded'].getPromise();\n    \n    /* Attach a callback to the promise */\n    p.then(function(result) {\n        /* Result contains the data for the dependency */\n        /* '0' is the default ResultSet name */\n        var data = result['0'].data;\n        \n        /* Resolve this data source asynchronously */\n        promise.resolve(data);\n    });\n}",
+        "type": "javascript"
+    }, {
+        "name": "throws-error",
+        "processor": "p = function () {\n    // Cause the Data Source to fail by throwing an error\n    throw \"This is an error!\";\n}",
+        "type": "javascript"
+    }, {
+        "errorHandler": "h = function (error) {\n    throw error.toUpperCase();\n}",
+        "name": "throws-error-2",
+        "processor": "p = function () {\n    // Cause the Data Source to fail by throwing an error\n    throw \"This is an error!\";\n}",
+        "type": "javascript"
+    }, {
+        "name": "rejects-promise",
+        "processor": "p = function (promise) {\n    // Cause the Data Source to fail by rejecting the promise\n    promise.reject(\"This is a serious error!\");\n}",
+        "type": "javascript"
+    }, {
+        "errorHandler": "h = function (error) {\n    throw \"ODE RED CODE RED CODE RED CODE RED C\";\n}",
+        "name": "rejects-promise-2",
+        "processor": "p = function (promise) {\n    // Cause the Data Source to fail by rejecting the promise\n    promise.reject(\"This is a serious error!\");\n}",
+        "type": "javascript"
+    }],
+    "description": "Examples of the Javascript Data Source",
+    "disableAnalytics": true,
+    "name": "example-datasource-javascript",
+    "pages": [{
+        "frequency": 1,
+        "layout": {
+            "gridColumns": 1,
+            "gridRows": 10
+        },
+        "widgets": [{
+            "dataSource": "jquery-ajax",
+            "gridHeight": 3,
+            "title": "jQuery AJAX",
+            "widget": "table"
+        }, {
+            "dataSource": "modernizr",
+            "gridHeight": 3,
+            "html": "<div class=\"capability\">\n    <h1>#{name}</h1>\n    <div>#{value}${'true' == '#{value}' ? '<i class=\"fa fa-check\" style=\"color: green\"></i>' : ''}</div>\n</div>",
+            "postHtml": "<style>\n    .capability {\n        display: inline-block;\n        margin: 0.5rem;\n        padding: 0.5rem;\n        border: 1px dotted #777;\n    }\n    \n    .capability h1 {\n        font-size: 1.3rem;\n    }\n</style>",
+            "title": "Modernizr - Browser Capabilities",
+            "widget": "html"
+        }, {
+            "allowFullscreen": false,
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "html": "<label>Max Prime #: <input id=\"max-prime\" type=\"textbox\" value=\"100\"></input></label>\n<script>\n    $('#max-prime').change(function() {\n        Cyclotron.parameters.maxPrime = $(this).val();\n        Cyclotron.dataSources.primes.execute(true);\n    });\n</script>",
+            "name": "Max Prime # Parameter Switcher",
+            "theme": "lightborderless",
+            "widget": "html"
+        }, {
+            "dataSource": "primes",
+            "gridHeight": 3,
+            "gridWidth": 1,
+            "highchart": {
+                "series": [{
+                    "x": "index",
+                    "y": "prime"
+                }],
+                "yAxis": {
+                    "min": 0
+                }
+            },
+            "title": "Primes",
+            "widget": "chart"
+        }]
+    }, {
+        "frequency": 1,
+        "layout": {
+            "gridColumns": 4,
+            "gridRows": 3
+        },
+        "widgets": [{
+            "dataSource": "dependent-datasource",
+            "gridWidth": 3,
+            "title": "Dependency-Loaded Data (Using Execute())",
+            "widget": "table"
+        }, {
+            "html": "<p>\n    This Widget uses a Data Source which loaded data from another Data Source, using <pre>Cyclotron.dataSources['green-cities']\n    .execute()\n    .then(function(result) { \n        ... \n    });</pre>\n    This works by executing the upstream Data Source and waiting for the result.\n</p>",
+            "widget": "html"
+        }, {
+            "dataSource": "dependent-datasource-preloaded",
+            "gridWidth": 3,
+            "title": "Dependency-Loaded Data (Preload Dependency)",
+            "widget": "table"
+        }, {
+            "html": "<p>\n    This Widget uses a Data Source which loaded data from another Data Source, using <pre>Cyclotron.dataSources['green-cities-preloaded']\n    .getCachedData();</pre>\n    This works if the upstream Data Source has already been executed (e.g. with Preload: true)\n</p>",
+            "widget": "html"
+        }, {
+            "dataSource": "dependent-datasource-getPromise",
+            "gridWidth": 3,
+            "title": "Dependency-Loaded Data (Using Promise)",
+            "widget": "table"
+        }, {
+            "html": "<p>\n    This Widget uses a Data Source which loaded data from another Data Source, using <pre>var p = Cyclotron.dataSources['green-cities-preloaded']\n    .getPromise();\n    p.then(function(result) {\n        ...\n    });</pre>\n    This works if the upstream Data Source is being executed independently, and may or may not be complete.\n</p>",
+            "widget": "html"
+        }]
+    }, {
+        "frequency": 1,
+        "layout": {
+            "gridColumns": 2,
+            "gridRows": 2
+        },
+        "widgets": [{
+            "dataSource": "throws-error",
+            "numbers": [{
+                "number": "#{value}"
+            }],
+            "showWidgetErrors": true,
+            "title": "Throws Error",
+            "widget": "number"
+        }, {
+            "dataSource": "rejects-promise",
+            "numbers": [{
+                "number": "#{value}"
+            }],
+            "showWidgetErrors": true,
+            "title": "Rejects Promise",
+            "widget": "number"
+        }, {
+            "dataSource": "throws-error-2",
+            "numbers": [{
+                "number": "#{value}"
+            }],
+            "showWidgetErrors": true,
+            "title": "Throws Error with Error Handler",
+            "widget": "number"
+        }, {
+            "dataSource": "rejects-promise-2",
+            "numbers": [{
+                "number": "#{value}"
+            }],
+            "showWidgetErrors": true,
+            "title": "Rejects Promise then Throws Error in Error Handler",
+            "widget": "number"
+        }]
+    }],
+    "parameters": [{
+        "defaultValue": "100",
+        "name": "maxPrime"
+    }],
+    "scripts": [],
+    "theme": "light"
+}

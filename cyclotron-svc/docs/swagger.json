@@ -1167,6 +1167,12 @@
                         "required": false,
                         "type": "string",
                         "format": "date-time"
+                    }, {
+                        "name": "max",
+                        "in": "query",
+                        "description": "Optionally limits the results to the top N. A value of 0 returns all results.",
+                        "required": false,
+                        "type": "integer"
                     }
                 ],
                 "responses": {
@@ -1265,12 +1271,6 @@
                         "required": false,
                         "type": "string",
                         "format": "date-time"
-                    }, {
-                        "name": "max",
-                        "in": "query",
-                        "description": "Optionally limits the results to the top N. A value of 0 returns all results.",
-                        "required": false,
-                        "type": "integer"
                     }
                 ],
                 "responses": {
@@ -2193,6 +2193,11 @@
                     "type": "string",
                     "required": true
                 },
+                "division": {
+                    "description": "The User's division.",
+                    "type": "string",
+                    "required": true
+                },
                 "name": {
                     "description": "Formal name of the User.",
                     "type": "string",
@@ -2224,11 +2229,6 @@
             "properties": {
                 "sAMAccountName": {
                     "description": "Username of the User.",
-                    "type": "string",
-                    "required": true
-                },
-                "division": {
-                    "description": "The User's division.",
                     "type": "string",
                     "required": true
                 },

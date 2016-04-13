@@ -23,7 +23,6 @@ cyclotronDirectives.directive 'fancyImage', ($interval) ->
             $element = $(element)
             
             scope.$watch 'image', (image) ->
-                console.log image
 
                 $element.css {
                     'background-image': 'url(' + image.url + ')'

@@ -13,14 +13,36 @@ pre.code.
         "defaultValue": 4
     }]
 
+h4 Parameters in the URL
+
 p Parameters can be set when loading the Dashboard by using URL query parameters.  Here is an example that sets two Parameters via the URL:
 
 pre.code.
     http://cyclotron/MyDashboard?numberOfHours=8&amp;includeFailures=true
 
-p Parameters can be consumed in the Dashboard via inline Javascript, anywhere that inline Javascript is supported.  The 
+p If any Parameters are modified by the Dashboard, the URL will be automatically updated with the new values.
+
+p All Parameters appear in the URL by default, but this can be disabled for individual Parameters by setting
+    em  showInURL
+    |  to false.  It is still possible to set these Parameters via the URL on load, but they will be automatically stripped from the URL after loading.
+
+h4 Persistent Parameters
+
+p Persistent Parameters retain their value across multiple sessions of viewing a Dashboard.  This is enabled by setting 
+    em  persistent
+    |  to true.  Once enabled, any changes to the Parameter will be immediately cached in the browser, and reloaded upon subsequent visits to the same dashboard.  Persistent Parameters are stored by name, per Dashboard.
+
+p Cyclotron attempts to load Parameters in the following order: 
+ol
+    li All URL query string parameters are loaded
+    li Persistent Parameters which are not yet set will have their value retrieved from cache (if possible)
+    li Parameters which are not yet set will have be assigned a default value (if exists)
+
+h4 JavaScript API
+
+p Parameters are also exposed to Dashboards through JavaScript.  The 
     em Cyclotron.parameters 
-    | object is a Javascript hash of key-value pairs.  For example:
+    | object is a Javascript hash of key-value pairs which can be used to read or write Parameters.  For example:
 
 pre.code.
     "dataSources": [{
@@ -31,10 +53,17 @@ pre.code.
         "url": "http://graphite"
     }]
 
-p The 
-    em Cyclotron.parameters 
-    | object can be used to access any URL parameters, regardless of whether they are specified in the Parameters array.  
-    | The primary benefit of the Parameters array is to provide default values.
+p This uses inline JavaScript to load data for a configurable number of hours, specified by a Parameter.  It is also possible to
+    | update or create new Parameters:
+
+pre.code.
+    Cyclotron.parameters.numberOfHours = 24;
+
+p Changes to the Cyclotron.parameters object will be reflected immediately in the URL (unless
+    em  showInURL
+    |  is false).  All URL parameters will appear in the 
+    em  Cyclotron.parameters 
+    | object, regardless of whether they were explicitly specified in the Parameters configuration.
 
 h4 Properties
 

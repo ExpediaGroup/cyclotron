@@ -35,28 +35,31 @@ cyclotronDataSources.factory 'javascriptDataSource', ($q, $http, configService, 
         if processor?
             promise = $q.defer()
 
-            result = processor(promise) || promise.promise
-            if _.isObject(result) and result.promise?
-                result = result.promise
+            try
+                result = processor(promise) || promise.promise
+                if _.isObject(result) and result.promise?
+                    result = result.promise
 
-            # Post-Processor can either update the current dataset,
-            # or return a new array that replaces it
-            q2 = $q.when(result)
+                # Post-Processor can either update the current dataset,
+                # or return a new array that replaces it
+                q2 = $q.when(result)
 
-            q2.then (data) ->
-                if _.isArray data
-                    q.resolve
-                        '0':
-                            data: data
-                            columns: null
-                else 
-                    err = 'Invalid data set returned in JavaScript Data Source.  Returned object must be an array of objects.'
-                    console.log err
-                    q.reject err
-            
-            q2.catch (reason) ->
-                console.log(reason)
-                q.reject reason
+                q2.then (data) ->
+                    if _.isArray data
+                        q.resolve
+                            '0':
+                                data: data
+                                columns: null
+                    else 
+                        err = 'Invalid data set returned in JavaScript Data Source.  Returned object must be an array of objects.'
+                        console.log err
+                        q.reject err
+                
+                q2.catch (reason) ->
+                    console.log(reason)
+                    q.reject reason
+            catch error
+                q.reject error
         else
             q.reject 'Processor is not a function.'
 

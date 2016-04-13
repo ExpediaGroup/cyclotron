@@ -38,6 +38,9 @@ cyclotronApp.controller 'HomeController', ($scope, $location, $uibModal, configS
         hints: []
         query: []
 
+    $scope.currentPage = 1
+    $scope.itemsPerPage = 25
+
     $scope.isTag = (hint) -> 
         _.contains $scope.search.allTags, hint
 
@@ -55,7 +58,7 @@ cyclotronApp.controller 'HomeController', ($scope, $location, $uibModal, configS
             $scope.getAdvancedSearchHints()
 
     $scope.getAdvancedSearchHints = ->
-        $scope.search.advanced = ['is:deleted', 'include:deleted']
+        $scope.search.advanced = _.sortBy ['is:deleted', 'is:liked', 'include:deleted']
 
         if userService.authEnabled and userService.isLoggedIn()
             username = userService.currentUser().sAMAccountName
@@ -86,6 +89,7 @@ cyclotronApp.controller 'HomeController', ($scope, $location, $uibModal, configS
         p.then (dashboards) ->
             $scope.dashboards = dashboards
             $scope.augmentDashboards()
+            $scope.resultsCount = $scope.dashboards.length
             $scope.loading = false
 
         p.catch (response) ->
@@ -168,6 +172,13 @@ cyclotronApp.controller 'HomeController', ($scope, $location, $uibModal, configS
             $scope.sortByField = field
             $scope.sortByReverse = descending
 
+        if $scope.sortByReverse == true
+            field = '-' + field
+        $location.search 's', field
+
+    $scope.setPageSize = (size) ->
+        $scope.itemsPerPage = size
+
     #
     # Initialization
     #
@@ -178,6 +189,17 @@ cyclotronApp.controller 'HomeController', ($scope, $location, $uibModal, configS
         $scope.loadQueryString(q)
         $scope.loadDashboards()
 
+    # Parse sort by
+    s = $location.search()?.s
+    if s? and s.length > 0
+        if s.indexOf('-') == 0
+            $scope.sortByReverse = true
+            s = s.substr 1
+        else
+            $scope.sortByReverse = false
+
+        $scope.sortByField = s
+        
     # Load all tags
     tagService.getTags (tags) ->
         $scope.search.allTags = tags

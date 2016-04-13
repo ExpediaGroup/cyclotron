@@ -353,8 +353,9 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
             # Process rules
             $scope.processRules(data, $scope.widget.rules)
 
-            # Save sorted rows (will be sorted later if sortBy is provided)
+            # Save and sort rows
             $scope.sortedRows = data
+            $scope.sortRows()
 
             $scope.loading = false
 

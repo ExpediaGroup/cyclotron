@@ -14,7 +14,7 @@
 # language governing permissions and limitations under the License. 
 ###
 
-cyclotronServices.factory 'userService', ($http, $q, $localForage, configService) ->
+cyclotronServices.factory 'userService', ($http, $q, $localForage, configService, logService) ->
 
     loggedIn = false
     currentSession = null
@@ -39,6 +39,18 @@ cyclotronServices.factory 'userService', ($http, $q, $localForage, configService
         setLoggedOut: ->
             loggedIn = false
             currentSession = null
+
+        isNewUser: true
+
+        notNewUser: (update = true) ->
+            return unless exports.isNewUser
+
+            # Save flag indicating this is no longer a new user
+            $localForage.setItem('newUser', 0).then ->
+                # Change field accordingly 
+                exports.isNewUser = false if update
+                logService.debug 'User is not longer a New User'
+
     }
 
     # Load cached username
@@ -50,6 +62,17 @@ cyclotronServices.factory 'userService', ($http, $q, $localForage, configService
     $localForage.getItem('cachedUserId').then (userId) ->
         if userId?
             exports.cachedUserId = userId
+
+    # Load New User quality
+    $localForage.getItem('newUser').then (value) ->
+        if value == 0
+            logService.debug 'User is definitely not a New User'
+            exports.isNewUser = false
+        else if value > 0
+            logService.debug 'User is definitely a New User'
+        else
+            logService.debug 'User is probably a New User'
+            $localForage.setItem 'newUser', 1
 
     exports.login = (username, password) ->
         return if _.isEmpty(username) || _.isEmpty(password)

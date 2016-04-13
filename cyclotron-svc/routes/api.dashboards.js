@@ -114,48 +114,6 @@ var searchDashboards = function (res, filters, searchItems) {
         });
 };
 
-var searchDashboards = function (res, filters, searchItems) {
-    Dashboards
-        .find(filters)
-        .select('-dashboard')
-        .populate('createdBy lastUpdatedBy', 'name')
-        .exec(function(err, obj) {
-            if (err) {
-                console.log(err);
-                return res.status(500).send(err);
-            } else if (_.isUndefined(obj) || _.isNull(obj)) {
-                return res.status(404).send('Dashboard not found.');
-            }
-
-            /* Create hash of regex objects */
-            var searchRegexes = {};
-            try {
-                _.each(searchItems, function(item) {
-                    searchRegexes[item] = new RegExp(".*" + item + ".*");
-                });
-            } catch (e) {
-                /* Bad input, return empty */
-                return res.send([]); 
-            }
-
-            var filteredResults = _.filter(obj, function(dashboard) {
-                return _.every(searchItems, function(searchItem) {
-                    if (searchRegexes[searchItem].test(dashboard.name))
-                        return true;
-                    if (_.any(dashboard.tags, function(tag) {
-                        return tag.toLowerCase() === searchItem;
-                    }))
-                        return true;
-
-                    /* No match */
-                    return false;
-                });
-            });
-
-            res.send(filteredResults);
-        });
-};
-
 exports.get = function (req, res) {
 
     var search = req.query.q
@@ -178,7 +136,12 @@ exports.get = function (req, res) {
         
         /* Handle advanced search terms */
         _.each(tempSearchItems, function (item) {
-            if (item == 'is:deleted') {
+            if (item == 'is:liked') {
+                dashboardFilter.likes = {
+                    $exists: true,
+                    $ne: []
+                };
+            } else if (item == 'is:deleted') {
                 dashboardFilter.deleted = true;
             } else if (item == 'include:deleted') {
                 delete dashboardFilter.deleted;

@@ -138,6 +138,45 @@ var getPageViewsCounts = function () {
     });
 };
 
+var getUIDCounts = function () {
+    return new Promise(function (resolve, reject) {
+        var oneDay = moment().subtract(1, 'day'),
+            oneMonth = moment().subtract(1, 'month'),
+            sixMonths = moment().subtract(6, 'month');
+        
+        Analytics.aggregate([{
+            $project: {
+                uid: '$uid',
+                pastDay: { $cond: [ { '$gt': [ '$date', oneDay.toDate() ] }, 1, 0]},
+                pastMonth: { $cond: [ { '$gt': [ '$date', oneMonth.toDate() ] }, 1, 0]},
+                pastSixMonths: { $cond: [ { '$gt': [ '$date', sixMonths.toDate() ] }, 1, 0]}
+            },
+        }, {
+            $group: {
+                _id: { 'uid': '$uid' },
+                activePastDay: { $max: '$pastDay' },
+                activePastMonth: { $max: '$pastMonth' },
+                activePastSixMonths: { $max: '$pastSixMonths' }
+            }
+        }, {
+            $group: {
+                _id: { },
+                uidsPastDayCount: { $sum: '$activePastDay' },
+                uidsPastMonthCount: { $sum: '$activePastMonth' },
+                uidsPastSixMonthsCount: { $sum: '$activePastSixMonths' },
+                totalUids: { $sum: 1 }
+            }
+        }]).exec(function (err, results) {
+            if (err) {
+                reject(err);
+            }
+
+            results = _.omit(results[0], '_id');
+            resolve(results);
+        });
+    });
+};
+
 var getUserCounts = function () {
     return new Promise(function (resolve, reject) {
         var oneDay = moment().subtract(1, 'day'),
@@ -327,6 +366,7 @@ exports.get = function (req, res) {
     Promise.join(
         getDashboardCounts(), 
         getPageViewsCounts(), 
+        getUIDCounts(),
         getUserCounts(),
         getSessionCounts(),
         getUsersByRevisions(),
@@ -334,13 +374,13 @@ exports.get = function (req, res) {
         getLikes(),
         getEvents('like'),
         getEvents('unlike'),
-        function (dashboardCounts, analyticsCounts, userCounts, sessionCounts, usersByRevisions, revisions, likes, likeEvents, unlikeEvents) {
+        function (dashboardCounts, analyticsCounts, uidCounts, userCounts, sessionCounts, usersByRevisions, revisions, likes, likeEvents, unlikeEvents) {
             res.send({
                 dashboards: dashboardCounts,
                 pageViews: analyticsCounts,
                 revisions: revisions,
                 sessions: sessionCounts,
-                users: _.merge(userCounts, usersByRevisions),
+                users: _.merge(userCounts, usersByRevisions, uidCounts),
                 likes: likes,
                 likeEvents: likeEvents,
                 unlikeEvents: unlikeEvents

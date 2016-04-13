@@ -17,11 +17,16 @@
 #
 # Clock Widget
 #
-cyclotronApp.controller 'ClockWidget', ($scope, $interval) ->
-    if _.isEmpty($scope.widget.format) then $scope.widget.format = 'dddd, MMMM Do YYYY, h:mm:ss a'
+cyclotronApp.controller 'ClockWidget', ($scope, $interval, configService) ->
+    $scope.format = configService.widgets.clock.properties.format.default
+    
+    # Load user-specified format if defined
+    if $scope.widget.format? 
+        $scope.format = _.jsExec $scope.widget.format
 
+    # Schedule an update every second
     $scope.updateTime = ->
-        $scope.currentTime = moment().format $scope.widget.format
+        $scope.currentTime = moment().format $scope.format
 
     $scope.updateTime()
     $scope.interval = $interval $scope.updateTime, 1000

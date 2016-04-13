@@ -1,0 +1,9 @@
+.qrcode-widget(ng-controller='QRCodeWidget')
+    .spinjs(ng-if='loading')
+
+    .widget-error(ng-if='dataSourceError == true && !loading')        
+    .widget-nodata(ng-if='nodata && !loading')
+        .fa.fa-exclamation-triangle
+        span  {{ nodata }}
+
+    .qrcode(ng-if='!nodata && !loading && !dataSourceError', options='options')
