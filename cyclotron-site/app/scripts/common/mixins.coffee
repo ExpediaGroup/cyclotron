@@ -218,4 +218,14 @@ _.mixin({
 
         _.assign obj, rep
 
+    # Flatten nested objects (no arrays)
+    'flattenObject': (obj) ->
+        return obj unless _.isObject(obj) and not _.isArray(obj)
+        newObj = {}
+        _.forOwn obj, (value, key) ->
+            if _.isObject(value) and not _.isArray(value)
+                _.assign newObj, _.flattenObject value
+            else
+                newObj[key] = value
+        newObj
 })

@@ -114,7 +114,8 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location,
 
     # Returns true if it is possible to move backwards in the dashboard pages
     $scope.canMoveBack = ->
-        return indexHistory.length > 1
+        return false unless $scope.dashboard? && $scope.dashboard.pages?
+        return $scope.dashboard.pages.length > 1
 
     # Returns true if it is possible to move forwards in the dashboard pages
     $scope.canMoveForward = ->
@@ -136,11 +137,16 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location,
         return unless $scope.canMoveBack()
         logService.debug 'User moving backward'
 
-        # Pop the current page off
-        indexHistory.pop()
+        if indexHistory.length > 1
+            # Pop the current page off
+            indexHistory.pop()
 
-        # Get the previous page index
-        $scope.currentPageIndex = _.last(indexHistory)
+            # Get the previous page index
+            $scope.currentPageIndex = _.last(indexHistory)
+        else
+            $scope.currentPageIndex = $scope.currentPageIndex - 1
+            if $scope.currentPageIndex < 0
+                $scope.currentPageIndex = $scope.dashboard.pages.length - 1
 
         # Set the previous page and re-enable rotation
         $scope.currentPage = [$scope.dashboard.pages[$scope.currentPageIndex]]

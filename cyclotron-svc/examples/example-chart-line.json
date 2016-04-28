@@ -460,7 +460,7 @@
                             "x": 10,
                             "y": 15
                         },
-                        "value": "${moment().add('minutes', 5).valueOf()}",
+                        "value": "${moment().add(5, 'minutes').valueOf()}",
                         "width": 2
                     }],
                     "title": {

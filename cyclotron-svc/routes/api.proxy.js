@@ -24,6 +24,7 @@
 var config = require('../config/config'),
     _ = require('lodash'),
     request = require('request'),
+    aws4  = require('aws4'),
     crypto = require('crypto');
 
 var pool = { maxSockets: Infinity };
@@ -52,6 +53,11 @@ var decrypter = function (req) {
 var sendRequest = function (req, callback) {
     var proxyRequest = decrypter(req);
     proxyRequest.pool = pool;
+
+    if (proxyRequest.awsCredentials) {
+        /* Should contain { accessKeyId: '', secretAccessKey: '' } */
+        aws4.sign(proxyRequest, proxyRequest.awsCredentials);
+    }
 
     request(proxyRequest, function (err, proxyResponse, body) {
         if (err) {

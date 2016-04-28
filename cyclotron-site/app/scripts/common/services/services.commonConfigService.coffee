@@ -26,7 +26,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
     exports = {
 
-        version: '1.28.0'
+        version: '1.29.0'
 
         logging: 
             enableDebug: false
@@ -491,6 +491,233 @@ cyclotronServices.factory 'commonConfigService', ->
                                     required: false
                                     defaultHidden: true
                                     order: 11
+
+                        elasticsearch:
+                            value: 'elasticsearch'
+                            icon: 'fa-cloud-download'
+                            properties:
+                                url:
+                                    label: 'URL'
+                                    description: 'Specifies the Elasticsearch endpoint.'
+                                    placeholder: 'Elasticsearch URL'
+                                    type: 'url'
+                                    inlineJs: true
+                                    inlineEncryption: true
+                                    required: true
+                                    order: 10
+                                index:
+                                    label: 'Index'
+                                    description: 'Specifies the name of the Elasticsearch index to query.'
+                                    type: 'string'
+                                    inlineJs: true
+                                    inlineEncryption: true
+                                    required: true
+                                    order: 12
+                                method:
+                                    label: 'API Name'
+                                    description: 'Indicates which Elasticsearch API method to use; defaults to "_search".'
+                                    type: 'string'
+                                    inlineJs: true
+                                    inlineEncryption: true
+                                    defaultHidden: true
+                                    default: '_search'
+                                    required: false
+                                    order: 13
+                                request:
+                                    label: 'Elasticsearch Request'
+                                    description: 'Specifies the Elasticsearch JSON request.'
+                                    placeholder: 'JSON'
+                                    type: 'editor'
+                                    editorMode: 'json'
+                                    inlineJs: true
+                                    inlineEncryption: true
+                                    required: true
+                                    order: 14
+                                responseAdapter:
+                                    label: 'Response Adapter'
+                                    description: 'Determines how the Elasticsearch response will be converted to Cyclotron\'s data format.  Defaults to "auto".'
+                                    type: 'string'
+                                    default: 'auto'
+                                    inlineJs: true
+                                    options:
+                                        'Auto':
+                                            value: 'auto'
+                                        'Hits':
+                                            value: 'hits'
+                                        'Aggregations':
+                                            value: 'aggregations'
+                                        'Raw':
+                                            value: 'raw'
+                                    required: false
+                                    order: 15
+                                awsCredentials:
+                                    label: 'AWS Credentials'
+                                    description: 'Optional AWS IAM signing credentials for making authenticated requests.  If set, the request will be signed before it is sent.'
+                                    type: 'propertyset'
+                                    required: false
+                                    defaultHidden: true
+                                    order: 16
+                                    properties:
+                                        accessKeyId:
+                                            label: 'Access Key Id'
+                                            description: 'AWS access key id'
+                                            type: 'string'
+                                            placeholder: 'Access Key Id'
+                                            inlineJs: true
+                                            inlineEncryption: true
+                                            order: 1
+                                        secretAccessKey:
+                                            label: 'Secret Access Key'
+                                            description: 'AWS sercet access key'
+                                            type: 'string'
+                                            placeholder: 'Secret Access Key'
+                                            inlineJs: true
+                                            inlineEncryption: true
+                                            order: 2
+                                refresh: 
+                                    label: 'Auto-Refresh'
+                                    description: 'Optional; specifies the number of seconds after which the Data Source reloads'
+                                    type: 'integer'
+                                    required: false
+                                    placeholder: 'Number of Seconds'
+                                    order: 20
+                                preProcessor:
+                                    label: 'Pre-Processor'
+                                    description: 'Specifies an optional JavaScript function that can inspect and modify the Data Source properties before it is executed. This method will be called before the Data Source is executed, and passed the Data Source object as an argument. This object can be modified, or a new/modified object returned. If this value is not an JavaScript function, it will be ignored.'
+                                    placeholder: 'JavaScript Function'
+                                    type: 'editor'
+                                    editorMode: 'javascript'
+                                    required: false
+                                    defaultHidden: true
+                                    order: 21
+                                postProcessor:
+                                    label: 'Post-Processor'
+                                    description: 'Specifies an optional JavaScript function that can inspect and modify the result before it is sent to the Widgets. If this value is not an JavaScript function, it will be ignored.'
+                                    placeholder: 'JavaScript Function'
+                                    type: 'editor'
+                                    editorMode: 'javascript'
+                                    required: false
+                                    order: 16
+                                proxy:
+                                    label: 'Proxy Server'
+                                    description: 'Specifies which Proxy server to route the requests through. If omitted, the default proxy sever will be used.'
+                                    type: 'url'
+                                    inlineJs: true
+                                    required: false
+                                    defaultHidden: true
+                                    order: 23
+
+                        graphite:
+                            value: 'graphite'
+                            icon: 'fa-cloud-download'
+                            message: 'The Graphite Data Source connects to any <a href="http://graphite.readthedocs.org/" target="_blank">Graphite<a> server to load time-series metrics via the Render api. For more details on usage, refer to the Graphite <a href="http://graphite.readthedocs.org/en/latest/render_api.html" target="_blank">documentation</a>.'
+                            properties:
+                                url:
+                                    label: 'URL'
+                                    description: 'The Graphite server'
+                                    placeholder: 'Graphite Server URL or IP'
+                                    type: 'url'
+                                    inlineJs: true
+                                    inlineEncryption: true
+                                    required: true
+                                    order: 10
+                                targets:
+                                    label: 'Targets'
+                                    description: 'One or more Graphite metrics, optionally with metrics.'
+                                    type: 'string[]'
+                                    inlineJs: true
+                                    inlineEncryption: true
+                                    required: true
+                                    order: 11
+                                from:
+                                    label: 'From'
+                                    description: 'Specifies the absolute or relative beginning of the time period to retrieve. If omitted, it defaults to 24 hours ago (per Graphite).'
+                                    placeholder: 'Start Time'
+                                    type: 'string'
+                                    inlineJs: true
+                                    inlineEncryption: true
+                                    required: false
+                                    order: 12
+                                until:
+                                    label: 'Until'
+                                    description: 'Specifies the absolute or relative end of the time period to retrieve. If omitted, it defaults now (per Graphite).'
+                                    placeholder: 'End Time'
+                                    type: 'string'
+                                    inlineJs: true
+                                    inlineEncryption: true
+                                    required: false
+                                    order: 13
+                                refresh:
+                                    label: 'Auto-Refresh'
+                                    description: 'Optional; specifies the number of seconds after which the Data Source reloads'
+                                    type: 'integer'
+                                    required: false
+                                    placeholder: 'Number of Seconds'
+                                    order: 14
+                                preProcessor:
+                                    label: 'Pre-Processor'
+                                    description: 'Specifies an optional JavaScript function that can inspect and modify the Data Source properties before it is executed. This method will be called before the Data Source is executed, and passed the Data Source object as an argument. This object can be modified, or a new/modified object returned. If this value is not an JavaScript function, it will be ignored.'
+                                    placeholder: 'JavaScript Function'
+                                    type: 'editor'
+                                    editorMode: 'javascript'
+                                    required: false
+                                    defaultHidden: true
+                                    order: 15
+                                postProcessor:
+                                    label: 'Post-Processor'
+                                    description: 'Specifies an optional JavaScript function that can inspect and modify the Graphite result before it is sent to the Widgets. If this value is not an JavaScript function, it will be ignored.'
+                                    placeholder: 'JavaScript Function'
+                                    type: 'editor'
+                                    editorMode: 'javascript'
+                                    required: false
+                                    order: 22
+                                proxy:
+                                    label: 'Proxy Server'
+                                    description: 'Specifies which Proxy server to route the requests through. If omitted, the default proxy sever will be used.'
+                                    type: 'url'
+                                    inlineJs: true
+                                    required: false
+                                    defaultHidden: true
+                                    order: 11
+                        javascript: 
+                            value: 'javascript'
+                            icon: 'fa-cloud-download'
+                            message: 'The JavaScript Data Source allows custom JavaScript to be used to load or generate a Data Source.'
+                            properties: 
+                                processor:
+                                    label: 'Processor'
+                                    description: 'Specifies a JavaScript function used to provide data for the Data Source, either by directly returning a data set, or resolving a promise asynchronously. The function is called with an optional promise which can be used for this purpose.'
+                                    placeholder: 'JavaScript Function'
+                                    type: 'editor'
+                                    editorMode: 'javascript'
+                                    required: true
+                                    order: 10
+                                refresh: 
+                                    label: 'Auto-Refresh'
+                                    description: 'Optional; specifies the number of seconds after which the Data Source reloads'
+                                    type: 'integer'
+                                    required: false
+                                    placeholder: 'Number of Seconds'
+                                    order: 11
+                                preProcessor:
+                                    label: 'Pre-Processor'
+                                    description: 'Specifies an optional JavaScript function that can inspect and modify the Data Source properties before it is executed. This method will be called before the Data Source is executed, and passed the Data Source object as an argument. This object can be modified, or a new/modified object returned. If this value is not an JavaScript function, it will be ignored.'
+                                    placeholder: 'JavaScript Function'
+                                    type: 'editor'
+                                    editorMode: 'javascript'
+                                    required: false
+                                    defaultHidden: true
+                                    order: 12
+                                postProcessor:
+                                    label: 'Post-Processor'
+                                    description: 'Specifies an optional JavaScript function that can inspect and modify the JavaScript result dataset before it is sent to the Widgets. If this value is not an JavaScript function, it will be ignored.'
+                                    placeholder: 'JavaScript Function'
+                                    type: 'editor'
+                                    editorMode: 'javascript'
+                                    required: false
+                                    defaultHidden: true
+                                    order: 13
+
                         json:
                             value: 'json'
                             icon: 'fa-cloud-download'
@@ -556,116 +783,6 @@ cyclotronServices.factory 'commonConfigService', ->
                                     defaultHidden: true
                                     order: 11
 
-                        graphite:
-                            value: 'graphite'
-                            icon: 'fa-cloud-download'
-                            message: 'The Graphite Data Source connects to any <a href="http://graphite.readthedocs.org/" target="_blank">Graphite<a> server to load time-series metrics via the Render api. For more details on usage, refer to the Graphite <a href="http://graphite.readthedocs.org/en/latest/render_api.html" target="_blank">documentation</a>.'
-                            properties:
-                                url:
-                                    label: 'URL'
-                                    description: 'The Graphite server'
-                                    placeholder: 'Graphite Server URL or IP'
-                                    type: 'url'
-                                    inlineJs: true
-                                    inlineEncryption: true
-                                    required: true
-                                    order: 10
-                                targets:
-                                    label: 'Targets'
-                                    description: 'One or more Graphite metrics, optionally with metrics.'
-                                    type: 'string[]'
-                                    inlineJs: true
-                                    inlineEncryption: true
-                                    required: true
-                                    order: 11
-                                from:
-                                    label: 'From'
-                                    description: 'Specifies the absolute or relative beginning of the time period to retrieve. If omitted, it defaults to 24 hours ago (per Graphite).'
-                                    placeholder: 'Start Time'
-                                    type: 'string'
-                                    inlineJs: true
-                                    inlineEncryption: true
-                                    required: false
-                                    order: 12
-                                until:
-                                    label: 'Until'
-                                    description: 'Specifies the absolute or relative end of the time period to retrieve. If omitted, it defaults now (per Graphite).'
-                                    placeholder: 'End Time'
-                                    type: 'string'
-                                    inlineJs: true
-                                    inlineEncryption: true
-                                    required: false
-                                    order: 13
-                                refresh:
-                                    label: 'Auto-Refresh'
-                                    description: 'Optional; specifies the number of seconds after which the Data Source reloads'
-                                    type: 'integer'
-                                    required: false
-                                    placeholder: 'Number of Seconds'
-                                    order: 14
-                                preProcessor:
-                                    label: 'Pre-Processor'
-                                    description: 'Specifies an optional JavaScript function that can inspect and modify the Data Source properties before it is executed. This method will be called before the Data Source is executed, and passed the Data Source object as an argument. This object can be modified, or a new/modified object returned. If this value is not an JavaScript function, it will be ignored.'
-                                    placeholder: 'JavaScript Function'
-                                    type: 'editor'
-                                    editorMode: 'javascript'
-                                    required: false
-                                    defaultHidden: true
-                                    order: 15
-                                postProcessor:
-                                    label: 'Post-Processor'
-                                    description: 'Specifies an optional JavaScript function that can inspect and modify the Graphite result before it is sent to the Widgets. If this value is not an JavaScript function, it will be ignored.'
-                                    placeholder: 'JavaScript Function'
-                                    type: 'editor'
-                                    editorMode: 'javascript'
-                                    required: false
-                                    order: 16
-                                proxy:
-                                    label: 'Proxy Server'
-                                    description: 'Specifies which Proxy server to route the requests through. If omitted, the default proxy sever will be used.'
-                                    type: 'url'
-                                    inlineJs: true
-                                    required: false
-                                    defaultHidden: true
-                                    order: 11
-                        javascript: 
-                            value: 'javascript'
-                            icon: 'fa-cloud-download'
-                            message: 'The JavaScript Data Source allows custom JavaScript to be used to load or generate a Data Source.'
-                            properties: 
-                                processor:
-                                    label: 'Processor'
-                                    description: 'Specifies a JavaScript function used to provide data for the Data Source, either by directly returning a data set, or resolving a promise asynchronously. The function is called with an optional promise which can be used for this purpose.'
-                                    placeholder: 'JavaScript Function'
-                                    type: 'editor'
-                                    editorMode: 'javascript'
-                                    required: true
-                                    order: 10
-                                refresh: 
-                                    label: 'Auto-Refresh'
-                                    description: 'Optional; specifies the number of seconds after which the Data Source reloads'
-                                    type: 'integer'
-                                    required: false
-                                    placeholder: 'Number of Seconds'
-                                    order: 11
-                                preProcessor:
-                                    label: 'Pre-Processor'
-                                    description: 'Specifies an optional JavaScript function that can inspect and modify the Data Source properties before it is executed. This method will be called before the Data Source is executed, and passed the Data Source object as an argument. This object can be modified, or a new/modified object returned. If this value is not an JavaScript function, it will be ignored.'
-                                    placeholder: 'JavaScript Function'
-                                    type: 'editor'
-                                    editorMode: 'javascript'
-                                    required: false
-                                    defaultHidden: true
-                                    order: 12
-                                postProcessor:
-                                    label: 'Post-Processor'
-                                    description: 'Specifies an optional JavaScript function that can inspect and modify the JavaScript result dataset before it is sent to the Widgets. If this value is not an JavaScript function, it will be ignored.'
-                                    placeholder: 'JavaScript Function'
-                                    type: 'editor'
-                                    editorMode: 'javascript'
-                                    required: false
-                                    defaultHidden: true
-                                    order: 13
                         mock: 
                             value: 'mock'
                             icon: 'fa-cloud-download'

@@ -5,18 +5,17 @@ p The Graphite Data Source connects to any Graphite server and uses the /render 
     a(href='http://graphite.readthedocs.org/en/latest/functions.html', target='_blank') Graphite functions
     | .
 
+P Please note that it may be necessary to set the optional 
+    em proxy 
+    | property in the Data Source in order to access web sites or services in other domains.  
+    | This property lists other Cyclotron servers which may have the required connectivity. 
+    | By default, this Data Source uses the current Cyclotron environment to proxy the request.
+    
 p Examples of the Graphite Data Source are available on the 
     a(href='/example-datasource-graphite') example-datasource-graphite
     |  dashboard
 
 property-table(properties='config.dashboard.properties.dataSources.options.graphite.properties')
-
-p Under the covers, Cyclotron is proxying the Graphite requests through its own server.  As a result, it 
-    | may be necessary to set the optional 
-    em proxy 
-    | property in the Data Source in order to access Graphite servers in other domains.  This property lists
-    | other Cyclotron servers which may have the required connectivity.  
-    | By default, this Data Source uses the current Cyclotron environment to proxy the request.
 
 h4 Pre-Processor
 

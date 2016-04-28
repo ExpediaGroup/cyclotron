@@ -17,7 +17,7 @@
 #
 # Splunk Data Source
 #
-# Runs a Splunk job.  Always uses a proxy.
+# Runs a Splunk job. Always proxies requests through the Cyclotron service.
 #
 # Properties:
 #   url: The REST service endpoint

@@ -1,3 +1,17 @@
+# 1.29.0 (04/28/2016)
+
+## Features
+
+ - Elasticsearch Data Source: submits searches to Elasticsearch and parses the results. Optionally supports AWS IAM request signing to enable use with AWS Elasticsearch service
+
+ - Backward Dashboard Rotation: enabled rotating Dashboards backwards from the current page without requiring forward rotation beforehand
+
+## Bug Fixes
+
+ - Cyclotron logo link: fixed instances when clicking would not redirect to the Home page
+
+ - Revision History: fixed failures when viewing very large Revision Histories by adding a MongoDB index
+
 # 1.28.0 (04/14/2016)
 
 ## Features

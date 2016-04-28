@@ -17,7 +17,7 @@
 #
 # Graphite Data Source
 #
-# Queries Graphite API for metrics.  Always uses a proxy.
+# Queries Graphite API for metrics.  Always proxies requests through the Cyclotron service.
 #
 cyclotronDataSources.factory 'graphiteDataSource', ($q, $http, configService, dataSourceFactory) ->
 

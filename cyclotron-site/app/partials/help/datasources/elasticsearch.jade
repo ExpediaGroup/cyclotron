@@ -1,0 +1,64 @@
+h3 Elasticsearch Data Source
+
+p The Elasticsearch Data Source is a thin wrapper around the Elasticsearch API, making it easier to submit searches and process the results. For more fine-tuned control around the requests, it may be preferable to use the JSON Data Source instead.
+
+P Please note that it may be necessary to set the optional 
+    em proxy 
+    | property in the Data Source in order to access web sites or services in other domains.  
+    | This property lists other Cyclotron servers which may have the required connectivity. 
+    | By default, this Data Source uses the current Cyclotron environment to proxy the request.
+
+p Examples of the Elasticsearch Data Source are available on the 
+    a(href='/example-datasource-elasticsearch') example-datasource-elasticsearch
+    |  dashboard
+
+property-table(properties='config.dashboard.properties.dataSources.options.elasticsearch.properties')
+
+h4 API Name
+
+p The 
+    em  method
+    |  property (displayed as API Name) controls which Elasticsearch endpoint to submit the request to.  By default this is "_search", but it can by changed to any valid endpoint (e.g. "_msearch", "_suggest").
+
+h4 Response Adapter
+
+p The 
+    em  responseAdapter
+    |  property controls how Cyclotron handles the result that Elasticsearch provides.  The default value, 
+    em  "auto"
+    | , automatically selects between 
+    em  "hits"
+    |  and 
+    em  "aggregations"
+    |  by choosing 
+    em  "aggregations"
+    |  when the response includes aggregations, otherwise
+    em  "hits
+    | . Both 
+    em  "hits"
+    |  and 
+    em  "aggregations"
+    |  can be selected manually as well.  If a Elasticsearch request returns both hits and aggregations, custom processing will be needed to consume both at once.  This is possible using the 
+    em  "raw" 
+    |  option, which returns the original response.  In this case, the 
+    em  postProcessor
+    |  option should be set to a JavaScript function that can handle the entire result.
+
+
+h4 Pre-Processor
+
+p The Elasticsearch Data Source supports an optional pre-processor function that will be called before
+    | the Data Source executes.  For more details, see the main Data Sources page.
+
+h4 Post-Processor
+
+p The Elasticsearch Data Source supports an optional post-processor function that will be called after
+    | data is loaded.  For more details, see the main Data Sources page.
+
+p The data that is sent to the Post-Processor will depend on the setting of the 
+    em  responseAdapter
+    |  property. This property controls how the Elasticsearch response is converted into Cyclotron's tabular data format. The Post-Processor receives the output of whichever 
+    em  responseAdapter
+    |  has been selected.  In order to manually inspect the entire response, set 
+    em  responseAdapter
+    |  to "raw".

@@ -21,7 +21,7 @@
 # 
 # All options documented here are available: https://github.com/mikeal/request#requestoptions-callback
 #
-# Always uses a proxy.
+# Always proxies requests through the Cyclotron service.
 #
 # Properties:
 #   url: The JSON REST service endpoint
@@ -42,16 +42,16 @@ cyclotronDataSources.factory 'jsonDataSource', ($q, $http, configService, dataSo
             url.search queryParams
 
         # Format: https://github.com/mikeal/request#requestoptions-callback
-        body =
+        proxyBody =
             url: url.toString()
             method: options.method || 'GET'
             json: true
 
         if options.options?
             compiledOptions = _.compile(options.options, {})
-            _.assign(body, compiledOptions)
+            _.assign(proxyBody, compiledOptions)
 
-        return body
+        return proxyBody
 
     runner = (options) ->
 

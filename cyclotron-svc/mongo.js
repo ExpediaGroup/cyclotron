@@ -50,7 +50,7 @@ var dashboardSchema = mongoose.Schema({
    a revision counter */
 var revisionSchema = mongoose.Schema({
     name          : {type: String, required: true, unique: false},
-    rev           : {type: Number, required: true, default: 0},
+    rev           : {type: Number, required: true, default: 0, index: true},
     deleted       : {type: Boolean, required: true, default: false},
     date          : {type: Date, required: true},
     tags          : {type: []},
