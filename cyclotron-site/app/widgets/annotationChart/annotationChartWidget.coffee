@@ -28,6 +28,10 @@ cyclotronApp.controller 'AnnotationChartWidget', ($scope, configService, cyclotr
 
     widgetConfig = configService.widgets.annotationChart
     themeOptions = widgetConfig.themes[$scope.widget.theme]?.options || {}
+
+    # Load events
+    $scope.rangeChangeEventHandler = _.jsEval $scope.widget.events?.rangechange
+    if !_.isFunction($scope.rangeChangeEventHandler) then $scope.rangeChangeEventHandler = null
     
     $scope.chartObject =
         type: 'AnnotationChart'
@@ -51,10 +55,8 @@ cyclotronApp.controller 'AnnotationChartWidget', ($scope, configService, cyclotr
     # Auto-assigns missing annotation columns
     $scope.updateSeries = ->
         $scope.series = _.map $scope.widget.series, (series) ->
-            newSeries = 
-                id: _.jsExec series.column
-                label: _.jsExec series.label
-                secondaryAxis: series.secondaryAxis
+            newSeries = _.compile series, {}
+            newSeries.id = newSeries.column
 
             if !newSeries.label? 
                 newSeries.label = _.titleCase newSeries.id
@@ -100,6 +102,8 @@ cyclotronApp.controller 'AnnotationChartWidget', ($scope, configService, cyclotr
             type: 'datetime'
         }
 
+        optionsSeries = {}
+
         # Series
         _.each $scope.series, (series, index) ->
             if series.secondaryAxis == true
@@ -122,6 +126,10 @@ cyclotronApp.controller 'AnnotationChartWidget', ($scope, configService, cyclotr
                 label: series.id + '-text'
                 type: 'string'
             }
+
+            optionsSeries[index] = {}
+            if series.lineDashStyle?
+                optionsSeries[index].lineDashStyle = series.lineDashStyle
 
         if secondaryAxis?
             scaleColumns = switch secondaryAxis
@@ -146,6 +154,8 @@ cyclotronApp.controller 'AnnotationChartWidget', ($scope, configService, cyclotr
         # Undocumented option -- most options from linechart can be applied under "chart" 
         if $scope.chartObject.options.focusTarget?
             $scope.chartObject.options.chart.focusTarget = $scope.chartObject.options.focusTarget
+
+        $scope.chartObject.options.chart.series = optionsSeries
 
         # Override focusTarget if Annotation Editing is enabled
         if $scope.widget.annotationEditing == true
@@ -252,6 +262,10 @@ cyclotronApp.controller 'AnnotationChartWidget', ($scope, configService, cyclotr
                 $scope.annotations.newAnnotationText = null
 
                 $scope.updateChart $scope.data
+
+    $scope.rangeChange = (start, end) ->
+        if $scope.rangeChangeEventHandler?
+            $scope.rangeChangeEventHandler { start, end }
 
     # Load Data Source
     dsDefinition = dashboardService.getDataSource $scope.dashboard, $scope.widget

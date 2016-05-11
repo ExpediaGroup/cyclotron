@@ -1,3 +1,11 @@
+# 1.30.0 (05/12/2016)
+
+## Features
+
+ - Annotation Chart: Added option to handle time range change events
+
+ - Annotation Chart: enabled undocumented lineDashStyle property for series
+
 # 1.29.0 (04/28/2016)
 
 ## Features

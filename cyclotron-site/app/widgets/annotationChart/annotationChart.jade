@@ -20,5 +20,6 @@
         .the-chart(google-chart='google-chart', chart='chartObject', 
             agc-on-error='handleError(message)',
             agc-on-select='selectItem(selectedItem)',
+            agc-on-range-change='rangeChange(start, end)',
             ng-if='!nodata && !dataSourceError && chartObject.data')
 

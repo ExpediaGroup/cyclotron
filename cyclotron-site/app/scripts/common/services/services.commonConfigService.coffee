@@ -26,7 +26,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
     exports = {
 
-        version: '1.29.0'
+        version: '1.30.0'
 
         logging: 
             enableDebug: false
@@ -1406,7 +1406,22 @@ cyclotronServices.factory 'commonConfigService', ->
                         inlineJs: true
                         required: false
                         defaultHidden: true
-                        order: 14                  
+                        order: 14
+                    events:
+                        label: 'Events'
+                        description: 'Optional event handlers for various events.'
+                        type: 'propertyset'
+                        required: false
+                        defaultHidden: true
+                        order: 15
+                        properties:
+                            rangechange:
+                                label: 'Range Change Event'
+                                description: 'This event occurs when the user changes the range slider. The new endpoints are available as e.start and e.end.'
+                                type: 'editor'
+                                editorMode: 'javascript'
+                                required: false
+                                order: 1
                     filters: 
                         label: 'Filters'
                         description: 'Optional, but if provided, specifies name-value pairs used to filter the data source\'s result set. Each key specifies a column in the data source, and the value specifies either a single value (string) or a set of values (array of strings). Only rows which have the specifies value(s) will be permitted.'

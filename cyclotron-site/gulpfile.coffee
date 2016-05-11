@@ -128,6 +128,7 @@ gulp.task 'vendor-scripts', ->
             'ace.js'
             'highcharts.js'
             'd3.js'
+            'ng-google-chart.js'
             '**'
         ])
         .pipe concat 'vendor.js'

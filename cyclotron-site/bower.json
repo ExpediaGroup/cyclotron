@@ -19,7 +19,7 @@
     "angular": "1.4.9",
     "angular-bootstrap": "1.2.4",
     "angular-cookies": "1.4.9",
-    "angular-google-chart": "~0.1.0",
+    "angular-google-chart": "angular-google-chart#75fdd22",
     "angular-hotkeys": "0.2.2",
     "angular-localForage": "1.2.5",
     "angular-mocks": "1.4.9",
@@ -81,6 +81,12 @@
       "main": [
         "lib/alertify.js",
         "themes/alertify.core.css"
+      ]
+    },
+    "angular-google-chart": {
+      "main": [
+        "ng-google-chart.js",
+        "src/agcOnRangeChange.js"
       ]
     },
     "angular-hotkeys": {
