@@ -108,7 +108,11 @@ cyclotronDirectives.directive 'dashboardPage', ($compile, $window, $timeout, con
                         if (newValue.enableMasonry != false)
                             masonry(element, scope.layout)
                             
-                    scope.layout = layoutService.getLayout(newValue, $($window).width(), $($window).height())
+                    newLayout = layoutService.getLayout(newValue, $($window).width(), $($window).height())
+
+                    # Optional persistent widget area of layout
+                    newLayout.widget = scope.layout?.widget || {}
+                    scope.layout = newLayout
 
                     # Set page margin if defined
                     if !_.isNullOrUndefined(scope.layout.margin)

@@ -1,3 +1,23 @@
+# 1.31.0 (05/26/2016)
+
+## Features
+
+ - Table Widget: Added optional pagination--can automatically or manually specify the number of rows displayed per page. Improves performance when displaying large Data Sources.
+ 
+ - Number Widget: Added Click event handler: can provide a JavaScript function that gets executed when the Number is clicked.
+
+ - Dashboard Controls: Added an option to disable the UI controls completely
+
+## Bug Fixes
+
+ - Elasticsearch: Fixed error handling for HTTP status code 400
+
+ - _.flattenObject: Fixed premature return when handling false values
+
+## Breaking Changes
+
+ - Removed overrides to the Highcharts' dateFormats property
+
 # 1.30.0 (05/12/2016)
 
 ## Features

@@ -23,10 +23,13 @@ cyclotronDirectives.directive 'widgetBody', ($timeout) ->
             $widget = $widgetBody.parent()
 
             sizer = ->
-                $title = $widget.find('.title')
-                $footer = $widget.find('.widget-footer')
+                $title = $widget.find '.title'
+                $footer = $widget.find '.widget-footer'
                 widgetBodyHeight = $widget.outerHeight() - $title.outerHeight() - $footer.outerHeight()
-                $widgetBody.height(Math.floor(widgetBodyHeight))
+                $widgetBody.height Math.floor(widgetBodyHeight)
+
+                if scope.layout?
+                    scope.layout.widget.widgetBodyHeight = widgetBodyHeight
 
             # Update on window resizing
             $widget.add('.title, .widget-footer').on 'resize', _.throttle(->
@@ -36,11 +39,11 @@ cyclotronDirectives.directive 'widgetBody', ($timeout) ->
 
             # Run now & again in 100ms
             sizer()
-            timer = $timeout(sizer, 100)
+            timer = $timeout sizer, 100
 
             scope.$on '$destroy', ->
                 $timeout.cancel timer
-                $widget.off('resize')
+                $widget.off 'resize'
 
             return
     }

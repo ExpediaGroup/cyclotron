@@ -37,11 +37,17 @@ cyclotronApp.controller 'NumberWidget', ($scope, dashboardService, dataService) 
     $scope.linkTarget = ->
         if $scope.dashboard.openLinksInNewWindow == false then '_self' else '_blank'
 
-    $scope.getClass = ->
+    $scope.getClass = (number) ->
+        c = ''
         if $scope.numbers.length == 1
-            return 'orientation-vertical'
+            c = 'orientation-vertical'
         else
-            return 'orientation-' + $scope.orientation
+            c = 'orientation-' + $scope.orientation
+
+        if _.isFunction(number.onClick)
+            c += ' actionable'
+
+        return c
 
     $scope.getUrl = ->
         return '' if _.isEmpty($scope.widget.link)
@@ -65,10 +71,17 @@ cyclotronApp.controller 'NumberWidget', ($scope, dashboardService, dataService) 
                 icon: _.compile(item.icon, row)
                 iconColor: _.compile(item.iconColor, row)
                 iconTooltip: _.compile(item.iconTooltip, row)
+                onClick: _.jsEval _.compile(item.onClick, row)
             }
 
         # Set flag for single number or not
         $scope.singleNumber = ($scope.numbers.length == 1)
+
+    $scope.onClickEvent = (number) ->
+        console.log number
+        if _.isFunction(number.onClick)
+            # Invoke event handler; pass the number object as an argument
+            number.onClick({ number })
 
     $scope.reload = ->
         $scope.dataSource.execute(true)

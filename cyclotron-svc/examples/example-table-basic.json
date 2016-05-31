@@ -86,6 +86,84 @@
     }, {
         "layout": {
             "gridColumns": 2,
+            "gridRows": 1
+        },
+        "name": "Paging",
+        "widgets": [{
+            "dataSource": "uscrime",
+            "enableSort": false,
+            "layout": {},
+            "pagination": {
+                "autoItemsPerPage": true,
+                "enabled": true
+            },
+            "rowHeight": 30,
+            "title": "US Crime Over Time (Auto-paging)",
+            "widget": "table"
+        }, {
+            "columns": [{
+                "headerTooltip": "The Year",
+                "name": "Year"
+            }, {
+                "name": "Total"
+            }, {
+                "name": "Burglary"
+            }, {
+                "name": "Robbery"
+            }, {
+                "name": "Murder"
+            }],
+            "dataSource": "uscrime",
+            "pagination": {
+                "autoItemsPerPage": false,
+                "enabled": true,
+                "itemsPerPage": 10
+            },
+            "title": "US Crime Over Time (10 rows/page)",
+            "widget": "table"
+        }]
+    }, {
+        "layout": {
+            "gridColumns": 2,
+            "gridRows": 1
+        },
+        "name": "Paging",
+        "widgets": [{
+            "dataSource": "uscrime",
+            "enableSort": false,
+            "layout": {},
+            "pagination": {
+                "autoItemsPerPage": true,
+                "enabled": true
+            },
+            "rowHeight": 30,
+            "title": "US Crime Over Time (Auto-paging)",
+            "widget": "table"
+        }, {
+            "columns": [{
+                "headerTooltip": "The Year",
+                "name": "Year"
+            }, {
+                "name": "Total"
+            }, {
+                "name": "Burglary"
+            }, {
+                "name": "Robbery"
+            }, {
+                "name": "Murder"
+            }],
+            "dataSource": "uscrime",
+            "pagination": {
+                "autoItemsPerPage": false,
+                "enabled": true,
+                "itemsPerPage": 10
+            },
+            "title": "US Crime Over Time (10 rows/page)",
+            "widget": "table"
+        }]
+    }, {
+        "layout": {
+            "gridColumns": 2,
             "gridRows": 2
         },
         "name": "Wildcards/Regex",

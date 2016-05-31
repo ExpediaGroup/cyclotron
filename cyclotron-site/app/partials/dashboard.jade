@@ -2,7 +2,7 @@
 //- Dashboards
 div.dashboard
 
-    .dashboard-controls
+    .dashboard-controls(ng-hide='dashboard.showDashboardControls == false')
         i.fa.fa-chevron-left(ng-click='moveBack()', ng-class='{ disabled: !canMoveBack() }', title='Go to the previous page')
         i.fa.fa-pause(ng-click='pause()', ng-show='!paused', title='Pause Dashboard page rotation')
         i.fa.fa-play(ng-click='play()', ng-show='paused', ng-class='{ disabled: !canMoveForward() }', title='Start Dashboard page rotation')

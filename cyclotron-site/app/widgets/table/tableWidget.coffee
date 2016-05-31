@@ -36,6 +36,15 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
     
     $scope.columnGroups = []
     sortFunction = _.jsEval $scope.widget.sortFunction
+
+    $scope.paging =
+        boundaryLinks: true
+        maxSize: 5
+        currentPage: 1
+        itemsPerPage: 1000
+
+    if $scope.widget.pagination?.enabled
+        $scope.paging.itemsPerPage = $scope.widget.pagination.itemsPerPage
     
     $scope.widgetTitle = -> _.jsExec($scope.widget.title)
 
@@ -167,7 +176,6 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
                     console.log('Table Widget: Error in rule: ' + rule.rule)
                     return
 
-
     # Process the rows to collect row groups
     $scope.processRowGroups = (rows, columns) ->
 
@@ -250,6 +258,15 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
 
     $scope.reload = ->
         $scope.dataSource.execute(true)
+
+    $scope.calculateItemsPerPage = (bodyHeight) ->
+        rowHeight = if $scope.widget.rowHeight?
+            $scope.widget.rowHeight
+        else
+            45 #Magic number
+
+        # Divide widget body by row height and subtract 1x header / 3x footer
+        $scope.paging.itemsPerPage = Math.floor((bodyHeight / rowHeight)) - 4
 
     # Load Data Source
     dsDefinition = dashboardService.getDataSource $scope.dashboard, $scope.widget
@@ -357,6 +374,8 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
             $scope.sortedRows = data
             $scope.sortRows()
 
+            $scope.paging.totalItems = $scope.sortedRows.length
+
             $scope.loading = false
 
         # Data Source error
@@ -378,3 +397,7 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
         # Initialize the Data Source
         $scope.dataSource.init dsDefinition
 
+    $scope.$watch 'layout.widget.widgetBodyHeight', (height) ->
+        if $scope.widget.pagination?.autoItemsPerPage == true
+            $scope.calculateItemsPerPage(height)
+    , true

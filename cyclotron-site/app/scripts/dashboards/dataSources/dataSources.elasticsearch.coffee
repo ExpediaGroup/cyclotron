@@ -120,25 +120,32 @@ cyclotronDataSources.factory 'elasticsearchDataSource', ($q, $http, configServic
 
             # Successful Result
             successCallback = (result) ->
-                responseAdapter = _.jsExec options.responseAdapter
+                if result.statusCode == 200
+                    responseAdapter = _.jsExec options.responseAdapter
 
-                if result.body.responses?
-                    # E.g. _msearch responses
-                    data = _.map result.body.responses, (response) ->
-                        processResponse response, responseAdapter, reject
-                    data = _.flatten data
-                else 
-                    data = processResponse result.body, responseAdapter, reject
+                    if result.body.responses?
+                        # E.g. _msearch responses
+                        data = _.map result.body.responses, (response) ->
+                            processResponse response, responseAdapter, reject
+                        data = _.flatten data
+                    else 
+                        data = processResponse result.body, responseAdapter, reject
 
-                if _.isNull data
-                    logService.debug 'Elasticsearch result is null.'
-                    data = []
+                    if _.isNull data
+                        logService.debug 'Elasticsearch result is null.'
+                        data = []
 
-                resolve {
-                    '0':
-                        data: data
-                        columns: null
-                }
+                    resolve {
+                        '0':
+                            data: data
+                            columns: null
+                    }
+                else
+                    error = result.body?.error
+                    if !error? then error = 'Status code: ' + result.statusCode
+                    logService.error error
+                    reject error
+
 
             # Do the request, wiring up success/failure handlers
             proxyUrl = (_.jsExec(options.proxy) || configService.restServiceUrl) + '/proxy'

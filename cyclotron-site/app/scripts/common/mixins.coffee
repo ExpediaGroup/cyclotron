@@ -227,5 +227,6 @@ _.mixin({
                 _.assign newObj, _.flattenObject value
             else
                 newObj[key] = value
+            return
         newObj
 })

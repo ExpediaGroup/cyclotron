@@ -25,10 +25,6 @@ Highcharts.setOptions {
         shared: true
 }
 
-Highcharts.dateFormats = 
-    W: (timestamp) -> moment(timestamp).isoWeek()
-    L: (timestamp) -> moment(timestamp).format('[Week] w (M/D - ') + moment(timestamp).add(6, 'days').format('M/D)')
-
 # Inspired by: https://github.com/rootux/angular-highcharts-directive
 cyclotronDirectives.directive 'highchart', (configService) ->
     {

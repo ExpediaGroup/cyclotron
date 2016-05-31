@@ -68,6 +68,24 @@
         }
 
     }
+
+    .paging {
+        text-align: center;
+        .box-sizing(border-box);
+        * {
+            .box-sizing(border-box);
+        }
+        *:before,
+        *:after {
+            .box-sizing(border-box);
+        }
+
+        .pagination a {
+            background-color: @headerColor;
+            color: contrast(@headerColor, @color, white);
+            border-bottom: 1px solid;
+        }
+    }
 }
 
 .widget-noscroll .table-widget {

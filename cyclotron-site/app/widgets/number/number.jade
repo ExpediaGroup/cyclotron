@@ -13,7 +13,8 @@
         .the-number(ng-if='!nodata && !dataSourceError', ng-repeat='number in numbers', 
             single-number='singleNumber', 
             orientation='orientation',
-            class='{{ getClass() }}')
+            class='{{ getClass(number) }}',
+            ng-click='onClickEvent(number)')
             span(ng-if='number.prefix') {{ number.prefix }}              
             h1.big(title='{{ number.tooltip }}',ng-style='{color: number.color || "inherit"}') 
                 | {{ number.number }}

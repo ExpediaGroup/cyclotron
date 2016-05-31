@@ -1,38 +1,45 @@
 .table-widget(ng-controller='TableWidget')
     h1.title(ng-if='widget.title') {{ widgetTitle() }}
 
-    .spinjs(ng-if='loading')
-    .widget-error(ng-if='dataSourceError == true && !loading')
-    .widget-nodata(ng-if='nodata && !loading')
-        .fa.fa-exclamation-triangle
-        span  {{ nodata }}
+    .widget-body
+        .spinjs(ng-if='loading')
+        .widget-error(ng-if='dataSourceError == true && !loading')
+        .widget-nodata(ng-if='nodata && !loading')
+            .fa.fa-exclamation-triangle
+            span  {{ nodata }}
 
-    table(ng-if='!nodata && !dataSourceError', table-fixed-header='widget.freezeHeaders')
-        thead(ng-if='widget.omitHeaders != true')
-            tr(ng-if='columnGroups.length > 0')
-                th.group(ng-repeat='group in columnGroups', colspan='{{ group.length }}', 
-                    ng-class='{ empty: group.name === null }') {{ group.name }}
-            tr
-                th(ng-repeat='column in columns', ng-class='{ empty: column.label === "" }', title='{{ column.headerTooltip }}')
-                    a(ng-if='widget.enableSort != false', ng-click='selectSort(column.name)') {{ column.label }}
-                    span(ng-if='widget.enableSort == false') {{ column.label }}
-                    i.fa.fa-sort-up(ng-show='isSorted(column.name, true)')
-                    i.fa.fa-sort-down(ng-show='isSorted(column.name, false)')
-                    i.fa.fa-sort-down.invisible(ng-show='!isSorted(column.name, false) && !isSorted(column.name, true)')
-        tbody
-            tr(ng-repeat='row in sortedRows', table-rule)
-                td(ng-repeat='column in columns', table-rule, table-column, 
-                    ng-class='{hidden: getRowSpan(row, column) == 0, aLink: getCellProperty(row, column, "link")}',
-                    rowspan='{{ getRowSpan(row, column) }}', 
-                    title='{{ getCellProperty(row, column, "tooltip") }}') 
+        .results(ng-if='sortedRows && !nodata && !dataSourceError')
+            table(table-fixed-header='widget.freezeHeaders')
+                thead(ng-if='widget.omitHeaders != true')
+                    tr(ng-if='columnGroups.length > 0', table-row)
+                        th.group(ng-repeat='group in columnGroups', colspan='{{ group.length }}', 
+                            ng-class='{ empty: group.name === null }') {{ group.name }}
+                    tr(table-row)
+                        th(ng-repeat='column in columns', ng-class='{ empty: column.label === "" }', title='{{ column.headerTooltip }}')
+                            a(ng-if='widget.enableSort != false', ng-click='selectSort(column.name)') {{ column.label }}
+                            span(ng-if='widget.enableSort == false') {{ column.label }}
+                            i.fa.fa-sort-up(ng-show='isSorted(column.name, true)')
+                            i.fa.fa-sort-down(ng-show='isSorted(column.name, false)')
+                            i.fa.fa-sort-down.invisible(ng-show='!isSorted(column.name, false) && !isSorted(column.name, true)')
+                tbody
+                    tr(ng-repeat='row in sortedRows | limitTo:paging.itemsPerPage:(paging.currentPage-1)*paging.itemsPerPage', table-rule, table-row)
+                        td(ng-repeat='column in columns', table-rule, table-column, 
+                            ng-class='{hidden: getRowSpan(row, column) == 0, aLink: getCellProperty(row, column, "link")}',
+                            rowspan='{{ getRowSpan(row, column) }}', 
+                            title='{{ getCellProperty(row, column, "tooltip") }}') 
 
-                    img(ng-if='getCellProperty(row, column, "image")', ng-src='{{ getCellProperty(row, column, "image") }}', style='height: {{ getCellProperty(row, column, "imageHeight", "1em") }};')
+                            img(ng-if='getCellProperty(row, column, "image")', ng-src='{{ getCellProperty(row, column, "image") }}', style='height: {{ getCellProperty(row, column, "imageHeight", "1em") }};')
 
-                    i(ng-if='getCellProperty(row, column, "icon")', class='fa {{ getCellProperty(row, column, "icon") }}', ng-style='{color: getCellProperty(row, column, "iconColor")}')
+                            i(ng-if='getCellProperty(row, column, "icon")', class='fa {{ getCellProperty(row, column, "icon") }}', ng-style='{color: getCellProperty(row, column, "iconColor")}')
 
-                    //- Normal text output
-                    span(ng-if='!getCellProperty(row, column, "link")')  {{ getText(row, column) }}
+                            //- Normal text output
+                            span(ng-if='!getCellProperty(row, column, "link")')  {{ getText(row, column) }}
 
-                    //- Link if the column specifies a link
-                    a(ng-if='getCellProperty(row, column, "link")', target='{{ linkTarget(column) }}', ng-href='{{ getCellProperty(row, column, "link") }}') {{ getText(row, column) }}
-                        i.fa.fa-external-link
+                            //- Link if the column specifies a link
+                            a(ng-if='getCellProperty(row, column, "link")', target='{{ linkTarget(column) }}', ng-href='{{ getCellProperty(row, column, "link") }}') {{ getText(row, column) }}
+                                i.fa.fa-external-link
+        
+            .paging(ng-if='widget.pagination.enabled')
+                uib-pagination.pagination-sm(total-items='paging.totalItems', ng-model='paging.currentPage', 
+                    items-per-page='paging.itemsPerPage', max-size='paging.maxSize', 
+                    boundary-links='paging.boundaryLinks')

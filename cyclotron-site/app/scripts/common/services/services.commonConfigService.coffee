@@ -26,7 +26,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
     exports = {
 
-        version: '1.30.0'
+        version: '1.31.0'
 
         logging: 
             enableDebug: false
@@ -148,6 +148,14 @@ cyclotronServices.factory 'commonConfigService', ->
                 showWidgetErrors:
                     label: 'Show Error Messages on Widgets'
                     description: 'If true, allows error messages to be displayed on Widgets. This setting can be overridden by each Page/Widget.'
+                    type: 'boolean'
+                    required: false
+                    default: true
+                    defaultHidden: true
+
+                showDashboardControls:
+                    label: 'Show Dashboard Controls'
+                    description: 'If false, hides the default Dashboard controls (rotation, export, etc)'
                     type: 'boolean'
                     required: false
                     default: true
@@ -2365,6 +2373,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                 inlineJs: true
                                 required: false
                                 defaultHidden: true
+                                order: 4
                             tooltip:
                                 label: 'Tooltip'
                                 description: 'Sets the tooltip of the number.'
@@ -2373,6 +2382,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                 inlineJs: true
                                 required: false
                                 defaultHidden: true
+                                order: 5
                             icon:
                                 label: 'Icon'
                                 description: 'Optional Font Awesome icon class to be displayed with the number.'
@@ -2380,12 +2390,14 @@ cyclotronServices.factory 'commonConfigService', ->
                                 inlineJs: true
                                 type: 'string'
                                 defaultHidden: true
+                                order: 6
                             iconColor:
                                 label: 'Icon Color'
                                 description: 'Optionally specifies a color for the icon if the icon property is also set. The value can be a named color (e.g. "red"), a hex color (e.g. "#AA0088") or a data source column/inline javascript (e.g. "#{statusColor}").'
                                 type: 'string'
                                 inlineJs: true
                                 defaultHidden: true
+                                order: 7
                             iconTooltip:
                                 label: 'IconTooltip'
                                 description: 'Sets the tooltip of the icon.'
@@ -2394,6 +2406,15 @@ cyclotronServices.factory 'commonConfigService', ->
                                 inlineJs: true
                                 required: false
                                 defaultHidden: true
+                                order: 8
+                            onClick:
+                                label: 'Click Event'
+                                description: 'This event occurs when the user clicks on the number. If this property is set with a JavaScript function, the function will be called as an event handler.'
+                                type: 'editor'
+                                editorMode: 'javascript'
+                                required: false
+                                defaultHidden: true
+                                order: 9
                     orientation:
                         label: 'Orientation'
                         description: 'Controls the direction in which the numbers are arranged.'
@@ -2759,6 +2780,40 @@ cyclotronServices.factory 'commonConfigService', ->
                         default: true
                         required: false
                         order: 14
+                    rowHeight:
+                        label: 'Minimum Row Height'
+                        description: 'Specifies the (minimum) height in pixels of all rows (including the header row).  The actual height of a row may be greater than this value, depending on the contents. If this is not set, each row will automatically size to its contents.'
+                        type: 'integer'
+                        required: false
+                        order: 15
+                    pagination:
+                        label: 'Pagination'
+                        description: 'Controls pagination of the Table.'
+                        type: 'propertyset'
+                        required: false
+                        defaultHidden: true
+                        order: 16
+                        properties:
+                            enabled:
+                                label: 'Enable Pagination'
+                                description: 'Enables or disables pagination for this Table Widget.'
+                                type: 'boolean'
+                                default: false
+                                required: false
+                                order: 1
+                            autoItemsPerPage:
+                                label: 'Auto Items Per Page'
+                                description: 'Enables automatic detection of the number of rows to display in order to fit in the widget dimensions. Requires rowHeight property to be configured to work accurately. To manually size, set false and configure itemsPerPage instead.'
+                                type: 'boolean'
+                                default: true
+                                required: false
+                                order: 2
+                            itemsPerPage:
+                                label: 'Items Per Page'
+                                description: 'Controls how many row are displayed on each page. If autoItemsPerPage is true, this is ignored.'
+                                type: 'integer'
+                                required: false
+                                order: 3
                     filters: 
                         label: 'Filters'
                         description: 'Optional, but if provided, specifies name-value pairs used to filter the data source\'s result set. Each key specifies a column in the data source, and the value specifies either a single value (string) or a set of values (array of strings). Only rows which have the specifies value(s) will be permitted.'
@@ -2766,7 +2821,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         inlineJsKey: true
                         inlineJsValue: true
                         required: false
-                        order: 15
+                        order: 17
                     sortBy: 
                         label: 'Sort By'
                         description: 'Optional, specifies the field(s) to sort the data by. If the value is a string, it will sort by that single field. If it is an array of strings, multiple fields will be used to sort, with left-to-right priority. The column name can be prefixed with a + or a - sign to indicate the direction or sort. + is ascending, while - is descending. The default sort direction is ascending, so the + sign does not need to be used. If this property is omitted, the original sort order of the data will be used.'
@@ -2774,7 +2829,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         inlineJs: true
                         required: false
                         placeholder: 'Column name'
-                        order: 16
+                        order: 18
                     sortFunction:
                         label: 'Sort Function'
                         description: 'Optional, specifies an alternative function to the default sort implementation.'
@@ -2783,7 +2838,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         editorMode: 'javascript'
                         required: false
                         defaultHidden: true
-                        order: 17
+                        order: 19
 
             tableau: 
                 name: 'tableau'
