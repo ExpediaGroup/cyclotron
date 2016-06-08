@@ -1,0 +1,10 @@
+div.header-widget(ng-controller='HeaderWidget')
+    .title(ng-show='showTitle')
+        a(ng-href='{{ headerTitle.link }}', ng-class='{ actionable: headerTitle.link }')
+            h1(ng-show='showTitle', ng-style='{ "font-size": headerTitle.titleSize }')
+                img.logo(ng-src='{{ headerTitle.logoUrl }}', ng-show='headerTitle.logoUrl', ng-style='{ "height": headerTitle.logoSize }')
+                span {{ title }}
+                span.page-name.separator(ng-if='headerTitle.showPageName') {{ headerTitle.pageNameSeparator }}
+                span.page-name(ng-if='headerTitle.showPageName') {{ page.name }}
+
+    .custom-box(ng-show='showCustomHtml', ng-bind-html='customHtml()')

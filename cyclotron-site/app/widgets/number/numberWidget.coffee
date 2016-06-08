@@ -32,6 +32,13 @@ cyclotronApp.controller 'NumberWidget', ($scope, dashboardService, dataService) 
     $scope.dataSourceErrorMessage = null
     $scope.orientation = $scope.widget.orientation ? 'vertical'
 
+    $scope.numberCount = $scope.widget.numbers?.length || 0
+    $scope.isHorizontal = $scope.widget.orientation == 'horizontal'
+
+    # Flip horizontal/vertical if the widgets are auto-sized
+    if $scope.numberCount <= 4 and $scope.widget.autoSize != false
+        $scope.isHorizontal = !$scope.isHorizontal      
+
     $scope.widgetTitle = -> _.jsExec($scope.widget.title)
 
     $scope.linkTarget = ->
@@ -39,10 +46,10 @@ cyclotronApp.controller 'NumberWidget', ($scope, dashboardService, dataService) 
 
     $scope.getClass = (number) ->
         c = ''
-        if $scope.numbers.length == 1
-            c = 'orientation-vertical'
+        if $scope.isHorizontal
+            c = 'orientation-horizontal'
         else
-            c = 'orientation-' + $scope.orientation
+            c = 'orientation-vertical'
 
         if _.isFunction(number.onClick)
             c += ' actionable'
@@ -61,7 +68,7 @@ cyclotronApp.controller 'NumberWidget', ($scope, dashboardService, dataService) 
 
     # Compiles the numbers and updates the widget
     $scope.compileNumbers = (row) ->
-        $scope.numbers = _.map $scope.widget.numbers, (item, index) ->
+        numbers = _.map $scope.widget.numbers, (item, index) ->
             {
                 number: _.compile(item.number, row)
                 prefix: _.compile(item.prefix, row)
@@ -72,13 +79,16 @@ cyclotronApp.controller 'NumberWidget', ($scope, dashboardService, dataService) 
                 iconColor: _.compile(item.iconColor, row)
                 iconTooltip: _.compile(item.iconTooltip, row)
                 onClick: _.jsEval _.compile(item.onClick, row)
-            }
+            }      
 
-        # Set flag for single number or not
-        $scope.singleNumber = ($scope.numbers.length == 1)
+        if $scope.numbers?
+            _.each numbers, (number, index) ->
+                _.assign($scope.numbers[index], number)
+        else
+            $scope.numbers = numbers
+
 
     $scope.onClickEvent = (number) ->
-        console.log number
         if _.isFunction(number.onClick)
             # Invoke event handler; pass the number object as an argument
             number.onClick({ number })

@@ -268,6 +268,15 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
         # Divide widget body by row height and subtract 1x header / 3x footer
         $scope.paging.itemsPerPage = Math.floor((bodyHeight / rowHeight)) - 4
 
+    $scope.onClickEvent = (row, column) ->
+        if _.isFunction(column.onClick)
+            # Invoke event handle
+            column.onClick { 
+                row: row
+                column: column
+                text: $scope.getText(row, column)
+            }
+
     # Load Data Source
     dsDefinition = dashboardService.getDataSource $scope.dashboard, $scope.widget
     $scope.dataSource = dataService.get dsDefinition
@@ -359,7 +368,10 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
                             # Save the existing group and reset to null
                             $scope.columnGroups.push currentGroup
                             currentGroup = { name: null, length: 1 }
-                
+                    
+                    # Evaluate onClick event
+                    column.onClick = _.jsEval column.onClick
+
                 # Save the last group
                 if $scope.columnGroups.length > 0 || currentGroup.name?
                     $scope.columnGroups.push currentGroup

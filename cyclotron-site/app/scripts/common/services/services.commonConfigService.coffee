@@ -26,7 +26,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
     exports = {
 
-        version: '1.31.0'
+        version: '1.32.0'
 
         logging: 
             enableDebug: false
@@ -54,13 +54,23 @@ cyclotronServices.factory 'commonConfigService', ->
                     required: true
                     order: 0
 
+                displayName:
+                    label: 'Display Name'
+                    description: 'Display Name; this is displayed in the browser title bar or the Header Widget.'
+                    placeholder: 'Display Name'
+                    type: 'string'
+                    required: false
+                    inlineJs: true
+                    defaultHidden: true
+                    order: 1
+
                 description:
                     label: 'Description'
                     description: 'A short summary of the Dashboard\'s purpose or capabilities.'
                     placeholder: 'A short summary of the Dashboard\'s purpose or capabilities.'
                     type: 'string'
                     required: false
-                    order: 1
+                    order: 2
 
                 theme:
                     label: 'Theme'
@@ -84,7 +94,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         dark2:
                             value: 'dark2'
                             dashboardBackgroundColor: 'black'
-                    order: 2
+                    order: 5
 
                 style:
                     label: 'Style'
@@ -98,7 +108,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         fullscreen:
                             value: 'fullscreen'
                     defaultHidden: true
-                    order: 3
+                    order: 6
 
                 autoRotate:
                     label: 'Auto-Rotate'
@@ -107,7 +117,7 @@ cyclotronServices.factory 'commonConfigService', ->
                     default: false
                     required: false
                     defaultHidden: true
-                    order: 4
+                    order: 10
 
                 duration:
                     label: 'Auto-Rotate Duration (seconds)'
@@ -117,7 +127,7 @@ cyclotronServices.factory 'commonConfigService', ->
                     default: 60
                     required: false
                     defaultHidden: true
-                    order: 5
+                    order: 11
 
                 preload:
                     label: 'Pre-Load Time (seconds)'
@@ -127,7 +137,7 @@ cyclotronServices.factory 'commonConfigService', ->
                     default: 0.050
                     required: false
                     defaultHidden: true
-                    order: 6
+                    order: 12
 
                 allowFullscreen:
                     label: 'Allow Fullscreen'
@@ -194,6 +204,21 @@ cyclotronServices.factory 'commonConfigService', ->
                                     type: 'integer'
                                     required: false
                                     order: 1
+                                gridWidthAdjustment:
+                                    label: 'Grid Page Width Adjustment'
+                                    description: 'Specifies an adjustment (in pixels) to the width of the page when calculating the grid layout.  If the value is positive, the page width will have the adjustment added to it (making each column wider), whereas if it is negative, the page width will be reduced (making each column skinnier).'
+                                    type: 'integer'
+                                    default: 0
+                                    required: false
+                                    defaultHidden: true
+                                    order: 2
+                                gridHeightAdjustment:
+                                    label: 'Grid Page Height Adjustment'
+                                    description: 'Specifies an adjustment (in pixels) to the height of the page when calculating the grid layout.  If the value is positive, the page height will have the adjustment added to it (making each row taller), whereas if it is negative, the page height will be reduced (making each row shorter). This is commonly used with a fixed-height Header widget.'
+                                    type: 'integer'
+                                    default: 0
+                                    required: false
+                                    order: 3
                                 gutter:
                                     label: 'Gutter'
                                     description: 'Controls the space (in pixels) between widgets positioned in the grid. The default value is 10.'
@@ -201,7 +226,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     default: 10
                                     required: false
                                     defaultHidden: true
-                                    order: 2
+                                    order: 5
                                 borderWidth:
                                     label: 'Border Width'
                                     description: 'Specifies the pixel width of the border around each widget. Can be set to 0 to remove the border. If omitted, the theme default will be used.'
@@ -209,7 +234,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     default: null
                                     required: false
                                     defaultHidden: true
-                                    order: 3
+                                    order: 6
                                 margin:
                                     label: 'Margin'
                                     description: 'Controls the empty margin width (in pixels) around the outer edge of the Dashboard. Can be set to 0 to remove the margin.'
@@ -217,7 +242,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     default: 10
                                     required: false
                                     defaultHidden: true
-                                    order: 4
+                                    order: 7
                                 scrolling:
                                     label: 'Scrolling Enabled'
                                     description: 'Enables vertical scrolling of the page to display content longer than the current browser size.'
@@ -225,7 +250,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     default: true
                                     required: false
                                     defaultHidden: true
-                                    order: 5
+                                    order: 8
                             order: 2
                         widgets:
                             label: 'Widgets'
@@ -2084,6 +2109,77 @@ cyclotronServices.factory 'commonConfigService', ->
                         required: false
                         order: 10
 
+            header:
+                name: 'header'
+                icon: 'fa-header'
+                properties:
+                    headerTitle:
+                        label: 'Header Title'
+                        description: 'Contains properties for displaying a title in the header.'
+                        type: 'propertyset'
+                        order: 10
+                        properties:
+                            showTitle:
+                                label: 'Show Title'
+                                description: 'Determines whether a title will be shown. If the Widget has a Title, it will be shown, otherwise it defaults to the Dashboard\'s Display Name or Name.'
+                                type: 'boolean'
+                                default: true
+                                required: false
+                                inlineJs: true
+                                order: 1
+                            showPageName:
+                                label: 'Show Page Name'
+                                description: 'Determines whether the current page name will be shown as part of the title.'
+                                type: 'boolean'
+                                default: true
+                                required: false
+                                inlineJs: true
+                                order: 2
+                            pageNameSeparator:
+                                label: 'Page Name Separator'
+                                description: 'Configures a string to use to separate the Dashboard name from the Page name.  Defaults to a space.'
+                                type: 'string'
+                                required: false
+                                default: ''
+                                inlineJs: true
+                                defaultHidden: true
+                                order: 3
+                            titleSize:
+                                label: 'Title Size'
+                                description: 'Sets the font size for the header title (if displayed). Any valid CSS height is allowed.'
+                                type: 'string'
+                                required: false
+                                inlineJs: true
+                                order: 5
+                            logoUrl:
+                                label: 'Logo URL'
+                                description: 'Contains a URL to a dashboard logo to display before the title. Data URLs can be used.'
+                                type: 'string'
+                                required: false
+                                inlineJs: true
+                                order: 10
+                            logoSize:
+                                label: 'Logo Size'
+                                description: 'Sets the height for the header logo (if displayed). The logo will be scaled without changing the aspect ratio. Any valid CSS height is allowed.'
+                                type: 'string'
+                                required: false
+                                inlineJs: true
+                                order: 11
+                            link:
+                                label: 'Link'
+                                description: 'If set, makes the Logo and Title a link to this URL.'
+                                type: 'string'
+                                required: false
+                                inlineJs: true
+                                order: 20
+                    customHtml:
+                        label: 'HTML Content'
+                        description: 'Provides additional HTML content to be displayed in the header.  This can be used to customize the header display.'
+                        type: 'editor'
+                        editorMode: 'html'
+                        required: false
+                        inlineJs: true
+                        order: 11
             html:
                 name: 'html'
                 icon: 'fa-html5'
@@ -2427,13 +2523,20 @@ cyclotronServices.factory 'commonConfigService', ->
                             horizontal:
                                 value: 'horizontal'
                         order: 12
+                    autoSize:
+                        label: 'Auto-Size Numbers'
+                        description: 'If true, up to 4 numbers will be automatically sized-to-fit in the Widget.  If false, or if there are more than four numbers, all numbers will be listed sequentially.'
+                        type: 'boolean'
+                        required: false
+                        default: true
+                        order: 13
                     link:
                         label: 'Link'
                         description: 'Optional, specifies a URL that will be displayed at the bottom of the widget as a link.'
                         placeholder: 'URL'
                         type: 'url'
                         required: false
-                        order: 13
+                        order: 14
                     filters: 
                         label: 'Filters'
                         description: "Optional, but if provided, specifies name-value pairs used to filter the data source's result set. This has no effect if the dataSource property is not set.\nOnly the first row of the data source is used to get data, so this property can be used to narrow down on the correct row"
@@ -2629,6 +2732,13 @@ cyclotronServices.factory 'commonConfigService', ->
                                 description: 'Optionally specifies a tooltip to display for the column header. "#value" can be used to reference the "name" property of the column.'
                                 type: 'string'
                                 inlineJs: true
+                                defaultHidden: true
+                            onClick:
+                                label: 'Click Event'
+                                description: 'This event occurs when the user clicks on a cell in this column. If this property is set with a JavaScript function, the function will be called as an event handler.'
+                                type: 'editor'
+                                editorMode: 'javascript'
+                                required: false
                                 defaultHidden: true
                             link:
                                 label: 'Link'

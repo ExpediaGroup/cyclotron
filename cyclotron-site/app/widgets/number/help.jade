@@ -19,6 +19,15 @@ p
     | at the front (ascending).  For example, if a Data Source returns daily data for the past month, sorting 
     | by "-date" would order by date descending, causing the row with the most recent data to appear first.
 
+h4 Layout
+
+p
+    | By default, the Number Widget will automatically size and position up to four numbers to fit the dimensions of the Widget.  If there is a single number, it will be resized to fit the entire size of the Widget.  Two numbers will split the Widget either vertically or horizontally; three numbers will place two on top, and one below; four numbers will divide the Widget into four quadrants.
+
+p If the Widget has more than four numbers, it will just list the numbers without any scaling or positioning.  It's also possible to disable the auto-sizing completely by setting the
+    em  auto-size
+    |  property to false.
+
 h4 Orientation
 
 p
@@ -28,16 +37,16 @@ p
     | This property has different behavior depending on whether a single number is displayed, or a list of numbers:
 
     ul
-        li If a single number is displayed in the widget, the 
+        li If one-to-four numbers are displayed in the widget, the 
             em orientation 
             |  controls how the prefix/suffix are displayed in relation to the number.  If "vertical", the prefix/suffix
             | will appear above and below the main number.  If "horizontal", all three will appear on the same line
-        li When two or more numbers are displayed in the widget, the 
+        li
+        li When more than four numbers are displayed in the widget, the 
             em orientation 
             |  property controls the direction of the list of numbers.  If "vertical", each number will be stacked vertically, 
             | and the prefix/suffix will be displayed in the same line as the number.  If "horizontal", the numbers will be arranged 
             | in a row, wrapping if necessary, and the prefix/suffix will appear above and below each number.
-
 
 h4 Properties
 p.

@@ -1,3 +1,20 @@
+# 1.32.0 (06/09/2016)
+
+## Features
+
+ - Number Widget: Extended auto-sizing of numbers to up to 4 numbers per widget.
+
+ - Header Widget: New Widget with basic functionality for displaying simple headers at the top of Dashboards.
+
+ - Table Widget: Added click event handler: can provide a JavaScript function that gets executed when a table cell is clicked.
+
+ - Grid Layout Adjustments: Added new Page layout properties for adding/subtracting height or width from the dimensions of the page when calculating grid dimensions. This is useful for allowing a header to have a fixed
+ height, while sizing the remaining widgets to fit the browser window.
+
+## Bug Fixes
+
+ - Number Widget: fixed flicker when a Data Source refreshes and content is redrawn.
+
 # 1.31.0 (05/26/2016)
 
 ## Features

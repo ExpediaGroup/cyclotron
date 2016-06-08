@@ -24,9 +24,10 @@
                 tbody
                     tr(ng-repeat='row in sortedRows | limitTo:paging.itemsPerPage:(paging.currentPage-1)*paging.itemsPerPage', table-rule, table-row)
                         td(ng-repeat='column in columns', table-rule, table-column, 
-                            ng-class='{hidden: getRowSpan(row, column) == 0, aLink: getCellProperty(row, column, "link")}',
+                            ng-class='{hidden: getRowSpan(row, column) == 0, aLink: getCellProperty(row, column, "link"), actionable: column.onClick}',
                             rowspan='{{ getRowSpan(row, column) }}', 
-                            title='{{ getCellProperty(row, column, "tooltip") }}') 
+                            title='{{ getCellProperty(row, column, "tooltip") }}'
+                            ng-click='onClickEvent(row, column)') 
 
                             img(ng-if='getCellProperty(row, column, "image")', ng-src='{{ getCellProperty(row, column, "image") }}', style='height: {{ getCellProperty(row, column, "imageHeight", "1em") }};')
 

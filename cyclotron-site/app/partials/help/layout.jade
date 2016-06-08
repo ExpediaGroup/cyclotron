@@ -105,3 +105,15 @@ p Absolute sizing can be combined with the Grid Layout by defining only one prop
     |  property and the 
     em  gridWidth
     |  property together will create a fixed-height but fluid-width Widget.
+
+h5 Combining Absolutely-Sized Widgets with Grid Layout
+
+p It's possible to mix Widgets with absolute sizes in a grid layout, by using the 
+    em  gridWidthAdjustment
+    |  and/or
+    em  gridHeightAdjustment
+    |  properties.  These can be set to negative values to indicate the number of pixels to remove from the page height or width before calculating the grid sizes.
+
+p For example, to add a 150px header onto a dashboard with a 10px gutter, the 
+    em  gridHeightAdjustment
+    |  would be set to -160.  Then the remaining Widgets would be sized-to-fit as if the page height was actually 160 pixels shorter. 

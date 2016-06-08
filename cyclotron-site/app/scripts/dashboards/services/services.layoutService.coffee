@@ -27,6 +27,9 @@ cyclotronServices.factory 'layoutService', ->
                 gridSquareMax: 300
                 gridSquareMid: 220
 
+                gridWidthAdjustment: dashboardPage.layout.gridWidthAdjustment || 0
+                gridHeightAdjustment: dashboardPage.layout.gridHeightAdjustment || 0
+
                 # Padding around outer edge of dashboard
                 margin: dashboardPage.layout.margin
 
@@ -55,10 +58,10 @@ cyclotronServices.factory 'layoutService', ->
                 layout.margin = 0
 
             updateInnerWidth = ->
-                layout.innerWidth = layout.width - (layout.margin * 2)
+                layout.innerWidth = layout.width + layout.gridWidthAdjustment - (layout.margin * 2)
 
             updateInnerHeight = ->
-                layout.innerHeight = layout.height - (layout.margin * 2)
+                layout.innerHeight = layout.height + layout.gridHeightAdjustment - (layout.margin * 2)
 
             # Set the layout column count and calculate the width of each
             calculateSquareWidth = (gridColumns) ->
@@ -84,6 +87,9 @@ cyclotronServices.factory 'layoutService', ->
 
             # Phone portrait mode (400px max width)
             if layout.width <= 400 and layout.width < layout.height
+                layout.gridHeightAdjustment = 0
+                layout.gridWidthAdjustment = 0
+
                 layout.width -= 16 # Add some padding on the right for the scroll bar
                 reducePadding()
 
@@ -95,6 +101,9 @@ cyclotronServices.factory 'layoutService', ->
 
             # Phone landscape mode (400px max height)
             else if layout.height <= 400 and layout.width > layout.height
+                layout.gridHeightAdjustment = 0
+                layout.gridWidthAdjustment = 0
+
                 layout.width -= 16 # Add some padding on the right for the scroll bar
                 reducePadding()
 

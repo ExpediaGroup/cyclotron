@@ -11,13 +11,13 @@
             span  {{ nodata }}
 
         .the-number(ng-if='!nodata && !dataSourceError', ng-repeat='number in numbers', 
-            single-number='singleNumber', 
-            orientation='orientation',
+            number-count='numberCount', 
+            index='$index', auto-size='widget.autoSize',
+            is-horizontal='isHorizontal',
             class='{{ getClass(number) }}',
             ng-click='onClickEvent(number)')
             span(ng-if='number.prefix') {{ number.prefix }}              
-            h1.big(title='{{ number.tooltip }}',ng-style='{color: number.color || "inherit"}') 
-                | {{ number.number }}
+            h1.big(title='{{ number.tooltip }}',ng-style='{color: number.color || "inherit"}') {{ number.number }}
                 i(ng-if='number.icon', title='{{ number.iconTooltip }}', class='fa {{ number.icon }}', ng-style='{color: number.iconColor || "inherit"}')
             span(ng-if='number.suffix')  {{ number.suffix }}
             

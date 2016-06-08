@@ -52,11 +52,16 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location,
         currentPage = $scope.dashboard.pages[$scope.currentPageIndex]
         pageName = dashboardService.getPageName(currentPage, $scope.currentPageIndex)
 
-        loadService.setTitle $scope.dashboard.name + ' | ' + pageName + ' | Cyclotron'
+        displayName = _.jsExec($scope.dashboard.displayName) || $scope.dashboard.name
+        loadService.setTitle displayName + ' | ' + pageName + ' | Cyclotron'
         if currentPage.name? || $scope.currentPageIndex != 0
             $location.path '/' + $scope.dashboard.name + '/' + _.slugify pageName
         else
             $location.path '/' + $scope.dashboard.name
+
+        # Save values accessible to Dashboards
+        Cyclotron.dashboardName = $scope.dashboard.name
+        Cyclotron.pageName = pageName
 
     #
     # Increments the page index and loads the next page into the dashboard (hidden)

@@ -1,0 +1,71 @@
+h3 Header Widget
+p.
+    The Header Widget is useful for generating a header at the top of a Dashboard.  It has various properties for generating common header features, as well as allowing for additional HTML content
+p.
+    Since this is a Widget, it must be copied onto each page individually.  However this can be beneficial if differences are desired between the pages.
+
+h4 Sizing
+p
+    | Like all other Widgets, the Header Widget can be sized dynamically using the grid layout, or with a fixed height in pixels (or other units).  When using a fixed height, the rest of the page can be sized-to-fit in the remaining space by setting the 
+    em  layout.gridHeightAdjustment
+    |  property for the Page.  This property should be set to the negative header height, minus the gutter. This 
+    | will allow the header height to be fixed while the other Widgets scale to match the browser.
+
+h4 Properties
+p.
+    These are the properties specific to this widget.  
+    General Cyclotron widget properties are not repeated here (e.g. layout properties).
+
+property-table(properties='config.widgets.header.properties')
+
+h3 Examples
+
+h4 Basic Usage
+
+p This is a basic header with a title, logo, and link:
+pre.code.
+    {
+        "allowFullscreen": false,
+        "headerTitle": {
+            "link": "http://cyclotron.io",
+            "logoSize": "72px",
+            "logoUrl": "http://www.cyclotron.io/img/favicon128.png",
+            "pageNameSeparator": "|",
+            "showPageName": true,
+            "showTitle": true,
+            "titleSize": "2.5rem"
+        },
+        "height": "150px",
+        "widget": "header"
+    }
+
+h4 Custom HTML
+
+p Custom HTML can be added to the Widget, in addition to the default content. This illustrates adding right-aligned content via absolute positioning:
+pre.code.
+    {
+        "allowFullscreen": false,
+        "customHtml": "<div style=\"position: absolute; top: 15px; right: 15px;\">\n    <p>Right-Aligned</p>\n</div>",
+        "headerTitle": {
+            "showTitle": true,
+            "titleSize": "2.5rem"
+        },
+        "height": "150px",
+        "widget": "header"
+    }
+
+h4 Data URLs for Logos
+
+p Logos can be specified via data urls:
+pre.code.
+    {
+        "allowFullscreen": false,
+        "headerTitle": {
+            "logoSize": "72px",
+            "logoUrl": "data:image/png;base64,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",
+            "showTitle": true,
+            "titleSize": "2.5rem"
+        },
+        "height": "150px",
+        "widget": "header"
+    }

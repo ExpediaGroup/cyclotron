@@ -1,0 +1,69 @@
+{
+    "dataSources": [],
+    "description": "Examples of using the Header Widget.",
+    "disableAnalytics": true,
+    "name": "example-header",
+    "pages": [{
+        "frequency": 1,
+        "layout": {
+            "gridColumns": 1,
+            "gridHeightAdjustment": -160,
+            "gridRows": 1,
+            "gutter": 10,
+            "margin": 10
+        },
+        "name": "Awesome Page",
+        "widgets": [{
+            "allowFullscreen": false,
+            "customHtml": "<div>\n    <p>Additional Content</p>\n</div>",
+            "gridHeight": 1,
+            "headerTitle": {
+                "link": "http://cyclotron.io",
+                "logoSize": "72px",
+                "logoUrl": "http://www.cyclotron.io/img/favicon128.png",
+                "pageNameSeparator": "|",
+                "showPageName": true,
+                "showTitle": true,
+                "titleSize": "2.5rem"
+            },
+            "height": "150px",
+            "widget": "header"
+        }, {
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "widget": "clock"
+        }]
+    }, {
+        "frequency": 1,
+        "layout": {
+            "gridColumns": 1,
+            "gridHeightAdjustment": -160,
+            "gridRows": 1,
+            "gutter": 10,
+            "margin": 10
+        },
+        "name": "Another Awesome Page",
+        "widgets": [{
+            "allowFullscreen": false,
+            "customHtml": "<div>\n    <p>Additional Content</p>\n</div>",
+            "gridHeight": 1,
+            "headerTitle": {
+                "link": "http://cyclotron.io",
+                "logoSize": "72px",
+                "logoUrl": "http://www.cyclotron.io/img/favicon128.png",
+                "pageNameSeparator": "|",
+                "showPageName": true,
+                "showTitle": true,
+                "titleSize": "2.5rem"
+            },
+            "height": "150px",
+            "widget": "header"
+        }, {
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "widget": "clock"
+        }]
+    }],
+    "parameters": [],
+    "theme": "dark"
+}

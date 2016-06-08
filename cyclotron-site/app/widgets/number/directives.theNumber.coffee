@@ -18,35 +18,57 @@ cyclotronDirectives.directive 'theNumber', ($timeout) ->
     {
         restrict: 'C'
         scope:
-            singleNumber: '='
-            orientation: '='
+            numberCount: '='
+            isHorizontal: '='
+            index: '='
+            autoSize: '='
 
         link: (scope, element, attrs) ->
             $element = $(element)
             $widgetBody = $element.parent()
 
-            scope.isHorizontal = (scope.orientation == 'horizontal')
-            if scope.singleNumber == true then scope.isHorizontal = !scope.isHorizontal
-            
             sizer = ->
-                numbers = $widgetBody.find('.the-number')
                 widgetBodyHeight = $widgetBody.height()
                 widgetBodyWidth = $widgetBody.width()
 
                 return if widgetBodyHeight == 0
-                
-                if scope.singleNumber == true
 
-                    numbers.addClass('singleNumber')
+                numberWidth = widgetBodyWidth
+                numberHeight = widgetBodyHeight
+
+                if scope.numberCount == 2
+                    if scope.isHorizontal
+                        numberWidth = widgetBodyWidth / 2
+                        numberHeight = widgetBodyHeight
+                    else 
+                        numberWidth = widgetBodyWidth
+                        numberHeight = widgetBodyHeight / 2
+                else if scope.numberCount == 3
+                    if scope.index < 2
+                        numberWidth = widgetBodyWidth / 2
+                        numberHeight = widgetBodyHeight / 2
+                    else
+                        numberWidth = widgetBodyWidth
+                        numberHeight = widgetBodyHeight / 2
+                else if scope.numberCount == 4
+                    numberWidth = widgetBodyWidth / 2
+                    numberHeight = widgetBodyHeight / 2
+
+                if scope.numberCount <= 4 && scope.autoSize != false
+
+                    $element.addClass 'auto-sized'
+                    $element.css 'width', Math.floor(numberWidth) + 'px'
+                    $element.css 'height', Math.floor(numberHeight) + 'px'
+
                     $widgetBody.css('overflow-y', 'hidden')
-                    h1 = numbers.find('h1')
-                    spans = numbers.find('span')
+                    h1 = $element.find('h1')
+                    spans = $element.find('span')
 
                     if scope.isHorizontal
                         h1.css('display', 'inline-block')
                         spans.css('display', 'inline-block')
 
-                    fontSize = Math.min(102, widgetBodyHeight / 2)
+                    fontSize = Math.min(102, numberHeight / 2)
                     iterations = 0
                     currentWidth = 0
 
@@ -60,15 +82,15 @@ cyclotronDirectives.directive 'theNumber', ($timeout) ->
                         if scope.isHorizontal
                             currentWidth = h1.width()
                         else
-                            numbers.children().each -> currentWidth += $(this).width()
+                            $element.children().each -> currentWidth += $(this).width()
                     sizeMe()
-                    while (currentWidth + 25 >= widgetBodyWidth || h1.height() > fontSize * 2) && iterations < 15
+                    while (currentWidth + 25 >= numberWidth || h1.height() > fontSize * 2) && iterations < 15
                         fontSize -= 4
                         sizeMe()
 
                     if scope.isHorizontal
                         iterations = 0
-                        spanFontSize = Math.min(fontSize*.70, 40)
+                        spanFontSize = Math.min(fontSize * 0.70, 40)
                         sizePrefixSuffix = ->
                             spans.css('font-size', spanFontSize + 'px')
                             iterations++
@@ -79,26 +101,20 @@ cyclotronDirectives.directive 'theNumber', ($timeout) ->
                             spans.each -> currentWidth = Math.max(currentWidth, $(this).width())
 
                         sizePrefixSuffix()
-                        sizePrefixSuffix() while currentWidth + 15 >= widgetBodyWidth && iterations < 10
+                        sizePrefixSuffix() while currentWidth + 15 >= numberWidth && iterations < 10
 
                         # Set everything to block display now
                         h1.css('display', 'block')
 
                         # Vertical align
                         totalHeight = 0
-                        numbers.children().each -> totalHeight += $(this).height()
-                        $element.css('padding-top', (widgetBodyHeight - totalHeight) / 2.0 + 'px')
-
+                        $element.children().each -> totalHeight += $(this).height()
+                        $element.css('padding-top', (numberHeight - totalHeight) / 2.0 + 'px')
                     else 
-                        h1.css('line-height', widgetBodyHeight - fontSize/2.0 + 'px')
+                        h1.css('line-height', numberHeight - fontSize / 2.0 + 'px')
 
                 else
                     return
-                    #numberHeight = widgetBodyHeight / numbers.length
-                    #numberHeight = Math.max(numberHeight, 32)
-                    #numbers.height(numberHeight)
-                    #numbers.css('line-height', Math.floor(numberHeight*.8) + 'px')
-                    #numbers.css('font-size', Math.floor(numberHeight*.8) + 'px')
 
             # Update on window resizing
             $widgetBody.on 'resize', _.throttle(->

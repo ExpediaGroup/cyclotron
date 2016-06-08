@@ -43,10 +43,12 @@
             min-width: 5rem;
         }
 
-        &.singleNumber {
+        &.auto-sized {
+            box-sizing: border-box;
             text-align: center;
-            > h1 {
-                //display: block;
+            float: left;
+            &.orientation-horizontal { 
+                padding: 0;
             }
         }
     }
