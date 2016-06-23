@@ -409,7 +409,7 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
         # Initialize the Data Source
         $scope.dataSource.init dsDefinition
 
-    $scope.$watch 'layout.widget.widgetBodyHeight', (height) ->
+    $scope.$watch 'widgetLayout.widgetBodyHeight', (height) ->
         if $scope.widget.pagination?.autoItemsPerPage == true
             $scope.calculateItemsPerPage(height)
     , true

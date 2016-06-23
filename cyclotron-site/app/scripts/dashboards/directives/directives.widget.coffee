@@ -1,5 +1,5 @@
 ###
-# Copyright (c) 2013-2015 the original author or authors.
+# Copyright (c) 2013-2016 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
 # you may not use this file except in compliance with the License. 
@@ -14,29 +14,76 @@
 # language governing permissions and limitations under the License. 
 ###
 
-cyclotronDirectives.directive 'widget', ($compile, $sce, layoutService) ->
+#
+# Top-level Widget directive
+# 
+# Dynamically renders the configured widget into itself.  Expects the following
+# scope variables:
+#     widget: Widget to render
+#     widgetIndex: Index of the widget in the current page (zero-indexed)
+#     layout: Page layout object
+#     dashboard: Entire Dashboard object
+#     pageOverrides: Overrides object for the current page only
+#     postLayout: Function to be called when the Widget has finished updating its layout
+#
+cyclotronDirectives.directive 'widget', ($compile, $sce, $window, layoutService) ->
     {
         restrict: 'A'
+        scope:
+            widget: '='
+            widgetIndex: '='
+            layout: '='
+            dashboard: '='
+            pageOverrides: '='
+            postLayout: '&'
 
         link: (scope, element, attrs) ->
 
             $element = $(element)
 
-            #
-            # This directive dynamically replaces itself with the specified widget in the current scope
-            #
-            widget = null
-            layout = null
-
             # Save the SCE handler in the scope
             scope.$sce = $sce
 
-            # Watch for the model to change, indicating this widget needs to be updated
+            scope.widgetLayout = { }
+
+            # Determine if a Widget should be visible or hidden on the dashboard
+            isWidgetHidden = ->
+                return false unless scope.widget?
+                
+                if scope.pageOverrides?.widgets?
+                    widgetOverrides = scope.pageOverrides.widgets?[scope.widgetIndex]
+
+                    # If WidgetOverrides.hidden is set true or false, use its value
+                    if widgetOverrides?.hidden?
+                        return widgetOverrides.hidden == true
+
+                # Else, default to the widget's "hidden" property
+                return scope.widget.hidden == true
+
+            # Store Widget API for use by Dashboards
+            if scope.widget.name?
+                $window.Cyclotron.currentPage.widgets[scope.widget.name] = {
+                    show: ->
+                        scope.$apply ->
+                            widgetOverrides = scope.pageOverrides?.widgets?[scope.widgetIndex]
+                            widgetOverrides.hidden = false
+                    hide: ->
+                        scope.$apply ->
+                            widgetOverrides = scope.pageOverrides?.widgets?[scope.widgetIndex]
+                            widgetOverrides.hidden = true
+                    toggleVisibility: ->
+                        scope.$apply ->
+                            widgetOverrides = scope.pageOverrides?.widgets?[scope.widgetIndex]
+                            widgetOverrides.hidden = !widgetOverrides.hidden
+                }
+
+            # Watch for widget visibility to change
+            scope.$watch isWidgetHidden, (isHidden) ->
+                scope.layout.hidden = isHidden
+
+            # Watch for the widget model to change, indicating this widget needs to be updated
             scope.$watch 'widget', (newValue, oldValue) ->
                 widget = newValue
-
-                # Ignore the widget if hidden is set
-                return if widget.hidden == true
 
                 # Ignore widgets without a type
                 return if _.isEmpty widget.widget 
@@ -60,10 +107,17 @@ cyclotronDirectives.directive 'widget', ($compile, $sce, layoutService) ->
 
                 return
 
+            # Watch for page layout changes and resize the widget
             scope.$watch('layout', (layout, oldLayout) ->
+                
+                # Ensure a valid layout is provided
+                if _.isUndefined(layout)
+                    return scope.postLayout()
 
-                # Ignore the widget if hidden is set
-                return scope.postLayout() if widget.hidden == true or _.isUndefined(layout)
+                if isWidgetHidden()
+                    # Hide Widget to avoid occupying space
+                    $element.css 'display', 'none'
+                    return scope.postLayout()
 
                 # Copy gridWidth/width into the scope
                 # Apply overrides if necessary (mobile devices)
@@ -74,27 +128,27 @@ cyclotronDirectives.directive 'widget', ($compile, $sce, layoutService) ->
                         scope.widgetGridWidth = layout.forceGridWidth 
                     scope.widgetWidth = null
                 else
-                    scope.widgetGridWidth = widget.gridWidth
-                    scope.widgetWidth = widget.width
+                    scope.widgetGridWidth = scope.widget.gridWidth
+                    scope.widgetWidth = scope.widget.width
 
                 if layout.forceGridHeight?
-                    if widget.gridHeight == layout.originalGridRows
+                    if scope.widget.gridHeight == layout.originalGridRows
                         scope.widgetGridHeight = layout.gridRows
                     else
                         scope.widgetGridHeight = layout.forceGridHeight
                     scope.widgetHeight = null
                 else
-                    scope.widgetGridHeight = widget.gridHeight
-                    scope.widgetHeight = widget.height
+                    scope.widgetGridHeight = scope.widget.gridHeight
+                    scope.widgetHeight = scope.widget.height
 
                 # Calculate widget dimensions
                 if scope.widgetHeight?
-                    scope.widgetHeight = widget.height
+                    scope.widgetHeight = scope.widget.height
                 else if scope.widgetGridHeight?
                     scope.widgetHeight = layout.gridSquareHeight * scope.widgetGridHeight + ((layout.gutter) * (scope.widgetGridHeight - 1))
 
                 if scope.widgetWidth?
-                    scope.widgetWidth = widget.width
+                    scope.widgetWidth = scope.widget.width
                 else if scope.widgetGridWidth?
                     scope.widgetWidth = layout.gridSquareWidth * scope.widgetGridWidth + (layout.gutter * (scope.widgetGridWidth - 1))
                 else
@@ -103,11 +157,12 @@ cyclotronDirectives.directive 'widget', ($compile, $sce, layoutService) ->
                 # Set height/width
                 scope.widgetWidth = Math.floor(scope.widgetWidth) if _.isNumber(scope.widgetWidth)
                 scope.widgetHeight = Math.floor(scope.widgetHeight) if _.isNumber(scope.widgetHeight)
-                $element.width(scope.widgetWidth)
-                $element.height(scope.widgetHeight)
+                $element.width scope.widgetWidth
+                $element.height scope.widgetHeight
+                $element.css 'display', 'block'
 
                 # Set gutter padding (other sides are handled by masonry)    
-                $element.css('margin-bottom', layout.gutter)
+                $element.css 'margin-bottom', layout.gutter
 
                 # Trigger the post-layout update
                 scope.postLayout()

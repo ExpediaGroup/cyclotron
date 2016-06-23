@@ -28,8 +28,8 @@ cyclotronDirectives.directive 'widgetBody', ($timeout) ->
                 widgetBodyHeight = $widget.outerHeight() - $title.outerHeight() - $footer.outerHeight()
                 $widgetBody.height Math.floor(widgetBodyHeight)
 
-                if scope.layout?
-                    scope.layout.widget.widgetBodyHeight = widgetBodyHeight
+                if scope.widgetLayout?
+                    scope.widgetLayout.widgetBodyHeight = widgetBodyHeight
 
             # Update on window resizing
             $widget.add('.title, .widget-footer').on 'resize', _.throttle(->

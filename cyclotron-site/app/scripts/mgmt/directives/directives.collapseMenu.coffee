@@ -46,6 +46,18 @@ cyclotronDirectives.directive 'collapseMenu', (filterFilter) ->
                 section.expanded = true
                 $scope.selectItem {'item': child}
 
+            # Find and select an item by name
+            $scope.findItem = (name) ->
+                _.each $scope.items, (section) ->
+                    if section.name == name
+                        $scope.selectSection section
+                        return false
+
+                    child = _.find section.children, { name: name }
+                    if child?
+                        $scope.selectChild child, section
+                        return false
+
             $scope.$watch 'filter', (filter) ->
                 $scope.isFiltered = not _.isEmpty filter
 
@@ -67,18 +79,13 @@ cyclotronDirectives.directive 'collapseMenu', (filterFilter) ->
                         matchingChildren = filterFilter(firstSection.children, $scope.filter)
                         if matchingChildren?.length > 0
                             $scope.selectChild _.first(matchingChildren), firstSection
-           
+
+            $scope.$on 'findItem', (event, args) ->
+                $scope.findItem(args.name)
+
             # Initialize
             if $scope.initialSelection?
-                _.each $scope.items, (section) ->
-                    if section.name == $scope.initialSelection
-                        $scope.selectSection section
-                        return false
-
-                    child = _.find section.children, { name: $scope.initialSelection }
-                    if child?
-                        $scope.selectChild child, section
-                        return false
+                $scope.findItem $scope.initialSelection
             else
                 $scope.selectSection _.first $scope.items
         

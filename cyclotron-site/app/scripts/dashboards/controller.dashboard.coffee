@@ -17,7 +17,7 @@
 #
 # Home controller.
 #
-cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location, $timeout, $window, $q, $uibModal, analyticsService, configService, cyclotronDataService, dashboardService, dataService, loadService, logService, parameterService, userService) ->
+cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $localForage, $location, $timeout, $window, $q, $uibModal, analyticsService, configService, cyclotronDataService, dashboardService, dataService, loadService, logService, parameterService, userService) ->
 
     preloadTimer = null
     rotateTimer = null
@@ -100,6 +100,9 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location,
             $scope.currentPage.splice(0, 1)
 
         $scope.updateUrl()
+
+        $window.Cyclotron.currentPage =
+            widgets: {}
 
         # Track analytics
         analyticsService.recordPageView $scope.dashboardWrapper, $scope.currentPageIndex, $scope.firstLoad
@@ -285,17 +288,31 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location,
             dashboardService.setDashboardDefaults(dashboard)
             $scope.dashboard = dashboard
 
+            # Initialize dashboard overrides
+            $scope.dashboardOverrides.pages ?= []
+            _.each dashboard.pages, (page, index) ->
+                if !$scope.dashboardOverrides.pages[index]?
+                    $scope.dashboardOverrides.pages.push { widgets: [] }
+                $scope.dashboardOverrides.pages[index].widgets ?= []
+                _.each page.widgets, (widget, widgetIndex) ->
+                    if !$scope.dashboardOverrides.pages[index].widgets[widgetIndex]?
+                        $scope.dashboardOverrides.pages[index].widgets.push {}
+
             # Optionally disable analytics
             if dashboard.disableAnalytics == true
                 configService.enableAnalytics = false
 
             dependenciesLoaded = -> 
-                # Update current page if needed
-                if $scope.currentPage?
+                # Check if a new revision of the Dashboard has been loaded
+                if $scope.latestRevision and $scope.latestRevision < $scope.dashboardWrapper.rev
+                    # Update current page if needed
                     originalPage = $scope.currentPage[$scope.currentPage.length-1]
                     newPage = $scope.dashboard.pages[$scope.currentPageIndex]
                     if !angular.equals(originalPage, newPage)
+                        logService.debug 'Replacing the current page with a new revision'
                         $scope.currentPage[$scope.currentPage.length-1] = newPage
+
+                $scope.latestRevision = $scope.dashboardWrapper.rev
 
                 # Resolve promise
                 deferred.resolve()
@@ -389,7 +406,7 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location,
         _.each themes, (theme) ->
             loadService.loadCssUrl('/css/app.themes.' + theme + '.css', true)
 
-        # Intialize parameters
+        # Initialize parameters
         parameterService.initializeParameters($scope.dashboard).then ->
 
             # Watch querystring for changes
@@ -449,7 +466,14 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $location,
             .search $scope.deeplinkOptions
             .toString()
 
-    $scope.loadDashboard().then $scope.initialLoad
+    # Load Overrides, then the dashboard
+    $localForage.bind($scope, {
+        key: 'dashboardOverrides'
+        defaultValue: { pages: [] }
+    }).then ->
+        $window.Cyclotron.dashboardOverrides = $scope.dashboardOverrides
+        logService.debug 'Dashboard Overrides: ' + JSON.stringify($scope.dashboardOverrides)
+        $scope.loadDashboard().then $scope.initialLoad
 
     #
     # Hot Key Bindings

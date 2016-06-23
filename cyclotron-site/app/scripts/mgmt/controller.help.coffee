@@ -28,7 +28,10 @@ cyclotronApp.controller 'HelpController', ($scope, $location, configService) ->
         $location.search 'q', item.name
 
     $scope.feelingLucky = ->
-        $scope.$broadcast('feelingLucky')
+        $scope.$broadcast 'feelingLucky'
+
+    $scope.findItem = (name) ->
+        $scope.$broadcast 'findItem', { name: name }
 
     # Initialization
     q = $location.search().q

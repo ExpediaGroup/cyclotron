@@ -59,6 +59,9 @@ cyclotronServices = angular.module 'cyclotronApp.services', ['ngResource']
 
 cyclotronApp.config ($stateProvider, $urlRouterProvider, $locationProvider, $controllerProvider, $compileProvider, $provide, uiSelectConfig) ->
 
+    # Improve performance
+    $compileProvider.debugInfoEnabled false
+
     uiSelectConfig.theme = 'select2'
 
     # Save some providers for later

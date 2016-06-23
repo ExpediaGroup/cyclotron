@@ -92,8 +92,9 @@ cyclotronServices.factory 'dataService', ($injector, configService) ->
             
             # Create if not in the cache
             if not Cyclotron.dataSources[name]?
-                # Get instance
-                dataSource = $injector.get(type + "DataSource")
+                
+                # Get instance by name
+                dataSource = $injector.get(type + 'DataSource')
 
                 # Get default options
                 dataSourceProperties = configService?.dashboard.properties.dataSources.options[type]?.properties

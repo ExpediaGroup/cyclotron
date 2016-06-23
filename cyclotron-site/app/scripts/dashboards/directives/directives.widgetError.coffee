@@ -46,12 +46,21 @@ cyclotronDirectives.directive 'widgetError', ($timeout) ->
                 if scope.widget.showWidgetErrors
                     errorMessageLength = $widgetError.width() * widgetBodyHeight / 512
 
+                    if _.isObject(scope.dataSourceErrorMessage)
+                        if scope.dataSourceErrorMessage.message?
+                            scope.errorMessage = scope.dataSourceErrorMessage.message
+                    else 
+                        scope.errorMessage = scope.dataSourceErrorMessage
+                        
+                    if not _.isString(scope.errorMessage)
+                        $scope.errorMessage = JSON.stringify scope.errorMessage
+
                     if errorMessageLength < 30
                         scope.shortErrorMessage = null
-                    else if scope.dataSourceErrorMessage.length < errorMessageLength
-                        scope.shortErrorMessage = scope.dataSourceErrorMessage
+                    else if scope.errorMessage.length < errorMessageLength
+                        scope.shortErrorMessage = scope.errorMessage
                     else 
-                        scope.shortErrorMessage = scope.dataSourceErrorMessage.substring(0, errorMessageLength - 3) + '...'
+                        scope.shortErrorMessage = scope.errorMessage.substring(0, errorMessageLength - 3) + '...'
 
                 # Vertical align
                 topPadding = (widgetBodyHeight - $errorContainer.height()) / 3

@@ -26,7 +26,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
     exports = {
 
-        version: '1.32.0'
+        version: '1.33.0'
 
         logging: 
             enableDebug: false
@@ -1089,6 +1089,11 @@ cyclotronServices.factory 'commonConfigService', ->
                         tags: ['examples', 'cyclotron-examples']
                     }
                     {
+                        name: 'Browser Compatibility'
+                        path: '/partials/help/browserCompat.html' 
+                        tags: ['browser', 'compatibility', 'firefox', 'chrome', 'internet explorer', 'ie', 'safari', 'browsercheck']
+                    }
+                    {
                         name: 'Permissions'
                         path: '/partials/help/permissions.html' 
                         tags: ['permissions', 'edit permission', 'view permission', 'editors', 'viewers', 'restricted', 'login', 'rest', 'api']
@@ -1099,14 +1104,14 @@ cyclotronServices.factory 'commonConfigService', ->
                         tags: ['encryption', 'encrypted', '!{', 'decrypt', 'encrypt']
                     }
                     {
+                        name: 'JavaScript API'
+                        path: '/partials/help/javascriptApi.html' 
+                        tags: ['javascript', 'api', 'scripting']
+                    }
+                    {
                         name: 'CyclotronData'
                         path: '/partials/help/cyclotrondata.html' 
                         tags: ['cyclotrondata', 'data', 'storage', 'bucket', 'api']
-                    }
-                    {
-                        name: 'Browser Compatibility'
-                        path: '/partials/help/browserCompat.html' 
-                        tags: ['browser', 'compatibility', 'firefox', 'chrome', 'internet explorer', 'ie', 'safari', 'browsercheck']
                     }
                     {
                         name: '3rd Party Libraries'

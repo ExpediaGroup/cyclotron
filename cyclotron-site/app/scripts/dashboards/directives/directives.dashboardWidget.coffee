@@ -24,9 +24,6 @@ cyclotronDirectives.directive 'dashboardWidget', (layoutService) ->
 
             scope.$watch 'widget', (widget) ->
 
-                # Ignore the widget if hidden is set
-                return if widget.hidden == true
-
                 # Wire-up fullscreen button if available
                 if widget.allowFullscreen
                     $parent.find('.widget-fullscreen').click ->

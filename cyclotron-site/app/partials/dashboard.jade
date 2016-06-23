@@ -12,6 +12,7 @@ div.dashboard
         i.fa.fa-chevron-right(ng-click='moveForward()', ng-class='{ disabled: !canMoveForward() }', title='Go to the next page')
 
     .dashboard-pages
-        div(dashboard-page, dashboard='dashboard', page='page', page-number='{{ currentPageIndex }}', 
+        div(dashboard-page, dashboard='dashboard', 
+            page='page', page-number='{{ currentPageIndex }}', page-overrides='dashboardOverrides.pages[currentPageIndex]',
             ng-repeat='page in currentPage')
 

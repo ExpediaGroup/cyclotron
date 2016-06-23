@@ -78,7 +78,7 @@ cyclotronServices.factory 'parameterService', ($localForage, $q, $window, config
 
 
         savePersistentParameters: (parameters, dashboard) ->
-            logService.debug 'savePersistentParameters()'
+            logService.debug 'Saving persistent parameters to local browser storage'
             persistentParams = _.filter dashboard.parameters, { persistent: true }
 
             _.each persistentParams, (parameterDefinition) ->

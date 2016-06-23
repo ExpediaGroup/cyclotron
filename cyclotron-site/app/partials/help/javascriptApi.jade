@@ -1,0 +1,117 @@
+h3 JavaScript API
+
+p.
+    Cyclotron provides a JavaScript API that Dashboards can leverage. They make it easier to extend Cyclotron with custom functionality and add additional interactivity to a Dashboard. Basically, it exposes various actions in the Dashboard (e.g. execute a Data Source, show/hide a Widget), or to provide information about the Dashboard.
+
+p
+    | In addition to the Cyclotron API, there are a handful of 3rd party JavaScript libraries which are bundled with Cyclotron. Theese are the libraries that Cyclotron itself is built on, making them available for use by Dashboards as well. More information about these libraries can be found at 
+    a(ng-click='findItem("3rd Party Libraries")', href='?q=3rd Party Libraries') 3rd Party Libraries
+    
+h4 Dashboard Information
+
+table
+    tr
+        th Method/Property
+        th Description
+    tr
+        td Cyclotron.version
+        td Property that returns the current version of Cyclotron
+    tr
+        td Cyclotron.dashboard
+        td Property that returns the current Dashboard as an object
+    tr
+        td Cyclotron.dashboardOverrides
+        td Property that returns an object of user-specific overrides for the current Dashboard
+    tr
+        td Cyclotron.dashboardName
+        td Property that returns the name of the current Dashboard
+    tr
+        td Cyclotron.pageName
+        td Property that returns the name of the currently-displayed Page
+    tr
+        td Cyclotron.goToPage(pageNumber)
+        td Navigates to a specific page in the Dashboard (starting with page 1)
+    tr
+        td Cyclotron.getDeeplink()
+        td Returns a deeplink URL to the current Dashboard, including the values of all Parameters
+
+h4 Built-In Parameters
+
+p These Parameters are built-in to every Dashboard, and appear in the URL when set. They don't have to be configured manually in the Parameters section of the Dashboard, but they can be added there in order to change the default value.
+
+table
+    tr
+        th Parameter
+        th Description
+    tr
+        td Cyclotron.parameters.page
+        td Set to the current page number (as an integer)
+    tr
+        td Cyclotron.parameters.rev
+        td Set to the Dashboard's revision number (as a string); this will be undefined when viewing the latest revision
+    tr
+        td Cyclotron.parameters.live
+        td If true, causes the Dashboard to check for new Revisions more frequently. This Parameter can be set via URL only, when the Dashboard is loaded.
+    tr
+        td Cyclotron.parameters.autoRotate
+        td True/false value that enables/disables rotation in the Dashboard, overriding the Dashboard's setting. This Parameter can be set via URL only, when the Dashboard is loaded.
+
+h4 Data Sources
+
+p These functions allow interaction with the Data Sources in the Dashboard. The 
+    em  Cyclotron.dataSource
+    |  object contains each Data Source name as a key, with an object of functions as the value.
+
+table
+    tr
+        th Method
+        th Description
+    tr
+        td Cyclotron.dataSources['dataSourceName'].execute([showSpinners])
+        td Manually executes a Data Source.  If showSpinners is true, it will triggers Widgets to show a loading spinner while the Data Source is executing
+    tr
+        td Cyclotron.dataSources['dataSourceName'].getPromise()
+        td Returns the latest execution promise (may be completed).  The returned promise has two functions, promise.then(function) and promise.catch(function).  If the Data Source has already completed, then() will execute the given function immediately. This function returns an object of resultsets, each containing columns (optional) and data.
+    tr
+        td Cyclotron.dataSources['dataSourceName'].getCachedDataSet([resultSetName])
+        td Returns the latest resultset for the Data Source if it exists, else null. If no resultSet argument is provided, the default resultset name of '0' will be used. This function returns the result set data directly.
+    tr
+        td Cyclotron.dataSources['dataSourceName'].getData()
+        td Deprecated; do not use
+    tr
+        td Cyclotron.dataSources['dataSourceName'].init()
+        td Initializes the Data Source and starts automatic refresh if configured. This method is used internally by Widgets; execute() is probably better suited to custom JavaScript scripting.
+    
+h4 Widgets
+
+p These functions apply overrides to Widgets in the Dashboard. In order to use these functions, the Widget needs to have the
+    em  name
+    |  property configured; the 
+    em  Cyclotron.currentPage.widgets 
+    |  object contains each Widget name as a key, with an object of functions as the value.
+
+table
+    tr
+        th Method
+        th Description
+    tr
+        td Cyclotron.currentPage.widgets['widgetName'].show()
+        td Shows a Widget; overrides the Widget's 
+            em hidden
+            |  property
+    tr
+        td Cyclotron.currentPage.widgets['widgetName'].hide()
+        td Hides a Widget; overrides the Widget's 
+            em hidden
+            |  property
+    tr
+        td Cyclotron.currentPage.widgets['widgetName'].toggleVisibility()
+        td Toggles the visibility of a Widget; overrides the Widget's 
+            em hidden
+            |  property
+
+h4 CyclotronData
+
+p CyclotronData has a JavaScript API for reading/writing data. This is documented separately on the 
+    a(ng-click='findItem("CyclotronData")', href='?q=CyclotronData')  CyclotronData
+    |  page.

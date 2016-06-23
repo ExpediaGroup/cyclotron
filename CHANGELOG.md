@@ -1,3 +1,9 @@
+# 1.33.0 (06/23/2016)
+
+## Features
+
+ - JavaScript API for hiding/showing Widgets: Added API for changing the visibility of Widgets at runtime. Changes to Widget visibility is remembered across sessions by the user's browser.
+
 # 1.32.0 (06/09/2016)
 
 ## Features

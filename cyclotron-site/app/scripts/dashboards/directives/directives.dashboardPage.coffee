@@ -1,5 +1,5 @@
 ###
-# Copyright (c) 2013-2015 the original author or authors.
+# Copyright (c) 2013-2016 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
 # you may not use this file except in compliance with the License. 
@@ -14,6 +14,16 @@
 # language governing permissions and limitations under the License. 
 ###
 
+#
+# Top-level Page directive
+# 
+# Renders a series of Widgets and manages page-level interactivity.  Expects the following
+# scope variables:
+#     page: Page to render
+#     pageOverrides: Overrides for the current page
+#     pageNumber: Index of the Page in the Dashboard (zero-indexed)
+#     dashboard: Entire Dashboard object
+#
 cyclotronDirectives.directive 'dashboardPage', ($compile, $window, $timeout, configService, layoutService, logService) ->
     {
         replace: true
@@ -21,11 +31,14 @@ cyclotronDirectives.directive 'dashboardPage', ($compile, $window, $timeout, con
 
         scope:
             page: '='
+            pageOverrides: '='
+            pageNumber: '@'
             dashboard: '='
 
         template: '<div class="dashboard-page dashboard-{{page.theme}} {{page.style}}">' +
             '<div class="dashboard-page-inner">' +
-                '<div widget="widget" class="dashboard-widgetwrapper dashboard-{{widget.theme}}" ng-repeat="widget in page.widgets"></div>' + 
+                '<div class="dashboard-widgetwrapper dashboard-{{widget.theme}}" ng-repeat="widget in page.widgets"' +
+                ' widget="widget" page-overrides="pageOverrides" widget-index="$index" layout="layout" dashboard="dashboard" post-layout="postLayout()"></div>' + 
             '</div></div>'
 
         link: (scope, element, attrs) ->
@@ -107,21 +120,18 @@ cyclotronDirectives.directive 'dashboardPage', ($compile, $window, $timeout, con
                     scope.postLayout = _.after newValue.widgets.length, ->
                         if (newValue.enableMasonry != false)
                             masonry(element, scope.layout)
+                        return
                             
-                    newLayout = layoutService.getLayout(newValue, $($window).width(), $($window).height())
-
-                    # Optional persistent widget area of layout
-                    newLayout.widget = scope.layout?.widget || {}
-                    scope.layout = newLayout
+                    scope.layout = layoutService.getLayout(newValue, $($window).width(), $($window).height())
 
                     # Set page margin if defined
                     if !_.isNullOrUndefined(scope.layout.margin)
-                        $element.css('padding', scope.layout.margin + 'px')
+                        $element.css 'padding', scope.layout.margin + 'px'
 
-                    $dashboardPageInner.css({ 
+                    $dashboardPageInner.css { 
                         marginRight: '-' + scope.layout.gutter + 'px'
                         marginBottom: '-' + scope.layout.gutter + 'px'
-                    })
+                    }
 
                     # Enable/disable scrolling of the dashboard page
                     if !scope.layout.scrolling
@@ -172,4 +182,5 @@ cyclotronDirectives.directive 'dashboardPage', ($compile, $window, $timeout, con
                     $dashboardPageInner.masonry('destroy')
 
             return
+
     }
