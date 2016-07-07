@@ -30,6 +30,7 @@
     "angular-ui-ace": "0.2.3",
     "angular-ui-router": "0.2.14",
     "angular-ui-select": "0.12.1",
+    "angular-ui-switch": "~0.1.1",
     "bowser": "1.0.0",
     "c3": "0.4.10",
     "d3": "3.5.6",
@@ -45,7 +46,7 @@
     "lodash": "2.4.1",
     "masonry": "3.1.5",
     "metrics-graphics": "2.6.0",
-    "moment": "2.8.4",
+    "moment": "2.13.0",
     "ngTranscludeMod": "izhaki/ngTranscludeMod",
     "node-uuid": "1.4.3",
     "numeraljs": "1.5.3",
@@ -157,5 +158,8 @@
         "src/URI.min.js"
       ]
     }
+  },
+  "devDependencies": {
+    "angular-ui-switch": "~0.1.1"
   }
 }

@@ -17,7 +17,7 @@
 #
 # Home controller.
 #
-cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $localForage, $location, $timeout, $window, $q, $uibModal, analyticsService, configService, cyclotronDataService, dashboardService, dataService, loadService, logService, parameterService, userService) ->
+cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $localForage, $location, $timeout, $window, $q, $uibModal, analyticsService, configService, cyclotronDataService, dashboardOverridesService, dashboardService, dataService, loadService, logService, parameterService, userService) ->
 
     preloadTimer = null
     rotateTimer = null
@@ -44,7 +44,8 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $localFora
     $window.Cyclotron =
         version: configService.version
         dataSources: {}
-        functions: {}
+        functions: 
+            forceUpdate: -> $scope.$apply()
         parameters: _.clone $location.search()
         data: cyclotronDataService
 
@@ -52,8 +53,8 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $localFora
         currentPage = $scope.dashboard.pages[$scope.currentPageIndex]
         pageName = dashboardService.getPageName(currentPage, $scope.currentPageIndex)
 
-        displayName = _.jsExec($scope.dashboard.displayName) || $scope.dashboard.name
-        loadService.setTitle displayName + ' | ' + pageName + ' | Cyclotron'
+        $scope.dashboardDisplayName = _.jsExec($scope.dashboard.displayName) || $scope.dashboard.name
+        loadService.setTitle $scope.dashboardDisplayName + ' | ' + pageName + ' | Cyclotron'
         if currentPage.name? || $scope.currentPageIndex != 0
             $location.path '/' + $scope.dashboard.name + '/' + _.slugify pageName
         else
@@ -288,16 +289,6 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $localFora
             dashboardService.setDashboardDefaults(dashboard)
             $scope.dashboard = dashboard
 
-            # Initialize dashboard overrides
-            $scope.dashboardOverrides.pages ?= []
-            _.each dashboard.pages, (page, index) ->
-                if !$scope.dashboardOverrides.pages[index]?
-                    $scope.dashboardOverrides.pages.push { widgets: [] }
-                $scope.dashboardOverrides.pages[index].widgets ?= []
-                _.each page.widgets, (widget, widgetIndex) ->
-                    if !$scope.dashboardOverrides.pages[index].widgets[widgetIndex]?
-                        $scope.dashboardOverrides.pages[index].widgets.push {}
-
             # Optionally disable analytics
             if dashboard.disableAnalytics == true
                 configService.enableAnalytics = false
@@ -406,55 +397,68 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $localFora
         _.each themes, (theme) ->
             loadService.loadCssUrl('/css/app.themes.' + theme + '.css', true)
 
-        # Initialize parameters
-        parameterService.initializeParameters($scope.dashboard).then ->
+        # Initialize dashboard overrides
+        dashboardOverridesService.initializeDashboardOverrides($scope.dashboard).then (dashboardOverrides) ->
+            # Store for Dashboard use
+            $window.Cyclotron.dashboardOverrides = $scope.dashboardOverrides = dashboardOverrides
 
-            # Watch querystring for changes
-            $scope.$watch (-> $location.search()), handleQueryStringChanges
+            $scope.$watch 'dashboardOverrides', (updatedOverrides, previousOverrides) ->
+                return if _.isEqual updatedOverrides, previousOverrides
+                dashboardOverridesService.saveDashboardOverrides($scope.dashboard, updatedOverrides)
+            , true
 
-            # Watch Parameters for changes
-            $scope.$watch (-> $window.Cyclotron.parameters), handleParameterChanges, true
-            
-            # Preload any data sources with preload: true
-            preloadDataSources = _.filter $scope.dashboard.dataSources, { preload: true }
+            $scope.resetDashboardOverrides = ->
+                $window.Cyclotron.dashboardOverrides = $scope.dashboardOverrides = dashboardOverridesService.resetAndExpandOverrides $scope.dashboard
 
-            _.each preloadDataSources, (dataSourceDefinition) ->
-                logService.info 'Preloading data source', dataSourceDefinition.name
-                dataSource = dataService.get(dataSourceDefinition)
-                dataSource.getData(dataSourceDefinition, _.noop, _.noop, _.noop)
-                return
+            # Initialize parameters
+            parameterService.initializeParameters($scope.dashboard).then ->
 
-            # Only load if there are any pages
-            if $scope.dashboard.pages.length > 0
-                # Navigate to a particular page if specified
-                if $window.Cyclotron.parameters.page?
-                    $scope.goToPage parseInt($window.Cyclotron.parameters.page)
-                else if !_.isEmpty $scope.originalDashboardPageName
-                    pageNames = _.pluck $scope.dashboard.pages, 'name'
-                    pageIndex = _.findIndex pageNames, (name) ->
-                        name? and _.slugify(name) == $scope.originalDashboardPageName
+                # Watch querystring for changes
+                $scope.$watch (-> $location.search()), handleQueryStringChanges
 
-                    if pageIndex >= 0
-                        $scope.goToPage 1 + pageIndex
-                    else if $scope.originalDashboardPageName.match(/page-\d+$/)
-                        $scope.goToPage parseInt($scope.originalDashboardPageName.substring(5))
+                # Watch Parameters for changes
+                $scope.$watch (-> $window.Cyclotron.parameters), handleParameterChanges, true
+                
+                # Preload any data sources with preload: true
+                preloadDataSources = _.filter $scope.dashboard.dataSources, { preload: true }
+
+                _.each preloadDataSources, (dataSourceDefinition) ->
+                    logService.info 'Preloading data source', dataSourceDefinition.name
+                    dataSource = dataService.get(dataSourceDefinition)
+                    dataSource.getData(dataSourceDefinition, _.noop, _.noop, _.noop)
+                    return
+
+                # Only load if there are any pages
+                if $scope.dashboard.pages.length > 0
+                    # Navigate to a particular page if specified
+                    if $window.Cyclotron.parameters.page?
+                        $scope.goToPage parseInt($window.Cyclotron.parameters.page)
+                    else if !_.isEmpty $scope.originalDashboardPageName
+                        pageNames = _.pluck $scope.dashboard.pages, 'name'
+                        pageIndex = _.findIndex pageNames, (name) ->
+                            name? and _.slugify(name) == $scope.originalDashboardPageName
+
+                        if pageIndex >= 0
+                            $scope.goToPage 1 + pageIndex
+                        else if $scope.originalDashboardPageName.match(/page-\d+$/)
+                            $scope.goToPage parseInt($scope.originalDashboardPageName.substring(5))
+                        else
+                            $scope.goToPage 1
                     else
                         $scope.goToPage 1
-                else
-                    $scope.goToPage 1
 
-                $scope.updateUrl()
+                    $scope.updateUrl()
 
-            # Start Dashboard Rotation            
-            if $window.Cyclotron.parameters.autoRotate == "true" or $scope.dashboard.autoRotate == true
-                # ?autoRotate=true/false will override the dashboard setting.
-                # There is also a dashboard property which can disable rotation.
-                # Only enable rotation if there are multiple pages
-                if $scope.dashboard.pages.length > 1
-                    $scope.paused = false
-                    $scope.rotate()
-            
-            $scope.firstLoad = false
+                # Start Dashboard Rotation            
+                if $window.Cyclotron.parameters.autoRotate == "true" or $scope.dashboard.autoRotate == true
+                    # ?autoRotate=true/false will override the dashboard setting.
+                    # There is also a dashboard property which can disable rotation.
+                    # Only enable rotation if there are multiple pages
+                    if $scope.dashboard.pages.length > 1
+                        $scope.paused = false
+                        $scope.rotate()
+                
+                $scope.firstLoad = false
 
     # Initial load - load dashboard and initialize rotation
     $scope.reloadInterval = if $window.Cyclotron.parameters.live == 'true' then 1500 else 60000
@@ -466,14 +470,8 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $localFora
             .search $scope.deeplinkOptions
             .toString()
 
-    # Load Overrides, then the dashboard
-    $localForage.bind($scope, {
-        key: 'dashboardOverrides'
-        defaultValue: { pages: [] }
-    }).then ->
-        $window.Cyclotron.dashboardOverrides = $scope.dashboardOverrides
-        logService.debug 'Dashboard Overrides: ' + JSON.stringify($scope.dashboardOverrides)
-        $scope.loadDashboard().then $scope.initialLoad
+    # Load the dashboard
+    $scope.loadDashboard().then $scope.initialLoad
 
     #
     # Hot Key Bindings

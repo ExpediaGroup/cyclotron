@@ -35,6 +35,18 @@ table
         td Cyclotron.getDeeplink()
         td Returns a deeplink URL to the current Dashboard, including the values of all Parameters
 
+h4 Functions
+
+p These functions are hooks into Cyclotron that can be leveraged by Dashboards
+
+table
+    tr
+        th Function
+        th Description
+    tr
+        td Cyclotron.functions.forceUpdate()
+        td Forces Cyclotron to do an internal update of Dashboard state, e.g. syncing parameters to the URL. In general, this should not be needed, but can be used to immediately trigger an update cycle after running custom JavaScript.
+
 h4 Built-In Parameters
 
 p These Parameters are built-in to every Dashboard, and appear in the URL when set. They don't have to be configured manually in the Parameters section of the Dashboard, but they can be added there in order to change the default value.

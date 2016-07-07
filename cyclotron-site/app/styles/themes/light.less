@@ -30,6 +30,22 @@
 @tableBorderColor: #555;
 
 /* Dashboard Styles */
+.dashboard.dashboard-light {
+    background-color: @pageBackgroundColor;
+    
+    .dashboard-page-background {
+        background-color: @pageBackgroundColor;
+    }
+
+    /* Dashboard elements */
+    @import "../dashboards/_sidebar.less";
+
+    .dashboard-sidebar {
+        .rounded(4px);
+        .box-shadow(1px 1px 6px 0 rgba(0, 0, 0, 0.8));
+    }
+}
+
 .dashboard-page {
     /* Well style, normal only */
     &.normal {
@@ -75,6 +91,7 @@
 }
 
 .dashboard-light.dashboard-widgetwrapper {
+
     /* Import widget styles, using the theme variables */
     @import "../../widgets/annotationChart/_annotationChart.less";
     @import "../../widgets/chart/_chart.less";

@@ -1,0 +1,8 @@
+.panel.panel-default
+    .panel-heading(ng-click='toggleOpen()')
+        h4.panel-title
+            a.accordion-toggle(accordion-transclude='heading')
+                span(ng-class='{"text-muted": isDisabled}') {{heading}}
+    
+    .panel-collapse(uib-collapse='!isOpen')
+        .panel-body(ng-style='styles', ng-transclude='')

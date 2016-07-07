@@ -21,7 +21,7 @@ cyclotronDirectives.directive 'tableColumn', ->
             border = scope.column.border
             if border?
                 if border.indexOf('left') >= 0
-                    $(element).css('border-left-width', '1px')
+                    $(element).css 'border-left-width', '1px'
                 if border.indexOf('right') >= 0
-                    $(element).css('border-right-width', '1px')
+                    $(element).css 'border-right-width', '1px'
     }

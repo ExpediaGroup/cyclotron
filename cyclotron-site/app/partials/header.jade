@@ -9,7 +9,7 @@
             i.fa.fa-file-o
         a.documentation(ui-sref='help', target='_blank' title='Documentation for Cyclotron')
             i.fa.fa-question-circle
-        a.analytics(ui-sref='analytics', title='Analytics for Cyclotron')
+        a.analytics(ng-if='analyticsEnabled()', ui-sref='analytics', title='Analytics for Cyclotron')
             i.fa.fa-bar-chart
         a.login(requires-auth, ng-click='login()', ng-if='!isLoggedIn()', title='Login')
             i.fa.fa-unlock

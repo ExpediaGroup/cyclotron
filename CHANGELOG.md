@@ -1,3 +1,23 @@
+# 1.34.0 (07/07/2016)
+
+## Features
+
+ - Dashboard Sidebar: Added a new sidebar with a toolbar of relevent links, ability to show/hide Widgets, and space for Dashboard-defined content to appear. Dashboards can use this space to provide useful information about the data or visualizations, or to add controls, filters, etc.
+
+ - Cyclotron.functions.forceUpdate: Added method to manually trigger an Angular.js digest cycle.
+
+ - Upgraded Moment.js to 2.13.0
+
+## Bug Fixes
+
+ - Dashboard Performance: improved dashboard performance across the board
+
+ - Table Widget: fixed broken Freeze Headers functionality
+
+ - Header Widget: when displaying page name in the header, value was always blank
+
+ - Fixed Numeral formatting errors with non-numeric strings; added unit tests
+
 # 1.33.0 (06/23/2016)
 
 ## Features

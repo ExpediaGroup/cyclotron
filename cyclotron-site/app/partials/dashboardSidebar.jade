@@ -1,0 +1,42 @@
+.dashboard-sidebar.collapsed.dashboard-page-background(ng-if='dashboard.sidebar.showDashboardSidebar')
+    .sidebar-expander-hitbox
+        .sidebar-expander
+            i.fa.fa-caret-right
+
+    .sidebar-header
+        h1(ng-if='dashboard.sidebar.showDashboardTitle == true') {{ dashboardDisplayName }}
+        table.iconbar(ng-if='dashboard.sidebar.showToolbar == true')
+            tr
+                td
+                    a(ng-href='/edit/{{ dashboard.name }}', title='Edit this Dashboard', target='_blank')
+                        i.fa.fa-edit
+                td(ng-if='analyticsEnabled()')
+                    a(ng-href='/analytics/{{ dashboard.name }}', title='View Analytics for this Dashboard', target='_blank')
+                        i.fa.fa-bar-chart
+                td
+                    a(ng-href='{{ exportUrl }}', title='Export this Dashboard', target='_blank')
+                        i.fa.fa-download
+                td(requires-auth)
+                    i.fa.fa-thumbs-o-up(ng-if='!isLiked', ng-click='toggleLike()', title='Like this Dashboard')
+                    i.fa.fa-thumbs-up(ng-if='isLiked', ng-click='toggleLike()', title='Unlike this Dashboard')    
+
+    .sidebar-accordion
+
+        accordion-group(ng-repeat='content in dashboard.sidebar.sidebarContent track by $index', heading='{{ content.heading }}')
+            div(ng-bind-html='trustHtml(content.html)')
+
+        accordion-group(heading='Show/Hide Widgets', ng-if='dashboard.sidebar.showHideWidgets == true')
+            table.table
+                tr(ng-repeat='widget in widgetVisibilities track by $index')
+                    td {{ widget.label }}
+                    td 
+                        switch(ng-model='widget.visible', ng-change='changeVisibility(widget, $index)')
+            p.centered
+                a(ng-click='resetDashboardOverrides()', title='Reset to default')
+                    i.fa.fa-refresh
+                    |  Reset to default
+    .sidebar-footer
+        .logos
+            a.logo(ng-repeat='logo in footerLogos', title='{{ logo.title }}', 
+                ng-href='{{ logo.href }}', target='_self')
+                img(ng-src='{{ logo.src }}', alt='{{ logo.title }}')

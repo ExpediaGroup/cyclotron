@@ -41,6 +41,23 @@
         margin: 0;
     }
 
+    .dashboard-sidebar {
+        /* Basic styles and initial positioning to avoid initial transition */
+        /* Sidebar styling is loaded per theme */
+        * {
+            .box-sizing(border-box);
+        }
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 9000;
+
+        &.collapsed {
+            margin-left: -@sidebar-width * 1.2;
+        }
+    }
+
     .dashboard-controls {
         .user-select(none);
         z-index: 999;
@@ -69,6 +86,16 @@
         &.active {
             .opacity(1);
         }
+    }
+
+    .click-cover {
+        position: fixed;
+        z-index: 8999;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: none;
     }
 
     .dashboard-pages {

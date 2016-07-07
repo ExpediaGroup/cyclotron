@@ -599,6 +599,16 @@ cyclotronServices.factory 'dashboardService', ($http, $resource, $q, analyticsSe
         else
             pageName
 
+    service.getWidgetName = (widget, index) ->
+        if !widget.widget? || widget.widget == ''
+            return 'Widget ' + (index + 1)
+        if widget?.name?.length > 0
+            return _.titleCase(widget.widget) + ': ' + widget.name
+        else if widget.title?.length > 0
+            return _.titleCase(widget.widget) + ': ' + widget.title
+        else
+            return  _.titleCase(widget.widget)
+
     service.getVisitCategory = (dashboard) ->
         return null unless dashboard?
         visits = dashboard.visits

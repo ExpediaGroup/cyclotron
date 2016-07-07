@@ -29,8 +29,32 @@
 @headerColor: #202020;
 @tableBorderColor: #ccc;
 
-
 /* Dashboard Styles */
+.dashboard.dashboard-dark {
+    background-color: @pageBackgroundColor;
+    
+    .dashboard-page-background {
+        background-color: @pageBackgroundColor;
+    }
+
+    @sidebar-outline-color: #666;
+    @sidebar-expander-color: #ddd;
+    @sidebar-header-color: @color;
+    @sidebar-header-background-color: lighten(@pageBackgroundColor, 1%);
+    @sidebar-iconbar-color: lighten(@color, 10%);
+    @sidebar-iconbar-background-color: @widgetBackgroundColor; //lighten(@pageBackgroundColor, 8%);
+    @sidebar-heading-color: @color;
+    @sidebar-heading-background-color: lighten(@pageBackgroundColor, 15%);;
+    @sidebar-heading-border-bottom: 1px solid @widgetBackgroundColor;
+    @sidebar-panel-color: @widgetBackgroundColor;
+    @sidebar-panel-background-color: lighten(@pageBackgroundColor, 70%);
+    @sidebar-footer-color: @color;
+    @sidebar-footer-background-color: lighten(@pageBackgroundColor, 1%);
+
+    /* Dashboard elements */
+    @import "../dashboards/_sidebar.less";
+}
+
 .dashboard-page {
     /* Well style, normal only */
     &.normal {

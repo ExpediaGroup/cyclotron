@@ -32,10 +32,10 @@ cyclotronDirectives.directive 'widgetBody', ($timeout) ->
                     scope.widgetLayout.widgetBodyHeight = widgetBodyHeight
 
             # Update on window resizing
-            $widget.add('.title, .widget-footer').on 'resize', _.throttle(->
+            $widget.add('.title, .widget-footer').on 'resize', _.debounce(->
                 scope.$apply ->
                     sizer()
-            , 65)
+            , 120, { leading: false, maxWait: 500 })
 
             # Run now & again in 100ms
             sizer()

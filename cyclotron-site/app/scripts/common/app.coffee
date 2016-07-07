@@ -48,9 +48,10 @@ cyclotronApp = angular.module 'cyclotronApp', [
     'ui.bootstrap'
     'ui.ace'
     'drahak.hotkeys'
+    'googlechart'
     'LocalForageModule'
     'tableSort'
-    'googlechart'
+    'uiSwitch'
 ]
 
 cyclotronDirectives = angular.module 'cyclotronApp.directives', []
@@ -309,7 +310,7 @@ cyclotronApp.config ($stateProvider, $urlRouterProvider, $locationProvider, $con
     }
     $locationProvider.hashPrefix = '!'
 
-cyclotronApp.run ($rootScope, $urlRouter, $location, $state, $stateParams, $uibModal, userService) ->
+cyclotronApp.run ($rootScope, $urlRouter, $location, $state, $stateParams, $uibModal, configService, userService) ->
 
     #
     # Authentication-related scope variables
@@ -317,6 +318,8 @@ cyclotronApp.run ($rootScope, $urlRouter, $location, $state, $stateParams, $uibM
     $rootScope.isLoggedIn = userService.isLoggedIn
     $rootScope.isAdmin = userService.isAdmin
     $rootScope.currentUser = userService.currentUser
+
+    $rootScope.analyticsEnabled = -> configService.enableAnalytics
 
     $rootScope.login = (isModal = false) ->
         options =

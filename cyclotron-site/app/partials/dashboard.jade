@@ -1,6 +1,10 @@
 
 //- Dashboards
-div.dashboard
+div.dashboard.dashboard-page-background(ng-class='{ "has-sidebar": dashboard.sidebar.showDashboardSidebar }')
+
+    .click-cover
+
+    include dashboardSidebar
 
     .dashboard-controls(ng-hide='dashboard.showDashboardControls == false')
         i.fa.fa-chevron-left(ng-click='moveBack()', ng-class='{ disabled: !canMoveBack() }', title='Go to the previous page')
@@ -12,7 +16,7 @@ div.dashboard
         i.fa.fa-chevron-right(ng-click='moveForward()', ng-class='{ disabled: !canMoveForward() }', title='Go to the next page')
 
     .dashboard-pages
-        div(dashboard-page, dashboard='dashboard', 
-            page='page', page-number='{{ currentPageIndex }}', page-overrides='dashboardOverrides.pages[currentPageIndex]',
-            ng-repeat='page in currentPage')
+        div(dashboard-page, ng-repeat='page in currentPage',
+            dashboard='dashboard', page='page', page-number='{{ currentPageIndex }}', 
+            page-overrides='dashboardOverrides.pages[currentPageIndex]')
 

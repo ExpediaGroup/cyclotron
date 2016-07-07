@@ -162,6 +162,9 @@ describe 'Unit: _.numeralformat', ->
     it 'should apply format correctly to strings', ->
         expect(_.numeralformat('0,0.0', '2002.041')).toBe '2,002.0'
 
+    it 'should return the string if a non-numeric string is provided', ->
+        expect(_.numeralformat('0,0.0', 'null')).toBe 'null'
+
 describe 'Unit: _.ngApply', ->
     actual = null
     mockScope = {

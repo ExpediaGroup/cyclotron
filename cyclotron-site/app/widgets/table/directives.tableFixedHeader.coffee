@@ -28,8 +28,12 @@ cyclotronDirectives.directive 'tableFixedHeader', ($window, configService) ->
             $table = $(element)
             $tableHeaders = null
 
-            $parent = $table.parent()
-            $container = $('<div id="container"></div>').appendTo($parent)
+            $widgetBody = $table.parents '.widget-body'
+            $container = $('<div id="container"></div>').appendTo $widgetBody
+
+            pos =
+                originalTop: 0
+                originalLeft: $table.position().left
 
             $container.css({
                 'overflow': 'hidden'
@@ -38,30 +42,32 @@ cyclotronDirectives.directive 'tableFixedHeader', ($window, configService) ->
                 'left': $table.position().left
             }).hide()
 
-            pos =
-                originalTop: 0
-                originalLeft: $table.position().left
-
+            # Clone table for fixed header
             $clonedTable = $table.clone().empty()
 
             $clonedTable.css({
                 'position': 'relative'
-                'top': '0'
+                
             }).appendTo($container)
+
+            # Add fixed layout if there are no column groups
+            if scope.columnGroups.length == 0
+                $clonedTable.css 'table-layout', 'fixed'
 
             #
             # Handle resize events
             #
             resize = ->
-                $tableHeaders = $table.find('thead')
-                $headerRows = $tableHeaders.find('tr')
-                pos.originalTop = $parent.offset().top
-                pos.originalLeft = $table.position().left
+                $tableHeaders = $table.children 'thead'
+                $headerRows = $tableHeaders.children 'tr'
+                pos.originalTop = $widgetBody.position().top
+                pos.originalLeft = $table.offset().left
 
-                $container.css({
-                    width: $parent[0].clientWidth
+                $container.css {
+                    width: $widgetBody[0].clientWidth
                     height: $tableHeaders.height()
-                })
+                    top: pos.originalTop
+                }
 
                 $clonedTable
                     .empty()
@@ -72,23 +78,27 @@ cyclotronDirectives.directive 'tableFixedHeader', ($window, configService) ->
                         $(this).css('height', height)
                         $(this).find('th').each (thIndex) ->
                             originalHeader = $headerRows.eq(index).find('th').eq(thIndex)
-                            $(this).css('width', originalHeader.width())
+                            $(this).css {
+                                width: originalHeader.width()
+                            }
 
-            $parent.on 'resize', _.throttle(resize, 200, { leading: false, trailing: true })
+            $widgetBody.on 'resize', _.throttle(resize, 250, { leading: false, maxWait: 500 })
 
             scope.$watch 'sortBy+sortedRows', _.throttle(resize, 200, { leading: false, trailing: true })
 
             #
             # Handle scroll events
             #
-            $parent.on 'scroll', ->
-                scrollTop = $parent.scrollTop()
+            $widgetBody.on 'scroll', _.debounce(->
+                scrollTop = $widgetBody.scrollTop()
                 elementTop = $tableHeaders.offset().top
                 diff = pos.originalTop - elementTop
 
-                if (diff > 0 && scrollTop > diff && scrollTop <= (diff + $table.height() - $tableHeaders.height()))
+                $container.css 'top', pos.originalTop
+
+                if scrollTop > 0
                     $clonedTable.css({
-                        'left': -$parent.scrollLeft()
+                        'left': -$widgetBody.scrollLeft()
                     })
 
                     if not scope.visible
@@ -98,6 +108,7 @@ cyclotronDirectives.directive 'tableFixedHeader', ($window, configService) ->
                 else
                     $container.hide()
                     scope.visible = false
+            , 120, { leading: false, maxWait: 200 })
 
             #
             # Cleanup
@@ -107,8 +118,8 @@ cyclotronDirectives.directive 'tableFixedHeader', ($window, configService) ->
                     $container.remove()
                     $container = null
 
-                $parent.off 'resize'
-                $parent.off 'scroll'
+                $widgetBody.off 'resize'
+                $widgetBody.off 'scroll'
                 return
 
             return

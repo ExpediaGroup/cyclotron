@@ -30,6 +30,21 @@
 @tableBorderColor: #555;
 
 /* Dashboard Styles */
+.dashboard.dashboard-lightborderless {
+    background-color: @pageBackgroundColor;
+    
+    .dashboard-page-background {
+        background-color: @pageBackgroundColor;
+    }
+
+    /* Dashboard elements */
+    @import "../dashboards/_sidebar.less";
+
+    .dashboard-sidebar {
+        .rounded(4px);
+        .box-shadow(1px 1px 6px 0 rgba(0, 0, 0, 0.8));
+    }
+}
 .dashboard-page {
     /* Well style, normal only */
     &.normal {

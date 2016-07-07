@@ -53,7 +53,7 @@ cyclotronDirectives.directive 'widgetError', ($timeout) ->
                         scope.errorMessage = scope.dataSourceErrorMessage
                         
                     if not _.isString(scope.errorMessage)
-                        $scope.errorMessage = JSON.stringify scope.errorMessage
+                        scope.errorMessage = JSON.stringify scope.errorMessage
 
                     if errorMessageLength < 30
                         scope.shortErrorMessage = null
@@ -70,7 +70,7 @@ cyclotronDirectives.directive 'widgetError', ($timeout) ->
             $widget.add('.title, .widget-footer').on 'resize', _.throttle(->
                 scope.$apply ->
                     sizer()
-            , 65)
+            , 120, { leading: false, maxWait: 500 })
 
             # Run now & again in 100ms
             sizer()

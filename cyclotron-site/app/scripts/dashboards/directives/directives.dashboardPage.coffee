@@ -38,75 +38,22 @@ cyclotronDirectives.directive 'dashboardPage', ($compile, $window, $timeout, con
         template: '<div class="dashboard-page dashboard-{{page.theme}} {{page.style}}">' +
             '<div class="dashboard-page-inner">' +
                 '<div class="dashboard-widgetwrapper dashboard-{{widget.theme}}" ng-repeat="widget in page.widgets"' +
-                ' widget="widget" page-overrides="pageOverrides" widget-index="$index" layout="layout" dashboard="dashboard" post-layout="postLayout()"></div>' + 
+                ' widget="widget" page="page" page-overrides="pageOverrides" widget-index="$index" layout="layout" dashboard="dashboard" post-layout="postLayout()"></div>' + 
             '</div></div>'
 
         link: (scope, element, attrs) ->
             $element = $(element)
+            $dashboard = $element.parents('.dashboard')
             $dashboardPageInner = $element.children('.dashboard-page-inner')
-            $dashboardControls = $('.dashboard-controls')
+            $dashboardControls = $dashboard.find '.dashboard-controls'
+            $dashboardSidebar = $dashboard.find '.dashboard-sidebar'
             
-            scope.controlTimer = null
-
             masonry = (element, layout) ->
                 $dashboardPageInner.masonry({
                     itemSelector: '.dashboard-widgetwrapper'
                     columnWidth: layout.gridSquareWidth
                     gutter: layout.gutter
                 })
-
-            calculateMouseTarget = ->
-                # Get all dimensions and the padding options
-                
-                controlOffset = $dashboardControls.offset()
-                controlWidth = $dashboardControls.width()
-                controlHeight = $dashboardControls.height()
-                padX = configService.dashboard.controls.hitPaddingX
-                padY = configService.dashboard.controls.hitPaddingY
-
-                return unless $dashboardControls? and controlOffset?
-
-                scope.controlTarget = {
-                    top: controlOffset.top - padY
-                    bottom: controlOffset.top + controlHeight + padY
-                    left: controlOffset.left - padX
-                    right: controlOffset.left + controlWidth + padX
-                }
-
-            makeControlsDisappear = ->
-                $dashboardControls.removeClass 'active'
-
-            makeControlsAppear = _.throttle(->
-                # Make visible
-                $dashboardControls.addClass 'active'
-
-                # Set timer to remove the controls after some delay
-                $timeout.cancel(scope.controlTimer) if scope.controlTimer?
-
-                scope.controlTimer = $timeout(makeControlsDisappear, configService.dashboard.controls.duration)
-            , 500, { leading: true })
-
-            controlHitTest = (event) ->
-                # Abort if outside the target
-                if event.pageX < scope.controlTarget.left ||
-                   event.pageX > scope.controlTarget.right ||
-                   event.pageY < scope.controlTarget.top ||
-                   event.pageY > scope.controlTarget.bottom
-                    return
-
-                makeControlsAppear()
-
-            #
-            # Configure Dashboard Controls
-            #
-            calculateMouseTarget()
-
-            #
-            # Bind mousemove event for entire document (remove during $destroy)
-            #
-            $(document).on 'mousemove', controlHitTest
-
-            $(document).on 'scroll', calculateMouseTarget
 
             #
             # Watch the dashboard page and update the layout
@@ -121,8 +68,10 @@ cyclotronDirectives.directive 'dashboardPage', ($compile, $window, $timeout, con
                         if (newValue.enableMasonry != false)
                             masonry(element, scope.layout)
                         return
-                            
-                    scope.layout = layoutService.getLayout(newValue, $($window).width(), $($window).height())
+
+                    containerWidth = $dashboard.innerWidth()
+                    containerHeight = $($window).height()
+                    scope.layout = layoutService.getLayout(newValue, containerWidth, containerHeight)
 
                     # Set page margin if defined
                     if !_.isNullOrUndefined(scope.layout.margin)
@@ -139,31 +88,28 @@ cyclotronDirectives.directive 'dashboardPage', ($compile, $window, $timeout, con
                     else 
                         $element.parents().removeClass 'fullscreen'
 
-                    # Store updated hit target for the dashboard controls
-                    calculateMouseTarget()
-
-
                 # Update everything
                 updateLayout()
 
-                resizeFunction = _.throttle(-> 
-                    scope.$apply(updateLayout)
+                resizeFunction = _.throttle(->
+                    scope.$apply updateLayout
                 , 65)
 
-                # Update on window resizing
-                $(window).on 'resize', resizeFunction
+                # Update on element resizing
+                $element.on 'resize', resizeFunction
 
                 scope.$on '$destroy', ->
-                    $(window).off 'resize', resizeFunction
+                    $element.off 'resize', resizeFunction
 
                 # Apply page theme class to dashboard-controls
+                $dashboard.addClass('dashboard-' + newValue.theme)
                 $dashboardControls.addClass('dashboard-' + newValue.theme)
 
                 # Set dashboard background color from theme
                 themeSettings = configService.dashboard.properties.theme.options[newValue.theme]
                 if newValue.theme? and themeSettings?
                     color = themeSettings.dashboardBackgroundColor
-                    $('.dashboard, html').css('background-color', color)
+                    $('html').css('background-color', color)
 
                 return
 
@@ -171,12 +117,6 @@ cyclotronDirectives.directive 'dashboardPage', ($compile, $window, $timeout, con
             # Cleanup
             #
             scope.$on '$destroy', ->
-                $(document).off 'mousemove', controlHitTest
-                $(document).off 'scroll', calculateMouseTarget
-
-                # Cancel timer
-                $timeout.cancel(scope.controlTimer) if scope.controlTimer?
-
                 # Uninitialize Masonry if still present
                 if $dashboardPageInner.data('masonry')
                     $dashboardPageInner.masonry('destroy')

@@ -70,6 +70,10 @@ ngAnnotateOptions =
     remove: true
     single_quotes: true
 
+plumberError = (error) ->
+    console.log(error)
+    this.emit('end')
+
 gulp.task 'clean', (done) ->
     del(['./_public', './coverage', 'bower_components'], done)
 
@@ -222,25 +226,25 @@ gulp.task 'styles', ->
     lessFilter = filter '**/*.less'
     
     appCommon = gulp.src './app/styles/common/*.less'
-        .pipe plumber()
+        .pipe plumber(plumberError)
         .pipe less()
         .pipe concat 'css/app.common.css'
         .pipe gulp.dest './_public'
 
-    appDashboards = gulp.src './app/styles/dashboards/*.less'
-        .pipe plumber()
+    appDashboards = gulp.src ['./app/styles/dashboards/*.less', '!./app/styles/dashboards/_*.less']
+        .pipe plumber(plumberError)
         .pipe less()
         .pipe concat 'css/app.dashboards.css'
         .pipe gulp.dest './_public'
 
     appMgmt = gulp.src './app/styles/mgmt/*.less'
-        .pipe plumber()
+        .pipe plumber(plumberError)
         .pipe less()
         .pipe concat 'css/app.mgmt.css'
         .pipe gulp.dest './_public'
 
     themes = gulp.src './app/styles/themes/*.less'
-        .pipe plumber()
+        .pipe plumber(plumberError)
         .pipe less()
         .pipe rename {
             prefix: 'app.themes.'

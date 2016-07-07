@@ -188,15 +188,7 @@ cyclotronApp.controller 'GuiEditorController', ($scope, $state, $stateParams, $l
 
     $scope.getPageName = dashboardService.getPageName
 
-    $scope.getWidgetName = (widget, index) ->
-        if !widget.widget? || widget.widget == ''
-            return 'Widget ' + (index + 1)
-        if widget?.name?.length > 0
-            return _.titleCase(widget.widget) + ': ' + widget.name
-        else if widget.title?.length > 0
-            return _.titleCase(widget.widget) + ': ' + widget.title
-        else
-            return  _.titleCase(widget.widget)
+    $scope.getWidgetName = dashboardService.getWidgetName
 
     $scope.getParameterName = (item, index) ->
         if item.name?.length > 0

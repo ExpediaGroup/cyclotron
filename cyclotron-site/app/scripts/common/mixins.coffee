@@ -168,7 +168,8 @@ _.mixin({
         return 'NaN' if _.isNaN value
         
         if !_.isNumber(value)
-            value = parseFloat(value)
+            parsedValue = parseFloat(value)
+            if _.isNaN parsedValue then return value else value = parsedValue
         return numeral(value).format(format)
 
     # ngApply: Takes a scope and a function, and returns a function that calls $apply around the given function

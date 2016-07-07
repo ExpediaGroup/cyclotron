@@ -34,6 +34,7 @@ cyclotronDirectives.directive 'widget', ($compile, $sce, $window, layoutService)
             widgetIndex: '='
             layout: '='
             dashboard: '='
+            page: '='
             pageOverrides: '='
             postLayout: '&'
 
@@ -46,69 +47,8 @@ cyclotronDirectives.directive 'widget', ($compile, $sce, $window, layoutService)
 
             scope.widgetLayout = { }
 
-            # Determine if a Widget should be visible or hidden on the dashboard
-            isWidgetHidden = ->
-                return false unless scope.widget?
-                
-                if scope.pageOverrides?.widgets?
-                    widgetOverrides = scope.pageOverrides.widgets?[scope.widgetIndex]
-
-                    # If WidgetOverrides.hidden is set true or false, use its value
-                    if widgetOverrides?.hidden?
-                        return widgetOverrides.hidden == true
-
-                # Else, default to the widget's "hidden" property
-                return scope.widget.hidden == true
-
-            # Store Widget API for use by Dashboards
-            if scope.widget.name?
-                $window.Cyclotron.currentPage.widgets[scope.widget.name] = {
-                    show: ->
-                        scope.$apply ->
-                            widgetOverrides = scope.pageOverrides?.widgets?[scope.widgetIndex]
-                            widgetOverrides.hidden = false
-                    hide: ->
-                        scope.$apply ->
-                            widgetOverrides = scope.pageOverrides?.widgets?[scope.widgetIndex]
-                            widgetOverrides.hidden = true
-                    toggleVisibility: ->
-                        scope.$apply ->
-                            widgetOverrides = scope.pageOverrides?.widgets?[scope.widgetIndex]
-                            widgetOverrides.hidden = !widgetOverrides.hidden
-                }
-
-            # Watch for widget visibility to change
-            scope.$watch isWidgetHidden, (isHidden) ->
-                scope.layout.hidden = isHidden
-
-            # Watch for the widget model to change, indicating this widget needs to be updated
-            scope.$watch 'widget', (newValue, oldValue) ->
-                widget = newValue
-
-                # Ignore widgets without a type
-                return if _.isEmpty widget.widget 
-
-                noscrollClass = if widget.noscroll == true
-                    ' widget-noscroll'
-                else
-                    ''
-
-                # Create the include for the specific widget referenced
-                template = '<div class="dashboard-widget ' + newValue.style + noscrollClass + '" ng-include="\'/widgets/' + newValue.widget + '/' + newValue.widget + '.html\'"></div>'
-
-                if widget.allowFullscreen != false
-                    template = '<i class="widget-fullscreen fa fa-arrows-alt" title="Click to view fullscreen"></i>' + template
-
-                compiledValue = $compile(template)(scope)
-
-                # Replace the current contents with the newly compiled element
-                element.contents().remove()
-                element.append(compiledValue)
-
-                return
-
-            # Watch for page layout changes and resize the widget
-            scope.$watch('layout', (layout, oldLayout) ->
+            # Update the layout
+            updateLayout = (layout) ->
                 
                 # Ensure a valid layout is provided
                 if _.isUndefined(layout)
@@ -122,7 +62,7 @@ cyclotronDirectives.directive 'widget', ($compile, $sce, $window, layoutService)
                 # Copy gridWidth/width into the scope
                 # Apply overrides if necessary (mobile devices)
                 if layout.forceGridWidth? 
-                    if widget.gridWidth == layout.originalGridColumns
+                    if scope.widget.gridWidth == layout.originalGridColumns
                         scope.widgetGridWidth = layout.gridColumns
                     else
                         scope.widgetGridWidth = layout.forceGridWidth 
@@ -169,7 +109,69 @@ cyclotronDirectives.directive 'widget', ($compile, $sce, $window, layoutService)
 
                 return
 
-            , true)
+            # Determine if a Widget should be visible or hidden on the dashboard
+            isWidgetHidden = ->
+                return false unless scope.widget?
+                
+                if scope.pageOverrides?.widgets?
+                    widgetOverrides = scope.pageOverrides.widgets?[scope.widgetIndex]
+
+                    # If WidgetOverrides.hidden is set true or false, use its value
+                    if widgetOverrides?.hidden?
+                        return widgetOverrides.hidden == true
+
+                # Else, default to the widget's "hidden" property
+                return scope.widget.hidden == true
+
+            # Store Widget API for use by Dashboards
+            # Use scope.$evalAsync to ensure it gets digested by Angular
+            if scope.widget.name?
+                $window.Cyclotron.currentPage.widgets[scope.widget.name] = {
+                    show: ->
+                        scope.$evalAsync ->
+                            widgetOverrides = scope.pageOverrides?.widgets?[scope.widgetIndex]
+                            widgetOverrides.hidden = false
+                    hide: ->
+                        scope.$evalAsync ->
+                            widgetOverrides = scope.pageOverrides?.widgets?[scope.widgetIndex]
+                            widgetOverrides.hidden = true
+                    toggleVisibility: ->
+                        scope.$evalAsync ->
+                            widgetOverrides = scope.pageOverrides?.widgets?[scope.widgetIndex]
+                            widgetOverrides.hidden = !widgetOverrides.hidden
+                }
+
+            # Watch for the widget model to change, indicating this widget needs to be updated
+            scope.$watch 'widget', (newValue, oldValue) ->
+                widget = newValue
+
+                # Ignore widgets without a type
+                return if _.isEmpty widget.widget 
+
+                noscrollClass = if widget.noscroll == true
+                    ' widget-noscroll'
+                else
+                    ''
+
+                # Create the include for the specific widget referenced
+                template = '<div class="dashboard-widget ' + newValue.style + noscrollClass + '" ng-include="\'/widgets/' + newValue.widget + '/' + newValue.widget + '.html\'"></div>'
+
+                if widget.allowFullscreen != false
+                    template = '<i class="widget-fullscreen fa fa-arrows-alt" title="Click to view fullscreen"></i>' + template
+
+                compiledValue = $compile(template)(scope)
+
+                # Replace the current contents with the newly compiled element
+                element.contents().remove()
+                element.append(compiledValue)
+
+                return
+
+            # Watch for page layout changes and resize the widget
+            scope.$watch 'layout', updateLayout, true
+
+            # Watch for widget visibility to change
+            scope.$watch 'pageOverrides', (-> updateLayout(scope.layout)), true
 
             return
     }

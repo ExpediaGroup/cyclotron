@@ -20,7 +20,6 @@
 @import "../common/variables.less";
 
 /* Variables */
-
 @color: black;
 @pageBackgroundColor: white;
 @widgetBackgroundColor: white;
@@ -31,6 +30,17 @@
 @tableBorderColor: #555;
 
 /* Dashboard Styles */
+.dashboard.dashboard-gto {
+    background-color: @pageBackgroundColor;
+    
+    .dashboard-page-background {
+        background-color: @pageBackgroundColor;
+    }
+
+    /* Dashboard elements */
+    @import "../dashboards/_sidebar.less";
+}
+
 .dashboard-page {
     /* Well style, normal only */
     &.normal {

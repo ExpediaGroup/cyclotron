@@ -37,7 +37,7 @@
         a.documentation(ui-sref='help', title='Documentation for Cyclotron')
             i.fa.fa-question-circle
             span Help
-        a.login(ui-sref='analytics', title='Analytics for Cyclotron')
+        a.login(ng-if='analyticsEnabled()', ui-sref='analytics', title='Analytics for Cyclotron')
             i.fa.fa-bar-chart
             span Analytics
         a.login(requires-auth, ng-if='!isLoggedIn()', ng-click='login()',title='Login')

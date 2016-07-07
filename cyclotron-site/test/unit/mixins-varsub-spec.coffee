@@ -74,3 +74,6 @@ describe 'Unit: _.varSub', ->
 
     it 'should return an unchanged string if the variable name is not found but there is a format code', ->
         expect(_.varSub('#{number|0.0 %}', {})).toBe '#{number|0.0 %}'
+
+    it 'should return an unchanged string if a format string is provided but the value is not a number', ->
+        expect(_.varSub('#{number|0.0 %}', {number: 'null'})).toBe 'null'

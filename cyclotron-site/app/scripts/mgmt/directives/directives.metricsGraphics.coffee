@@ -58,9 +58,9 @@ cyclotronDirectives.directive 'metricsGraphics', ->
             scope.$watch 'data', (newData) ->
                 redraw()
 
-            $element.resize(_.throttle(->
+            $element.resize _.debounce ->
                 scope.$apply ->
                     scope.width = $element.width()
                     redraw()
-            , 65))
+            , 90, { leading: false, maxWait: 200 }
     }

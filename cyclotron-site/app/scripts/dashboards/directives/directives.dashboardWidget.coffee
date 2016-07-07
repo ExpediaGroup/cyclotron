@@ -32,6 +32,7 @@ cyclotronDirectives.directive 'dashboardWidget', (layoutService) ->
                 return
 
             scope.$watch('layout', (layout) ->
+                return unless layout?
 
                 # Set the border width if overloaded (otherwise keep theme default)
                 if layout.borderWidth?

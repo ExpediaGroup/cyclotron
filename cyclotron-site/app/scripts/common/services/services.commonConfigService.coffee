@@ -26,7 +26,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
     exports = {
 
-        version: '1.33.0'
+        version: '1.34.0'
 
         logging: 
             enableDebug: false
@@ -170,6 +170,67 @@ cyclotronServices.factory 'commonConfigService', ->
                     required: false
                     default: true
                     defaultHidden: true
+
+                sidebar:
+                    label: 'Sidebar'
+                    description: ''
+                    type: 'propertyset'
+                    default: {}
+                    defaultHidden: true
+                    properties:
+                        showDashboardSidebar:
+                            label: 'Show Dashboard Sidebar'
+                            description: 'If false, hides the default Dashboard Sidebar.'
+                            type: 'boolean'
+                            required: false
+                            default: false
+                            order: 10
+                        showDashboardTitle:
+                            label: 'Include Dashboard Title'
+                            description: 'Enables a section of the sidebar for the Dashboard title.'
+                            type: 'boolean'
+                            required: false
+                            default: true
+                            defaultHidden: true
+                            order: 11
+                        showToolbar:
+                            label: 'Include Toolbar'
+                            description: 'Enables a toolbar in the sidebar.'
+                            type: 'boolean'
+                            required: false
+                            default: true
+                            defaultHidden: true
+                            order: 12
+                        showHideWidgets:
+                            label: 'Include Show/Hide Widgets'
+                            description: 'Enables a section of the sidebar for overriding the visibility of Widgets.'
+                            type: 'boolean'
+                            required: false
+                            default: false
+                            defaultHidden: true
+                            order: 13
+                        sidebarContent:
+                            label: 'Custom Sidebar Sections'
+                            singleLabel: 'Section'
+                            description: 'One or more sections of content to display in the Sidebar.'
+                            type: 'propertyset[]'
+                            default: []
+                            order: 15
+                            properties:
+                                heading:
+                                    label: 'Heading'
+                                    description: 'Heading for the Sidebar section.'
+                                    type: 'string'
+                                    inlineJs: true
+                                    order: 1
+                                html:
+                                    label: 'HTML Content'
+                                    description: 'HTML Content to display.'
+                                    placeholder: 'Value'
+                                    type: 'editor'
+                                    editorMode: 'html'
+                                    inlineJs: true
+                                    order: 2
 
                 pages:
                     label: 'Pages'
@@ -1065,6 +1126,17 @@ cyclotronServices.factory 'commonConfigService', ->
 
             sample:
                 name: ''
+                sidebar:
+                    showDashboardSidebar: true
+
+        # Dashboard Sidebar
+        dashboardSidebar:
+            footer:
+                logos: [{
+                    title: 'Cyclotron'
+                    src: '/img/favicon32.png'
+                    href: '/'
+                }]
 
         # List of help pages
         help: [
