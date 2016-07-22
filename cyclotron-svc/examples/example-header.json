@@ -1,5 +1,26 @@
 {
-    "dataSources": [],
+    "dataSources": [{
+        "name": "uscrime",
+        "preload": true,
+        "type": "json",
+        "url": "http://pastebin.com/raw.php?i=YGN7gWWG"
+    }, {
+        "name": "uscrime-filtered",
+        "processor": "p = function (promise) {\n    Cyclotron.dataSources.uscrime.getPromise().then(function (result) {\n        var data = result['0'].data; \n        var columnsToDisplay = ['Year'];\n        if (Cyclotron.parameters.showTotal == true) {\n            columnsToDisplay.push('Total');\n        }\n        columnsToDisplay.push(Cyclotron.parameters.selectedCrime);\n        \n        data = _.map(data, function (row) {\n            return _.pick(row, columnsToDisplay);\n        });\n        promise.resolve(data);\n    });\n}",
+        "type": "javascript"
+    }, {
+        "name": "uscrime-filtered2",
+        "processor": "p = function (promise) {\n    Cyclotron.dataSources.uscrime.getPromise().then(function (result) {\n        var data = result['0'].data; \n        var columnsToDisplay = ['Year'];\n        if (Cyclotron.parameters.showTotal === true) {\n            columnsToDisplay.push('Total');\n        }\n        columnsToDisplay.push(Cyclotron.parameters.selectedCrime);\n        \n        data = _.map(data, function (row) {\n            return _.pick(row, columnsToDisplay);\n        });\n        promise.resolve(data);\n    });\n}",
+        "type": "javascript"
+    }, {
+        "name": "uscrime-filtered-links",
+        "processor": "p = function (promise) {\n    Cyclotron.dataSources.uscrime.getPromise().then(function (result) {\n        var data = result['0'].data; \n        var columnsToDisplay = ['Year'];\n        if (Cyclotron.parameters.showTotal === true) {\n            columnsToDisplay.push('Total');\n        }\n        columnsToDisplay.push(Cyclotron.parameters.selectedCrimeLinks);\n        \n        data = _.map(data, function (row) {\n            return _.pick(row, columnsToDisplay);\n        });\n        promise.resolve(data);\n    });\n}",
+        "type": "javascript"
+    }, {
+        "name": "uscrime-types",
+        "processor": "p = function (promise) {\n    Cyclotron.dataSources.uscrime.getPromise().then(function (result) {\n        var data = result['0'].data; \n        var row = _.omit(data[0], ['Year', 'Total']);\n        \n        // Get list of columns from the first row\n        var crimes = _.keys(row);\n        \n        // Convert to an array of objects with name/value\n        promise.resolve(_.map(crimes, function (crime) {\n            return {\n                name: crime,\n                value: crime\n            };\n        }));\n    });\n}",
+        "type": "javascript"
+    }],
     "description": "Examples of using the Header Widget.",
     "disableAnalytics": true,
     "name": "example-header",
@@ -7,63 +28,507 @@
         "frequency": 1,
         "layout": {
             "gridColumns": 1,
-            "gridHeightAdjustment": -160,
+            "gridHeightAdjustment": -110,
             "gridRows": 1,
             "gutter": 10,
             "margin": 10
         },
         "name": "Awesome Page",
+        "theme": "lightborderless",
         "widgets": [{
             "allowFullscreen": false,
-            "customHtml": "<div>\n    <p>Additional Content</p>\n</div>",
             "gridHeight": 1,
             "headerTitle": {
                 "link": "http://cyclotron.io",
                 "logoSize": "72px",
-                "logoUrl": "http://www.cyclotron.io/img/favicon128.png",
+                "logoUrl": "/img/favicon128.png",
                 "pageNameSeparator": "|",
                 "showPageName": true,
                 "showTitle": true,
                 "titleSize": "2.5rem"
             },
-            "height": "150px",
+            "height": "100px",
             "widget": "header"
         }, {
             "gridHeight": 1,
             "gridWidth": 1,
+            "theme": "light",
             "widget": "clock"
         }]
     }, {
         "frequency": 1,
         "layout": {
-            "gridColumns": 1,
-            "gridHeightAdjustment": -160,
+            "gridColumns": 2,
+            "gridHeightAdjustment": -110,
             "gridRows": 1,
             "gutter": 10,
             "margin": 10
         },
         "name": "Another Awesome Page",
+        "theme": "light",
         "widgets": [{
             "allowFullscreen": false,
-            "customHtml": "<div>\n    <p>Additional Content</p>\n</div>",
             "gridHeight": 1,
+            "gridWidth": 2,
             "headerTitle": {
                 "link": "http://cyclotron.io",
                 "logoSize": "72px",
-                "logoUrl": "http://www.cyclotron.io/img/favicon128.png",
+                "logoUrl": "/img/favicon128.png",
                 "pageNameSeparator": "|",
                 "showPageName": true,
                 "showTitle": true,
                 "titleSize": "2.5rem"
             },
-            "height": "150px",
+            "height": "100px",
+            "theme": "lightborderless",
             "widget": "header"
         }, {
             "gridHeight": 1,
             "gridWidth": 1,
             "widget": "clock"
+        }, {
+            "columns": [{
+                "headerTooltip": "The Year",
+                "name": "Year"
+            }, {
+                "name": "Total"
+            }, {
+                "name": "Burglary"
+            }, {
+                "name": "Robbery"
+            }, {
+                "name": "Murder"
+            }],
+            "dataSource": "uscrime",
+            "title": "US Crime Over Time (some columns)",
+            "widget": "table"
+        }]
+    }, {
+        "frequency": 1,
+        "layout": {
+            "gridColumns": 1,
+            "gridHeightAdjustment": -170,
+            "gridRows": 1,
+            "gutter": 10,
+            "margin": 10
+        },
+        "name": "Header With Parameters",
+        "theme": "light",
+        "widgets": [{
+            "allowFullscreen": false,
+            "customHtml": "<div><small>This chart updates whenever a Parameter is changed, because the Change Event for each Parameter re-executes the Data Source.</small></div>",
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "headerTitle": {
+                "link": "http://cyclotron.io",
+                "logoSize": "64px",
+                "logoUrl": "/img/favicon128.png",
+                "pageNameSeparator": "|",
+                "showPageName": true,
+                "showTitle": true,
+                "titleSize": "2rem"
+            },
+            "height": "160px",
+            "noscroll": true,
+            "parameters": {
+                "parametersIncluded": ["selectedCrime", "showTotal"],
+                "showParameters": true
+            },
+            "theme": "lightborderless",
+            "widget": "header"
+        }, {
+            "dataSource": "uscrime-filtered",
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "highchart": {
+                "series": [{
+                    "x": "Year",
+                    "y": "*"
+                }],
+                "xAxis": [{
+                    "type": "linear"
+                }],
+                "yAxis": [{
+                    "title": {
+                        "text": "Values"
+                    }
+                }]
+            },
+            "title": "US Crime Over Time",
+            "widget": "chart"
+        }]
+    }, {
+        "frequency": 1,
+        "layout": {
+            "gridColumns": 1,
+            "gridHeightAdjustment": -170,
+            "gridRows": 1,
+            "gutter": 10,
+            "margin": 10
+        },
+        "name": "Header With Parameters and Change Button",
+        "theme": "dark",
+        "widgets": [{
+            "allowFullscreen": false,
+            "customHtml": "<div><small>This chart only updates when the Change button is clicked, because an event handler for the button re-executes the Data Source.</small></div>",
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "headerTitle": {
+                "link": "http://cyclotron.io",
+                "logoSize": "64px",
+                "logoUrl": "/img/favicon128.png",
+                "pageNameSeparator": "|",
+                "showPageName": true,
+                "showTitle": true,
+                "titleSize": "2rem"
+            },
+            "height": "160px",
+            "noscroll": true,
+            "parameters": {
+                "parametersIncluded": ["selectedCrime", "showTotal"],
+                "showParameters": true,
+                "showUpdateButton": true,
+                "updateButtonLabel": "Change",
+                "updateEvent": "e = function() {\n    // Re-execute the Data Source whenever the button is clicked\n    Cyclotron.dataSources['uscrime-filtered2'].execute(true);\n}"
+            },
+            "widget": "header"
+        }, {
+            "dataSource": "uscrime-filtered2",
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "highchart": {
+                "series": [{
+                    "x": "Year",
+                    "y": "*"
+                }],
+                "xAxis": [{
+                    "type": "linear"
+                }],
+                "yAxis": [{
+                    "title": {
+                        "text": "Values"
+                    }
+                }]
+            },
+            "title": "US Crime Over Time",
+            "widget": "chart"
+        }]
+    }, {
+        "frequency": 1,
+        "layout": {
+            "gridColumns": 1,
+            "gridHeightAdjustment": -170,
+            "gridRows": 1,
+            "gutter": 10,
+            "margin": 10
+        },
+        "name": "Header With Parameters and Change Button 2",
+        "theme": "dark",
+        "widgets": [{
+            "allowFullscreen": false,
+            "customHtml": "<div><small>This chart only updates when the Change button is clicked, because an event handler for the button re-executes the Data Source.</small></div>",
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "headerTitle": {
+                "link": "http://cyclotron.io",
+                "logoSize": "64px",
+                "logoUrl": "/img/favicon128.png",
+                "pageNameSeparator": "|",
+                "showPageName": true,
+                "showTitle": true,
+                "titleSize": "2rem"
+            },
+            "height": "160px",
+            "noscroll": true,
+            "parameters": {
+                "parametersIncluded": ["selectedCrimeLinks", "showTotal"],
+                "showParameters": true,
+                "showUpdateButton": true,
+                "updateButtonLabel": "Change",
+                "updateEvent": "e = function() {\n    // Re-execute the Data Source whenever the button is clicked\n    Cyclotron.dataSources['uscrime-filtered-links'].execute(true);\n}"
+            },
+            "widget": "header"
+        }, {
+            "dataSource": "uscrime-filtered-links",
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "highchart": {
+                "series": [{
+                    "x": "Year",
+                    "y": "*"
+                }],
+                "xAxis": [{
+                    "type": "linear"
+                }],
+                "yAxis": [{
+                    "title": {
+                        "text": "Values"
+                    }
+                }]
+            },
+            "title": "US Crime Over Time",
+            "widget": "chart"
+        }]
+    }, {
+        "frequency": 1,
+        "layout": {
+            "gridColumns": 1,
+            "gridHeightAdjustment": -175,
+            "gridRows": 1,
+            "gutter": 10,
+            "margin": 10
+        },
+        "name": "Header With Separate Parameters",
+        "theme": "light",
+        "widgets": [{
+            "allowFullscreen": false,
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "headerTitle": {
+                "link": "http://cyclotron.io",
+                "logoSize": "64px",
+                "logoUrl": "/img/favicon128.png",
+                "pageNameSeparator": "|",
+                "showPageName": true,
+                "showTitle": true,
+                "titleSize": "2rem"
+            },
+            "height": "85px",
+            "noscroll": true,
+            "theme": "lightborderless",
+            "widget": "header"
+        }, {
+            "allowFullscreen": false,
+            "customHtml": "<div><small>This chart only updates when the Change button is clicked, because an event handler for the button re-executes the Data Source.</small></div>",
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "headerTitle": {
+                "showTitle": false
+            },
+            "height": "70px",
+            "noscroll": true,
+            "parameters": {
+                "parametersIncluded": ["selectedCrimeLinks", "showTotal"],
+                "showParameters": true,
+                "showUpdateButton": true,
+                "updateButtonLabel": "Change",
+                "updateEvent": "e = function() {\n    // Re-execute the Data Source whenever the button is clicked\n    Cyclotron.dataSources['uscrime-filtered-links'].execute(true);\n}"
+            },
+            "widget": "header"
+        }, {
+            "dataSource": "uscrime-filtered-links",
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "highchart": {
+                "series": [{
+                    "x": "Year",
+                    "y": "*"
+                }],
+                "xAxis": [{
+                    "type": "linear"
+                }],
+                "yAxis": [{
+                    "title": {
+                        "text": "Values"
+                    }
+                }]
+            },
+            "title": "US Crime Over Time",
+            "widget": "chart"
+        }]
+    }, {
+        "frequency": 1,
+        "layout": {
+            "gridColumns": 1,
+            "gridHeightAdjustment": -170,
+            "gridRows": 1,
+            "gutter": 10,
+            "margin": 10
+        },
+        "name": "Header With DateTime Parameters",
+        "theme": "light",
+        "widgets": [{
+            "allowFullscreen": false,
+            "customHtml": "<div><small>This chart updates whenever a Parameter is changed, because the Change Event for each Parameter re-executes the Data Source.</small></div>",
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "headerTitle": {
+                "link": "http://cyclotron.io",
+                "logoSize": "64px",
+                "logoUrl": "/img/favicon128.png",
+                "pageNameSeparator": "|",
+                "showPageName": true,
+                "showTitle": true,
+                "titleSize": "2rem"
+            },
+            "height": "160px",
+            "noscroll": true,
+            "parameters": {
+                "parametersIncluded": ["datetime", "date", "time"],
+                "showParameters": true
+            },
+            "theme": "lightborderless",
+            "widget": "header"
+        }, {
+            "dataSource": "uscrime-types",
+            "filters": {
+                "x": "y"
+            },
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "layout": {},
+            "noData": "No Data",
+            "widget": "chart"
+        }]
+    }, {
+        "frequency": 1,
+        "layout": {
+            "gridColumns": 1,
+            "gridHeightAdjustment": -170,
+            "gridRows": 1,
+            "gutter": 10,
+            "margin": 10
+        },
+        "name": "Header With DateTime Parameters",
+        "theme": "light",
+        "widgets": [{
+            "allowFullscreen": false,
+            "customHtml": "<div><small>This chart updates whenever a Parameter is changed, because the Change Event for each Parameter re-executes the Data Source.</small></div>",
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "headerTitle": {
+                "link": "http://cyclotron.io",
+                "logoSize": "64px",
+                "logoUrl": "/img/favicon128.png",
+                "pageNameSeparator": "|",
+                "showPageName": true,
+                "showTitle": true,
+                "titleSize": "2rem"
+            },
+            "height": "160px",
+            "noscroll": true,
+            "parameters": {
+                "parametersIncluded": ["datetime", "date", "time"],
+                "showParameters": true
+            },
+            "theme": "lightborderless",
+            "widget": "header"
+        }, {
+            "dataSource": "uscrime-types",
+            "filters": {
+                "x": "y"
+            },
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "layout": {},
+            "noData": "No Data",
+            "widget": "chart"
+        }]
+    }, {
+        "frequency": 1,
+        "layout": {
+            "gridColumns": 5,
+            "gridRows": 1,
+            "gutter": 10,
+            "margin": 10
+        },
+        "name": "Side Header",
+        "theme": "light",
+        "widgets": [{
+            "allowFullscreen": false,
+            "gridHeight": 1,
+            "gridWidth": 1,
+            "headerTitle": {
+                "link": "http://cyclotron.io",
+                "logoSize": "48px",
+                "logoUrl": "/img/favicon128.png",
+                "pageNameSeparator": "|",
+                "showPageName": false,
+                "showTitle": true,
+                "titleSize": "1.5rem"
+            },
+            "parameters": {
+                "showParameters": true
+            },
+            "theme": "light",
+            "title": "Side Header",
+            "widget": "header"
+        }, {
+            "dataSource": "uscrime-filtered",
+            "gridHeight": 1,
+            "gridWidth": 4,
+            "highchart": {
+                "series": [{
+                    "x": "Year",
+                    "y": "*"
+                }],
+                "xAxis": [{
+                    "type": "linear"
+                }],
+                "yAxis": [{
+                    "title": {
+                        "text": "Values"
+                    }
+                }]
+            },
+            "title": "US Crime Over Time",
+            "widget": "chart"
         }]
     }],
-    "parameters": [],
-    "theme": "dark"
+    "parameters": [{
+        "changeEvent": "e = function(parameterName, value, oldValue) {\n    // Re-execute the Data Source whenever the value changes\n    if (Cyclotron.dataSources['uscrime-filtered']) {\n        Cyclotron.dataSources['uscrime-filtered'].execute(true);\n    }\n}",
+        "defaultValue": "Burglary",
+        "editInHeader": true,
+        "editing": {
+            "dataSource": "uscrime-types",
+            "displayName": "Selected Crime",
+            "editorType": "dropdown"
+        },
+        "name": "selectedCrime"
+    }, {
+        "changeEvent": "e = function(parameterName, value, oldValue) {\n    // Re-execute the Data Source whenever the value changes\n    if (Cyclotron.dataSources['uscrime-filtered']) {\n        Cyclotron.dataSources['uscrime-filtered'].execute(true);\n    }\n}",
+        "defaultValue": "Burglary",
+        "editInHeader": true,
+        "editing": {
+            "dataSource": "uscrime-types",
+            "displayName": "Selected Crime",
+            "editorType": "links"
+        },
+        "name": "selectedCrimeLinks"
+    }, {
+        "changeEvent": "e = function(parameterName, value, oldValue) {\n    // Re-execute the Data Source whenever the value changes\n    if (Cyclotron.dataSources['uscrime-filtered']) {\n        Cyclotron.dataSources['uscrime-filtered'].execute(true);\n    }\n}",
+        "defaultValue": "${true}",
+        "editInHeader": true,
+        "editing": {
+            "displayName": "Show Total Crimes",
+            "editorType": "checkbox"
+        },
+        "name": "showTotal"
+    }, {
+        "defaultValue": "${moment()}",
+        "editInHeader": true,
+        "editing": {
+            "displayName": "Date/Time",
+            "editorType": "datetime"
+        },
+        "name": "datetime"
+    }, {
+        "defaultValue": "2016-06-08",
+        "editInHeader": true,
+        "editing": {
+            "displayName": "Date",
+            "editorType": "date"
+        },
+        "name": "date"
+    }, {
+        "defaultValue": "15:30",
+        "editInHeader": true,
+        "editing": {
+            "displayName": "Time",
+            "editorType": "time"
+        },
+        "name": "time"
+    }],
+    "scripts": [],
+    "theme": "lightborderless"
 }

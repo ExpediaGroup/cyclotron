@@ -33,6 +33,7 @@
             "dataSource": "mock",
             "gridHeight": null,
             "gridWidth": null,
+            "helpText": "Basic chart with minimal configuration",
             "highchart": {
                 "series": [{
                     "x": "__index",
@@ -45,6 +46,7 @@
             "dataSource": "mock",
             "gridHeight": null,
             "gridWidth": null,
+            "helpText": "Advanced configuration for a chart",
             "highchart": {
                 "chart": {
                     "style": {
@@ -113,6 +115,7 @@
             "dataSource": "timeseries",
             "gridHeight": null,
             "gridWidth": null,
+            "helpText": "Example of using a \"datetime\" x-axis",
             "highchart": {
                 "series": [{
                     "x": "_time",
@@ -132,6 +135,7 @@
             "dataSource": "timeseries2",
             "gridHeight": null,
             "gridWidth": null,
+            "helpText": "This chart uses two y-axes to display two series with different data ranges side-by-side",
             "highchart": {
                 "series": [{
                     "x": "date",
@@ -167,6 +171,7 @@
             "dataSource": "timeseries2",
             "gridHeight": null,
             "gridWidth": null,
+            "helpText": "Example of both columns and a line, using dual y-axes",
             "highchart": {
                 "series": [{
                     "type": "column",
@@ -202,6 +207,7 @@
             "dataSource": "timeseries2",
             "gridHeight": null,
             "gridWidth": null,
+            "helpText": "Example of both an area and a line, using dual y-axes",
             "highchart": {
                 "series": [{
                     "type": "area",

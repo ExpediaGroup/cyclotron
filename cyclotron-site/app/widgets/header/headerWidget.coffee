@@ -32,3 +32,24 @@ cyclotronApp.controller 'HeaderWidget', ($scope, $sce, configService) ->
 
         $scope.customHtml = ->
             $sce.trustAsHtml _.jsExec($scope.widget.customHtml)
+
+    $scope.showParameters = $scope.widget.parameters?.showParameters == true
+
+    # If Parameters are show in the Widget...
+    if $scope.showParameters
+        $scope.showUpdateButton = $scope.widget.parameters.showUpdateButton
+        $scope.updateButtonLabel = $scope.widget.parameters.updateButtonLabel || 'Update'
+
+        $scope.parameters = _.filter $scope.dashboard.parameters, { editInHeader: true }
+
+        # Filter further using the Widget's parametersIncluded property
+        if _.isArray($scope.widget.parameters.parametersIncluded) and $scope.widget.parameters.parametersIncluded.length > 0
+            $scope.parameters = _.filter $scope.parameters, (param) ->
+                _.contains $scope.widget.parameters.parametersIncluded, param.name
+
+        updateEventHandler = _.jsEval $scope.widget.parameters.updateEvent
+        if !_.isFunction(updateEventHandler) then updateEventHandler = null
+
+        $scope.updateButtonClick = ->
+            updateEventHandler() unless _.isNull updateEventHandler
+            

@@ -2,7 +2,7 @@ h3 Header Widget
 p.
     The Header Widget is useful for generating a header at the top of a Dashboard.  It has various properties for generating common header features, as well as allowing for additional HTML content
 p.
-    Since this is a Widget, it must be copied onto each page individually.  However this can be beneficial if differences are desired between the pages.
+    Since this is a Widget, it won't appear automatically on every page, but rather must be copied onto each page individually.  One benefit of this is that it allows for configuration differences between pages.
 
 h4 Sizing
 p
@@ -10,6 +10,32 @@ p
     em  layout.gridHeightAdjustment
     |  property for the Page.  This property should be set to the negative header height, minus the gutter. This 
     | will allow the header height to be fixed while the other Widgets scale to match the browser.
+
+h4 Parameters
+p
+    | The Header Widget has integrated support for editing selected Dashboard Parameters. In order to enable this feature, the Header Widget must have the 
+    em  parameters.showParameters
+    |  property set to true; additionally at least one Parameter must have the 
+    em  editInHeader
+    |  property set to true (defaults to false).
+
+p
+    | There are two approaches to trigger updates for changing Parameters. The first is to add a JavaScript event handler to each Parameter's 
+    em  changeEvent
+    |  property. This event is fired whenever the Parameter is changed, either programmatically or via the Header Widget.  The second approach is to enable 
+    em  parameters.showUpdateButton
+    | , which appears after the Parameters in the Header. It has a corresponding event handler,
+    em  parameters.updateEvent
+    | , which fires after being clicked. Implementing this event handler supports the pattern of allowing the user to make multiple changes to Parameters, and click a button to apply the changes. 
+
+p The 
+    em  parameters.updateEvent
+    |  expects a JavaScript function in the following form:
+
+pre.code.
+    function () {
+        // event handler
+    }
 
 h4 Properties
 p.

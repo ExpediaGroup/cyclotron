@@ -1,3 +1,17 @@
+# 1.35.0 (07/21/2016)
+
+## Features
+
+ - Header Widget: Added built-in Parameter editing to the Header Widget, standardizing a common use-case for many Dashboards. Supports editing via textbox, checkbox, dropdown, list of links, datetime, date, or time. Dropdowns or link lists can be populating using results from a Data Source.  Datetime/date/time types feature a UI date time picker, or can be edited manually.
+
+ - Widget Help Tooltips: Added new, optional help text to each Widget, which appears in a tooltip over a question mark icon in the top-right corner of the Widget. Useful to provide users some context or more information about the data being displayed.
+
+ - Upgraded Modernizer to 3.3.1 and tweaked feature selection.
+
+## Bug Fixes
+
+ - Fixed issues with Incompatible Browser message appearing in Chrome when zooming in.
+
 # 1.34.0 (07/07/2016)
 
 ## Features

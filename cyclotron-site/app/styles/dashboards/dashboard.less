@@ -133,21 +133,37 @@
             top: 0;
             width: 100%;
         }
-
-        .widget-fullscreen {
-            position: absolute;
-            right: 4px;
-            top: 4px;
-            opacity: .4;
-            cursor: pointer;
-            z-index: 1000;
-            .user-select(none);
-        }
     }
 
     .dashboard-widgetwrapper {
         float: left;
         background: none;
+
+        > i {
+            position: absolute;
+            top: 4px;
+            cursor: pointer;
+            z-index: 1000;
+            .user-select(none);
+
+            opacity: 0.4;
+            &:hover {
+                opacity: 0.7;
+            }
+        }
+        > i.widget-fullscreen {
+            right: 4px;
+        }
+
+        > i.widget-helptext {
+            right: 24px;
+        }
+
+        > .tooltip {
+            .tooltip-arrow {
+                right: 1px !important;
+            }
+        }
 
         > .dashboard-widget {
             .box-sizing(border-box);
@@ -171,6 +187,14 @@
                     @media only screen and (max-width: 1024px) { font-size: 2.5em; line-height: 1.3em; } 
                     @media only screen and (max-width: 600px) { font-size: 2.0em; line-height: 1.3em; } 
                 }
+
+                i.fa.fa-question-circle {
+                    opacity: 0.7;
+                    &:hover {
+                        opacity: 1;
+                    }
+                }
+                
             }
 
             /* Center in the middle of the widget */

@@ -1,42 +1,81 @@
 h3 Parameters
 
-p The 
-    em parameters 
-    | property is an optional list of Parameters that can be used to configure the Dashboard.  Each item in the array 
-    | defines a Parameter by name.  Each Parameter can have a 
-    em defaultValue 
-    | provided as well.
+p Cyclotron provides support for Parameters, which are optionally-defined values used to configure the Dashboard. They can be used almost everywhere in Cyclotron, from Data Sources to Widgets, etc. Parameters should be used for values that can be modified while viewing the Dashboard, but are also convenient for constant values used in many places in a Dashboard, like connection information or a server name.
 
-pre.code.
-    "parameters": [{
-        "name": "numberOfHours"
-        "defaultValue": 4
-    }]
+strong Benefits of using Parameters
+
+ul
+    li Centralized configuration, making it easy to change configuration which might be repeated in multiple Data Sources or Widgets
+    li Automatic URL synchronization
+    li Persistent value across sessions
+    li Built-in editor in the Header Widget
+
+p These features are all optional per Parameter, so you can store both user-facing and internal configuration in Parameters.
 
 h4 Parameters in the URL
 
-p Parameters can be set when loading the Dashboard by using URL query parameters.  Here is an example that sets two Parameters via the URL:
+p By default, Parameters are synchronized to/from the URL automatically. That is, Parameters can be loaded from the URL query string when loading a Dashboard, and any changes to the Parameters will be reflected back to the URL. This allows a user to copy and share the current URL, including the current configuration.
+
+p Here is an example that sets two Parameters via the URL:
 
 pre.code.
     http://cyclotron/MyDashboard?numberOfHours=8&amp;includeFailures=true
 
-p If any Parameters are modified by the Dashboard, the URL will be automatically updated with the new values.
+p The URL contains two Parameters, 
+    em  numberOfHours
+    |  and
+    em  includeFailures
+    | , both of which will be initialized when the Dashboard opens.  Any query string parameters will be loaded automatically into Cyclotron, even if they are not defined in the Dashboard configuration.
 
-p All Parameters appear in the URL by default, but this can be disabled for individual Parameters by setting
+p If any Parameters are modified by the Dashboard (e.g. by JavaScript), the URL will be automatically updated with the new, non-default values.  If a Parameter has a 
+    em  defaultValue
+    | , it will only appear in the URL when it has a non-default value.
+
+p URL synchronization can be disabled for individual Parameters by setting
     em  showInURL
     |  to false.  It is still possible to set these Parameters via the URL on load, but they will be automatically stripped from the URL after loading.
 
 h4 Persistent Parameters
 
-p Persistent Parameters retain their value across multiple sessions of viewing a Dashboard.  This is enabled by setting 
+p Persistent Parameters retain their value across multiple sessions of viewing a Dashboard with the same browser. This is disabled by default, but can be enabled by setting 
     em  persistent
     |  to true.  Once enabled, any changes to the Parameter will be immediately cached in the browser, and reloaded upon subsequent visits to the same dashboard.  Persistent Parameters are stored by name, per Dashboard.
+
+p Parameters are not stored server-side, so they will not persist across different browsers, devices, or after clearing browsing data.
 
 p Cyclotron attempts to load Parameters in the following order: 
 ol
     li All URL query string parameters are loaded
     li Persistent Parameters which are not yet set will have their value retrieved from cache (if possible)
     li Parameters which are not yet set will have be assigned a default value (if exists)
+
+h4 Change Event
+
+p Each Parameter has an optional 
+    em  changeEvent
+    |  property that, if defined, runs a custom JavaScript function whenever the value of the Parameter changes. It doesn't run upon initialization of the Dashboard, but only if the value is changed subsequently.
+
+p The property expects a JavaScript function in the following form:
+pre.code.
+    function(parameterName, newValue, oldValue) {
+        // event handler
+    }
+
+h4 Editing via the Header Widget
+
+p The Header Widget has built-in support for modifying the value of Parameters while viewing a Dashboard. Each enabled Parameter will appear in the Header Widget with the current value, and users viewing the Dashboard can edit the Parameters' values using various editor types (e.g. textbox, checkbox, dropdown, datetime, etc.). Properties under the 
+    em  editing
+    |  property set can determine how the Parameter is displayed and edited.
+
+p In order to enable this feature, the Header Widget must have the 
+    em  parameters.showParameters
+    |  property set to true; additionally at least one Parameter must have the 
+    em  editInHeader
+    |  property set to true (defaults to false). This feature is opt-in for each Parameter.
+
+p The Header Widget can also display a button for applying Parameter changes, with an event handler property that runs a JavaScript method whenever the user clicks on the button. Alternately, each Parameter can have the 
+    em  changeEvent
+    |  property set, as described above.
 
 h4 JavaScript API
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015 the original author or authors.
+ * Copyright (c) 2013-2016 the original author or authors.
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License. 
@@ -21,13 +21,15 @@
 
 /* Variables */
 @color: black;
+@linkColor: #081F79;
+@headerColor: white;
+@tableRowHoverBackgroundColor: #efefef;
+@tableBorderColor: #555;
+
 @pageBackgroundColor: white;
 @widgetBackgroundColor: white;
-
-@linkColor: #081F79;
-@accentColor: #efefef;
-@headerColor: white;
-@tableBorderColor: #555;
+@widgetBackgroundAccentColor: @tableRowHoverBackgroundColor;
+@widgetBackgroundAccentBorderColor: darken(@widgetBackgroundAccentColor, 10%);
 
 /* Dashboard Styles */
 .dashboard.dashboard-light {
@@ -52,10 +54,7 @@
         .dashboard-light.dashboard-widgetwrapper > .dashboard-widget {
             .rounded(4px);
             padding: 10px;
-            -moz-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 6px 0px;
-            -webkit-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 6px 0px;
-            -o-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 6px 0px;
-            box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 1px 1px 6px 0px;
+            .box-shadow(1px 1px 6px 0 rgba(0, 0, 0, 0.8));
         }
     }
 
@@ -112,5 +111,11 @@
     /* Extra styles */
     .table-widget table th {
         font-style: italic;
+    }
+
+    .header-widget .parameters {
+        .header-parameter, button {
+            .rounded(4px);
+        }
     }
 }

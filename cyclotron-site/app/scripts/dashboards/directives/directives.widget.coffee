@@ -101,6 +101,11 @@ cyclotronDirectives.directive 'widget', ($compile, $sce, $window, layoutService)
                 $element.height scope.widgetHeight
                 $element.css 'display', 'block'
 
+                if scope.widgetWidth < scope.widgetHeight
+                    $element.addClass 'widget-skinny'
+                else
+                    $element.removeClass 'widget-skinny'
+
                 # Set gutter padding (other sides are handled by masonry)    
                 $element.css 'margin-bottom', layout.gutter
 
@@ -157,7 +162,11 @@ cyclotronDirectives.directive 'widget', ($compile, $sce, $window, layoutService)
                 template = '<div class="dashboard-widget ' + newValue.style + noscrollClass + '" ng-include="\'/widgets/' + newValue.widget + '/' + newValue.widget + '.html\'"></div>'
 
                 if widget.allowFullscreen != false
-                    template = '<i class="widget-fullscreen fa fa-arrows-alt" title="Click to view fullscreen"></i>' + template
+                    template = '<i class="widget-fullscreen fa fa-expand" title="Click to view fullscreen"></i>' + template
+
+                if widget.helpText?
+                    scope.helpText = _.jsExec widget.helpText
+                    template = '<i class="widget-helptext fa fa-question-circle" uib-tooltip="{{ helpText }}" tooltip-placement="auto-right" tooltip-trigger="outsideClick"></i>' + template
 
                 compiledValue = $compile(template)(scope)
 

@@ -30,7 +30,7 @@
 
         .well.well-sm(ng-switch-when='propertyset')
             div.recursive
-                .editor-property-set(model='model[value.name]', definition='value.properties')
+                .editor-property-set(dashboard='dashboard', model='model[value.name]', definition='value.properties')
 
         .well.well-sm(ng-switch-when='propertyset[]')
             div.recursive

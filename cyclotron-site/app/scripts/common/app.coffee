@@ -83,6 +83,7 @@ cyclotronApp.config ($stateProvider, $urlRouterProvider, $locationProvider, $con
     lazyLoad = (jsDependencies, cssDependencies) ->
         ['$q', '$rootScope', ($q, $rootScope) ->
             deferred = $q.defer()
+            cyclotronApp.loadedScripts ?= []
 
             # Load stylesheets
             if cssDependencies?

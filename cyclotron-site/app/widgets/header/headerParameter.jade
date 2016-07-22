@@ -1,0 +1,25 @@
+.parameter(ng-switch='parameter.editorType')
+    div(ng-switch-when='dropdown')
+        label {{ parameter.displayName }}: 
+            select(ng-hide='loading', ng-model='parameter.value', ng-change='updateParameter()', ng-options='item.value as item.name for item in dataSourceData')
+            i.fa.fa-cog.fa-spin(ng-show='loading')
+    div.links(ng-switch-when='links')
+        label {{ parameter.displayName }}: 
+        a.btn.btn-link(ng-hide='loading', ng-repeat='item in dataSourceData', ng-click='selectValue(item.value)', ng-class='{selected: parameter.value == item.value}') {{ item.name }}
+        i.fa.fa-cog.fa-spin(ng-show='loading')
+    div(ng-switch-when='checkbox')
+        label 
+            input(type='checkbox', ng-model='parameter.value', ng-change='updateParameter()')
+            |  {{ parameter.displayName }}
+    div(ng-switch-when='datetime')
+        label {{ parameter.displayName }}: 
+            span(datetimepicker, options='parameter.datetimeOptions', ng-model='parameter.value', ng-change='updateParameter()')
+    div(ng-switch-when='date')
+        label {{ parameter.displayName }}: 
+            span(datetimepicker, options='parameter.datetimeOptions', ng-model='parameter.value', ng-change='updateParameter()')
+    div(ng-switch-when='time')
+        label {{ parameter.displayName }}: 
+            span(datetimepicker, options='parameter.datetimeOptions', ng-model='parameter.value', ng-change='updateParameter()')
+    div(ng-switch-default)
+        label {{ parameter.displayName }}: 
+            input(type='text', ng-model='parameter.value', ng-blur='updateParameter()')

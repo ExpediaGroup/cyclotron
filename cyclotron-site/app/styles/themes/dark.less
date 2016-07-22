@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015 the original author or authors.
+ * Copyright (c) 2013-2016 the original author or authors.
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License. 
@@ -23,10 +23,12 @@
 @color: #D1D1D1;
 @pageBackgroundColor: #2f2f2f;
 @widgetBackgroundColor: #202020;
+@widgetBackgroundAccentColor: @pageBackgroundColor;
+@widgetBackgroundAccentBorderColor: lighten(@widgetBackgroundAccentColor, 10%);
 
 @linkColor: lighten(@color, 15%);
-@accentColor: lighten(@widgetBackgroundColor, 20%);
 @headerColor: #202020;
+@tableRowHoverBackgroundColor: lighten(@widgetBackgroundColor, 20%);
 @tableBorderColor: #ccc;
 
 /* Dashboard Styles */
@@ -76,30 +78,44 @@
 }
 
 /* Widget styles */
-.dashboard-dark.dashboard-widgetwrapper > .dashboard-widget {
+.dashboard-dark.dashboard-widgetwrapper {
 
-    color: @color;
-    background-color: @widgetBackgroundColor;
-
-    h1,h2,h3,h4,h5,h6 {
-        color: White;
+    > .tooltip {
+        .tooltip-inner {
+            background-color: @pageBackgroundColor;
+            color: @color;
+        }
+        .tooltip-arrow {
+            border-top-color: @pageBackgroundColor;
+            border-bottom-color: @pageBackgroundColor;
+        }
     }
 
-    button,
-    input,
-    optgroup,
-    select,
-    textarea {
-        color: black;
-    }
+    > .dashboard-widget {
 
-    a {
-        color: @linkColor;
-        text-decoration: none;
-        border-bottom: 1px dotted #888;
+        color: @color;
+        background-color: @widgetBackgroundColor;
 
-        &:hover {
-            color: lighten(@color, 30%);
+        h1,h2,h3,h4,h5,h6 {
+            color: White;
+        }
+
+        button,
+        input,
+        optgroup,
+        select,
+        textarea {
+            color: black;
+        }
+
+        a {
+            color: @linkColor;
+            text-decoration: none;
+            border-bottom: 1px dotted #888;
+
+            &:hover {
+                color: lighten(@color, 30%);
+            }
         }
     }
 }
@@ -131,7 +147,26 @@
     @import "../../widgets/youtube/_youtube.less";
 
     /* Extra styles */
+    h1.title {
+        > .tooltip {
+            .tooltip-inner {
+                background-color: @pageBackgroundColor;
+                color: @color;
+            }
+            .tooltip-arrow {
+                border-top-color: @pageBackgroundColor;
+                border-bottom-color: @pageBackgroundColor;
+            }
+        }
+    }
+
     .table-widget table th {
         font-style: italic;
+    }
+
+    .header-widget .parameters {
+        .header-parameter, button {
+            .rounded(4px);
+        }
     }
 }

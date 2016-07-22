@@ -250,6 +250,11 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $localFora
                 deeplinkOptions[key] = value
                 exportOptions[key] = value 
 
+            if parameterDefinition? and not _.isEqual value, oldParameters[key]
+                changeHandler = _.jsEval parameterDefinition.changeEvent
+                if _.isFunction changeHandler
+                    changeHandler key, value, oldParameters[key]
+
             return
 
         # Create export options from non-default parameters

@@ -26,7 +26,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
     exports = {
 
-        version: '1.34.0'
+        version: '1.35.0'
 
         logging: 
             enableDebug: false
@@ -360,54 +360,6 @@ cyclotronServices.factory 'commonConfigService', ->
                                     default: '1'
                                     required: false
                                     order: 101
-                                theme:
-                                    label: 'Theme'
-                                    description: 'If set, overrides the Page theme and allows a widget to have a different theme from the rest of the Page and Widgets.'
-                                    type: 'string'
-                                    inherit: true
-                                    required: false
-                                    defaultHidden: true
-                                    order: 102
-                                noData:
-                                    label: 'No Data Message'
-                                    description: 'If set, displays this message in the Widget when no data is loaded from the Data Source. If not set, no message will be displayed'
-                                    type: 'string'
-                                    inlineJs: true
-                                    required: false
-                                    defaultHidden: true
-                                    order: 103
-                                noscroll: 
-                                    label: 'No Scroll'
-                                    description: 'If set to true, the widget will not have scrollbars and any overflow will be hidden. The effect of this setting varies per widget.'
-                                    type: 'boolean'
-                                    default: false
-                                    required: false
-                                    defaultHidden: true
-                                    order: 104
-                                allowFullscreen:
-                                    label: 'Allow Fullscreen'
-                                    description: 'If true, the Widget can be maximized to fill the entire Dashboard; if false, the ability to view in fullscreen is disabled. This property overrides the Page setting.'
-                                    type: 'boolean'
-                                    inherit: true
-                                    required: false
-                                    defaultHidden: true
-                                    order: 105
-                                showWidgetErrors:
-                                    label: 'Show Error Messages on Widgets'
-                                    description: 'If true, allows error messages to be displayed on Widgets. This property overrides the Page setting.'
-                                    type: 'boolean'
-                                    required: false
-                                    inherit: true
-                                    defaultHidden: true
-                                    order: 106
-                                hidden:
-                                    label: 'Hidden'
-                                    description: 'If true, the Widget will not be displayed in the Dashboard and will not occupy space in the Layout rendering. The Widget will still be initialized, however.'
-                                    type: 'boolean'
-                                    default: false
-                                    required: false
-                                    defaultHidden: true
-                                    order: 107
                                 height: 
                                     label: 'Height'
                                     description: 'If set, specifies the absolute display height of the widget. Any valid CSS value can be used (e.g. "200px", "40%", etc).'
@@ -415,6 +367,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     type: 'string'
                                     required: false
                                     defaultHidden: true
+                                    order: 102
                                 width:
                                     label: 'Width'
                                     description: 'If set, specifies the absolute display width of the widget. Any valid CSS value can be used (e.g. "200px", "40%", etc).'
@@ -422,7 +375,63 @@ cyclotronServices.factory 'commonConfigService', ->
                                     type: 'string'
                                     required: false
                                     defaultHidden: true
-
+                                    order: 103
+                                helpText:
+                                    label: 'Help Text'
+                                    description: 'Provides an optional help text for the Widget, available via a help icon in the corner of the Widget.'
+                                    type: 'string'
+                                    required: false
+                                    inlineJs: true
+                                    defaultHidden: true
+                                    order: 109
+                                theme:
+                                    label: 'Theme'
+                                    description: 'If set, overrides the Page theme and allows a widget to have a different theme from the rest of the Page and Widgets.'
+                                    type: 'string'
+                                    inherit: true
+                                    required: false
+                                    defaultHidden: true
+                                    order: 110
+                                noData:
+                                    label: 'No Data Message'
+                                    description: 'If set, displays this message in the Widget when no data is loaded from the Data Source. If not set, no message will be displayed'
+                                    type: 'string'
+                                    inlineJs: true
+                                    required: false
+                                    defaultHidden: true
+                                    order: 111
+                                noscroll: 
+                                    label: 'No Scroll'
+                                    description: 'If set to true, the widget will not have scrollbars and any overflow will be hidden. The effect of this setting varies per widget.'
+                                    type: 'boolean'
+                                    default: false
+                                    required: false
+                                    defaultHidden: true
+                                    order: 112
+                                allowFullscreen:
+                                    label: 'Allow Fullscreen'
+                                    description: 'If true, the Widget can be maximized to fill the entire Dashboard; if false, the ability to view in fullscreen is disabled. This property overrides the Page setting.'
+                                    type: 'boolean'
+                                    inherit: true
+                                    required: false
+                                    defaultHidden: true
+                                    order: 113
+                                showWidgetErrors:
+                                    label: 'Show Error Messages on Widgets'
+                                    description: 'If true, allows error messages to be displayed on Widgets. This property overrides the Page setting.'
+                                    type: 'boolean'
+                                    required: false
+                                    inherit: true
+                                    defaultHidden: true
+                                    order: 114
+                                hidden:
+                                    label: 'Hidden'
+                                    description: 'If true, the Widget will not be displayed in the Dashboard and will not occupy space in the Layout rendering. The Widget will still be initialized, however.'
+                                    type: 'boolean'
+                                    default: false
+                                    required: false
+                                    defaultHidden: true
+                                    order: 115
                             order: 3
                         duration:
                             label: 'Auto-Rotate Duration (seconds)'
@@ -1034,13 +1043,82 @@ cyclotronServices.factory 'commonConfigService', ->
                             default: true
                             required: false
                             order: 2
+                        editInHeader:
+                            label: 'Editable in Header'
+                            description: 'If true, the Parameter will be displayed and configurable in the Parameter section of the Header Widget (if used).'
+                            type: 'boolean'
+                            default: false
+                            required: false
+                            order: 3
                         persistent:
                             label: 'Persistent'
                             description: 'If true, the value of this Parameter will be persisted in the user\'s browser across multiple sessions.'
                             type: 'boolean'
                             default: false
                             required: false
-                            order: 3
+                            order: 4
+                        changeEvent:
+                            label: 'Change Event'
+                            description: 'This event occurs when the Parameter value is modified. It does not fire when the Dashboard is being initialized. Expects a JavaScript function in the form function(parameterName, newValue, oldValue).'
+                            type: 'editor'
+                            editorMode: 'javascript'
+                            required: false
+                            defaultHidden: true
+                            order: 10
+                        editing:
+                            label: 'Editing'
+                            description: 'Configuration for how this Parameter can be edited in the Dashboard.'
+                            type: 'propertyset'
+                            required: false
+                            default: {}
+                            defaultHidden: true
+                            order: 15
+                            properties:
+                                displayName:
+                                    label: 'Display Name'
+                                    description: 'The display name used for this Parameter.'
+                                    type: 'string'
+                                    required: false
+                                    placeholder: 'Display Name'
+                                    order: 1
+                                editorType:
+                                    label: 'Editor Type'
+                                    description: 'Determines the type of editor used to configured this Parameter (e.g. in the Header Widget).'
+                                    type: 'string'
+                                    required: false
+                                    default: 'textbox'
+                                    order: 2
+                                    options: 
+                                        textbox:
+                                            value: 'textbox'
+                                        dropdown:
+                                            value: 'dropdown'
+                                        links:
+                                            value: 'links'
+                                        checkbox:
+                                            value: 'checkbox'
+                                        datetime:
+                                            value: 'datetime'
+                                        date:
+                                            value: 'date'
+                                        time:
+                                            value: 'time'
+                                dataSource:
+                                    label: 'Data Source'
+                                    description: 'Optionally specifies a Data Source providing dropdown options for this Parameter.'
+                                    placeholder: 'Data Source name'
+                                    type: 'string'
+                                    required: false
+                                    options: datasourceOptions
+                                    order: 4
+                                datetimeFormat:
+                                    label: 'Date/Time Format'
+                                    description: 'The Moment.js-compatible date/time format string used to read/write datetimes to this Parameter. Only used if the editor type is "datetime", "date", or "time".  Defaults to an ISO 8601 format.'
+                                    type: 'string'
+                                    required: false
+                                    placeholder: 'Format'
+                                    defaultHidden: true
+                                    order: 5
                     sample:
                         name: ''
                         defaultValue: ''
@@ -2249,6 +2327,51 @@ cyclotronServices.factory 'commonConfigService', ->
                                 required: false
                                 inlineJs: true
                                 order: 20
+                    
+                    parameters:
+                        label: 'Parameters'
+                        description: 'Contains properties for displaying Dashboard Parameters in the header.'
+                        type: 'propertyset'
+                        order: 20
+                        properties:
+                            showParameters:
+                                label: 'Show Parameters'
+                                description: 'Determines whether Parameters will be shown.'
+                                type: 'boolean'
+                                default: false
+                                required: false
+                                inlineJs: true
+                                order: 1
+                            showUpdateButton:
+                                label: 'Show Update Button'
+                                description: 'If true, an "Update" button will be displayed after the Parameters. The updateEvent property must be used to apply an action to the button click event, else nothing will happen.'
+                                type: 'boolean'
+                                default: false
+                                required: false
+                                order: 2
+                            updateButtonLabel:
+                                label: 'Update Button Label'
+                                description: 'Customizes the label for the Update button, if shown.'
+                                type: 'string'
+                                default: 'Update'
+                                defaultHidden: true
+                                required: false
+                                order: 2
+                            updateEvent:
+                                label: 'Update Button Click Event'
+                                description: 'This event occurs when the Update button is clicked, if shown.'
+                                type: 'editor'
+                                editorMode: 'javascript'
+                                required: false
+                                order: 10
+                            parametersIncluded:
+                                label: 'Included Parameters'
+                                description: 'Optionally specifies an array of Parameter names, limiting the Header to only displaying the specified Parameters. This does not override the editInHeader property of each Parameter, which needs to be set true to appear in the Header.'
+                                type: 'string[]'
+                                required: false
+                                defaultHidden: true
+                                order: 11
+                        
                     customHtml:
                         label: 'HTML Content'
                         description: 'Provides additional HTML content to be displayed in the header.  This can be used to customize the header display.'
@@ -2256,7 +2379,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         editorMode: 'html'
                         required: false
                         inlineJs: true
-                        order: 11
+                        order: 30
             html:
                 name: 'html'
                 icon: 'fa-html5'

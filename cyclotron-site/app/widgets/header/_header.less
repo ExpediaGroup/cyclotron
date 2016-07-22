@@ -22,9 +22,14 @@
         a { 
             color: unset;
             text-decoration: none;
+            border-bottom: none;
             cursor: unset;
+
             &.actionable {
                 cursor: pointer
+            }
+            h1 {
+                display: inline-block;
             }
         }
 
@@ -40,6 +45,82 @@
         .page-name {
             color: @lighterText;
             font-size: 80%;
+        }
+    }
+
+    .parameters {
+        &:first-child {
+            // Prevent top margin when parameters is the first element in the header.
+            margin-top: -0.5rem;
+        }
+
+        .header-parameter {
+            float: left;
+            display: inline-block;
+            margin-right: 0.5rem;
+            margin-top: 0.5rem;
+            padding: 0.75rem;
+            
+            i.fa.fa-cog {
+                margin-left: 0.5rem;
+            }
+
+            label {
+                font-weight: 400;
+                margin-bottom: 0;
+            }
+
+            input {
+                margin: 0; padding: 0;
+            }
+            input[type="checkbox"] {
+                margin: 5px 0;
+            }
+            select {
+                margin: 2px 0;
+            }
+
+            background-color: @widgetBackgroundAccentColor;
+            border: 1px solid @widgetBackgroundAccentBorderColor;
+
+            .links a.btn {
+                padding: 0;
+                margin-left: 0.5rem;
+                color: @color;
+                &.selected {
+                    color: @accentColor;
+                }
+            }
+        }
+
+        button {
+            float: left;
+            display: inline-block;
+            color: @color;
+            margin: 12px 0;
+            height: 36px;
+            border: 1px solid @widgetBackgroundAccentBorderColor;
+        }
+    }
+
+    .custom-box {
+        clear: both;
+    }
+}
+
+.widget-noscroll .header-widget {
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+// Skinny overrides
+&.widget-skinny {
+    .header-widget {
+        .parameters {
+            .header-parameter {
+                display: block;
+                float: none;
+            }
         }
     }
 }

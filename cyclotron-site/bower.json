@@ -19,7 +19,7 @@
     "angular": "1.4.9",
     "angular-bootstrap": "1.2.4",
     "angular-cookies": "1.4.9",
-    "angular-google-chart": "angular-google-chart#75fdd22",
+    "angular-google-chart": "angular-google-chart#9588ed2",
     "angular-hotkeys": "0.2.2",
     "angular-localForage": "1.2.5",
     "angular-mocks": "1.4.9",
@@ -29,11 +29,12 @@
     "angular-tablesort": "1.1.0",
     "angular-ui-ace": "0.2.3",
     "angular-ui-router": "0.2.14",
-    "angular-ui-select": "0.12.1",
+    "angular-ui-select": "0.18.1",
     "angular-ui-switch": "~0.1.1",
     "bowser": "1.0.0",
     "c3": "0.4.10",
     "d3": "3.5.6",
+    "datetimepicker": "~2.5.4",
     "fontawesome": "4.3.0",
     "highcharts-release": "4.2.0",
     "jquery": "2.1.4",
@@ -60,7 +61,9 @@
     "uri.js": "1.15.1"
   },
   "resolutions": {
-    "d3": "3.5.6"
+    "d3": "3.5.6",
+    "angular": "1.4.9",
+    "datetimepicker": "~2.5.4"
   },
   "overrides": {
     "ace-builds": {
@@ -125,6 +128,7 @@
     "lato": {
       "main": [
         "./css/lato.css",
+        "./font/lato-bold/*",
         "./font/lato-light/*",
         "./font/lato-lightitalic/*"
       ]
