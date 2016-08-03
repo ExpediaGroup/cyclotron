@@ -25,8 +25,6 @@ cyclotronApp.controller 'TreemapWidget', ($scope, dashboardService, dataService)
 
     $scope.legendHeight = $scope.widget.legendHeight || 30
 
-    $scope.widgetTitle = -> _.jsExec($scope.widget.title)
-
     $scope.reload = ->
         $scope.dataSource.execute(true)
 

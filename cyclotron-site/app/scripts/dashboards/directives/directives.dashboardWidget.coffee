@@ -31,14 +31,20 @@ cyclotronDirectives.directive 'dashboardWidget', (layoutService) ->
 
                 return
 
-            scope.$watch('layout', (layout) ->
+            scope.$watch 'layout', (layout) ->
                 return unless layout?
 
                 # Set the border width if overloaded (otherwise keep theme default)
                 if layout.borderWidth?
                     $element.css('border-width', layout.borderWidth + 'px')
 
-            , true)
+            return
+
+        controller: ($scope) ->
+            
+            # Evaluate Title of Widget
+            $scope.widgetTitle = -> _.jsExec $scope.widget.title
 
             return
+
     }

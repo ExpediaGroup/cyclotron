@@ -162,7 +162,7 @@ cyclotronServices.factory 'userService', ($http, $q, $localForage, configService
         promise.success (results) ->
             deferred.resolve(results)
         promise.error (error) ->
-            console.log('UserService error: ' + error)
+            logService.error('UserService error: ' + error)
             deferred.reject()
             
         return deferred.promise

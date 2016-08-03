@@ -27,7 +27,7 @@
 cyclotronDirectives.directive 'dashboardPage', ($compile, $window, $timeout, configService, layoutService, logService) ->
     {
         replace: true
-        restrict: 'A'
+        restrict: 'E'
 
         scope:
             page: '='

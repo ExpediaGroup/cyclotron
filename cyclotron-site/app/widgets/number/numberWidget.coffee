@@ -39,8 +39,6 @@ cyclotronApp.controller 'NumberWidget', ($scope, dashboardService, dataService) 
     if $scope.numberCount <= 4 and $scope.widget.autoSize != false
         $scope.isHorizontal = !$scope.isHorizontal      
 
-    $scope.widgetTitle = -> _.jsExec($scope.widget.title)
-
     $scope.linkTarget = ->
         if $scope.dashboard.openLinksInNewWindow == false then '_self' else '_blank'
 

@@ -1,5 +1,5 @@
 .image-widget(ng-controller='ImageWidget')
-    h1.title(ng-if='widget.title') {{ widgetTitle() }}
+    h1.title(ng-if='::widget.title') {{ widgetTitle() }}
 
     .widget-body
         a(ng-if='link', ng-href='{{ link }}', target='{{ linkTarget() }}')

@@ -24,7 +24,7 @@ cyclotronDirectives.directive 'metricsGraphics', ->
         link: (scope, element) ->
 
             $element = $(element)
-            scope.width = $element.width()
+            chartWidth = $element.width()
 
             # Generate random element ID
             if _.isEmpty $element.prop('id')
@@ -37,7 +37,7 @@ cyclotronDirectives.directive 'metricsGraphics', ->
                 options = 
                     title: null
                     height: 200
-                    width: scope.width
+                    width: chartWidth
                     target: '#' + scope.id
                     data: scope.data
                     interpolate: 'cardinal'
@@ -59,8 +59,7 @@ cyclotronDirectives.directive 'metricsGraphics', ->
                 redraw()
 
             $element.resize _.debounce ->
-                scope.$apply ->
-                    scope.width = $element.width()
-                    redraw()
-            , 90, { leading: false, maxWait: 200 }
+                chartWidth = $element.width()
+                redraw()
+            , 100, { leading: false, maxWait: 300 }
     }

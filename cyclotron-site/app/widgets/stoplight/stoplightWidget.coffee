@@ -25,8 +25,6 @@ cyclotronApp.controller 'StoplightWidget', ($scope, dashboardService, dataServic
 
     $scope.activeColor = null
 
-    $scope.widgetTitle = -> _.jsExec($scope.widget.title)
-
     $scope.evalColors = (row) ->
         rules = $scope.widget.rules
         return unless rules?

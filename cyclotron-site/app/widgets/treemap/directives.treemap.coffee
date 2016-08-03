@@ -392,19 +392,18 @@ cyclotronDirectives.directive 'treemap', ($window) ->
                 display(root)
 
             # Update on window resizing
-            $widgetBody.on 'resize', _.throttle(->
-                scope.$apply ->
-                    # Recalculate dimensions
-                    resize()
-                    initialize(scope.data)
-                    layout(scope.data)
+            $widgetBody.on 'resize', _.debounce ->
+                # Recalculate dimensions
+                resize()
+                initialize(scope.data)
+                layout(scope.data)
 
-                    # Remove last displayed element so it can be redrawn without duplicating
-                    d3.select(_.last(svgInner.selectAll('.depth')[0])).remove()
+                # Remove last displayed element so it can be redrawn without duplicating
+                d3.select(_.last(svgInner.selectAll('.depth')[0])).remove()
 
-                    # Redraw
-                    display(scope.data)
-            , 80)
+                # Redraw
+                display(scope.data)
+            , 100, { leading: false, maxWait: 300 }
 
             #
             # Cleanup

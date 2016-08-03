@@ -37,7 +37,6 @@ cyclotronApp.controller 'JavascriptWidget', ($scope, dashboardService, dataServi
     $scope.data = null
 
     $scope.jsObject = _.executeFunctionByName($scope.widget.functionName, window, $scope.widget)
-    $scope.widgetTitle = -> _.jsExec($scope.widget.title)
 
     $scope.reload = ->
         $scope.dataSource.execute(true)

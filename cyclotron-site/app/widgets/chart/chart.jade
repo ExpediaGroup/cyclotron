@@ -1,5 +1,5 @@
 .chart-widget(ng-controller='ChartWidget')
-    h1.title(ng-if='widget.title') {{ widgetTitle() }}
+    h1.title(ng-if='::widget.title') {{ widgetTitle() }}
 
     .spinjs(ng-if='loading')
     .widget-error(ng-if='dataSourceError == true && !loading')        

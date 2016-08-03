@@ -1,6 +1,5 @@
 
-//- Dashboards
-div.dashboard.dashboard-page-background(ng-class='{ "has-sidebar": dashboard.sidebar.showDashboardSidebar }')
+.dashboard.dashboard-page-background(ng-class='{ "has-sidebar": dashboard.sidebar.showDashboardSidebar }')
 
     .click-cover
 
@@ -16,7 +15,7 @@ div.dashboard.dashboard-page-background(ng-class='{ "has-sidebar": dashboard.sid
         i.fa.fa-chevron-right(ng-click='moveForward()', ng-class='{ disabled: !canMoveForward() }', title='Go to the next page')
 
     .dashboard-pages
-        div(dashboard-page, ng-repeat='page in currentPage',
+        dashboard-page(ng-repeat='page in currentPage',
             dashboard='dashboard', page='page', page-number='{{ currentPageIndex }}', 
             page-overrides='dashboardOverrides.pages[currentPageIndex]')
 

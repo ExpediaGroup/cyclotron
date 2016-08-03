@@ -19,7 +19,7 @@ cyclotronDirectives.directive 'dashboardSidebar', ($timeout, layoutService) ->
         restrict: 'EAC'
         link: (scope, element, attrs) ->
             # Initial position 
-            scope.sidebarExpanded = false
+            isSidebarExpanded = false
             
             $element = $(element)
             $parent = $element.parent()
@@ -31,8 +31,8 @@ cyclotronDirectives.directive 'dashboardSidebar', ($timeout, layoutService) ->
             $expanderIcon = $expander.children 'i'
             $clickCover = $parent.find '.click-cover'
 
-            scope.$watch 'sidebarExpanded', (expanded) ->
-                if expanded
+            updateExpandedState = ->
+                if isSidebarExpanded
                     $element.removeClass 'collapsed'
                     $clickCover.css 'display', 'block'
                     $expanderIcon.removeClass 'fa-caret-right'
@@ -47,21 +47,19 @@ cyclotronDirectives.directive 'dashboardSidebar', ($timeout, layoutService) ->
 
             $hitbox.on 'click', (event) ->
                 event.preventDefault()
-                scope.$apply ->
-                    scope.sidebarExpanded = !scope.sidebarExpanded
+                isSidebarExpanded = !isSidebarExpanded
+                updateExpandedState()
 
             $clickCover.on 'click', (event) ->
                 event.preventDefault()
-                scope.$apply ->
-                    scope.sidebarExpanded = false
+                isSidebarExpanded = false
+                updateExpandedState()
 
             # Resize accordion around header/footer
             sizer = ->
                 $accordion.height($element.outerHeight() - $header.outerHeight() - $footer.outerHeight())
                 
-            $element.on 'resize', _.debounce(-> 
-                scope.$apply sizer
-            , 300, { leading: false, maxWait: 600 })
+            $element.on 'resize', _.debounce sizer, 300, { leading: false, maxWait: 600 }
 
             # Run in 100ms
             timer = $timeout sizer, 100
@@ -76,8 +74,9 @@ cyclotronDirectives.directive 'dashboardSidebar', ($timeout, layoutService) ->
             $scope.footerLogos = configService.dashboardSidebar?.footer?.logos || []
             $scope.widgetVisibilities = []
             $scope.widgetOverrides = []
+            $scope.allWidgetsVisible = false
 
-            $scope.updateVisibility = ->
+            updateVisibility = ->
                 actualWidgets = $scope.currentPage[0]?.widgets
                 $scope.widgetOverrides = $scope.dashboardOverrides?.pages[$scope.currentPageIndex]?.widgets
 
@@ -94,6 +93,9 @@ cyclotronDirectives.directive 'dashboardSidebar', ($timeout, layoutService) ->
                         label: dashboardService.getWidgetName(widget, index)
                         visible: visible
                     }
+
+                visibleWidgets = _.filter($scope.widgetVisibilities, { visible: true }).length
+                $scope.allWidgetsVisible = (visibleWidgets / $scope.widgetVisibilities.length) > 0.5
             
             $scope.changeVisibility = (widget, index) ->
 
@@ -103,14 +105,19 @@ cyclotronDirectives.directive 'dashboardSidebar', ($timeout, layoutService) ->
                     $scope.widgetOverrides[index].hidden = true
                 return
 
-            $scope.$watch 'currentPage', (currentPage) ->
+            $scope.toggleAllWidgets = ->
+                _.each $scope.widgetOverrides, (widget) ->
+                    widget.hidden = $scope.allWidgetsVisible
+                    return
+                return
+
+            $scope.$watchCollection 'currentPage', (currentPage) ->
                 return unless currentPage?.length > 0
-                $scope.updateVisibility()
-            , true
+                updateVisibility()
 
             $scope.$watch 'dashboardOverrides', (dashboardOverrides) ->
                 return unless dashboardOverrides?
-                $scope.updateVisibility()
+                updateVisibility()
             , true
 
     }

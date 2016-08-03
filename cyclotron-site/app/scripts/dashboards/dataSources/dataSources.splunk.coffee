@@ -28,7 +28,7 @@
 #   response is not valid JSON.  This Data Source fixes the response, parses it into a
 #   JSON array, and selects the final result.  All the preview results are ignored.
 #
-cyclotronDataSources.factory 'splunkDataSource', ($q, $http, configService, dataSourceFactory) ->
+cyclotronDataSources.factory 'splunkDataSource', ($q, $http, configService, dataSourceFactory, logService) ->
 
     getSplunkUrl = (options) ->
         # Using 'json_rows' mode since 'json' is not actually valid JSON
@@ -43,9 +43,7 @@ cyclotronDataSources.factory 'splunkDataSource', ($q, $http, configService, data
             .search searchOptions
             .toString()
 
-        console.log uri
         return uri
-
 
     getProxyRequest = (options) ->
         # Format: https://github.com/mikeal/request#requestoptions-callback
@@ -82,7 +80,7 @@ cyclotronDataSources.factory 'splunkDataSource', ($q, $http, configService, data
                 # Select the final result (non-preview)
                 splunkResult = _.find results, { preview: false }
             catch e
-                console.log 'Unexpected response from Splunk: ' + proxyResult.body
+                logService.error 'Unexpected response from Splunk: ' + proxyResult.body
                 splunkResult = null
 
             return errorCallback 'Error retrieving data from Splunk', -1 unless _.isObject splunkResult

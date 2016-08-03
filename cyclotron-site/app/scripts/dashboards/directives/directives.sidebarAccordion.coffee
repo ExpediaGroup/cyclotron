@@ -74,7 +74,7 @@ cyclotronDirectives.directive 'sidebarAccordion', ($sce, $timeout) ->
             sizer = ->
                 scope.accordionHeight = scope.getAccordionHeight()
             
-            $(element).on 'resize', _.throttle(-> 
+            $(element).on 'resize', _.debounce(-> 
                 scope.$apply sizer
             , 100)
 

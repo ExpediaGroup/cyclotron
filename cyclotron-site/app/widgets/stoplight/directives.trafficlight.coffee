@@ -90,11 +90,7 @@ cyclotronDirectives.directive 'trafficlight', ($timeout) ->
                     })
 
             # Update on parent resizing
-            $widgetBody.on 'resize', _.throttle(->
-                scope.$apply ->
-                    sizer()
-            , 50)
-
+            $widgetBody.on 'resize', _.debounce sizer, 100, { leading: false, maxWait: 300 }
             $timeout(sizer, 10)
 
             scope.$watch 'activeColor', (color) ->

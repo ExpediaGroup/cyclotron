@@ -38,20 +38,23 @@ cyclotronDirectives.directive 'highchart', (configService) ->
         link: (scope, element, attrs) ->
             $element = $(element)
             $parent = $element.parent()
+            $title = $parent.children('h1')
+
+            # Reference to Highcharts Chart object
+            highchartsObj = null
 
             resize = ->
                 # Set height
                 parentHeight = $parent.height()
 
-                title = $parent.children('h1')
-                if title.length
-                    $element.height(parentHeight - title.height())
+                if $title.length
+                    $element.height(parentHeight - $title.height())
                 else
                     $element.height(parentHeight)
 
                 # Set highcharts size
-                if scope.chartObj?
-                    scope.chartObj.setSize($parent.width(), $element.height(), false)
+                if highchartsObj?
+                    highchartsObj.setSize($parent.width(), $element.height(), false)
  
             chartDefaults =
                 chart:
@@ -69,12 +72,12 @@ cyclotronDirectives.directive 'highchart', (configService) ->
                 resize()
 
                 # Create or Update
-                if scope.chartObj? && _.isEqual(_.omit(scope.currentChart, 'series'), _.omit(chart, 'series'))
+                if highchartsObj? && _.isEqual(_.omit(scope.currentChart, 'series'), _.omit(chart, 'series'))
 
                     seriesToRemove = []
 
                     # Update each series with new data
-                    _.each scope.chartObj.series, (aSeries) ->
+                    _.each highchartsObj.series, (aSeries) ->
                         newSeries = _.find chart.series, { name: aSeries.name }
 
                         # Remove the series from the chart if it doesn't exist anymore.
@@ -102,22 +105,22 @@ cyclotronDirectives.directive 'highchart', (configService) ->
 
                     # Add new series to the chart
                     _.each chart.series, (toSeries, index) ->
-                        existingSeries = _.find scope.chartObj.series, { name: toSeries.name }
+                        existingSeries = _.find highchartsObj.series, { name: toSeries.name }
 
                         if !existingSeries?
-                            scope.chartObj.addSeries(toSeries, false)
+                            highchartsObj.addSeries(toSeries, false)
 
                     # Remove any missing series
                     _.each seriesToRemove, (aSeries) ->
                         aSeries.remove(false)
 
                     # Redraw at once
-                    scope.chartObj.redraw()
+                    highchartsObj.redraw()
 
                 else
                     # Clean up old chart if exists
-                    if scope.chartObj?
-                        scope.chartObj.destroy()
+                    if highchartsObj?
+                        highchartsObj.destroy()
 
                     newChart = _.cloneDeep(chart)
                     scope.currentChart = chart
@@ -130,29 +133,24 @@ cyclotronDirectives.directive 'highchart', (configService) ->
                     _.merge(newChart, chartDefaults, _.default)
 
                     scope.chartSeries = newChart.series
-                    scope.chartObj = new Highcharts.Chart(newChart)
+                    highchartsObj = new Highcharts.Chart(newChart)
 
             , true)
 
             #
             # Resize when layout changes
             #
-            resizeFunction = -> 
-                scope.$apply ->
-                    _.delay(resize, 100)
-                    _.delay(resize, 450)
-
+            resizeFunction = _.debounce resize, 100, { leading: false, maxWait: 300 }
             $(window).on 'resize', resizeFunction
-
 
             #
             # Cleanup
             #
             scope.$on '$destroy', ->
                 $(window).off 'resize', resizeFunction
-                if scope.chartObj?
-                    scope.chartObj.destroy() 
-                    delete scope.chartObj
+                if highchartsObj?
+                    highchartsObj.destroy()
+                    highchartsObj = null
 
             return
     }

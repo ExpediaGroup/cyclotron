@@ -36,8 +36,6 @@ cyclotronApp.controller 'HtmlWidget', ($scope, dashboardService, dataService) ->
 
     $scope.htmlStrings = []
 
-    $scope.widgetTitle = -> _.jsExec($scope.widget.title)
-
     if $scope.widget.preHtml?
         $scope.preHtml = _.jsExec $scope.widget.preHtml
 

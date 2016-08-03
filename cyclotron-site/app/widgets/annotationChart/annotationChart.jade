@@ -1,5 +1,5 @@
 .annotation-chart-widget(ng-controller='AnnotationChartWidget')
-    h1.title(ng-if='widget.title') {{ widgetTitle() }}
+    h1.title(ng-if='::widget.title') {{ widgetTitle() }}
 
     .annotation-editor(ng-if='selectedPoint')
         button.btn.btn-link(type='button', 

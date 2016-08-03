@@ -35,7 +35,6 @@ cyclotronDataSources.factory 'cyclotrondataDataSource', ($q, $http, configServic
 
         # Successful Result
         successCallback = (result) ->
-            console.log result
             q.resolve
                 '0':
                     data: result.data

@@ -28,7 +28,7 @@
 # Optionally, headers can be provided by the callback as well
 #
 
-cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dataService) ->
+cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dataService, logService) ->
 
     $scope.loading = false
     $scope.dataSourceError = false
@@ -46,8 +46,6 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
     if $scope.widget.pagination?.enabled
         $scope.paging.itemsPerPage = $scope.widget.pagination.itemsPerPage
     
-    $scope.widgetTitle = -> _.jsExec($scope.widget.title)
-
     $scope.linkTarget = (column) ->
         if column.openLinksInNewWindow?
             if column.openLinksInNewWindow == false then '_self' else '_blank'
@@ -173,7 +171,7 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
                         # Set matching rule properties
                         row.__matchingRules.push matchingRule
                 catch
-                    console.log('Table Widget: Error in rule: ' + rule.rule)
+                    logService.error('Table Widget: Error in rule: ' + rule.rule)
                     return
 
     # Process the rows to collect row groups
@@ -239,7 +237,7 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
                 try
                     regex = new RegExp(column.name.substring(1, column.name.length-1), 'i')
                 catch
-                    console.log('Table Widget: Error in column regex: ' + column.name)
+                    logService.error('Table Widget: Error in column regex: ' + column.name)
                     return
 
                 remainingColumns = _.difference(headers, usedHeaders)

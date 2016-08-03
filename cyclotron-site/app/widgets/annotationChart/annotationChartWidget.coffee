@@ -49,8 +49,6 @@ cyclotronApp.controller 'AnnotationChartWidget', ($scope, configService, cyclotr
                 moment(d).toDate()
         else _.identity
 
-    $scope.widgetTitle = -> _.jsExec $scope.widget.title
-
     # Evaluates a list of series objects and stores in $scope.series
     # Auto-assigns missing annotation columns
     $scope.updateSeries = ->
@@ -165,7 +163,7 @@ cyclotronApp.controller 'AnnotationChartWidget', ($scope, configService, cyclotr
         $scope.dataSource.execute(true)
 
     $scope.handleError = (message) ->
-        console.log 'Annotation Chart error: ' + message
+        logService.error 'Annotation Chart error: ' + message
 
     $scope.selectItem = (selectedItem) ->
         if _.isUndefined(selectedItem) or $scope.widget.annotationEditing != true or _.isEmpty($scope.widget.annotationKey)
@@ -174,8 +172,7 @@ cyclotronApp.controller 'AnnotationChartWidget', ($scope, configService, cyclotr
 
         seriesId = $scope.chartObject.data.cols[selectedItem.column].id
         selectedSeries = _.find $scope.series, { id: seriesId }
-        console.log 'Selected Series'
-        console.log selectedSeries
+        
         $scope.selectedPoint = 
             x: $scope.data[selectedItem.row][$scope.xAxisId]
             series: selectedSeries

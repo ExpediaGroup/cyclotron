@@ -26,14 +26,15 @@
 #
 cyclotronDirectives.directive 'dashboard', ($compile, $window, $timeout, configService, layoutService, logService) ->
     {
-        restrict: 'AC'
+        restrict: 'C'
 
         link: (scope, element, attrs) ->
             $element = $(element)
             $dashboardSidebar = $element.children '.dashboard-sidebar'
             $dashboardControls = $element.children '.dashboard-controls'
 
-            scope.controlTimer = null
+            controlTimer = null
+            controlTarget = null
 
             calculateMouseTarget = ->
                 # Get all dimensions and the padding options
@@ -46,7 +47,7 @@ cyclotronDirectives.directive 'dashboard', ($compile, $window, $timeout, configS
 
                 return unless $dashboardControls? and controlOffset?
 
-                scope.controlTarget = {
+                controlTarget = {
                     top: controlOffset.top - padY
                     bottom: controlOffset.top + controlHeight + padY
                     left: controlOffset.left - padX
@@ -61,18 +62,18 @@ cyclotronDirectives.directive 'dashboard', ($compile, $window, $timeout, configS
                 $dashboardControls.addClass 'active'
 
                 # Set timer to remove the controls after some delay
-                $timeout.cancel(scope.controlTimer) if scope.controlTimer?
+                $timeout.cancel(controlTimer) if controlTimer?
 
-                scope.controlTimer = $timeout(makeControlsDisappear, configService.dashboard.controls.duration)
+                controlTimer = $timeout(makeControlsDisappear, configService.dashboard.controls.duration)
             , 500, { leading: true })
 
             controlHitTest = (event) ->
-                return unless scope.controlTarget?
+                return unless controlTarget?
                 # Abort if outside the target
-                if event.pageX < scope.controlTarget.left ||
-                   event.pageX > scope.controlTarget.right ||
-                   event.pageY < scope.controlTarget.top ||
-                   event.pageY > scope.controlTarget.bottom
+                if event.pageX < controlTarget.left ||
+                   event.pageX > controlTarget.right ||
+                   event.pageY < controlTarget.top ||
+                   event.pageY > controlTarget.bottom
                     return
 
                 makeControlsAppear()
@@ -89,9 +90,7 @@ cyclotronDirectives.directive 'dashboard', ($compile, $window, $timeout, configS
 
             $(document).on 'scroll', calculateMouseTarget
 
-            $(window).on 'resize', _.debounce(-> 
-                scope.$apply(calculateMouseTarget)
-            , 500, { leading: false, maxWait: 1000 })
+            $(window).on 'resize', _.debounce(calculateMouseTarget, 500, { leading: false })
 
             #
             # Cleanup
@@ -102,7 +101,7 @@ cyclotronDirectives.directive 'dashboard', ($compile, $window, $timeout, configS
                 $(window).off 'resize', calculateMouseTarget
 
                 # Cancel timer
-                $timeout.cancel(scope.controlTimer) if scope.controlTimer?
+                $timeout.cancel(controlTimer) if controlTimer?
 
             return
     }

@@ -25,18 +25,25 @@
         accordion-group(ng-repeat='content in dashboard.sidebar.sidebarContent track by $index', heading='{{ content.heading }}')
             div(ng-bind-html='trustHtml(content.html)')
 
-        accordion-group(heading='Show/Hide Widgets', ng-if='dashboard.sidebar.showHideWidgets == true')
+        accordion-group.show-hide-widgets(heading='Show/Hide Widgets', ng-if='dashboard.sidebar.showHideWidgets == true')
             table.table
                 tr(ng-repeat='widget in widgetVisibilities track by $index')
                     td {{ widget.label }}
                     td 
                         switch(ng-model='widget.visible', ng-change='changeVisibility(widget, $index)')
+                tr
+                    td(colspan='2') 
+                        hr
+                tr
+                    td All Widgets
+                    td
+                        switch(ng-model='allWidgetsVisible', ng-change='toggleAllWidgets()')
             p.centered
                 a(ng-click='resetDashboardOverrides()', title='Reset to default')
                     i.fa.fa-refresh
                     |  Reset to default
     .sidebar-footer
         .logos
-            a.logo(ng-repeat='logo in footerLogos', title='{{ logo.title }}', 
-                ng-href='{{ logo.href }}', target='_self')
-                img(ng-src='{{ logo.src }}', alt='{{ logo.title }}')
+            a.logo(ng-repeat='logo in ::footerLogos', title='{{ ::logo.title }}', 
+                ng-href='{{ ::logo.href }}', target='_self')
+                img(ng-src='{{ ::logo.src }}', alt='{{ ::logo.title }}')

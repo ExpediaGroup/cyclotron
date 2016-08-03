@@ -84,7 +84,7 @@ cyclotronDirectives.directive 'tableFixedHeader', ($window, configService) ->
 
             $widgetBody.on 'resize', _.throttle(resize, 250, { leading: false, maxWait: 500 })
 
-            scope.$watch 'sortBy+sortedRows', _.throttle(resize, 200, { leading: false, trailing: true })
+            scope.$watchGroup ['sortBy', 'sortedRows'], _.throttle(resize, 200, { leading: false, trailing: true })
 
             #
             # Handle scroll events

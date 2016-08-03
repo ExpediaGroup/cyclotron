@@ -1,3 +1,17 @@
+# 1.36.0 (08/04/2016)
+
+## Features
+
+ - Dashboard Performance: optimized dashboard and widget performance
+
+ - Animations: Enabled assorted animations across Cyclotron, e.g. transitioning accordions, slide-in dialogs.
+
+ - Dashboard Sidebar: Show/Hide Widgets: added a master toggle to show or hide all widgets
+
+## Bug Fixes
+
+ - Number Widget: improved auto-scaling algorithm to avoid situations with overlapping or truncated text
+
 # 1.35.0 (07/21/2016)
 
 ## Features

@@ -14,9 +14,7 @@
 # language governing permissions and limitations under the License. 
 ###
 
-cyclotronApp.controller 'YoutubeWidget', ($scope, $interval) ->
-    
-    $scope.widgetTitle = -> _.jsExec($scope.widget.title)
+cyclotronApp.controller 'YoutubeWidget', ($scope, logService) ->
 
     #
     # For reference: https://developers.google.com/youtube/player_parameters
@@ -64,5 +62,5 @@ cyclotronApp.controller 'YoutubeWidget', ($scope, $interval) ->
         if properties.length > 0
             url = url + '?' + properties.join '&'
 
-        console.log url
+        logService.debug 'YouTube URL:', url
         return $scope.$sce.trustAsResourceUrl(url)

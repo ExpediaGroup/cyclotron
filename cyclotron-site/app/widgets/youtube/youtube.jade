@@ -1,5 +1,5 @@
 .youtube-widget(ng-controller='YoutubeWidget')
-    h1.title(ng-if='widget.title') {{ widgetTitle() }}
+    h1.title(ng-if='::widget.title') {{ widgetTitle() }}
 
     .widget-body
         iframe(ng-src='{{ getUrl() }}',

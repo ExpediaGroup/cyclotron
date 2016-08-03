@@ -36,6 +36,7 @@ $ ->
 
 # Cyclotron main application
 cyclotronApp = angular.module 'cyclotronApp', [
+    'ngAnimate'
     'ngResource'
     'ngSanitize'
     'ngTranscludeMod'

@@ -37,8 +37,6 @@ cyclotronApp.controller 'ChartWidget', ($scope, dashboardService, dataService) -
     $scope.dataSourceError = false
     $scope.dataSourceErrorMessage = null
 
-    $scope.widgetTitle = -> _.jsExec $scope.widget.title
-
     getChart = ->
         defaults =
             credits:

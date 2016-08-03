@@ -45,5 +45,14 @@ cyclotronDirectives.directive 'qrcode', ->
             scope.$watch 'options', (options) ->
                 makeCode()
 
-            $widget.resize makeCode
+            # Update on window resizing
+            resizeFunction = _.debounce makeCode, 100, { leading: false, maxWait: 300 }
+            $widget.on 'resize', resizeFunction
+
+            #
+            # Cleanup
+            #
+            scope.$on '$destroy', ->
+                $widget.off 'resize', resizeFunction
+                return
     }

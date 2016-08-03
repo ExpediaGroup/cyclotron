@@ -26,8 +26,6 @@ cyclotronApp.controller 'ImageWidget', ($scope, $interval) ->
 
         $scope.link = $scope.currentImage.link
 
-    $scope.widgetTitle = -> _.jsExec($scope.widget.title)
-
     $scope.linkTarget = ->
         if $scope.dashboard.openLinksInNewWindow == false then '_self' else '_blank'
 

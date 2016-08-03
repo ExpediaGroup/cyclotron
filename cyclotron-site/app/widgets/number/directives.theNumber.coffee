@@ -71,11 +71,12 @@ cyclotronDirectives.directive 'theNumber', ($timeout) ->
                     fontSize = Math.min(102, numberHeight / 2)
                     iterations = 0
                     currentWidth = 0
+                    currentHeight = 0
 
                     sizeMe = ->
                         h1.css('font-size', fontSize + 'px')
                         h1.css('line-height', fontSize + 'px')
-                        spans.css('font-size', fontSize*.75 + 'px')
+                        spans.css('font-size', fontSize * 0.75 + 'px')
                         iterations++
 
                         currentWidth = 0
@@ -83,8 +84,15 @@ cyclotronDirectives.directive 'theNumber', ($timeout) ->
                             currentWidth = h1.width()
                         else
                             $element.children().each -> currentWidth += $(this).width()
+
+                        currentHeight = 0
+                        if scope.isHorizontal
+                            $element.children().each -> currentHeight += $(this).height()
+                        else
+                            currentHeight = h1.height()
+
                     sizeMe()
-                    while (currentWidth + 25 >= numberWidth || h1.height() > fontSize * 2) && iterations < 15
+                    while ((currentWidth + 25 >= numberWidth || h1.height() > fontSize * 2) or currentHeight > numberHeight) && iterations < 25
                         fontSize -= 4
                         sizeMe()
 
@@ -101,7 +109,7 @@ cyclotronDirectives.directive 'theNumber', ($timeout) ->
                             spans.each -> currentWidth = Math.max(currentWidth, $(this).width())
 
                         sizePrefixSuffix()
-                        sizePrefixSuffix() while currentWidth + 15 >= numberWidth && iterations < 10
+                        sizePrefixSuffix() while currentWidth + 15 >= numberWidth && iterations < 15
 
                         # Set everything to block display now
                         h1.css('display', 'block')
@@ -117,17 +125,16 @@ cyclotronDirectives.directive 'theNumber', ($timeout) ->
                     return
 
             # Update on window resizing
-            $widgetBody.on 'resize', _.throttle(->
-                scope.$apply ->
-                    sizer()
-            , 80)
+            resizeFunction = _.debounce sizer, 100, { leading: false, maxWait: 300 }
+            $widgetBody.on 'resize', resizeFunction
 
+            # Resize now
             $timeout(sizer, 10)
 
             #
             # Cleanup
             #
             scope.$on '$destroy', ->
-                $widgetBody.off 'resize'
+                $widgetBody.off 'resize', resizeFunction
                 return
     }

@@ -63,45 +63,45 @@ cyclotronDirectives.directive 'widget', ($compile, $sce, $window, layoutService)
                 # Apply overrides if necessary (mobile devices)
                 if layout.forceGridWidth? 
                     if scope.widget.gridWidth == layout.originalGridColumns
-                        scope.widgetGridWidth = layout.gridColumns
+                        widgetGridWidth = layout.gridColumns
                     else
-                        scope.widgetGridWidth = layout.forceGridWidth 
-                    scope.widgetWidth = null
+                        widgetGridWidth = layout.forceGridWidth 
+                    widgetWidth = null
                 else
-                    scope.widgetGridWidth = scope.widget.gridWidth
-                    scope.widgetWidth = scope.widget.width
+                    widgetGridWidth = scope.widget.gridWidth
+                    widgetWidth = scope.widget.width
 
                 if layout.forceGridHeight?
                     if scope.widget.gridHeight == layout.originalGridRows
-                        scope.widgetGridHeight = layout.gridRows
+                        widgetGridHeight = layout.gridRows
                     else
-                        scope.widgetGridHeight = layout.forceGridHeight
-                    scope.widgetHeight = null
+                        widgetGridHeight = layout.forceGridHeight
+                    widgetHeight = null
                 else
-                    scope.widgetGridHeight = scope.widget.gridHeight
-                    scope.widgetHeight = scope.widget.height
+                    widgetGridHeight = scope.widget.gridHeight
+                    widgetHeight = scope.widget.height
 
                 # Calculate widget dimensions
-                if scope.widgetHeight?
-                    scope.widgetHeight = scope.widget.height
-                else if scope.widgetGridHeight?
-                    scope.widgetHeight = layout.gridSquareHeight * scope.widgetGridHeight + ((layout.gutter) * (scope.widgetGridHeight - 1))
+                if widgetHeight?
+                    widgetHeight = scope.widget.height
+                else if widgetGridHeight?
+                    widgetHeight = layout.gridSquareHeight * widgetGridHeight + ((layout.gutter) * (widgetGridHeight - 1))
 
-                if scope.widgetWidth?
-                    scope.widgetWidth = scope.widget.width
-                else if scope.widgetGridWidth?
-                    scope.widgetWidth = layout.gridSquareWidth * scope.widgetGridWidth + (layout.gutter * (scope.widgetGridWidth - 1))
+                if widgetWidth?
+                    widgetWidth = scope.widget.width
+                else if widgetGridWidth?
+                    widgetWidth = layout.gridSquareWidth * widgetGridWidth + (layout.gutter * (widgetGridWidth - 1))
                 else
-                    scope.widgetWidth = layout.gridSquareWidth
+                    widgetWidth = layout.gridSquareWidth
 
                 # Set height/width
-                scope.widgetWidth = Math.floor(scope.widgetWidth) if _.isNumber(scope.widgetWidth)
-                scope.widgetHeight = Math.floor(scope.widgetHeight) if _.isNumber(scope.widgetHeight)
-                $element.width scope.widgetWidth
-                $element.height scope.widgetHeight
+                widgetWidth = Math.floor(widgetWidth) if _.isNumber(widgetWidth)
+                widgetHeight = Math.floor(widgetHeight) if _.isNumber(widgetHeight)
+                $element.width widgetWidth
+                $element.height widgetHeight
                 $element.css 'display', 'block'
 
-                if scope.widgetWidth < scope.widgetHeight
+                if widgetWidth < widgetHeight
                     $element.addClass 'widget-skinny'
                 else
                     $element.removeClass 'widget-skinny'
@@ -165,8 +165,9 @@ cyclotronDirectives.directive 'widget', ($compile, $sce, $window, layoutService)
                     template = '<i class="widget-fullscreen fa fa-expand" title="Click to view fullscreen"></i>' + template
 
                 if widget.helpText?
+                    # Store Help Text in scope for tooltip
                     scope.helpText = _.jsExec widget.helpText
-                    template = '<i class="widget-helptext fa fa-question-circle" uib-tooltip="{{ helpText }}" tooltip-placement="auto-right" tooltip-trigger="outsideClick"></i>' + template
+                    template = '<i class="widget-helptext fa fa-question-circle" uib-tooltip="{{ ::helpText }}" tooltip-placement="auto-right" tooltip-trigger="outsideClick"></i>' + template
 
                 compiledValue = $compile(template)(scope)
 
@@ -177,7 +178,7 @@ cyclotronDirectives.directive 'widget', ($compile, $sce, $window, layoutService)
                 return
 
             # Watch for page layout changes and resize the widget
-            scope.$watch 'layout', updateLayout, true
+            scope.$watch 'layout', updateLayout
 
             # Watch for widget visibility to change
             scope.$watch 'pageOverrides', (-> updateLayout(scope.layout)), true
