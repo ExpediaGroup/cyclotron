@@ -36,7 +36,7 @@
     "c3": "0.4.10",
     "d3": "3.5.6",
     "datetimepicker": "~2.5.4",
-    "fontawesome": "4.3.0",
+    "font-awesome": "~4.6",
     "highcharts-release": "4.2.0",
     "jquery": "2.1.4",
     "jquery-fullscreen": "1.1.4",
@@ -63,8 +63,7 @@
   },
   "resolutions": {
     "d3": "3.5.6",
-    "angular": "1.4.9",
-    "datetimepicker": "~2.5.4"
+    "angular": "1.4.9"
   },
   "overrides": {
     "ace-builds": {
@@ -102,6 +101,12 @@
     },
     "angular-scenario": {
       "ignore": true
+    },
+    "font-awesome": {
+      "main": [
+        "css/font-awesome.css",
+        "fonts/*"
+      ]
     },
     "highcharts-release": {
       "main": [
