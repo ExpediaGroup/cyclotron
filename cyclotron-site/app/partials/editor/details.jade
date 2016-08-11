@@ -11,7 +11,7 @@
 .form-group
     label Tags
     ui-select(ng-model='editor.dashboardWrapper.tags', multiple='',
-        tagging='', tagging-label='false', tagging-tokens='SPACE|ENTER')
+        tagging='', tagging-label='(new)', tagging-tokens='SPACE|ENTER')
         ui-select-match(placeholder='Tags...') 
             i.fa.fa-tag
             span  {{ $item }}

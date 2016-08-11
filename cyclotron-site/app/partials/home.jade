@@ -12,7 +12,7 @@
     section.search(ng-class='{active: !showSplash}')
 
         ui-select(ng-model='search.query', multiple='',
-            tagging='', tagging-label='false', tagging-tokens='SPACE|ENTER')
+            tagging='', tagging-label='(new)', tagging-tokens='SPACE|ENTER')
             ui-select-match(placeholder='Search by Name or Tags...')
                 i.fa.fa-tag(ng-if='isTag($item)')
                 i.fa.fa-filter(ng-if='isAdvanced($item)')
