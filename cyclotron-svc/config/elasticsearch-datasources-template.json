@@ -1,0 +1,97 @@
+{
+    "template": "-datasources-*",
+    "settings": {
+        "number_of_shards": 2,
+        "number_of_replicas": 1
+    },
+    "aliases": {
+        "-datasources": {}
+    },
+    "mappings": {
+        "datasource": {
+            "properties": {
+                "date": {
+                    "type": "date"
+                },
+                "visitId": {
+                    "type": "string",
+                    "index": "not_analyzed"
+                },
+                "dashboard": {
+                    "properties": {
+                        "_id": {
+                            "type": "string",
+                            "index": "not_analyzed"
+                        },
+                        "name": {
+                            "type": "string",
+                            "index": "not_analyzed"
+                        }
+                    }
+                },
+                "rev": {
+                    "type": "integer"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "success": {
+                    "type": "boolean"
+                },
+                "duration": {
+                    "type": "double"
+                },
+                "dataSourceName": {
+                    "type": "string",
+                    "index": "not_analyzed"
+                },
+                "dataSourceType": {
+                    "type": "string",
+                    "index": "not_analyzed"
+                },
+                "details": {
+                    "properties": {
+                        "url": {
+                            "type": "string"
+                        },
+                        "proxy": {
+                            "type": "string"
+                        },
+                        "refresh": {
+                            "type": "integer"
+                        },
+                        "errorMessage": {
+                            "type": "string",
+                            "fields": {
+                                "raw" : {
+                                    "type": "string",
+                                    "index": "not_analyzed"
+                                }
+                            }
+                        },
+                        "sources": {
+                            "type": "nested",
+                            "properties": {
+                                "type": {
+                                    "type": "string"
+                                },
+                                "uri": {
+                                    "type": "string"
+                                },
+                                "hostname": {
+                                    "type": "string"
+                                },
+                                "driver": {
+                                    "type": "string"
+                                },
+                                "topic": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

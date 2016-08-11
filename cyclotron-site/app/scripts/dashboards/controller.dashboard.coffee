@@ -296,7 +296,8 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $localFora
 
             # Optionally disable analytics
             if dashboard.disableAnalytics == true
-                configService.enableAnalytics = false
+                configService.analytics ?= {}
+                configService.analytics.enable = false
 
             dependenciesLoaded = -> 
                 # Check if a new revision of the Dashboard has been loaded

@@ -35,7 +35,8 @@ cyclotronServices.factory 'commonConfigService', ->
             enable: false
             loginMessage: 'Please login using your LDAP username and password.'
 
-        enableAnalytics: false
+        analytics: 
+            enable: false
 
         newUser:
             enableMessage: true
@@ -1247,6 +1248,11 @@ cyclotronServices.factory 'commonConfigService', ->
                         name: 'Permissions'
                         path: '/partials/help/permissions.html' 
                         tags: ['permissions', 'edit permission', 'view permission', 'editors', 'viewers', 'restricted', 'login', 'rest', 'api']
+                    }
+                    {
+                        name: 'Analytics'
+                        path: '/partials/help/analytics.html' 
+                        tags: ['analytics', 'pageviews', 'visits', 'metrics']
                     }
                     {
                         name: 'Encrypted Strings'

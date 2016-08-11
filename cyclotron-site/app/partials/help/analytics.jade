@@ -1,0 +1,60 @@
+h3 Analytics
+
+p.
+    Cyclotron has built-in support for collecting and viewing analytics data about Dashboards and Data Sources. This functionality has to be enabled in both the server and the website configuration, but once it is enabled, it will automatically collect data for every Dashboard that is viewed.
+
+p Collected data includes information about:
+
+ul
+    li Visits
+    li Page Views
+    li Data Source Executions
+    li Data Source and Widget Usage
+    li Unique and Repeat Visitors
+    li Events, such as Liking/Unliking a Dashboard
+
+h4 Configuration
+
+p The Cyclotron website needs the following configuration property enabled in the configService.js:
+
+pre.code.
+    analytics: {
+      enable: true
+    },
+
+p And the Cyclotron service needs the following configuration set in the config/config.js:
+
+pre.code.
+    /* Configuration for Analytics */
+    analytics: {
+        /* Enable or disable analytic data collection */
+        enable: true,
+
+        /* Possible values: 'mongo', 'elasticsearch' */
+        /* Default: 'mongo' */
+        analyticsEngine: 'mongo'
+    },
+
+p There are two backends available for storing analytics: MongoDB (the default) and Elasticsearch. When using MongoDB, analytics data is stored in the same database as the rest of the Cyclotron data, making it an easy first option. Alternately, analytics data can be stored in Elasticsearch by switching the config and providing the Elasticsearch configuration. Both backends implement the same API, so there is no functional difference between the two.
+
+p Please note that when switching between backends, existing analytics data is not automatically migrated. There is a helper script, 
+    span.code elastic-migration.js
+    |  which is designed to migrate data from MongoDB to Elasticsearch. This script must be configured and run manually if desired.
+
+h4 Viewing Analytics
+
+p Instance-wide analytics and statistics are available on the main Analytics page:
+
+p
+    strong 
+        a(href='/analytics', target='_blank') /analytics
+
+p There is also a page generated for each Dashboard, accessible from the Dashboard Editor.  The URL is of the form:
+
+p
+    strong 
+        a(href='/analytics/:dashboardName', target='_blank') /analytics/:dashboardName
+
+p For custom analysis, the analytics endpoints in the API can be queried without authentication&mdash;see 
+    a(ng-click='findItem("API")', href='?q=API') API documentation 
+    |  for details.  If using the Elasticsearch backend, Kibana or the Elasticsearch API can be used to perform ad-hoc analysis.

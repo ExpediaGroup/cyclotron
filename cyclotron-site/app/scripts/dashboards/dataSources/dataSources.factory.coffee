@@ -111,6 +111,9 @@ cyclotronDataSources.factory 'dataSourceFactory', ($rootScope, $interval, config
                             if _.isFunction(analyticsDetails)
                                 details = _.merge details, analyticsDetails(currentOptions)
 
+                            if _.isObject details.errorMessage
+                                details.errorMessage = JSON.stringify details.errorMessage
+
                             analyticsService.recordDataSource currentOptions, success, (endTime - startTime), details
 
                         # Define failure callback

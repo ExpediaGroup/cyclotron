@@ -35,7 +35,7 @@ var endsWith = function (str, suffix) {
 }
 
 /* Ensure exports directory exists */
-var exportDirectory = __dirname + '/../exports';
+var exportDirectory = __dirname + '/../export';
 fs.existsSync(exportDirectory) || fs.mkdirSync(exportDirectory);
 
 var exportKeys = {};

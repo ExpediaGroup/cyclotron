@@ -1,3 +1,15 @@
+# 1.37.0 (08/18/2016)
+
+## Features
+
+ - Analytics: Elasticsearch backend option added, implementing the same API over Elasticsearch storage.
+
+ - Font Awesome upgraded to 4.6
+
+## Breaking Changes
+
+ - Configuration for Analytics changed names in both cyclotron-site and cyclotron-svc. Basically, all analytics-related configurations were moved under an "analytics" parent. Please refer to the sample configuration files for current format.
+
 # 1.36.0 (08/04/2016)
 
 ## Features

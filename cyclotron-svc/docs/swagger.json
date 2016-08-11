@@ -2577,9 +2577,9 @@
                     "description": "The Data Source name.",
                     "type": "string"
                 },
-                "dashboard": {
+                "dashboardName": {
                     "description": "The Dashboard containing the Data Source.",
-                    "$ref": "#/definitions/DashboardRef"
+                    "type": "string"
                 },
                 "dataSourceType": {
                     "description": "The Data Source type name.",

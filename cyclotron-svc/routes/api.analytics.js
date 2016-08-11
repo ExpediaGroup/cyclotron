@@ -31,7 +31,6 @@ var Analytics = mongoose.model('analytics'),
     EventAnalytics = mongoose.model('eventAnalytics'),
     Dashboards = mongoose.model('dashboard2');
 
-
 /* Log a Dashboard visit & Page view
  *
  * New visits are incremented with ?newVisit=true 
@@ -57,6 +56,13 @@ exports.recordPageView = function (req, res) {
 
     /* Send 200 OK as soon as possible */
     res.send();
+
+    if (!_.isNull(record.dashboard)) {
+        record.dashboard = record.dashboard._id;
+    }
+    if (!_.isNull(record.user)) {
+        record.user = record.user._id;
+    }
 
     var pageViewInc = 0, 
         visitInc = 0, 
@@ -113,6 +119,10 @@ exports.recordDataSource = function (req, res) {
     /* Send 200 OK as soon as possible */
     res.send();
 
+    if (!_.isNull(record.dashboard)) {
+        record.dashboard = record.dashboard._id;
+    }
+
     /* Create new record in the Data Source Analytics collection */
     var analytic = new DataSourceAnalytics(record);
     analytic.save();
@@ -135,6 +145,10 @@ exports.recordEvent = function (req, res) {
 
     /* Send 200 OK as soon as possible */
     res.send();
+
+    if (!_.isNull(record.user)) {
+        record.user = record.user._id;
+    }
 
     /* Create new record in the Event Analytics collection */
     var analytic = new EventAnalytics(record);
@@ -710,7 +724,11 @@ var aggregateDataSources = function (pipeline, res) {
                 return res.status(500).send(err);
             }
 
-            res.send(populatedResults);
+            res.send(_.map(populatedResults, function (row) {
+                row.dashboardName = row.dashboard.name;
+                delete row.dashboard;
+                return row;
+            }));
         });
     });
 };

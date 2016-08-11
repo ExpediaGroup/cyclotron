@@ -80,7 +80,7 @@ exports.validateSession = function (key) {
                 reject('Session invalid');
             }
 
-            session.user.admin = _.contains(config.admins, session.user.distinguishedName);
+            session.user.admin = _.includes(config.admins, session.user.distinguishedName);
             resolve(session);
         });
     });
@@ -109,7 +109,7 @@ exports.isAdmin = function (req) {
 
     var user = req.session.user;
 
-    if (_.contains(config.admins, user.distinguishedName)) {
+    if (_.includes(config.admins, user.distinguishedName)) {
         return true;
     }
 
@@ -135,15 +135,15 @@ exports.hasEditPermission = function (dashboard, req) {
     }
 
     /* Admin override */
-    if (_.contains(config.admins, user.distinguishedName)) {
+    if (_.includes(config.admins, user.distinguishedName)) {
         console.log('Has permission due to ADMIN');
         return true;
     }
 
     /* If user is in Editors, or a member of a group that is */
-    return _.any(dashboard.editors, function (editor) {
+    return _.some(dashboard.editors, function (editor) {
         if (user.distinguishedName === editor.dn || 
-            _.contains(user.memberOf, editor.dn)) {
+            _.includes(user.memberOf, editor.dn)) {
             console.log('Has Permission due to ' + editor.dn);
             return true;
         }
@@ -169,7 +169,7 @@ exports.hasViewPermission = function (dashboard, req) {
     }
 
     /* Admin override */
-    if (_.contains(config.admins, user.distinguishedName)) {
+    if (_.includes(config.admins, user.distinguishedName)) {
         console.log('Has permission due to ADMIN');
         return true;
     }
@@ -180,9 +180,9 @@ exports.hasViewPermission = function (dashboard, req) {
     }
 
     /* If user is in Viewers, or a member of a group that is */
-    return _.any(dashboard.viewers, function (viewer) {
+    return _.some(dashboard.viewers, function (viewer) {
         if (user.distinguishedName === viewer.dn || 
-            _.contains(user.memberOf, viewer.dn)) {
+            _.includes(user.memberOf, viewer.dn)) {
             console.log('Has Permission due to ' + viewer.dn);
             return true;
         }

@@ -321,7 +321,7 @@ cyclotronApp.run ($rootScope, $urlRouter, $location, $state, $stateParams, $uibM
     $rootScope.isAdmin = userService.isAdmin
     $rootScope.currentUser = userService.currentUser
 
-    $rootScope.analyticsEnabled = -> configService.enableAnalytics
+    $rootScope.analyticsEnabled = -> configService.analytics?.enable == true
 
     $rootScope.login = (isModal = false) ->
         options =

@@ -23,8 +23,8 @@ cyclotronApp.controller 'DashboardAnalyticsController', ($scope, dashboard, anal
     $scope.dashboardId = dashboard._id
 
     $scope.createdDate = '?'
-    $scope.lastModifiedDate = moment(dashboard.date).format("MM/DD HH:mm:ss")
-    $scope.longModifiedDate = moment(dashboard.date).format("MM/DD/YYYY HH:mm:ss")
+    $scope.lastModifiedDate = moment(dashboard.date).format('MM/DD HH:mm:ss')
+    $scope.longModifiedDate = moment(dashboard.date).format('MM/DD/YYYY HH:mm:ss')
 
 
     $scope.pageViewsOptions = 

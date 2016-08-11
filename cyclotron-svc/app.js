@@ -46,10 +46,14 @@ app.use(function(req, res, next) {
     next();
 });
 
+/* API Documentation */
+app.use(serveStatic(__dirname + '/docs'));
+
 /* Cross-origin requests */
 var cors = require('./middleware/cors');
 app.use(cors.allowCrossDomain);
 
+/* Optional: Authentication */
 if (config.enableAuth == true) {
     /* Custom session management */
     var session = require('./middleware/session');
@@ -74,14 +78,19 @@ if (config.enableAuth == true) {
     }));
 }
 
-app.use(serveStatic(__dirname + '/docs'));
-
+/* Optional: Analytics */
+if (config.analytics && config.analytics.enable == true) {
+    if (config.analytics.analyticsEngine == 'elasticsearch') {
+        /* Initialize Elasticsearch for Analytics */
+        var elasticsearch = require('./elastic');
+    }
+}
 
 if ('development' == app.get('env')) {
   app.use(errorHandler());
 }
 
-/* JSON API */
+/* Initialize JSON API */
 var api = require('./routes/api');
 api.bindRoutes(app);
 

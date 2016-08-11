@@ -61,8 +61,10 @@ cyclotronServices.factory 'configService', (commonConfigService) ->
             # Message displayed when logging in.  Set to null/blank to disable
             loginMessage: 'Please login using your LDAP username and password.'
 
-        # Enable or disable analytic tracking for dashboards
-        enableAnalytics: false
+        # Analytics settings
+        analytics:
+            # Enable or disable analytic tracking for dashboards
+            enable: false
 
         # Logging settings
         logging:
@@ -113,6 +115,15 @@ cyclotronServices.factory 'configService', (commonConfigService) ->
                                     default: 'splunk'
                                 proxy:
                                     options: proxyOptions
+
+        # Add additional logos to the Dashboard Sidebar 
+        dashboardSidebar:
+            footer:
+                logos: [{
+                    title: 'Cyclotron'
+                    src: '/img/favicon32.png'
+                    href: '/'
+                }]
 
     # Merge overrides with commonConfigService
     # Settings in this file will override/extend those in the commonConfigService

@@ -123,7 +123,7 @@ cyclotronServices.factory 'analyticsService', ($http, $q, $localForage, $locatio
 
     # Record a Page View (occurance of a page being viewed)
     exports.recordPageView = (dashboard, pageIndex, newVisit = false) ->
-        return unless configService.enableAnalytics
+        return unless configService.analytics.enable
 
         exports.currentDashboard = dashboard
         exports.currentPage = pageIndex
@@ -133,7 +133,9 @@ cyclotronServices.factory 'analyticsService', ($http, $q, $localForage, $locatio
 
         req = 
             visitId: exports.visitId
-            dashboard: dashboard._id
+            dashboard: 
+                _id: dashboard._id
+                name: dashboard.name
             rev: dashboard.rev
             page: pageIndex
             widgets: _.pluck widgets, 'widget'
@@ -143,27 +145,33 @@ cyclotronServices.factory 'analyticsService', ($http, $q, $localForage, $locatio
 
         uidLoaded.promise.then ->
             if (userService.authEnabled && userService.isLoggedIn())
-                req.user = userService.currentUser()._id
+                req.user = 
+                    _id: userService.currentUser()._id
+                    sAMAccountName: userService.currentUser().sAMAccountName
+                    name: userService.currentUser().name
             else
                 # Anonymous: track the UID
                 req.uid = exports.uid 
 
                 # Also send cached UserId if it exists
                 if userService.cachedUserId?
-                    req.user = userService.cachedUserId
+                    req.user = 
+                        _id: userService.cachedUserId
                 
             logService.debug 'Page View Analytics:', req
             $http.post(configService.restServiceUrl + '/analytics/pageviews?newVisit=' + newVisit + '&' + 'exporting=' + exports.isExporting, req)
 
     # Record the execution of a Data Source
     exports.recordDataSource = (dataSource, success, duration, details = {}) ->
-        return unless configService.enableAnalytics and not exports.isExporting
+        return unless configService.analytics.enable and not exports.isExporting
 
         details = _.merge(details, _.pick(dataSource, [ 'url', 'proxy', 'refresh' ]))
         
         req = 
             visitId: exports.visitId
-            dashboard: exports.currentDashboard._id
+            dashboard: 
+                _id: exports.currentDashboard._id
+                name: exports.currentDashboard.name
             rev: exports.currentDashboard.rev
             page: exports.currentPage
             dataSourceName: dataSource.name
@@ -178,7 +186,7 @@ cyclotronServices.factory 'analyticsService', ($http, $q, $localForage, $locatio
 
     # Generic schema for recording events
     exports.recordEvent = (type, details = {}) ->
-        return unless configService.enableAnalytics
+        return unless configService.analytics.enable
         req = 
             eventType: type
             visitId: exports.visitId
@@ -186,14 +194,18 @@ cyclotronServices.factory 'analyticsService', ($http, $q, $localForage, $locatio
 
         uidLoaded.promise.then ->
             if (userService.authEnabled && userService.isLoggedIn())
-                req.user = userService.currentUser()._id
+                req.user = 
+                    _id: userService.currentUser()._id
+                    sAMAccountName: userService.currentUser().sAMAccountName
+                    name: userService.currentUser().name
             else
                 # Anonymous: track the UID
                 req.uid = exports.uid 
 
                 # Also send cached UserId if it exists
                 if userService.cachedUserId?
-                    req.user = userService.cachedUserId
+                    req.user = 
+                        _id: userService.cachedUserId
 
             logService.debug 'Event Analytics:', req
             $http.post(configService.restServiceUrl + '/analytics/events', req)

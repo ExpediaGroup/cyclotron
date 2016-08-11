@@ -1,0 +1,51 @@
+{
+    "template": "-events-*",
+    "settings": {
+        "number_of_shards": 2,
+        "number_of_replicas": 1
+    },
+    "aliases": {
+        "-events": {}
+    },
+    "mappings": {
+        "event": {
+            "properties": {
+                "date": {
+                    "type": "date"
+                },
+                "visitId": {
+                    "type": "string",
+                    "index": "not_analyzed"
+                },
+                "uid": {
+                    "type": "string",
+                    "index": "not_analyzed"
+                },
+                "user": {
+                    "properties": {
+                        "_id": {
+                            "type": "string",
+                            "index": "not_analyzed"
+                        },
+                        "sAMAccountName": {
+                            "type": "string",
+                            "index": "not_analyzed"
+                        }
+                    }
+                },
+                "eventType": {
+                    "type": "string",
+                    "index": "not_analyzed"
+                },
+                "details": {
+                    "properties": {
+                        "dashboardName": {
+                            "type": "string",
+                            "index": "not_analyzed"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -14,10 +14,10 @@
  * language governing permissions and limitations under the License. 
  */ 
 
-var _ = require('lodash');
+var _ = require('lodash'),
+    config = require('../config/config');
 
-var analytics = require('./api.analytics.js'),
-    auth = require('./auth.js'),
+var auth = require('./auth.js'),
     crypto = require('./api.crypto.js'),
     dashboards = require('./api.dashboards.js'),
     data = require('./api.data.js'),
@@ -25,7 +25,6 @@ var analytics = require('./api.analytics.js'),
     ldap = require('./api.ldap.js'),
     proxy = require('./api.proxy.js'),
     revisions = require('./api.revisions.js'),
-    statistics = require('./api.statistics.js'),
     tags = require('./api.tags.js'),
     users = require('./api.users.js');
 
@@ -115,33 +114,47 @@ exports.bindRoutes = function (app) {
     app.post('/crypto/encrypt', crypto.encrypt);
     app.all('/crypto/*', notAllowed);
 
-    app.get('/statistics', statistics.get);
+    /* Enable analytics via Config */
+    if (config.analytics && config.analytics.enable == true) {
+        var analytics = null;
+        var statistics = null;
+        
+        /* Load Analytics backend: Elasticsearch or MongoDB (default) */
+        if (config.analytics.analyticsEngine == 'elasticsearch') {
+            analytics = require('./api.analytics-elasticsearch.js');
+            statistics = require('./api.statistics-elasticsearch.js');
+        } else {
+            analytics = require('./api.analytics.js');
+            statistics = require('./api.statistics.js');
+        }
 
-    app.post('/analytics/pageviews', analytics.recordPageView);
-    app.get('/analytics/pageviews/recent', analytics.getRecentPageViews);
+        app.get('/statistics', statistics.get);
+    
+        app.post('/analytics/pageviews', analytics.recordPageView);
+        app.get('/analytics/pageviews/recent', analytics.getRecentPageViews);
 
-    app.post('/analytics/datasources', analytics.recordDataSource);
-    app.get('/analytics/datasources/recent', analytics.getRecentDataSources);
+        app.post('/analytics/datasources', analytics.recordDataSource);
+        app.get('/analytics/datasources/recent', analytics.getRecentDataSources);
 
-    app.post('/analytics/events', analytics.recordEvent);
-    app.get('/analytics/events/recent', analytics.getRecentEvents);
+        app.post('/analytics/events', analytics.recordEvent);
+        app.get('/analytics/events/recent', analytics.getRecentEvents);
 
-    app.get('/analytics/pageviewsovertime', analytics.getPageViewsOverTime);
-    app.get('/analytics/visitsovertime', analytics.getVisitsOverTime);
-    app.get('/analytics/uniquevisitors', analytics.getUniqueVisitors);
-    app.get('/analytics/browsers', analytics.getBrowserStats);
-    app.get('/analytics/widgets', analytics.getWidgetStats);
+        app.get('/analytics/pageviewsovertime', analytics.getPageViewsOverTime);
+        app.get('/analytics/visitsovertime', analytics.getVisitsOverTime);
+        app.get('/analytics/uniquevisitors', analytics.getUniqueVisitors);
+        app.get('/analytics/browsers', analytics.getBrowserStats);
+        app.get('/analytics/widgets', analytics.getWidgetStats);
 
-    app.get('/analytics/datasourcesbytype', analytics.getDataSourcesByType);
-    app.get('/analytics/datasourcesbyname', analytics.getDataSourcesByName);
-    app.get('/analytics/datasourcesbyerrormessage', analytics.getDataSourcesByErrorMessage);
+        app.get('/analytics/datasourcesbytype', analytics.getDataSourcesByType);
+        app.get('/analytics/datasourcesbyname', analytics.getDataSourcesByName);
+        app.get('/analytics/datasourcesbyerrormessage', analytics.getDataSourcesByErrorMessage);
 
-    app.get('/analytics/pageviewsbypage', analytics.getPageViewsByPage);
+        app.get('/analytics/pageviewsbypage', analytics.getPageViewsByPage);
 
-    app.get('/analytics/topdashboards', analytics.getTopDashboards);
+        app.get('/analytics/topdashboards', analytics.getTopDashboards);
 
-    app.get('/analytics/delete', analytics.deleteAnalyticsForDashboard);
-
+        app.get('/analytics/delete', analytics.deleteAnalyticsForDashboard);
+    }
     app.all('/analytics', notAllowed);
     app.all('/analytics/*', notAllowed);
 

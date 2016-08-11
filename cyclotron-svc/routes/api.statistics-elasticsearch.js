@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015 the original author or authors.
+ * Copyright (c) 2016 the original author or authors.
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License. 
@@ -15,7 +15,8 @@
  */ 
  
 /* 
- * API for Cyclotron Statistics
+ * API for Cyclotron Statistics - Elasticsearch implementation
+ * (only analytics data is pulled from Elasticsearch)
  */
 
 var config = require('../config/config'),
@@ -25,13 +26,12 @@ var config = require('../config/config'),
     Promise = require('bluebird'),
     api = require('./api');
     
-var Analytics = mongoose.model('analytics'),
-    Dashboards = mongoose.model('dashboard2'),
-    DataSourceAnalytics = mongoose.model('dataSourceAnalytics'),
-    EventAnalytics = mongoose.model('eventAnalytics'),
+var Dashboards = mongoose.model('dashboard2'),
     Revisions = mongoose.model('revision'),
     Sessions = mongoose.model('session'),
     Users = mongoose.model('user');
+
+var elasticsearch = require('../elastic');
 
 var getDashboardCounts = function () {
     return new Promise(function (resolve, reject) {
@@ -106,73 +106,102 @@ var getDashboardCounts2 = function (isDeleted) {
 
 var getPageViewsCounts = function () {
     return new Promise(function (resolve, reject) {
-        Analytics.aggregate([{
-            $group: {
-                _id: { 'uid': '$uid', 'visitId': '$visitId' },
-                totalPageViews: { $sum: 1 },
-            }
-        }, {
-            $group: {
-                _id: { 'uid': '$_id.uid' },
-                totalPageViews: { $sum: '$totalPageViews'},
-                totalVisits: { $sum: 1 }
-            }
-        }, {
-            $group: {
-                _id: {},
-                totalPageViews: { $sum: '$totalPageViews'},
-                totalVisits: { $sum: '$totalVisits'},
-                uniqueUids: { $sum: 1 }
-            }
-        }]).exec(function (err, results) {
-            if (err) {
-                reject(err);
-            }
-
-            results = _.omit(results[0], '_id');
-            results.avgPageViewsPerUid = results.totalPageViews / results.uniqueUids;
-            results.avgVisitsPerUid = results.totalVisits / results.uniqueUids;
-            results.avgPageViewsPerVisit = results.totalPageViews / results.totalVisits;
+        elasticsearch.client.search({
+            index: elasticsearch.indexAlias('pageviews'),
+            body: {
+                    size: 0,
+                    query: { match_all: {} },
+                    aggs: {
+                        distinctVisits: {
+                            cardinality: {
+                                field: 'visitId',
+                                precision_threshold: 100
+                            }
+                        },
+                        uniqueUids: {
+                            cardinality: {
+                                field: 'uid',
+                                precision_threshold: 100
+                            }
+                        }
+                    }
+                }
+        }).then(function (response) {
+            var results = {
+                totalPageViews: response.hits.total,
+                totalVisits: response.aggregations.distinctVisits.value,
+                uniqueUids: response.aggregations.uniqueUids.value,
+                avgPageViewsPerUid: response.hits.total / response.aggregations.uniqueUids.value,
+                avgVisitsPerUid: response.aggregations.distinctVisits.value / response.aggregations.uniqueUids.value,
+                avgPageViewsPerVisit: response.hits.total / response.aggregations.distinctVisits.value
+            };
             resolve(results);
+        }).catch(function (err) {
+            reject(err);
         });
     });
 };
 
 var getUIDCounts = function () {
     return new Promise(function (resolve, reject) {
-        var oneDay = moment().subtract(1, 'day'),
-            oneMonth = moment().subtract(1, 'month'),
-            sixMonths = moment().subtract(6, 'month');
         
-        Analytics.aggregate([{
-            $project: {
-                uid: '$uid',
-                pastDay: { $cond: [ { '$gt': [ '$date', oneDay.toDate() ] }, 1, 0]},
-                pastMonth: { $cond: [ { '$gt': [ '$date', oneMonth.toDate() ] }, 1, 0]},
-                pastSixMonths: { $cond: [ { '$gt': [ '$date', sixMonths.toDate() ] }, 1, 0]}
-            },
-        }, {
-            $group: {
-                _id: { 'uid': '$uid' },
-                activePastDay: { $max: '$pastDay' },
-                activePastMonth: { $max: '$pastMonth' },
-                activePastSixMonths: { $max: '$pastSixMonths' }
+        elasticsearch.client.search({
+            index: elasticsearch.indexAlias('pageviews'),
+            body: {
+                size: 0,
+                query: { match_all: {} },
+                aggs: {
+                    uniqueUids: {
+                        cardinality: {
+                            field: 'uid',
+                            precision_threshold: 100
+                        }
+                    },
+                    occurredPastDay: {
+                        filter: {  range: { date: { gte: 'now-1d' } } },
+                        aggs: {
+                            uniqueUids: {
+                                cardinality: {
+                                    field: 'uid',
+                                    precision_threshold: 100
+                                }
+                            }
+                        }
+                    },
+                    occurredPastMonth: {
+                        filter: {  range: { date: { gte: 'now-1M' } } },
+                        aggs: {
+                            uniqueUids: {
+                                cardinality: {
+                                    field: 'uid',
+                                    precision_threshold: 100
+                                }
+                            }
+                        }
+                    },
+                    occurredPastSixMonths: {
+                        filter: {  range: { date: { gte: 'now-6M' } } },
+                        aggs: {
+                            uniqueUids: {
+                                cardinality: {
+                                    field: 'uid',
+                                    precision_threshold: 100
+                                }
+                            }
+                        }
+                    }
+                }
             }
-        }, {
-            $group: {
-                _id: { },
-                uidsPastDayCount: { $sum: '$activePastDay' },
-                uidsPastMonthCount: { $sum: '$activePastMonth' },
-                uidsPastSixMonthsCount: { $sum: '$activePastSixMonths' },
-                totalUids: { $sum: 1 }
-            }
-        }]).exec(function (err, results) {
-            if (err) {
-                reject(err);
-            }
-
-            results = _.omit(results[0], '_id');
+        }).then(function (response) {
+            var results = {
+                totalUids: response.aggregations.uniqueUids.value,
+                uidsPastDayCount: response.aggregations.occurredPastDay.uniqueUids.value,
+                uidsPastMonthCount: response.aggregations.occurredPastMonth.uniqueUids.value,
+                uidsPastSixMonthsCount: response.aggregations.occurredPastSixMonths.uniqueUids.value
+            };
             resolve(results);
+        }).catch(function (err) {
+            reject(err);
         });
     });
 };
@@ -312,37 +341,42 @@ var getLikes = function () {
 
 var getEvents = function (eventType) {
     return new Promise(function (resolve, reject) {
-        var oneDay = moment().subtract(1, 'day'),
-            oneWeek = moment().subtract(1, 'week'),
-            oneMonth = moment().subtract(1, 'month'),
-            sixMonths = moment().subtract(6, 'month');
 
-        pipeline = [{
-            $match: { eventType: { $eq: eventType }}
-        }, {
-            $project: {
-                occurredPastDay: { $cond: [ { '$gt': [ '$date', oneDay.toDate() ] }, 1, 0]},
-                occurredPastWeek: { $cond: [ { '$gt': [ '$date', oneWeek.toDate() ] }, 1, 0]},
-                occurredPastMonth: { $cond: [ { '$gt': [ '$date', oneMonth.toDate() ] }, 1, 0]},
-                occurredPastSixMonths: { $cond: [ { '$gt': [ '$date', sixMonths.toDate() ] }, 1, 0]}
-            },
-        }, {
-            $group: {
-                _id: {},
-                count: { $sum: 1 },
-                occurredPastDayCount: { $sum: '$occurredPastDay' },
-                occurredPastWeekCount: { $sum: '$occurredPastWeek' },
-                occurredPastMonthCount: { $sum: '$occurredPastMonth' },
-                occurredPastSixMonthsCount: { $sum: '$occurredPastSixMonths' }
-            }
-        }]
-
-        EventAnalytics.aggregate(pipeline).exec(function (err, results) {
-            if (err) {
-                return reject(err);
-            }
-
-            resolve(_.omit(results[0], '_id'));
+        elasticsearch.client.search({
+            index: elasticsearch.indexAlias('events'),
+            body: {
+                    size: 0,
+                    query: { term: { eventType: eventType } },
+                    aggs: {
+                        occurredPastHour: {
+                            filter: {  range: { date: { gte: 'now-1h' } } }
+                        },
+                        occurredPastDay: {
+                            filter: {  range: { date: { gte: 'now-1d' } } }
+                        },
+                        occurredPastWeek: {
+                            filter: {  range: { date: { gte: 'now-1w' } } }
+                        },
+                        occurredPastMonth: {
+                            filter: {  range: { date: { gte: 'now-1M' } } }
+                        },
+                        occurredPastSixMonths: {
+                            filter: {  range: { date: { gte: 'now-6M' } } }
+                        }
+                    }
+                }
+        }).then(function (response) {
+            var results = {
+                count: response.hits.total,
+                occurredPastHourCount: response.aggregations.occurredPastHour.doc_count,
+                occurredPastDayCount: response.aggregations.occurredPastDay.doc_count,
+                occurredPastWeekCount: response.aggregations.occurredPastWeek.doc_count,
+                occurredPastMonthCount: response.aggregations.occurredPastMonth.doc_count,
+                occurredPastSixMonthsCount: response.aggregations.occurredPastSixMonths.doc_count
+            };
+            resolve(results);
+        }).catch(function (err) {
+            reject(err);
         });
     });
 };
@@ -356,12 +390,11 @@ exports.get = function (req, res) {
         getUIDCounts(),
         getUserCounts(),
         getSessionCounts(),
-        getUsersByRevisions(),
         getRevisions(),
         getLikes(),
         getEvents('like'),
         getEvents('unlike'),
-        function (dashboardCounts, analyticsCounts, uidCounts, userCounts, sessionCounts, usersByRevisions, revisions, likes, likeEvents, unlikeEvents) {
+        function (dashboardCounts, analyticsCounts, uidCounts, userCounts, sessionCounts, revisions, likes, likeEvents, unlikeEvents) {
 
             revisions.avgRevisionCount = revisions.count / dashboardCounts.total.count;
 
@@ -370,7 +403,7 @@ exports.get = function (req, res) {
                 pageViews: analyticsCounts,
                 revisions: revisions,
                 sessions: sessionCounts,
-                users: _.merge(userCounts, usersByRevisions, uidCounts),
+                users: _.merge(userCounts, uidCounts),
                 likes: likes,
                 likeEvents: likeEvents,
                 unlikeEvents: unlikeEvents

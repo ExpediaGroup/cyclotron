@@ -67,7 +67,7 @@ exports.getNames = function(req, res) {
                 console.log(err);
                 res.status(500).send(err);
             } else {
-                res.send(_.pluck(dashboards, 'name'));
+                res.send(_.map(dashboards, 'name'));
             }
         });
 };
@@ -100,7 +100,7 @@ var searchDashboards = function (res, filters, searchItems) {
                 return _.every(searchItems, function(searchItem) {
                     if (searchRegexes[searchItem].test(dashboard.name))
                         return true;
-                    if (_.any(dashboard.tags, function(tag) {
+                    if (_.some(dashboard.tags, function(tag) {
                         return tag.toLowerCase() === searchItem;
                     }))
                         return true;

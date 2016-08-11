@@ -44,6 +44,8 @@ Dashboards are defined declaratively as a JSON document, which contains all the 
 
 * Permissions for viewing and editing Dashboards
 
+* Built-in analytics for Dashboards
+
 * Mobile support
 
 * REST API access

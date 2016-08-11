@@ -23,6 +23,24 @@ module.exports = {
     /* If enabled, loads example Dashboards from /examples folder into the database */
     loadExampleDashboards: true,
 
+    /* Configuration for Analytics */
+    analytics: {
+        /* Enable or disable analytic data collection */
+        enable: false,
+
+        /* Possible values: 'mongo', 'elasticsearch' */
+        analyticsEngine: 'mongo',
+
+        /* Configuration for Elasticsearch (if enabled) */
+        elasticsearch: {
+            host: 'my-elasticsearch-cluster:9200',
+            indexPrefix: 'cyclotron',
+            pageviewsIndexStrategy: 'monthly',
+            datasourcesIndexStrategy: 'monthly',
+            eventsIndexStrategy: 'yearly'
+        }
+    },
+
     /* Enable or disable authentication */
     enableAuth: false,
 

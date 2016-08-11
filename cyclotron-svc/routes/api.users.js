@@ -105,7 +105,7 @@ exports.login = function (req, res) {
         }
 
         createSession(user, req.ip).then(function (session) {
-            session.user.admin = _.contains(config.admins, session.user.distinguishedName);
+            session.user.admin = _.includes(config.admins, session.user.distinguishedName);
 
             /* Finally, passport.js login */
             req.login(user, { session: false }, function (err) {

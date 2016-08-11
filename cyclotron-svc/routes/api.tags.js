@@ -34,7 +34,7 @@ exports.get = function (req, res) {
                 res.status(500).send(err);
             } else {
                 var tags = _(dashboards)
-                    .pluck('tags')
+                    .map('tags')
                     .flatten()
                     .compact()
                     .sortBy()
@@ -55,14 +55,14 @@ exports.getSearchHints = function (req, res) {
                 res.status(500).send(err);
             } else {
                 var tags = _(dashboards)
-                    .pluck('tags')
+                    .map('tags')
                     .flatten()
                     .compact()
                     .sortBy()
                     .value();
 
                 var names = _(dashboards)
-                    .pluck('name')
+                    .map('name')
                     .sortBy()
                     .value();
 

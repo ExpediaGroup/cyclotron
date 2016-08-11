@@ -101,7 +101,7 @@
         dl(title='Average number of times users have logged in')
             dt {{ statistics.users.avgLoginsPerUser | numeraljs: '0.0' }}
             dd logins per user 
-        dl(title='Number of users who have edited a Dashboard')
+        //-dl(title='Number of users who have edited a Dashboard')
             dt {{ statistics.users.editingUserCount | numeraljs: '0,0' }}
             dd  
                 ng-pluralize(count='statistics.users.editingUserCount', when='{"one": "user", "other": "users"}')
@@ -268,7 +268,7 @@
                         tbody
                             tr(ng-repeat='dataSource in dataSources | tablesort | limitTo:dataSourcesLimit', ts-repeat)
                                 td 
-                                    a(href='/{{ dataSource.dashboard.name }}', target='_blank', title='Open this Dashboard in a new window') {{ dataSource.dashboard.name }}
+                                    a(href='/{{ dataSource.dashboardName }}', target='_blank', title='Open this Dashboard in a new window') {{ dataSource.dashboardName }}
                                 td {{ dataSource.dataSourceName }}
                                 td {{ dataSource.dataSourceType }}
                                 td {{ dataSource.count | numeraljs:'0,0' }}
