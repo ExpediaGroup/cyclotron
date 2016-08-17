@@ -26,7 +26,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
     exports = {
 
-        version: '1.37.0-SNAPSHOT'
+        version: '1.37.0'
 
         logging: 
             enableDebug: false
