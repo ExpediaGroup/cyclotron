@@ -383,50 +383,6 @@
     }, {
         "frequency": 1,
         "layout": {
-            "gridColumns": 1,
-            "gridHeightAdjustment": -170,
-            "gridRows": 1,
-            "gutter": 10,
-            "margin": 10
-        },
-        "name": "Header With DateTime Parameters",
-        "theme": "light",
-        "widgets": [{
-            "allowFullscreen": false,
-            "customHtml": "<div><small>This chart updates whenever a Parameter is changed, because the Change Event for each Parameter re-executes the Data Source.</small></div>",
-            "gridHeight": 1,
-            "gridWidth": 1,
-            "headerTitle": {
-                "link": "http://cyclotron.io",
-                "logoSize": "64px",
-                "logoUrl": "/img/favicon128.png",
-                "pageNameSeparator": "|",
-                "showPageName": true,
-                "showTitle": true,
-                "titleSize": "2rem"
-            },
-            "height": "160px",
-            "noscroll": true,
-            "parameters": {
-                "parametersIncluded": ["datetime", "date", "time"],
-                "showParameters": true
-            },
-            "theme": "lightborderless",
-            "widget": "header"
-        }, {
-            "dataSource": "uscrime-types",
-            "filters": {
-                "x": "y"
-            },
-            "gridHeight": 1,
-            "gridWidth": 1,
-            "layout": {},
-            "noData": "No Data",
-            "widget": "chart"
-        }]
-    }, {
-        "frequency": 1,
-        "layout": {
             "gridColumns": 5,
             "gridRows": 1,
             "gutter": 10,

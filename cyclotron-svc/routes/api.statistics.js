@@ -124,7 +124,7 @@ var getPageViewsCounts = function () {
                 totalVisits: { $sum: '$totalVisits'},
                 uniqueUids: { $sum: 1 }
             }
-        }]).exec(function (err, results) {
+        }]).allowDiskUse(true).exec(function (err, results) {
             if (err) {
                 reject(err);
             }

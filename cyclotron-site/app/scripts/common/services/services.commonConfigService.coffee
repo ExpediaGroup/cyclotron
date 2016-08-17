@@ -701,7 +701,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     type: 'editor'
                                     editorMode: 'javascript'
                                     required: false
-                                    order: 16
+                                    order: 22
                                 proxy:
                                     label: 'Proxy Server'
                                     description: 'Specifies which Proxy server to route the requests through. If omitted, the default proxy sever will be used.'
@@ -774,7 +774,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     type: 'editor'
                                     editorMode: 'javascript'
                                     required: false
-                                    order: 22
+                                    order: 16
                                 proxy:
                                     label: 'Proxy Server'
                                     description: 'Specifies which Proxy server to route the requests through. If omitted, the default proxy sever will be used.'

@@ -120,9 +120,9 @@ cyclotronApp.controller 'DashboardAnalyticsController', ($scope, dashboard, anal
 
     dashboardService.getRevision dashboard.name, 1, (rev) ->
         $scope.rev1 = rev
-        $scope.createdDate = moment(rev.date).format("MM/DD HH:mm:ss")
-        $scope.longCreatedDate = moment(rev.date).format("MM/DD/YYYY HH:mm:ss")
+        $scope.createdDate = moment(rev.date).format('MM/DD HH:mm:ss')
+        $scope.longCreatedDate = moment(rev.date).format('MM/DD/YYYY HH:mm:ss')
 
     $scope.$watch 'selectedTimespan', (timespan) ->
         $scope.loadTimeseriesData()
-
+    
