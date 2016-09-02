@@ -1,5 +1,5 @@
 ###
-# Copyright (c) 2013-2015 the original author or authors.
+# Copyright (c) 2016 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
 # you may not use this file except in compliance with the License. 
@@ -15,19 +15,13 @@
 ###
 
 #
-# Tableau Widget
+# Listens for focus events and sets focuses on a particular element
+# For use with the focusService
 #
-# Displays a tableau dashboard.
-#
-
-cyclotronApp.controller 'TableauWidget', ($scope) ->
-    # Override the widget feature of exporting data, since there is no data
-    $scope.widgetContext.allowExport = false
-    $scope.params = []
-
-    if !_.isUndefined($scope.widget.params)
-        $scope.params = _.map _.keys($scope.widget.params), (key) ->
-            {
-                name: key,
-                value: $scope.widget.params[key]
-            }
+cyclotronDirectives.directive 'focusOn', -> 
+    {
+        restrict: 'AC',
+        link: (scope, element, attrs) ->
+            scope.$on 'focusOn', (event, name) -> 
+                element[0].focus() if attrs.focusOn == name
+    }

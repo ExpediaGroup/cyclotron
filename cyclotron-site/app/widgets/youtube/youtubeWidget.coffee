@@ -15,7 +15,9 @@
 ###
 
 cyclotronApp.controller 'YoutubeWidget', ($scope, logService) ->
-
+    # Override the widget feature of exporting data, since there is no data
+    $scope.widgetContext.allowExport = false
+    
     #
     # For reference: https://developers.google.com/youtube/player_parameters
     #

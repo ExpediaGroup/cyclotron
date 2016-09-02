@@ -148,9 +148,12 @@ cyclotronDataSources.factory 'elasticsearchDataSource', ($q, $http, configServic
 
 
             # Do the request, wiring up success/failure handlers
-            proxyUrl = (_.jsExec(options.proxy) || configService.restServiceUrl) + '/proxy'
+            proxyUri = (_.jsExec(options.proxy) || configService.restServiceUrl) + '/proxy'
 
-            req = $http.post proxyUrl, getProxyRequest(options)
+            # Remove protocol to work with either HTTP or HTTPS
+            proxyUri = new URI(proxyUri).protocol('').toString()
+
+            req = $http.post proxyUri, getProxyRequest(options)
             
             # Add callback handlers to promise
             req.success successCallback

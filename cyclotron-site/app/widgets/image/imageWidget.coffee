@@ -15,6 +15,9 @@
 ###
 
 cyclotronApp.controller 'ImageWidget', ($scope, $interval) ->
+    # Override the widget feature of exporting data, since there is no data
+    $scope.widgetContext.allowExport = false
+    
     $scope.duration = $scope.widget.duration * 1000
 
     $scope.urlIndex = -1

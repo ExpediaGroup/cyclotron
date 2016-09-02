@@ -26,17 +26,23 @@
             div(ng-bind-html='trustHtml(content.html)')
 
         accordion-group.show-hide-widgets(heading='Show/Hide Widgets', ng-if='dashboard.sidebar.showHideWidgets == true')
-            table.table
-                tr(ng-repeat='widget in widgetVisibilities track by $index')
-                    td {{ widget.label }}
-                    td 
+            
+            ul.widget-list(dnd-list='calculatedWidgets')
+                li(ng-repeat='widget in calculatedWidgets',
+                    dnd-draggable='widget',
+                    dnd-effect-allowed='move',
+                    dnd-moved='moveWidget($index)')
+                    span.icon
+                        i.fa.fa-bars
+                    span.title {{ widget.label }}
+                    span.swtch
                         switch(ng-model='widget.visible', ng-change='changeVisibility(widget, $index)')
-                tr
-                    td(colspan='2') 
-                        hr
-                tr
-                    td All Widgets
-                    td
+
+            ul.widget-list.final
+                li
+                    span.icon
+                    span.title All Widgets
+                    span.swtch
                         switch(ng-model='allWidgetsVisible', ng-change='toggleAllWidgets()')
             p.centered
                 a(ng-click='resetDashboardOverrides()', title='Reset to default')

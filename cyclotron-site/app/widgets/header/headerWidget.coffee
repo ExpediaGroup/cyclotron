@@ -18,6 +18,9 @@
 # Header Widget
 #
 cyclotronApp.controller 'HeaderWidget', ($scope, $sce, configService) ->
+    # Override the widget feature of exporting data, since there is no data
+    $scope.widgetContext.allowExport = false
+    
     $scope.headerTitle = _.compile $scope.widget.headerTitle
 
     # Load user-specified format if defined

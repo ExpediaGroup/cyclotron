@@ -46,11 +46,11 @@ cyclotronDirectives.directive 'widgetError', ($timeout) ->
                 if scope.widget.showWidgetErrors
                     errorMessageLength = $widgetError.width() * widgetBodyHeight / 512
 
-                    if _.isObject(scope.dataSourceErrorMessage)
-                        if scope.dataSourceErrorMessage.message?
-                            scope.errorMessage = scope.dataSourceErrorMessage.message
+                    if _.isObject(scope.widgetContext.dataSourceErrorMessage)
+                        if scope.widgetContext.dataSourceErrorMessage.message?
+                            scope.errorMessage = scope.widgetContext.dataSourceErrorMessage.message
                     else 
-                        scope.errorMessage = scope.dataSourceErrorMessage
+                        scope.errorMessage = scope.widgetContext.dataSourceErrorMessage
                         
                     if not _.isString(scope.errorMessage)
                         scope.errorMessage = JSON.stringify scope.errorMessage

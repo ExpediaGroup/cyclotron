@@ -20,6 +20,7 @@
     "angular-animate": "1.4.9",
     "angular-bootstrap": "1.2.4",
     "angular-cookies": "1.4.9",
+    "angular-drag-and-drop-lists": "~1.4.0",
     "angular-google-chart": "angular-google-chart#9588ed2",
     "angular-hotkeys": "0.2.2",
     "angular-localForage": "1.2.5",
@@ -46,7 +47,7 @@
     "jsondiffpatch": "~0.1.41",
     "lato": "0.3.0",
     "lodash": "2.4.1",
-    "masonry": "3.1.5",
+    "masonry": "~4.1.1",
     "metrics-graphics": "2.6.0",
     "moment": "2.13.0",
     "ngTranscludeMod": "izhaki/ngTranscludeMod",
@@ -136,7 +137,8 @@
         "./css/lato.css",
         "./font/lato-bold/*",
         "./font/lato-light/*",
-        "./font/lato-lightitalic/*"
+        "./font/lato-lightitalic/*",
+        "./font/lato-regular/*"
       ]
     },
     "masonry": {

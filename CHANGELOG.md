@@ -1,3 +1,29 @@
+# 1.38.0 (09/02/2016)
+
+## Features
+
+ - Dashboard Sidebar: Show/Hide Widgets now allows drag-and-drop reordering of Widgets.  Like the visibility toggle, this overrides the Widget order for the current user, and is persisted across sessions (in the same browser).
+
+ - Analytics/Statistics Update: Revisited the instance statistics displayed on the Analytics page: added/removed/renamed where appropriate. Switched from 1 month metrics to last 30 days for consistency.
+
+ - Widget Data Export: Added new export dropdown menu to all Widgets by default, with the option to download data in JSON/CSV/XLSX formats.  Also added JavaScript hooks to custom trigger exporting of Widget data, or to export custom data.
+
+ - Table Widget: Added a property for configuring a message to display underneath the pager when pagination is enabled.  Message can interpolate paging variables such as #{totalItems}, #{itemsPerPage}, and #{currentPage}.
+
+ - Widgets: Auto-Height (Fit to Content): Added option to allow Widgets to scale vertically to fit their contents, instead of providing a Grid or absolute height value.  This may be useful for embedding HTML content of varying length.
+
+ - View Permissions Failed Dialog: Added Dashboard Editors (including emails) to the dialog, so users who lack permissions can request accesss from the owners of the Dashboard.
+
+## Bug Fixes
+
+ - After login failure, set focus on password field
+
+ - Dashboards: in some cases, multiple browser history entries would be created when a Dashboard is loaded, confusing navigation. The extra entries have been removed.
+
+ - Update Data Sources to automatically use the current protocol (HTTP/HTTPS) for proxies.
+
+ - Fix issues with missing fonts in certain circumstances.
+
 # 1.37.0 (08/18/2016)
 
 ## Features

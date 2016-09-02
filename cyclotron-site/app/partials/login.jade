@@ -6,8 +6,8 @@
         .login-message(ng-if='loginMessage') {{ loginMessage }}
 
         form(ng-submit='login()')
-            input(type='text', ng-model='credentials.username', required, focus-me='focusUsername', placeholder='Username')
-            input(type='password', ng-model='credentials.password', required, focus-me='focusPassword', placeholder='Password')
+            input(type='text', ng-model='credentials.username', required, focus-on='focusUsername', placeholder='Username')
+            input(type='password', ng-model='credentials.password', required, focus-on='focusPassword', placeholder='Password')
 
             //- Hidden input for ng-submit to work
             input(type='submit', style='position: absolute; left: -9999px')

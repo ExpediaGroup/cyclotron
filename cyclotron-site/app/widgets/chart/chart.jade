@@ -1,10 +1,11 @@
 .chart-widget(ng-controller='ChartWidget')
     h1.title(ng-if='::widget.title') {{ widgetTitle() }}
 
-    .spinjs(ng-if='loading')
-    .widget-error(ng-if='dataSourceError == true && !loading')        
-    .widget-nodata(ng-if='nodata && !loading')
+    .widget-loading(spinjs, ng-if='isLoading()')
+    .widget-error(ng-if='widgetContext.dataSourceError == true && !isLoading()')
+    .widget-nodata(ng-if='widgetContext.nodata && !isLoading()')
         .fa.fa-exclamation-triangle
-        span  {{ nodata }}
-
-    .highchart(ng-if='!nodata && !dataSourceError', chart='highchart', theme='widget.theme', addshift='widget.addShiftPoints')
+        span  {{ widgetContext.nodata }}
+    
+    .highchart(ng-if='!widgetContext.nodata && !widgetContext.dataSourceError', 
+        chart='highchart', theme='widget.theme', addshift='widget.addShiftPoints')

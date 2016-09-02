@@ -46,6 +46,11 @@ table
     tr
         td Cyclotron.functions.forceUpdate()
         td Forces Cyclotron to do an internal update of Dashboard state, e.g. syncing parameters to the URL. In general, this should not be needed, but can be used to immediately trigger an update cycle after running custom JavaScript.
+    tr
+        td Cyclotron.functions.exportData(format, data)
+        td Downloads the provided data in one of the following formats: 'json', 'csv', 'xlsx'. CSV and XLSX are both tabular formats and may not be correctly formatted with nested data. See also 
+            em  Cyclotron.currentPage.widgets['widgetName'].exportData(format)
+            | .
 
 h4 Built-In Parameters
 
@@ -121,6 +126,11 @@ table
         td Toggles the visibility of a Widget; overrides the Widget's 
             em hidden
             |  property
+    tr
+        td Cyclotron.currentPage.widgets['widgetName'].exportData(format)
+        td Downloads the data behind a Widget in one of the following formats: 'json', 'csv', 'xlsx'.  CSV and XLSX are both tabular formats and may not be correctly formatted with nested data. See also
+            em  Cyclotron.functions.exportData()
+            | .
 
 h4 CyclotronData
 

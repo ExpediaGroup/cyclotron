@@ -11,15 +11,15 @@
 
     .widget-body
 
-        .spinjs(ng-if='loading')
-        .widget-error(ng-if='dataSourceError == true && !loading')        
-        .widget-nodata(ng-if='nodata && !loading')
+        .widget-loading(spinjs, ng-if='isLoading()')
+        .widget-error(ng-if='widgetContext.dataSourceError == true && !isLoading()')
+        .widget-nodata(ng-if='widgetContext.nodata && !isLoading()')
             .fa.fa-exclamation-triangle
-            span  {{ nodata }}
+            span  {{ widgetContext.nodata }}
 
         .the-chart(google-chart='google-chart', chart='chartObject', 
             agc-on-error='handleError(message)',
             agc-on-select='selectItem(selectedItem)',
             agc-on-range-change='rangeChange(start, end)',
-            ng-if='!nodata && !dataSourceError && chartObject.data')
+            ng-if='!noDataOrError() && chartObject.data')
 

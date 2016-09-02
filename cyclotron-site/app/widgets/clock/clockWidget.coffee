@@ -18,6 +18,9 @@
 # Clock Widget
 #
 cyclotronApp.controller 'ClockWidget', ($scope, $interval, configService) ->
+    # Override the widget feature of exporting data, since there is no data
+    $scope.widgetContext.allowExport = false
+    
     $scope.format = configService.widgets.clock.properties.format.default
     
     # Load user-specified format if defined

@@ -17,18 +17,20 @@
 #
 # PushDashboard controller -- for modal dialog
 #
-cyclotronApp.controller 'PushDashboardController', ($scope, $uibModalInstance, $q, $http, configService, dashboardService, userService) ->
+cyclotronApp.controller 'PushDashboardController', ($scope, $uibModalInstance, $q, $http, $timeout, configService, dashboardService, focusService, userService) ->
 
     $scope.environmentsForPush = _.reject configService.cyclotronEnvironments, { canPush: false }
 
     $scope.fields = {}
 
-    # Load cached username
-    if userService.cachedUsername?
-        $scope.fields.username = userService.cachedUsername
-        $scope.focusPassword = true
-    else 
-        $scope.focusUsername = true
+    $scope.updateFocus = ->
+        $timeout ->
+            # Load cached username
+            if userService.cachedUsername?
+                $scope.fields.username = userService.cachedUsername
+                focusService.focus 'focusPassword', $scope
+            else 
+                focusService.focus 'focusUsername', $scope
 
     # Login to the remote server if required.
     $scope.login = ->
@@ -48,6 +50,8 @@ cyclotronApp.controller 'PushDashboardController', ($scope, $uibModalInstance, $
                 
             loginPromise.error (error) ->
                 $scope.fields.password = ''
+                focusService.focus 'focusPassword', $scope
+
                 if _.isObject(error)
                     alertify.error('Login Error: ' + error.name, 2500)    
                 else

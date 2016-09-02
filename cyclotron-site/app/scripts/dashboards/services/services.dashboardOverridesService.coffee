@@ -58,6 +58,9 @@ cyclotronServices.factory 'dashboardOverridesService', ($localForage, $q, $windo
                     logService.error 'Error loading Dashboard Overrides:', error
                     reject error
 
+        expandOverrides: (dashboard, dashboardOverrides) ->
+            expandOverrides dashboard, dashboardOverrides
+
         resetAndExpandOverrides: (dashboard) ->
             dashboardOverrides = resetOverrides()
             expandOverrides dashboard, dashboardOverrides

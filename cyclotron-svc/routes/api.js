@@ -88,6 +88,7 @@ exports.bindRoutes = function (app) {
     app.get('/searchhints', tags.getSearchHints);
     app.all('/searchhints', notAllowed);
 
+    app.post('/export/data', exporter.dataAsync);
     app.get('/export/:name/pdf', exporter.pdf);
     app.post('/export/:name/pdf', exporter.pdfAsync);
     app.all('/export/:name/pdf', notAllowed);

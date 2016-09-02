@@ -58,10 +58,10 @@ exports.recordPageView = function (req, res) {
     res.send();
 
     if (!_.isNull(record.dashboard)) {
-        record.dashboard = record.dashboard._id;
+        record.dashboard = new mongoose.Types.ObjectId(record.dashboard._id);
     }
     if (!_.isNull(record.user)) {
-        record.user = record.user._id;
+        record.user = new mongoose.Types.ObjectId(record.user._id);
     }
 
     var pageViewInc = 0, 
@@ -120,7 +120,7 @@ exports.recordDataSource = function (req, res) {
     res.send();
 
     if (!_.isNull(record.dashboard)) {
-        record.dashboard = record.dashboard._id;
+        record.dashboard = new mongoose.Types.ObjectId(record.dashboard._id);
     }
 
     /* Create new record in the Data Source Analytics collection */
@@ -147,7 +147,7 @@ exports.recordEvent = function (req, res) {
     res.send();
 
     if (!_.isNull(record.user)) {
-        record.user = record.user._id;
+        record.user = new mongoose.Types.ObjectId(record.user._id);
     }
 
     /* Create new record in the Event Analytics collection */
@@ -725,8 +725,10 @@ var aggregateDataSources = function (pipeline, res) {
             }
 
             res.send(_.map(populatedResults, function (row) {
-                row.dashboardName = row.dashboard.name;
-                delete row.dashboard;
+                if (row.dashboard) {
+                    row.dashboardName = row.dashboard.name;
+                    delete row.dashboard;
+                }
                 return row;
             }));
         });

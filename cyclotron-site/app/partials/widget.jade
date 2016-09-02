@@ -1,0 +1,20 @@
+.widget-control-bar
+    i.widget-control.widget-helptext.fa.fa-question-circle(ng-if='widgetContext.helpText', uib-tooltip='{{ ::widgetContext.helpText }}', tooltip-placement='auto-right', tooltip-trigger='outsideClick')
+    .widget-control.widget-dropdown-menu.btn-group(ng-if='showDropdown()', uib-dropdown='')
+        i.fa.fa-caret-down(uib-dropdown-toggle='')
+        ul.dropdown-menu-right(uib-dropdown-menu='', role='menu')
+            li(role='menuitem')
+                a(ng-click='exportData("csv")') 
+                    i.fa.fa-file-o
+                    |  Export data as CSV
+            li(role='menuitem')
+                a(ng-click='exportData("json")')
+                    i.fa.fa-file-code-o
+                    |  Export data as JSON
+            li(role='menuitem')
+                a(ng-click='exportData("xlsx")')
+                    i.fa.fa-file-excel-o
+                    |  Export data as Excel
+    i.widget-control.widget-fullscreen.fa.fa-expand(ng-if='widgetContext.allowFullscreen', title='Click to view fullscreen')
+
+.dashboard-widget(class='{{ widgetClass }}', ng-include='widgetTemplateUrl')

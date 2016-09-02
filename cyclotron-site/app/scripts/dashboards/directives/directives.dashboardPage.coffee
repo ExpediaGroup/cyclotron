@@ -37,7 +37,7 @@ cyclotronDirectives.directive 'dashboardPage', ($compile, $window, $timeout, con
 
         template: '<div class="dashboard-page dashboard-{{page.theme}} {{page.style}}">' +
             '<div class="dashboard-page-inner">' +
-                '<div class="dashboard-widgetwrapper dashboard-{{widget.theme}}" ng-repeat="widget in page.widgets"' +
+                '<div class="dashboard-widgetwrapper dashboard-{{widget.theme}}" ng-repeat="widget in sortedWidgets track by widget.uid"' +
                 ' widget="widget" page="page" page-overrides="pageOverrides" widget-index="$index" layout="layout" dashboard="dashboard" post-layout="postLayout()"></div>' + 
             '</div></div>'
 
@@ -47,31 +47,66 @@ cyclotronDirectives.directive 'dashboardPage', ($compile, $window, $timeout, con
             $dashboardPageInner = $element.children('.dashboard-page-inner')
             $dashboardControls = $dashboard.find '.dashboard-controls'
             $dashboardSidebar = $dashboard.find '.dashboard-sidebar'
-            
-            masonry = (element, layout) ->
+
+            masonry = ->
+                return unless scope.layout?
                 $dashboardPageInner.masonry({
                     itemSelector: '.dashboard-widgetwrapper'
-                    columnWidth: layout.gridSquareWidth
-                    gutter: layout.gutter
+                    columnWidth: scope.layout.gridSquareWidth
+                    gutter: scope.layout.gutter
+                    resize: false
+                    transitionDuration: '0.1s'
+                    stagger: 5
                 })
 
-            #
-            # Watch the dashboard page and update the layout
-            #
-            scope.$watch 'page', (newValue, oldValue) ->
-                if _.isUndefined(newValue) then return
+            # Determine sort order of Widgets
+            # Normally, Widgets appear in sequential order that they are listed in the Dashboard
+            # However, Users can override the Widget index, so this must be taken into account
+            resortWidgets = ->
+                # Apply User overrides to Widget sort order
+                if scope.pageOverrides?.widgets?
+                    widgetOverrides = scope.pageOverrides.widgets
+                    sortedWidgets = _.map scope.page.widgets, (widget, index) ->
+                        widget = _.cloneDeep widget
+                        widget._originalIndex = index
+                        if widgetOverrides[index].indexOverride?
+                            widget._index = widgetOverrides[index].indexOverride
+                        else 
+                            # No override, so use the default index of the Widget
+                            widget._index = index
+                        return widget
 
+                    scope.sortedWidgets = _.sortBy sortedWidgets, '_index'
+                else
+                    # No overrides, so take the Widgets as-is
+                    scope.sortedWidgets = scope.page?.widgets || []
+
+
+            updatePage = ->
+
+                # Assign uids to Widgets -- use for tracking if widgets are rearranged
+                _.each scope.page.widgets, (widget) ->
+                    widget.uid ?= uuid.v4()
+                    return
+
+                # Sort Widgets per overrides
+                resortWidgets()
+            
                 # Update the layout -- this triggers all widgets to update
                 # Masonry will be called after all widgets have redrawn
                 updateLayout = ->
-                    scope.postLayout = _.after newValue.widgets.length, ->
-                        if (newValue.enableMasonry != false)
-                            masonry(element, scope.layout)
+
+                    # Create a run-once function that triggers Masonry after all the Widgets have drawn themselves
+                    scope.postLayout = _.after scope.page.widgets.length, ->
+                        if (scope.page.enableMasonry != false)
+                            masonry()
                         return
 
                     containerWidth = $dashboard.innerWidth()
                     containerHeight = $($window).height()
-                    scope.layout = layoutService.getLayout(newValue, containerWidth, containerHeight)
+
+                    # Recalculate layout
+                    scope.layout = layoutService.getLayout scope.page, containerWidth, containerHeight
 
                     # Set page margin if defined
                     if !_.isNullOrUndefined(scope.layout.margin)
@@ -102,16 +137,34 @@ cyclotronDirectives.directive 'dashboardPage', ($compile, $window, $timeout, con
                     $element.off 'resize', resizeFunction
 
                 # Apply page theme class to dashboard-controls
-                $dashboard.addClass('dashboard-' + newValue.theme)
-                $dashboardControls.addClass('dashboard-' + newValue.theme)
+                $dashboard.addClass('dashboard-' + scope.page.theme)
+                $dashboardControls.addClass('dashboard-' + scope.page.theme)
 
                 # Set dashboard background color from theme
-                themeSettings = configService.dashboard.properties.theme.options[newValue.theme]
-                if newValue.theme? and themeSettings?
+                themeSettings = configService.dashboard.properties.theme.options[scope.page.theme]
+                if scope.page.theme? and themeSettings?
                     color = themeSettings.dashboardBackgroundColor
                     $('html').css('background-color', color)
 
                 return
+
+            #
+            # Watch the dashboard page and update the layout
+            #
+            scope.$watch 'page', (page, oldValue) ->
+                return if _.isUndefined(page)                
+                updatePage()
+
+            scope.$watch 'pageOverrides', (pageOverrides, previous) ->
+                return if _.isEqual pageOverrides, previous
+                resortWidgets()
+
+                $timeout ->
+                    $dashboardPageInner.masonry('reloadItems')
+                    $dashboardPageInner.masonry()
+                , 30
+                return
+            , true
 
             #
             # Cleanup

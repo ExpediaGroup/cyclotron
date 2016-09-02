@@ -289,6 +289,7 @@ gulp.task 'webserver', ->
         .pipe webserver {
             host: '0.0.0.0'
             port: 8080
+            https: false
             livereload: false
             fallback: 'index.html'
             open: 'http://localhost:8080'

@@ -17,22 +17,19 @@
 #
 # Login controller -- for login modal dialog
 #
-cyclotronApp.controller 'LoginController', ($scope, $uibModalInstance, $localForage, configService, userService) ->
+cyclotronApp.controller 'LoginController', ($scope, $uibModalInstance, $localForage, configService, focusService, userService) ->
 
     $scope.credentials = {}
     $scope.loginError = false
-
-    $scope.focusUsername = false
-    $scope.focusPassword = false
 
     $scope.loginMessage ?= configService.authentication.loginMessage
 
     # Load cached username
     if userService.cachedUsername?
         $scope.credentials.username = userService.cachedUsername
-        $scope.focusPassword = true
+        focusService.focus 'focusPassword', $scope
     else 
-        $scope.focusUsername = true
+        focusService.focus 'focusUsername', $scope
 
     $scope.canLogin = ->
         return !_.isEmpty($scope.credentials.username) && !_.isEmpty($scope.credentials.password)
@@ -48,6 +45,7 @@ cyclotronApp.controller 'LoginController', ($scope, $uibModalInstance, $localFor
         loginPromise.catch (error) ->
             $scope.loginError = true
             $scope.credentials.password = ''
+            focusService.focus 'focusPassword', $scope
 
     $scope.cancel = ->
         $uibModalInstance.dismiss('cancel')

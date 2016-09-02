@@ -6,7 +6,10 @@
         strong  View Permissions
         |  that prevent you from being able to view or edit it.
 
-    p This is managed by the owner of this Dashboard.
+    p This is managed by the owner of this Dashboard.  Please contact:
+    ul
+        li(ng-repeat='editor in dashboardEditors') {{ editor.displayName }} 
+            a(href='mailto:{{ editor.mail }}?subject=Cyclotron:%20Access%20to%20Dashboard:%20{{ dashboardName }}') ({{ editor.mail }})
 
 .modal-footer
     button.btn.btn-primary(ng-click='goHome()')

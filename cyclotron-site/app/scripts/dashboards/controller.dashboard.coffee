@@ -17,7 +17,7 @@
 #
 # Home controller.
 #
-cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $localForage, $location, $timeout, $window, $q, $uibModal, analyticsService, configService, cyclotronDataService, dashboardOverridesService, dashboardService, dataService, loadService, logService, parameterService, userService) ->
+cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $localForage, $location, $timeout, $window, $q, $uibModal, analyticsService, configService, cyclotronDataService, dashboardOverridesService, dashboardService, dataService, downloadService, loadService, logService, parameterService, userService) ->
 
     preloadTimer = null
     rotateTimer = null
@@ -27,6 +27,8 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $localFora
     $scope.currentPageIndex = -1
     $scope.paused = true
     $scope.firstLoad = true
+    $scope.firstUrlUpdate = true
+    $scope.firstParameterSync = true
 
     $scope.restServiceUrl = configService.restServiceUrl
 
@@ -46,6 +48,10 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $localFora
         dataSources: {}
         functions: 
             forceUpdate: -> $scope.$apply()
+            exportData: (format, data, name = $scope.originalDashboardName) ->
+                return unless data?
+                downloadService.download name, format, data
+
         parameters: _.clone $location.search()
         data: cyclotronDataService
 
@@ -63,6 +69,10 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $localFora
         # Save values accessible to Dashboards
         Cyclotron.dashboardName = $scope.dashboard.name
         Cyclotron.pageName = pageName
+
+        if $scope.firstUrlUpdate
+            $location.replace()
+            $scope.firstUrlUpdate = false
 
     #
     # Increments the page index and loads the next page into the dashboard (hidden)
@@ -257,6 +267,11 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $localFora
 
             return
 
+        # Replace URL on initial load, to avoid creating an extra browser history item
+        if $scope.firstParameterSync
+            $location.replace()
+            $scope.firstParameterSync = false
+
         # Create export options from non-default parameters
         $scope.exportUrl = new URI('/export')
             .segment $scope.dashboard.name
@@ -314,8 +329,11 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $localFora
                 # Resolve promise
                 deferred.resolve()
 
-                # Continuous reload
-                $timeout($scope.loadDashboard, $scope.reloadInterval)
+                # Schedule a continuous reload of the Dashboard
+                $timeout(->
+                    $scope.loadDashboard().then $scope.subsequentLoad
+                , $scope.reloadInterval)
+
                 return
 
             # Clean old CSS first
@@ -363,6 +381,9 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $localFora
                         $scope.loadDashboard(deferred)
                     return
                 when 403
+                    $scope.dashboardEditors = error.data.data.editors
+                    $scope.dashboardName = $scope.originalDashboardName
+
                     $uibModal.open {
                         templateUrl: '/partials/viewPermissionDenied.html'
                         scope: $scope
@@ -396,6 +417,7 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $localFora
 
         return deferred.promise
 
+    # Method to be called after the first load of the Dashboard
     $scope.initialLoad = ->
 
         # Load theme css(s) 
@@ -453,8 +475,6 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $localFora
                     else
                         $scope.goToPage 1
 
-                    $scope.updateUrl()
-
                 # Start Dashboard Rotation            
                 if $window.Cyclotron.parameters.autoRotate == "true" or $scope.dashboard.autoRotate == true
                     # ?autoRotate=true/false will override the dashboard setting.
@@ -465,6 +485,11 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $localFora
                         $scope.rotate()
                 
                 $scope.firstLoad = false
+
+    # Method to be called after reloading the dashboard (compared to $scope.initialLoad)
+    $scope.subsequentLoad = ->
+        # Expand overrides to add defaults for any added widgets
+        dashboardOverridesService.expandOverrides $scope.dashboard, $scope.dashboardOverrides
 
     # Initial load - load dashboard and initialize rotation
     $scope.reloadInterval = if $window.Cyclotron.parameters.live == 'true' then 1500 else 60000

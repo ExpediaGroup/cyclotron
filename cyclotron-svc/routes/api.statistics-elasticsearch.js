@@ -39,11 +39,13 @@ var getDashboardCounts = function () {
             getDashboardCounts2(null),
             getDashboardCounts2(true),
             getDashboardCounts2(false),
-            function (totalDashboardCounts, deletedDashboardCounts, undeletedDashboardCounts) {
+            getActiveDashboardCounts(),
+            function (totalDashboardCounts, deletedDashboardCounts, undeletedDashboardCounts, activeDashboardCounts) {
                 resolve({
                     total: totalDashboardCounts,
                     deletedDashboards: deletedDashboardCounts,
-                    undeletedDashboards: undeletedDashboardCounts
+                    undeletedDashboards: undeletedDashboardCounts,
+                    active: activeDashboardCounts
                 });
             })
         .catch(function (err) {
@@ -56,7 +58,7 @@ var getDashboardCounts = function () {
 var getDashboardCounts2 = function (isDeleted) {
     return new Promise(function (resolve, reject) {
         var oneDay = moment().subtract(1, 'day'),
-            oneMonth = moment().subtract(1, 'month'),
+            thirtyDay = moment().subtract(30, 'day'),
             sixMonths = moment().subtract(6, 'month');
 
         var pipeline = [{
@@ -65,7 +67,7 @@ var getDashboardCounts2 = function (isDeleted) {
                 viewerCount: { $size: { $ifNull: ['$viewers', []] } },
                 tagsCount: { $size: { $ifNull: ['$tags', []] } },
                 editedPastDay: { $cond: [ { '$gt': [ '$date', oneDay.toDate() ] }, 1, 0]},
-                editedPastMonth: { $cond: [ { '$gt': [ '$date', oneMonth.toDate() ] }, 1, 0]},
+                editedPastThirtyDay: { $cond: [ { '$gt': [ '$date', thirtyDay.toDate() ] }, 1, 0]},
                 editedPastSixMonths: { $cond: [ { '$gt': [ '$date', sixMonths.toDate() ] }, 1, 0]}
             },
         }, {
@@ -73,7 +75,7 @@ var getDashboardCounts2 = function (isDeleted) {
                 _id: {},
                 count: { $sum: 1 },
                 editedPastDayCount: { $sum: '$editedPastDay' },
-                editedPastMonthCount: { $sum: '$editedPastMonth' },
+                editedPastThirtyDayCount: { $sum: '$editedPastThirtyDay' },
                 editedPastSixMonthsCount: { $sum: '$editedPastSixMonths' },
                 avgTagsCount: { $avg: '$tagsCount' },
                 maxTagsCount: { $max: '$tagsCount' },
@@ -100,6 +102,69 @@ var getDashboardCounts2 = function (isDeleted) {
             }
 
             resolve(_.omit(results[0], '_id'));
+        });
+    });
+};
+
+var getActiveDashboardCounts = function () {
+    return new Promise(function (resolve, reject) {
+        elasticsearch.client.search({
+            index: elasticsearch.indexAlias('pageviews'),
+            body: {
+                size: 0,
+                query: { match_all: {} },
+                aggs: {
+                    activeDashboards: {
+                        cardinality: {
+                            field: 'dashboard._id',
+                            precision_threshold: 100
+                        }
+                    },
+                    occurredPastDay: {
+                        filter: { range: { date: { gte: 'now-1d' } } },
+                        aggs: {
+                            activeDashboards: {
+                                cardinality: {
+                                    field: 'dashboard._id',
+                                    precision_threshold: 100
+                                }
+                            }
+                        }
+                    },
+                    occurredPastThirtyDay: {
+                        filter: { range: { date: { gte: 'now-30d' } } },
+                        aggs: {
+                            activeDashboards: {
+                                cardinality: {
+                                    field: 'dashboard._id',
+                                    precision_threshold: 100
+                                }
+                            }
+                        }
+                    },
+                    occurredPastSixMonths: {
+                        filter: { range: { date: { gte: 'now-6M' } } },
+                        aggs: {
+                            activeDashboards: {
+                                cardinality: {
+                                    field: 'dashboard._id',
+                                    precision_threshold: 100
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }).then(function (response) {
+            var results = {
+                activeDashboards: response.aggregations.activeDashboards.value,
+                activePastDayCount: response.aggregations.occurredPastDay.activeDashboards.value,
+                activePastThirtyDayCount: response.aggregations.occurredPastThirtyDay.activeDashboards.value,
+                activePastSixMonthsCount: response.aggregations.occurredPastSixMonths.activeDashboards.value
+            };
+            resolve(results);
+        }).catch(function (err) {
+            reject(err);
         });
     });
 };
@@ -168,8 +233,8 @@ var getUIDCounts = function () {
                             }
                         }
                     },
-                    occurredPastMonth: {
-                        filter: {  range: { date: { gte: 'now-1M' } } },
+                    occurredPastThirtyDay: {
+                        filter: {  range: { date: { gte: 'now-30d' } } },
                         aggs: {
                             uniqueUids: {
                                 cardinality: {
@@ -196,7 +261,7 @@ var getUIDCounts = function () {
             var results = {
                 totalUids: response.aggregations.uniqueUids.value,
                 uidsPastDayCount: response.aggregations.occurredPastDay.uniqueUids.value,
-                uidsPastMonthCount: response.aggregations.occurredPastMonth.uniqueUids.value,
+                uidsPastThirtyDayCount: response.aggregations.occurredPastThirtyDay.uniqueUids.value,
                 uidsPastSixMonthsCount: response.aggregations.occurredPastSixMonths.uniqueUids.value
             };
             resolve(results);
@@ -209,7 +274,7 @@ var getUIDCounts = function () {
 var getUserCounts = function () {
     return new Promise(function (resolve, reject) {
         var oneDay = moment().subtract(1, 'day'),
-            oneMonth = moment().subtract(1, 'month'),
+            thirtyDay = moment().subtract(30, 'day'),
             sixMonths = moment().subtract(6, 'month');
 
         Users.aggregate([{
@@ -218,7 +283,7 @@ var getUserCounts = function () {
             $project: {
                 timesLoggedIn: '$timesLoggedIn',
                 activePastDay: { $cond: [ { '$gt': [ '$lastLogin', oneDay.toDate() ] }, 1, 0]},
-                activePastMonth: { $cond: [ { '$gt': [ '$lastLogin', oneMonth.toDate() ] }, 1, 0]},
+                activePastThirtyDay: { $cond: [ { '$gt': [ '$lastLogin', thirtyDay.toDate() ] }, 1, 0]},
                 activePastSixMonths: { $cond: [ { '$gt': [ '$lastLogin', sixMonths.toDate() ] }, 1, 0]}
             }
         }, {
@@ -226,7 +291,7 @@ var getUserCounts = function () {
                 _id: {},
                 count: { $sum: 1 },
                 activePastDayCount: { $sum: '$activePastDay' },
-                activePastMonthCount: { $sum: '$activePastMonth' },
+                activePastThirtyDayCount: { $sum: '$activePastThirtyDay' },
                 activePastSixMonthsCount: { $sum: '$activePastSixMonths' },
                 avgLoginsPerUser: { $avg: '$timesLoggedIn' }
             }
@@ -357,8 +422,8 @@ var getEvents = function (eventType) {
                         occurredPastWeek: {
                             filter: {  range: { date: { gte: 'now-1w' } } }
                         },
-                        occurredPastMonth: {
-                            filter: {  range: { date: { gte: 'now-1M' } } }
+                        occurredPastThirtyDayCount: {
+                            filter: {  range: { date: { gte: 'now-30d' } } }
                         },
                         occurredPastSixMonths: {
                             filter: {  range: { date: { gte: 'now-6M' } } }
@@ -371,7 +436,7 @@ var getEvents = function (eventType) {
                 occurredPastHourCount: response.aggregations.occurredPastHour.doc_count,
                 occurredPastDayCount: response.aggregations.occurredPastDay.doc_count,
                 occurredPastWeekCount: response.aggregations.occurredPastWeek.doc_count,
-                occurredPastMonthCount: response.aggregations.occurredPastMonth.doc_count,
+                occurredPastThirtyDayCount: response.aggregations.occurredPastThirtyDayCount.doc_count,
                 occurredPastSixMonthsCount: response.aggregations.occurredPastSixMonths.doc_count
             };
             resolve(results);

@@ -1,5 +1,5 @@
 ###
-# Copyright (c) 2013-2015 the original author or authors.
+# Copyright (c) 2013-2016 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
 # you may not use this file except in compliance with the License. 
@@ -48,6 +48,7 @@ cyclotronApp = angular.module 'cyclotronApp', [
     'ui.select'
     'ui.bootstrap'
     'ui.ace'
+    'dndLists'
     'drahak.hotkeys'
     'googlechart'
     'LocalForageModule'

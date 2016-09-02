@@ -84,10 +84,18 @@
             .box-sizing(border-box);
         }
 
-        .pagination a {
-            background-color: @headerColor;
-            color: contrast(@headerColor, @color, white);
-            border-bottom: 1px solid;
+        .pagination {
+            margin-bottom: 0.25rem;
+            a {
+                background-color: @headerColor;
+                color: contrast(@headerColor, @color, white);
+                border-bottom: 1px solid;
+            }
+        }
+
+        .below-pager-message {
+            font-style: italic;
+            font-size: 90%;
         }
     }
 }

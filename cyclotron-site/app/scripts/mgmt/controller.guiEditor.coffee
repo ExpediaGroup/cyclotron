@@ -437,6 +437,9 @@ cyclotronApp.controller 'GuiEditorController', ($scope, $state, $stateParams, $l
                         $scope.login(true).then ->
                             initialize()
                     when 403
+                        $scope.dashboardEditors = error.data.data.editors
+                        $scope.dashboardName = $stateParams.dashboardName
+
                         modalInstance = $uibModal.open {
                             templateUrl: '/partials/viewPermissionDenied.html'
                             scope: $scope

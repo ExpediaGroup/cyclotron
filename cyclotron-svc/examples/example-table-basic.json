@@ -95,6 +95,7 @@
             "layout": {},
             "pagination": {
                 "autoItemsPerPage": true,
+                "belowPagerMessage": "Displaying page ##{currentPage} with #{itemsPerPage} out of #{totalItems}.",
                 "enabled": true
             },
             "rowHeight": 30,

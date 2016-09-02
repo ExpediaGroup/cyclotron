@@ -26,7 +26,17 @@
 #     pageOverrides: Overrides object for the current page only
 #     postLayout: Function to be called when the Widget has finished updating its layout
 #
-cyclotronDirectives.directive 'widget', ($compile, $sce, $window, layoutService) ->
+# Widget Context scope variables:
+#     widgetContext: {
+#         helpText: compiled text for the Help (?) tooltip icon
+#         allowFullscreen: true if the user can view the Widget in fullscreen
+#         allowExport: true if the user can export the data for the Widget
+#         loading: true if the widget is loading
+#         nodata: message to display when there is no data; null otherwise
+#         data: filtered/sorted data for the Widget
+#     }
+#
+cyclotronDirectives.directive 'widget', ($compile, $sce, $window, downloadService, layoutService) ->
     {
         restrict: 'A'
         scope:
@@ -37,6 +47,8 @@ cyclotronDirectives.directive 'widget', ($compile, $sce, $window, layoutService)
             page: '='
             pageOverrides: '='
             postLayout: '&'
+
+        templateUrl: '/partials/widget.html'
 
         link: (scope, element, attrs) ->
 
@@ -96,9 +108,12 @@ cyclotronDirectives.directive 'widget', ($compile, $sce, $window, layoutService)
 
                 # Set height/width
                 widgetWidth = Math.floor(widgetWidth) if _.isNumber(widgetWidth)
-                widgetHeight = Math.floor(widgetHeight) if _.isNumber(widgetHeight)
                 $element.width widgetWidth
-                $element.height widgetHeight
+                
+                if scope.widget.autoHeight != true
+                    widgetHeight = Math.floor(widgetHeight) if _.isNumber(widgetHeight)
+                    $element.height widgetHeight
+                
                 $element.css 'display', 'block'
 
                 if widgetWidth < widgetHeight
@@ -119,7 +134,7 @@ cyclotronDirectives.directive 'widget', ($compile, $sce, $window, layoutService)
                 return false unless scope.widget?
                 
                 if scope.pageOverrides?.widgets?
-                    widgetOverrides = scope.pageOverrides.widgets?[scope.widgetIndex]
+                    widgetOverrides = scope.pageOverrides.widgets[scope.widget._originalIndex]
 
                     # If WidgetOverrides.hidden is set true or false, use its value
                     if widgetOverrides?.hidden?
@@ -134,46 +149,56 @@ cyclotronDirectives.directive 'widget', ($compile, $sce, $window, layoutService)
                 $window.Cyclotron.currentPage.widgets[scope.widget.name] = {
                     show: ->
                         scope.$evalAsync ->
-                            widgetOverrides = scope.pageOverrides?.widgets?[scope.widgetIndex]
+                            widgetOverrides = scope.pageOverrides?.widgets?[scope.widget._originalIndex]
                             widgetOverrides.hidden = false
                     hide: ->
                         scope.$evalAsync ->
-                            widgetOverrides = scope.pageOverrides?.widgets?[scope.widgetIndex]
+                            widgetOverrides = scope.pageOverrides?.widgets?[scope.widget._originalIndex]
                             widgetOverrides.hidden = true
                     toggleVisibility: ->
                         scope.$evalAsync ->
-                            widgetOverrides = scope.pageOverrides?.widgets?[scope.widgetIndex]
+                            widgetOverrides = scope.pageOverrides?.widgets?[scope.widget._originalIndex]
                             widgetOverrides.hidden = !widgetOverrides.hidden
+
+                    exportData: (format) ->
+                        scope.exportData format
+
                 }
 
             # Watch for the widget model to change, indicating this widget needs to be updated
             scope.$watch 'widget', (newValue, oldValue) ->
                 widget = newValue
+                scope.widgetContext ?= {
+                    loading: false
+                    dataSourceError: false
+                    dataSourceErrorMessage: null
+                    nodata: null
+                }
 
                 # Ignore widgets without a type
                 return if _.isEmpty widget.widget 
 
-                noscrollClass = if widget.noscroll == true
-                    ' widget-noscroll'
-                else
-                    ''
+                # Update Widget HTML template to include
+                scope.widgetTemplateUrl = '/widgets/' + widget.widget + '/' + widget.widget + '.html'
 
-                # Create the include for the specific widget referenced
-                template = '<div class="dashboard-widget ' + newValue.style + noscrollClass + '" ng-include="\'/widgets/' + newValue.widget + '/' + newValue.widget + '.html\'"></div>'
-
-                if widget.allowFullscreen != false
-                    template = '<i class="widget-fullscreen fa fa-expand" title="Click to view fullscreen"></i>' + template
-
+                # Update standard Widget Options
                 if widget.helpText?
                     # Store Help Text in scope for tooltip
-                    scope.helpText = _.jsExec widget.helpText
-                    template = '<i class="widget-helptext fa fa-question-circle" uib-tooltip="{{ ::helpText }}" tooltip-placement="auto-right" tooltip-trigger="outsideClick"></i>' + template
+                    scope.widgetContext.helpText = _.jsExec widget.helpText
+                else 
+                    scope.widgetContext.helpText = null
 
-                compiledValue = $compile(template)(scope)
+                scope.widgetContext.allowFullscreen = widget.allowFullscreen != false
+                scope.widgetContext.allowExport = widget.allowExport != false
 
-                # Replace the current contents with the newly compiled element
-                element.contents().remove()
-                element.append(compiledValue)
+                # Update additional Widget styles
+                scope.widgetClass = ''
+
+                if widget.style
+                    scope.widgetClass += newValue.style
+
+                if widget.noscroll == true
+                    scope.widgetClass += ' widget-noscroll'
 
                 return
 
@@ -182,6 +207,57 @@ cyclotronDirectives.directive 'widget', ($compile, $sce, $window, layoutService)
 
             # Watch for widget visibility to change
             scope.$watch 'pageOverrides', (-> updateLayout(scope.layout)), true
+
+            return
+        
+        controller: ($scope, dataService) ->
+
+            $scope.showDropdown = ->
+                # Extensible for additional dropdown items
+                $scope.widgetContext?.allowExport
+
+            # Evaluate Title of Widget
+            $scope.widgetTitle = -> _.jsExec $scope.widget.title
+
+            $scope.isLoading = ->
+                $scope.widgetContext.loading
+
+            $scope.noDataOrError = ->
+                $scope.widgetContext.nodata or $scope.widgetContext.dataSourceError
+
+            $scope.filterAndSortWidgetData = (data) ->
+                # Filter the data if the widget has "filters"
+                if $scope.widget.filters?
+                    data = dataService.filter(data, $scope.widget.filters)
+
+                # Sort the data if the widget has "sortBy"
+                if $scope.widget.sortBy?
+                    data = dataService.sort(data, $scope.widget.sortBy)
+
+                # Check for nodata
+                if _.isEmpty(data) && $scope.widget.noData?
+                    $scope.widgetContext.nodata = _.jsExec $scope.widget.noData
+                    $scope.widgetContext.data = null
+                    $scope.widgetContext.allowExport = false
+                else
+                    # Reset
+                    $scope.widgetContext.nodata = null
+                    $scope.widgetContext.data = data
+                    $scope.widgetContext.allowExport = $scope.widget.allowExport != false
+
+                return $scope.widgetContext.data
+                
+            # Export Widget data as a downloaded file
+            # Expects data in $scope.widgetContext.data
+            # Returns promise
+            $scope.exportData = (format) ->
+                return unless $scope.widgetContext.data
+                name = if _.isString($scope.widget.dataSource) 
+                        name = $scope.widget.dataSource
+                    else 
+                        $scope.dashboard.name
+
+                downloadService.download name, format, $scope.widgetContext.data
 
             return
     }

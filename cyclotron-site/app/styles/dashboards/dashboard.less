@@ -139,29 +139,52 @@
         float: left;
         background: none;
 
-        > i {
+        > .widget-control-bar {
             position: absolute;
-            top: 4px;
-            cursor: pointer;
+            top: 0px;
+            right: 4px;
             z-index: 1000;
             .user-select(none);
 
-            opacity: 0.4;
-            &:hover {
-                opacity: 0.7;
+            > .widget-control {
+                display: inline-block;
+                margin-left: 0.5rem;
+                cursor: pointer;
+                opacity: 0.4;
+                &:hover {
+                    opacity: 0.7;
+                }
+
+                > i {
+                    vertical-align: top;
+                }
+
+                /* Dropdown menu has a div wrapping the <i> tag */
+                &.widget-dropdown-menu {
+                    opacity: 1;
+
+                    > i {
+                        opacity: 0.4;
+                        &:hover {
+                            opacity: 0.7; 
+                        }
+                    }
+
+                    .dropdown-menu {
+                        a {
+                            border-bottom: 0;
+                            &:hover {
+                                border-bottom: 0;
+                            }
+                        }
+                    }
+                }
             }
-        }
-        > i.widget-fullscreen {
-            right: 4px;
-        }
 
-        > i.widget-helptext {
-            right: 24px;
-        }
-
-        > .tooltip {
-            .tooltip-arrow {
-                right: 1px !important;
+            > .tooltip {
+                .tooltip-arrow {
+                    right: 1px !important;
+                }
             }
         }
 
@@ -197,8 +220,9 @@
                 
             }
 
-            /* Center in the middle of the widget */
-            .spinjs {
+            /* Style for loading spinner */
+            .widget-loading {
+                /* Center in the middle of the widget */
                 position: absolute;
                 top: 50%;
                 left: 50%;
@@ -227,6 +251,7 @@
                 }
             }
 
+            /* Style for no data message */
             .widget-nodata {
                 position: absolute;
                 top: 45%;

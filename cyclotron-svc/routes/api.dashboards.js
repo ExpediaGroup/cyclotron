@@ -199,7 +199,12 @@ exports.getSingle = function (req, res) {
 
                 /* Check view permissions */
                 if (!auth.hasViewPermission(dashboard, req)) {
-                    return res.status(403).send('View Permission denied for this Dashboard.');
+                    return res.status(403).send({
+                        message: 'View Permission denied for this Dashboard.',
+                        data: {
+                            editors: dashboard.editors
+                        }
+                    });
                 }
             }
 

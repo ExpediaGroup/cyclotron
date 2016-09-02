@@ -39,11 +39,13 @@ var getDashboardCounts = function () {
             getDashboardCounts2(null),
             getDashboardCounts2(true),
             getDashboardCounts2(false),
-            function (totalDashboardCounts, deletedDashboardCounts, undeletedDashboardCounts) {
+            getActiveDashboardCounts(),
+            function (totalDashboardCounts, deletedDashboardCounts, undeletedDashboardCounts, activeDashboardCounts) {
                 resolve({
                     total: totalDashboardCounts,
                     deletedDashboards: deletedDashboardCounts,
-                    undeletedDashboards: undeletedDashboardCounts
+                    undeletedDashboards: undeletedDashboardCounts,
+                    active: activeDashboardCounts
                 });
             })
         .catch(function (err) {
@@ -56,7 +58,7 @@ var getDashboardCounts = function () {
 var getDashboardCounts2 = function (isDeleted) {
     return new Promise(function (resolve, reject) {
         var oneDay = moment().subtract(1, 'day'),
-            oneMonth = moment().subtract(1, 'month'),
+            thirtyDay = moment().subtract(30, 'day'),
             sixMonths = moment().subtract(6, 'month');
 
         var pipeline = [{
@@ -65,7 +67,7 @@ var getDashboardCounts2 = function (isDeleted) {
                 viewerCount: { $size: { $ifNull: ['$viewers', []] } },
                 tagsCount: { $size: { $ifNull: ['$tags', []] } },
                 editedPastDay: { $cond: [ { '$gt': [ '$date', oneDay.toDate() ] }, 1, 0]},
-                editedPastMonth: { $cond: [ { '$gt': [ '$date', oneMonth.toDate() ] }, 1, 0]},
+                editedPastThirtyDay: { $cond: [ { '$gt': [ '$date', thirtyDay.toDate() ] }, 1, 0]},
                 editedPastSixMonths: { $cond: [ { '$gt': [ '$date', sixMonths.toDate() ] }, 1, 0]}
             },
         }, {
@@ -73,7 +75,7 @@ var getDashboardCounts2 = function (isDeleted) {
                 _id: {},
                 count: { $sum: 1 },
                 editedPastDayCount: { $sum: '$editedPastDay' },
-                editedPastMonthCount: { $sum: '$editedPastMonth' },
+                editedPastThirtyDayCount: { $sum: '$editedPastThirtyDay' },
                 editedPastSixMonthsCount: { $sum: '$editedPastSixMonths' },
                 avgTagsCount: { $avg: '$tagsCount' },
                 maxTagsCount: { $max: '$tagsCount' },
@@ -100,6 +102,45 @@ var getDashboardCounts2 = function (isDeleted) {
             }
 
             resolve(_.omit(results[0], '_id'));
+        });
+    });
+};
+
+var getActiveDashboardCounts = function () {
+    return new Promise(function (resolve, reject) {
+        var oneDay = moment().subtract(1, 'day'),
+            thirtyDay = moment().subtract(30, 'day'),
+            sixMonths = moment().subtract(6, 'month');
+        
+        Analytics.aggregate([{
+            $project: {
+                dashboard: '$dashboard',
+                pastDay: { $cond: [ { '$gt': [ '$date', oneDay.toDate() ] }, 1, 0]},
+                pastThirtyDay: { $cond: [ { '$gt': [ '$date', thirtyDay.toDate() ] }, 1, 0]},
+                pastSixMonths: { $cond: [ { '$gt': [ '$date', sixMonths.toDate() ] }, 1, 0]}
+            },
+        }, {
+            $group: {
+                _id: { 'dashboard': '$dashboard' },
+                activePastDay: { $max: '$pastDay' },
+                activePastThirtyDay: { $max: '$pastThirtyDay' },
+                activePastSixMonths: { $max: '$pastSixMonths' }
+            }
+        }, {
+            $group: {
+                _id: { },
+                activeDashboards: { $sum: 1 },
+                activePastDayCount: { $sum: '$activePastDay' },
+                activePastThirtyDayCount: { $sum: '$activePastThirtyDay' },
+                activePastSixMonthsCount: { $sum: '$activePastSixMonths' }
+            }
+        }]).exec(function (err, results) {
+            if (err) {
+                reject(err);
+            }
+
+            results = _.omit(results[0], '_id');
+            resolve(results);
         });
     });
 };
@@ -141,28 +182,28 @@ var getPageViewsCounts = function () {
 var getUIDCounts = function () {
     return new Promise(function (resolve, reject) {
         var oneDay = moment().subtract(1, 'day'),
-            oneMonth = moment().subtract(1, 'month'),
+            thirtyDay = moment().subtract(30, 'day'),
             sixMonths = moment().subtract(6, 'month');
         
         Analytics.aggregate([{
             $project: {
                 uid: '$uid',
                 pastDay: { $cond: [ { '$gt': [ '$date', oneDay.toDate() ] }, 1, 0]},
-                pastMonth: { $cond: [ { '$gt': [ '$date', oneMonth.toDate() ] }, 1, 0]},
+                pastThirtyDay: { $cond: [ { '$gt': [ '$date', thirtyDay.toDate() ] }, 1, 0]},
                 pastSixMonths: { $cond: [ { '$gt': [ '$date', sixMonths.toDate() ] }, 1, 0]}
             },
         }, {
             $group: {
                 _id: { 'uid': '$uid' },
                 activePastDay: { $max: '$pastDay' },
-                activePastMonth: { $max: '$pastMonth' },
+                activePastThirtyDay: { $max: '$pastThirtyDay' },
                 activePastSixMonths: { $max: '$pastSixMonths' }
             }
         }, {
             $group: {
                 _id: { },
                 uidsPastDayCount: { $sum: '$activePastDay' },
-                uidsPastMonthCount: { $sum: '$activePastMonth' },
+                uidsPastThirtyDayCount: { $sum: '$activePastThirtyDay' },
                 uidsPastSixMonthsCount: { $sum: '$activePastSixMonths' },
                 totalUids: { $sum: 1 }
             }
@@ -180,7 +221,7 @@ var getUIDCounts = function () {
 var getUserCounts = function () {
     return new Promise(function (resolve, reject) {
         var oneDay = moment().subtract(1, 'day'),
-            oneMonth = moment().subtract(1, 'month'),
+            thirtyDay = moment().subtract(30, 'day'),
             sixMonths = moment().subtract(6, 'month');
 
         Users.aggregate([{
@@ -189,7 +230,7 @@ var getUserCounts = function () {
             $project: {
                 timesLoggedIn: '$timesLoggedIn',
                 activePastDay: { $cond: [ { '$gt': [ '$lastLogin', oneDay.toDate() ] }, 1, 0]},
-                activePastMonth: { $cond: [ { '$gt': [ '$lastLogin', oneMonth.toDate() ] }, 1, 0]},
+                activePastThirtyDay: { $cond: [ { '$gt': [ '$lastLogin', thirtyDay.toDate() ] }, 1, 0]},
                 activePastSixMonths: { $cond: [ { '$gt': [ '$lastLogin', sixMonths.toDate() ] }, 1, 0]}
             }
         }, {
@@ -197,7 +238,7 @@ var getUserCounts = function () {
                 _id: {},
                 count: { $sum: 1 },
                 activePastDayCount: { $sum: '$activePastDay' },
-                activePastMonthCount: { $sum: '$activePastMonth' },
+                activePastThirtyDayCount: { $sum: '$activePastThirtyDay' },
                 activePastSixMonthsCount: { $sum: '$activePastSixMonths' },
                 avgLoginsPerUser: { $avg: '$timesLoggedIn' }
             }
@@ -314,7 +355,7 @@ var getEvents = function (eventType) {
     return new Promise(function (resolve, reject) {
         var oneDay = moment().subtract(1, 'day'),
             oneWeek = moment().subtract(1, 'week'),
-            oneMonth = moment().subtract(1, 'month'),
+            thirtyDay = moment().subtract(30, 'day'),
             sixMonths = moment().subtract(6, 'month');
 
         pipeline = [{
@@ -323,7 +364,7 @@ var getEvents = function (eventType) {
             $project: {
                 occurredPastDay: { $cond: [ { '$gt': [ '$date', oneDay.toDate() ] }, 1, 0]},
                 occurredPastWeek: { $cond: [ { '$gt': [ '$date', oneWeek.toDate() ] }, 1, 0]},
-                occurredPastMonth: { $cond: [ { '$gt': [ '$date', oneMonth.toDate() ] }, 1, 0]},
+                occurredPastThirtyDay: { $cond: [ { '$gt': [ '$date', thirtyDay.toDate() ] }, 1, 0]},
                 occurredPastSixMonths: { $cond: [ { '$gt': [ '$date', sixMonths.toDate() ] }, 1, 0]}
             },
         }, {
@@ -332,7 +373,7 @@ var getEvents = function (eventType) {
                 count: { $sum: 1 },
                 occurredPastDayCount: { $sum: '$occurredPastDay' },
                 occurredPastWeekCount: { $sum: '$occurredPastWeek' },
-                occurredPastMonthCount: { $sum: '$occurredPastMonth' },
+                occurredPastThirtyDayCount: { $sum: '$occurredPastThirtyDay' },
                 occurredPastSixMonthsCount: { $sum: '$occurredPastSixMonths' }
             }
         }]
@@ -351,7 +392,7 @@ var getEvents = function (eventType) {
 exports.get = function (req, res) {
 
     Promise.join(
-        getDashboardCounts(), 
+        getDashboardCounts(),
         getPageViewsCounts(), 
         getUIDCounts(),
         getUserCounts(),

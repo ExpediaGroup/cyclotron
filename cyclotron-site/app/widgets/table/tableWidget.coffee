@@ -1,5 +1,5 @@
 ###
-# Copyright (c) 2013-2015 the original author or authors.
+# Copyright (c) 2013-2016 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
 # you may not use this file except in compliance with the License. 
@@ -30,10 +30,6 @@
 
 cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dataService, logService) ->
 
-    $scope.loading = false
-    $scope.dataSourceError = false
-    $scope.dataSourceErrorMessage = null
-    
     $scope.columnGroups = []
     sortFunction = _.jsEval $scope.widget.sortFunction
 
@@ -264,7 +260,10 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
             45 #Magic number
 
         # Divide widget body by row height and subtract 1x header / 3x footer
-        $scope.paging.itemsPerPage = Math.floor((bodyHeight / rowHeight)) - 4
+        $scope.paging.itemsPerPage = Math.floor((bodyHeight / rowHeight)) - 5
+
+    $scope.getBelowPagerMessage = ->
+        _.compile $scope.widget.pagination.belowPagerMessage, $scope.paging
 
     $scope.onClickEvent = (row, column) ->
         if _.isFunction(column.onClick)
@@ -282,15 +281,15 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
     # Initialize
     if $scope.dataSource?
         $scope.dataVersion = 0
-        $scope.loading = true
+        $scope.widgetContext.loading = true
 
         # Data Source (re)loaded
         $scope.$on 'dataSource:' + dsDefinition.name + ':data', (event, eventData) ->
             return unless eventData.version > $scope.dataVersion
             $scope.dataVersion = eventData.version
 
-            $scope.dataSourceError = false
-            $scope.dataSourceErrorMessage = null
+            $scope.widgetContext.dataSourceError = false
+            $scope.widgetContext.dataSourceErrorMessage = null
 
             data = eventData.data[dsDefinition.resultSet].data
             isUpdate = eventData.isUpdate
@@ -302,16 +301,18 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
             # Check for no data
             if _.isEmpty data
                 $scope.sortedRows = null
-                $scope.loading = false
+                $scope.widgetContext.loading = false
+                $scope.widgetContext.allowExport = false
 
                 if $scope.widget.noData?
-                    $scope.nodata = _.jsExec($scope.widget.noData)
+                    $scope.widgetContext.nodata = _.jsExec($scope.widget.noData)
+                    
                 else
-                    $scope.nodata = null
-
+                    $scope.widgetContext.nodata = null
                 return
             else
-                $scope.nodata = null
+                $scope.widgetContext.nodata = null
+                $scope.widgetContext.allowExport = $scope.widget.allowExport != false
 
             data = _.cloneDeep(data)
             _.each data, (row, index) -> row.__index = index
@@ -381,25 +382,26 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
             $scope.processRules(data, $scope.widget.rules)
 
             # Save and sort rows
-            $scope.sortedRows = data
+            $scope.sortedRows = $scope.widgetContext.data = data
             $scope.sortRows()
 
             $scope.paging.totalItems = $scope.sortedRows.length
 
-            $scope.loading = false
+            $scope.widgetContext.loading = false
 
         # Data Source error
         $scope.$on 'dataSource:' + dsDefinition.name + ':error', (event, data) ->
-            $scope.dataSourceError = true
-            $scope.dataSourceErrorMessage = data.error
-            $scope.nodata = null
+            $scope.widgetContext.dataSourceError = true
+            $scope.widgetContext.dataSourceErrorMessage = data.error
+            $scope.widgetContext.nodata = null
             $scope.sortedRows = null
             $scope.columns = null
-            $scope.loading = false
+            $scope.widgetContext.data = null
+            $scope.widgetContext.loading = false
 
         # Data Source loading
         $scope.$on 'dataSource:' + dsDefinition.name + ':loading', ->
-            $scope.loading = true
+            $scope.widgetContext.loading = true
 
         # Watches
         $scope.$watch('sortBy', $scope.sortRows, true)

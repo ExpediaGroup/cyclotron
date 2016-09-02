@@ -1,5 +1,5 @@
 ###
-# Copyright (c) 2013-2015 the original author or authors.
+# Copyright (c) 2016 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
 # you may not use this file except in compliance with the License. 
@@ -14,14 +14,9 @@
 # language governing permissions and limitations under the License. 
 ###
 
-cyclotronDirectives.directive 'focusMe', ($timeout, $parse) -> 
+cyclotronServices.factory 'focusService', ($timeout) ->
     {
-        restrict: 'AC',
-        link: (scope, element, attrs) ->
-            model = $parse(attrs.focusMe)
-            scope.$watch model, (value) ->
-                if value
-                    $timeout ->
-                        element[0].focus()
-                    , 10
+        focus: (name, scope) ->
+            $timeout ->
+                scope.$broadcast 'focusOn', name
     }

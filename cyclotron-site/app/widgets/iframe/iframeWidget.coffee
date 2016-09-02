@@ -18,6 +18,8 @@
 # Iframe Widget
 #
 cyclotronApp.controller 'IframeWidget', ($scope) ->
+    # Override the widget feature of exporting data, since there is no data
+    $scope.widgetContext.allowExport = false
     
     $scope.getUrl = ->
         return '' if _.isEmpty($scope.widget.url)

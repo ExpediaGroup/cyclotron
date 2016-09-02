@@ -27,7 +27,10 @@ var Dashboards = mongoose.model('dashboard2');
 
 var fs = require('fs'),
     childProcess = require('child_process'),
-    ip = require('ip');
+    ip = require('ip'),
+    shortid = require('shortid'),
+    json2csv = require('json2csv'),
+    json2xls = require('json2xls');
 
 /* String EndsWith implementation */
 var endsWith = function (str, suffix) {
@@ -192,5 +195,80 @@ exports.status = function (req, res) {
 
 /* Sends an exported report with the correct Content-Type headers */
 exports.serve = function (req, res) {
+    res.attachment(req.params.file);
     res.sendfile('./export/' + req.params.file);
+};
+
+
+/* Data Download:
+ * Writes POSTED data to a file, then returns a key to download it.
+ * Download file using /exports/:key 
+ */
+exports.dataAsync = function (req, res) {
+    if (req.body == null) {
+        return res.status(400).send('Missing body in request.');
+    }
+
+    if (req.body.format == null) {
+        return res.status(400).send('Missing format in request.');
+    }
+    if (req.body.data == null) {
+        return res.status(400).send('Missing data in request.');
+    }
+
+    switch (req.body.format.toLowerCase()) {
+        case 'json': 
+            /* Unique key for the file */
+            var key = (req.body.name || 'data') + '-' + shortid.generate() + '.json',
+                filename = './export/' + key;
+            
+            /* Write file and return key for download */
+            fs.writeFile(filename, JSON.stringify(req.body.data, null, 4), 'utf8', function (err) {
+                if (err) { 
+                    console.log(err);
+                    return res.status(500).send(err);
+                }
+                res.status(201).send({
+                    url: '//' + ip.address() + ':' + config.port + '/exports/' + key
+                });
+            });
+            
+            break;
+        case 'csv':
+            /* Unique key for the file */
+            var key = (req.body.name || 'data') + '-' + shortid.generate() + '.csv',
+                filename = './export/' + key;
+            
+            /* Write file and return key for download */
+            fs.writeFile(filename, json2csv({ data: req.body.data }), 'utf8', function (err) {
+                if (err) { 
+                    console.log(err);
+                    return res.status(500).send(err);
+                }
+                res.status(201).send({
+                    url: '//' + ip.address() + ':' + config.port + '/exports/' + key
+                });
+            });
+            
+            break;
+        case 'xlsx':
+            /* Unique key for the file */
+            var key = (req.body.name || 'data') + '-' + shortid.generate() + '.xlsx',
+                filename = './export/' + key;
+            
+            /* Write file and return key for download */
+            fs.writeFile(filename, json2xls(req.body.data), 'binary', function (err) {
+                if (err) { 
+                    console.log(err);
+                    return res.status(500).send(err);
+                }
+                res.status(201).send({
+                    url: '//' + ip.address() + ':' + config.port + '/exports/' + key
+                });
+            });
+            
+            break;
+        default:
+            return res.status(400).send('Unknown format in request: "' + req.body.format.toLowerCase() + '".');
+    }
 };

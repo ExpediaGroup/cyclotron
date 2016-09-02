@@ -1,7 +1,7 @@
 div.javascript-widget(ng-controller='JavascriptWidget')
     h1.title(ng-if='::widget.title') {{ widgetTitle() }}
 
-    .spinjs(ng-if='loading')
-    .widget-error(ng-if='dataSourceError && !loading')
-
-    .js-container(data='data', refresh='widget.refresh', js-object='jsObject')
+    .widget-loading(spinjs, ng-if='isLoading()')
+    .widget-error(ng-if='widgetContext.dataSourceError == true && !isLoading()')
+    
+    .js-container(data='widgetContext.data', refresh='widget.refresh', js-object='jsObject')

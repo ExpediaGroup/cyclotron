@@ -14,6 +14,8 @@
  * language governing permissions and limitations under the License. 
  */
 
+@import "../common/variables.less";
+
 &.has-sidebar {
     /* Add a special margin on the left side of the dashboard for the sidebar */
     margin-left: @sidebar-expander-width;
@@ -134,6 +136,53 @@
         .show-hide-widgets {
             p.centered {
                 margin-bottom: 1rem;
+            }
+
+            .widget-list {
+                position: relative;
+                padding-left: 0;
+                list-style: none; 
+                li {
+                    display: flex;
+                    align-items: center;
+                    flex-direction: row;
+
+                    position: relative;
+                    min-height: 50px;
+                    padding-left: 0;
+                    list-style: none; 
+                    border-bottom: 1px solid #ddd;
+
+
+                    > span.icon {
+                        display: inline-block;
+                        min-width: 30px;
+                        color: @lighterText;
+                        cursor: move;
+                    }
+
+                    > span.title {
+                        flex-grow: 1;
+                    }
+
+                    > span.swtch {
+                        display: inline-block;
+                    }
+                }
+
+                .dndDraggingSource {
+                    display: none;
+                }
+                .dndPlaceholder {
+                    display: block;
+                    background-color: #ddd;
+                    min-height: 50px;
+                }
+
+                &.final {
+                    margin-top: 1rem;
+                    border-top: 1px solid #ddd;
+                }
             }
         }
     }

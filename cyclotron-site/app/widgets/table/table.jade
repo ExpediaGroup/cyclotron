@@ -2,13 +2,14 @@
     h1.title(ng-if='::widget.title') {{ widgetTitle() }}
 
     .widget-body
-        .spinjs(ng-if='loading')
-        .widget-error(ng-if='dataSourceError == true && !loading')
-        .widget-nodata(ng-if='nodata && !loading')
-            .fa.fa-exclamation-triangle
-            span  {{ nodata }}
 
-        .results(ng-if='sortedRows && !nodata && !dataSourceError')
+        .widget-loading(spinjs, ng-if='isLoading()')
+        .widget-error(ng-if='widgetContext.dataSourceError == true && !isLoading()')
+        .widget-nodata(ng-if='widgetContext.nodata && !isLoading()')
+            .fa.fa-exclamation-triangle
+            span  {{ widgetContext.nodata }}
+
+        .results(ng-if='sortedRows && !noDataOrError()')
             table(table-fixed-header='widget.freezeHeaders')
                 thead(ng-if='widget.omitHeaders != true')
                     tr(ng-if='columnGroups.length > 0', table-row)
@@ -44,3 +45,4 @@
                 uib-pagination.pagination-sm(total-items='paging.totalItems', ng-model='paging.currentPage', 
                     items-per-page='paging.itemsPerPage', max-size='paging.maxSize', 
                     boundary-links='paging.boundaryLinks')
+                p.below-pager-message(ng-if='widget.pagination.belowPagerMessage') {{ getBelowPagerMessage() }}

@@ -8,33 +8,21 @@
             dt {{ statistics.dashboards.total.count | numeraljs:'0,0' }} 
             dd total 
                 ng-pluralize(count='statistics.dashboards.total.count', when='{"one": "Dashboard", "other": "Dashboards"}')
-        dl(title='Total number of non-deleted Dashboards')
-            dt {{ statistics.dashboards.undeletedDashboards.count | numeraljs:'0,0' }} 
-            dd active 
-                ng-pluralize(count='statistics.dashboards.undeletedDashboards.count', when='{"one": "Dashboard", "other": "Dashboards"}')
+        dl(title='Number of viewed Dashboards in the last 30 days')
+            dt {{ statistics.dashboards.active.activePastThirtyDayCount | numeraljs:'0,0' }} 
+            dd 30-day active 
+                ng-pluralize(count='statistics.dashboards.active.activePastThirtyDayCount', when='{"one": "Dashboard", "other": "Dashboards"}')
         dl(title='Total number of deleted Dashboards')
             dt {{ statistics.dashboards.deletedDashboards.count | numeraljs:'0,0' }} 
             dd deleted 
                 ng-pluralize(count='statistics.dashboards.deletedDashboards.count', when='{"one": "Dashboard", "other": "Dashboards"}')
-        dl(title='Total number of Dashboards modified within the last day')
-            dt {{ statistics.dashboards.total.editedPastDayCount | numeraljs:'0,0' }} 
-            dd modified in the past day
-        dl(title='Total number of Dashboards modified within the last 6 months')
-            dt {{ statistics.dashboards.total.editedPastSixMonthsCount | numeraljs:'0,0' }} 
-            dd modified in the last 6 months
+        dl(title='Total number of Dashboards modified within the last 30 days')
+            dt {{ statistics.dashboards.total.editedPastThirtyDayCount | numeraljs:'0,0' }} 
+            dd modified in the last 30 days
+        dl(title='Total number of Dashboards deleted within the last 30 days')
+            dt {{ statistics.dashboards.deletedDashboards.editedPastThirtyDayCount | numeraljs:'0,0' }} 
+            dd deleted in the last 30 days
         
-        dl(title='Total number of Dashboards with limited editing permissions')
-            dt {{ statistics.dashboards.total.restrictedEditingCount | numeraljs:'0,0' }} 
-            dd secured  
-                ng-pluralize(count='statistics.dashboards.total.restrictedEditingCount', when='{"one": "Dashboard", "other": "Dashboards"}')
-        dl(title='Total number of Dashboards with limited viewing permissions')
-            dt {{ statistics.dashboards.total.restrictedViewingCount | numeraljs:'0,0' }} 
-            dd private  
-                ng-pluralize(count='statistics.dashboards.total.restrictedViewingCount', when='{"one": "Dashboard", "other": "Dashboards"}')
-
-        dl(title='Average number of tags assigned per Dashboard')
-            dt {{ statistics.dashboards.total.avgTagsCount | numeraljs:'0.00' }} 
-            dd tags per Dashboard  
         dl(title='Total number of Revisions, including those for deleted Dashboards')
             dt {{ statistics.revisions.count | numeraljs:'0,0' }} 
             dd total 
@@ -49,30 +37,27 @@
         h2 Likes
         dl(title='Total number of likes for all active Dashboards (currently)')
             dt {{ statistics.likes.count | numeraljs:'0,0' }} 
-            dd unique Likes
-        dl(title='Total number of times a Dashboard was liked')
+            dd current Likes
+        dl(title='Total number of times Dashboards have been liked (or re-liked)')
             dt {{ statistics.likeEvents.count | numeraljs:'0,0' }} 
-            dd all-time Likes
-        dl(title='Total number of Dashboard Likes within the last day')
+            dd all-time Likes (including repeats)
+        dl(title='Total number of Dashboard Likes within the past day')
             dt {{ statistics.likeEvents.occurredPastDayCount | numeraljs:'0,0' }} 
-            dd times Liked in the last day
-        dl(title='Total number of Dashboard Likes within the last week')
-            dt {{ statistics.likeEvents.occurredPastWeekCount | numeraljs:'0,0' }} 
-            dd times Liked in the last week
-        dl(title='Total number of Dashboard Likes within the last 6 months')
-            dt {{ statistics.likeEvents.occurredPastSixMonthsCount | numeraljs:'0,0' }} 
-            dd times Liked in the last 6 months
+            dd Likes in the past day
+        dl(title='Total number of Dashboard Likes within the last 30 days')
+            dt {{ statistics.likeEvents.occurredPastThirtyDayCount | numeraljs:'0,0' }} 
+            dd Likes in the last 30 days
         dl(title='Total number of times a Dashboard was unliked')
             dt {{ statistics.unlikeEvents.count | numeraljs:'0,0' }} 
-            dd times Unliked
+            dd Unlikes
         
         h2 Visits
         dl(title='Total number of times any Dashboard was visited')
             dt {{ statistics.pageViews.totalVisits | numeraljs:'0,0' }}
-            dd total Visits
+            dd total Dashboard Visits
         dl(title='Total number of times a Page in any Dashboard was viewed')
             dt {{ statistics.pageViews.totalPageViews | numeraljs:'0,0' }}
-            dd total Page Views
+            dd total Dashboard Page Views
         dl(title='Average number of Pages viewed during each Visit')
             dt {{ statistics.pageViews.avgPageViewsPerVisit | numeraljs:'0.0' }}
             dd Page Views per Visit
@@ -86,18 +71,16 @@
         h2 Users
         dl(title='Number of unique logged-in users')
             dt {{ statistics.users.count | numeraljs:'0,0' }}
-            dd authenticated
+            dd registered 
                 ng-pluralize(count='statistics.users.count', when='{"one": "user", "other": "users"}')
-        dl(title='Number of users who have logged in during the last 24 hours')
+        dl(title='Number of users who have logged in during the past 24 hours')
             dt {{ statistics.users.activePastDayCount | numeraljs:'0,0' }}
-            dd active 
+            dd daily active 
                 ng-pluralize(count='statistics.users.activePastDayCount', when='{"one": "user", "other": "users"}')
-                |  (1 day)
-        dl(title='Number of users who have logged in during the last month')
-            dt {{ statistics.users.activePastMonthCount | numeraljs:'0,0' }}
-            dd active 
-                ng-pluralize(count='statistics.users.activePastMonthCount', when='{"one": "user", "other": "users"}')
-                |  (1 month)
+        dl(title='Number of users who have logged in during the last 30 days')
+            dt {{ statistics.users.activePastThirtyDayCount | numeraljs:'0,0' }}
+            dd 30-day active 
+                ng-pluralize(count='statistics.users.activePastThirtyDayCount', when='{"one": "user", "other": "users"}')
         dl(title='Average number of times users have logged in')
             dt {{ statistics.users.avgLoginsPerUser | numeraljs: '0.0' }}
             dd logins per user 
@@ -110,15 +93,10 @@
             dt {{ statistics.pageViews.uniqueUids | numeraljs:'0,0' }}
             dd unique 
                 ng-pluralize(count='statistics.pageViews.uniqueUids', when='{"one": "UID", "other": "UIDs"}')
-        dl(title='Number of unique user cookies active over the past month (may not be authenticated)')
-            dt {{ statistics.users.uidsPastMonthCount | numeraljs:'0,0' }}
-            dd active 
-                ng-pluralize(count='statistics.users.uidsPastMonthCount', when='{"one": "UID", "other": "UIDs"}')
-                |  (1 month)
-        dl(title='Number of user sessions currently active')
-            dt {{ statistics.sessions.activeSessions | numeraljs:'0,0' }}
-            dd active 
-                ng-pluralize(count='statistics.sessions.activeSessions', when='{"one": "session", "other": "sessions"}')
+        dl(title='Number of unique user cookies active over the last 30 days (may not be authenticated)')
+            dt {{ statistics.users.uidsPastSixMonthsCount | numeraljs:'0,0' }}
+            dd 30-day active 
+                ng-pluralize(count='statistics.users.uidsPastSixMonthsCount', when='{"one": "UID", "other": "UIDs"}')
     .content
         .container-fluid
             .row

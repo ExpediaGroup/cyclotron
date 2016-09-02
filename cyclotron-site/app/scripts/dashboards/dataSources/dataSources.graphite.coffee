@@ -87,9 +87,12 @@ cyclotronDataSources.factory 'graphiteDataSource', ($q, $http, configService, da
                     columns: null
 
         # Do the request, wiring up success/failure handlers
-        proxyUrl = (_.jsExec(options.proxy) || configService.restServiceUrl) + '/proxy'
+        proxyUri = (_.jsExec(options.proxy) || configService.restServiceUrl) + '/proxy'
+        
+        # Remove protocol to work with either HTTP or HTTPS
+        proxyUri = new URI(proxyUri).protocol('').toString()
 
-        req = $http.post proxyUrl, getProxyRequest(options)
+        req = $http.post proxyUri, getProxyRequest(options)
 
         # Add callback handlers to promise
         req.success successCallback

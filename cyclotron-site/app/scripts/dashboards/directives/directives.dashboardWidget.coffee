@@ -26,9 +26,8 @@ cyclotronDirectives.directive 'dashboardWidget', (layoutService) ->
 
                 # Wire-up fullscreen button if available
                 if widget.allowFullscreen
-                    $parent.find('.widget-fullscreen').click ->
+                    $parent.find('.widget-fullscreen').on 'click', ->
                         $element.fullScreen(true)
-
                 return
 
             scope.$watch 'layout', (layout) ->
@@ -37,13 +36,6 @@ cyclotronDirectives.directive 'dashboardWidget', (layoutService) ->
                 # Set the border width if overloaded (otherwise keep theme default)
                 if layout.borderWidth?
                     $element.css('border-width', layout.borderWidth + 'px')
-
-            return
-
-        controller: ($scope) ->
-            
-            # Evaluate Title of Widget
-            $scope.widgetTitle = -> _.jsExec $scope.widget.title
 
             return
 

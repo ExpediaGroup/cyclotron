@@ -3,14 +3,14 @@
     h1.title(ng-if='::widget.title') {{ widgetTitle() }}
 
     .widget-body
-
-        .spinjs(ng-if='loading')
-        .widget-error(ng-if='dataSourceError == true && !loading')
-        .widget-nodata(ng-if='nodata && !loading')
+        .widget-loading(spinjs, ng-if='isLoading()')
+        .widget-error(ng-if='widgetContext.dataSourceError == true && !isLoading()')
+        .widget-nodata(ng-if='widgetContext.nodata && !isLoading()')
             .fa.fa-exclamation-triangle
-            span  {{ nodata }}
+            span  {{ widgetContext.nodata }}
 
-        .the-number(ng-if='!nodata && !dataSourceError', ng-repeat='number in numbers', 
+        .the-number(ng-if='!noDataOrError()', 
+            ng-repeat='number in numbers', 
             number-count='numberCount', 
             index='$index', auto-size='widget.autoSize',
             is-horizontal='isHorizontal',

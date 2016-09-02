@@ -70,17 +70,17 @@ cyclotronDirectives.directive 'dashboardSidebar', ($timeout, layoutService) ->
            
             return
 
-        controller: ($scope, configService, dashboardService) ->
+        controller: ($scope, $window, configService, dashboardOverridesService, dashboardService) ->
             $scope.footerLogos = configService.dashboardSidebar?.footer?.logos || []
-            $scope.widgetVisibilities = []
+            $scope.calculatedWidgets = []
             $scope.widgetOverrides = []
             $scope.allWidgetsVisible = false
 
-            updateVisibility = ->
+            calculateOverrides = ->
                 actualWidgets = $scope.currentPage[0]?.widgets
                 $scope.widgetOverrides = $scope.dashboardOverrides?.pages[$scope.currentPageIndex]?.widgets
 
-                $scope.widgetVisibilities = _.map actualWidgets, (widget, index) ->
+                $scope.calculatedWidgets = _.map actualWidgets, (widget, index) ->
                     # Visible by default
                     visible = true
 
@@ -89,35 +89,54 @@ cyclotronDirectives.directive 'dashboardSidebar', ($timeout, layoutService) ->
                     else if widget.hidden
                         visible = false
 
+                    if $scope.widgetOverrides?[index].indexOverride?
+                        indexOverride = $scope.widgetOverrides?[index].indexOverride
+                    else 
+                        indexOverride = index
+                    
                     return {
                         label: dashboardService.getWidgetName(widget, index)
                         visible: visible
+                        index: index                    # Actual Widget index
+                        indexOverride: indexOverride    # Override to index
                     }
 
-                visibleWidgets = _.filter($scope.widgetVisibilities, { visible: true }).length
-                $scope.allWidgetsVisible = (visibleWidgets / $scope.widgetVisibilities.length) > 0.5
-            
-            $scope.changeVisibility = (widget, index) ->
+                visibleWidgets = _.filter($scope.calculatedWidgets, { visible: true }).length
+                $scope.allWidgetsVisible = (visibleWidgets / $scope.calculatedWidgets.length) > 0.5
 
-                if widget.visible == true
-                    $scope.widgetOverrides[index].hidden = false
+                # Resort the widgets using the index override
+                $scope.calculatedWidgets = _.sortBy $scope.calculatedWidgets, 'indexOverride'
+
+            $scope.moveWidget = (index) ->
+                # Remove widget from old posision
+                $scope.calculatedWidgets.splice(index, 1)
+
+                # Save all widget positions
+                _.each $scope.calculatedWidgets, (widgetOverride, index) ->
+                    widgetOverride.indexOverride = index
+                    $scope.widgetOverrides[widgetOverride.index].indexOverride = index
+                    return
+
+            $scope.changeVisibility = (widgetOverride) ->
+                if widgetOverride.visible == true
+                    $scope.widgetOverrides[widgetOverride.index].hidden = false
                 else
-                    $scope.widgetOverrides[index].hidden = true
+                    $scope.widgetOverrides[widgetOverride.index].hidden = true
                 return
 
             $scope.toggleAllWidgets = ->
-                _.each $scope.widgetOverrides, (widget) ->
-                    widget.hidden = $scope.allWidgetsVisible
+                _.each $scope.widgetOverrides, (widgetOverride) ->
+                    widgetOverride.hidden = $scope.allWidgetsVisible
                     return
                 return
 
             $scope.$watchCollection 'currentPage', (currentPage) ->
                 return unless currentPage?.length > 0
-                updateVisibility()
+                calculateOverrides()
 
             $scope.$watch 'dashboardOverrides', (dashboardOverrides) ->
                 return unless dashboardOverrides?
-                updateVisibility()
+                calculateOverrides()
             , true
 
     }

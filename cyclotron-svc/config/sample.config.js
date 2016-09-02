@@ -33,8 +33,17 @@ module.exports = {
 
         /* Configuration for Elasticsearch (if enabled) */
         elasticsearch: {
+            /* String or String[]
+             * Can provide basic HTTP authentication like:  
+             *     host: [
+             *         'user:password@my-elasticsearch-server1:9200',
+             *         'user:password@my-elasticsearch-server2:9200'
+             *     ]
+             */
             host: 'my-elasticsearch-cluster:9200',
             indexPrefix: 'cyclotron',
+
+            /* Configure how frequently to rotate to new indicies */
             pageviewsIndexStrategy: 'monthly',
             datasourcesIndexStrategy: 'monthly',
             eventsIndexStrategy: 'yearly'

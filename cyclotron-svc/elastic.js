@@ -28,7 +28,7 @@ if (_.isUndefined(config.analytics.elasticsearch.host)) {
 var elasticsearchConfig = config.analytics.elasticsearch;
 
 /* Connect to Elasticsearch */
-console.log('Connecting to: ' + elasticsearchConfig.host);
+console.log('Connecting to: ' + JSON.stringify(elasticsearchConfig.host));
 var client = new elasticsearch.Client({
   host: elasticsearchConfig.host,
   log: 'info'

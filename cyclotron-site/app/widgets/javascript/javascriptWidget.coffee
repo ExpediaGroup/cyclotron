@@ -30,12 +30,6 @@
 
 cyclotronApp.controller 'JavascriptWidget', ($scope, dashboardService, dataService) ->
 
-    $scope.loading = false
-    $scope.dataSourceError = false
-    $scope.dataSourceErrorMessage = null
-
-    $scope.data = null
-
     $scope.jsObject = _.executeFunctionByName($scope.widget.functionName, window, $scope.widget)
 
     $scope.reload = ->
@@ -48,44 +42,36 @@ cyclotronApp.controller 'JavascriptWidget', ($scope, dashboardService, dataServi
     # Initialize
     if $scope.dataSource?
         $scope.dataVersion = 0
-        $scope.loading = true
+        $scope.widgetContext.loading = true
 
         # Data Source (re)loaded
         $scope.$on 'dataSource:' + dsDefinition.name + ':data', (event, eventData) ->
             return unless eventData.version > $scope.dataVersion
             $scope.dataVersion = eventData.version
 
-            $scope.dataSourceError = false
-            $scope.dataSourceErrorMessage = null
+            $scope.widgetContext.dataSourceError = false
+            $scope.widgetContext.dataSourceErrorMessage = null
 
             data = eventData.data[dsDefinition.resultSet].data
 
             # Always ignore empty data sets, even on update
             if _.isEmpty(data)
-                $scope.loading = false
+                $scope.widgetContext.loading = false
                 return
 
-            # Filter the data if the widget has "filters"
-            if $scope.widget.filters?
-                data = dataService.filter(data, $scope.widget.filters)
-
-            # Sort the data if the widget has "sortBy"
-            if $scope.widget.sortBy?
-                data = dataService.sort(data, $scope.widget.sortBy)
-
-            $scope.data = data
-            $scope.loading = false
+            data = $scope.filterAndSortWidgetData(data)
+            $scope.widgetContext.loading = false
 
         # Data Source error
         $scope.$on 'dataSource:' + dsDefinition.name + ':error', (event, data) ->
-            $scope.dataSourceError = true
-            $scope.dataSourceErrorMessage = data.error
-            $scope.nodata = null
-            $scope.loading = false
+            $scope.widgetContext.dataSourceError = true
+            $scope.widgetContext.dataSourceErrorMessage = data.error
+            $scope.widgetContext.nodata = null
+            $scope.widgetContext.loading = false
 
         # Data Source loading
         $scope.$on 'dataSource:' + dsDefinition.name + ':loading', ->
-            $scope.loading = true
+            $scope.widgetContext.loading = true
         
         # Initialize the Data Source
         $scope.dataSource.init dsDefinition 

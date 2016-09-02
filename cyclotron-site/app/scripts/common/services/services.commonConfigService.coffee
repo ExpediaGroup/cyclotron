@@ -26,7 +26,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
     exports = {
 
-        version: '1.37.0'
+        version: '1.38.0'
 
         logging: 
             enableDebug: false
@@ -143,6 +143,14 @@ cyclotronServices.factory 'commonConfigService', ->
                 allowFullscreen:
                     label: 'Allow Fullscreen'
                     description: 'If true, each Widget on a Page can be maximized to fill the entire Dashboard. This setting can be overridden by each Page/Widget.'
+                    type: 'boolean'
+                    default: true
+                    required: false
+                    defaultHidden: true
+
+                allowExport:
+                    label: 'Allow Export'
+                    description: 'If true, the Widget data can be exported via a dropdown menu in the Widget. This setting can be overridden by each Page/Widget.'
                     type: 'boolean'
                     default: true
                     required: false
@@ -377,6 +385,13 @@ cyclotronServices.factory 'commonConfigService', ->
                                     required: false
                                     defaultHidden: true
                                     order: 103
+                                autoHeight: 
+                                    label: 'Auto-Height (Fit to Contents)'
+                                    description: 'If true, disables both the gridHeight and height properties, and allows the Widget to be vertically sized to fit its contents.'
+                                    type: 'boolean'
+                                    required: false
+                                    defaultHidden: true
+                                    order: 104
                                 helpText:
                                     label: 'Help Text'
                                     description: 'Provides an optional help text for the Widget, available via a help icon in the corner of the Widget.'
@@ -417,6 +432,14 @@ cyclotronServices.factory 'commonConfigService', ->
                                     required: false
                                     defaultHidden: true
                                     order: 113
+                                allowExport:
+                                    label: 'Allow Export'
+                                    description: 'If true, the Widget data can be exported via a dropdown menu in the Widget. This property overrides the Page setting.'
+                                    type: 'boolean'
+                                    inherit: true
+                                    required: false
+                                    defaultHidden: true
+                                    order: 114
                                 showWidgetErrors:
                                     label: 'Show Error Messages on Widgets'
                                     description: 'If true, allows error messages to be displayed on Widgets. This property overrides the Page setting.'
@@ -424,7 +447,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     required: false
                                     inherit: true
                                     defaultHidden: true
-                                    order: 114
+                                    order: 115
                                 hidden:
                                     label: 'Hidden'
                                     description: 'If true, the Widget will not be displayed in the Dashboard and will not occupy space in the Layout rendering. The Widget will still be initialized, however.'
@@ -432,7 +455,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     default: false
                                     required: false
                                     defaultHidden: true
-                                    order: 115
+                                    order: 116
                             order: 3
                         duration:
                             label: 'Auto-Rotate Duration (seconds)'
@@ -475,6 +498,14 @@ cyclotronServices.factory 'commonConfigService', ->
                             required: false
                             defaultHidden: true
                             order: 8
+                        allowExport:
+                            label: 'Allow Export'
+                            description: 'If true, the Widget data can be exported via a dropdown menu in the Widget. This setting can be overridden by each Widget.'
+                            type: 'boolean'
+                            inherit: true
+                            required: false
+                            defaultHidden: true
+                            order: 9
                         showWidgetErrors:
                             label: 'Show Error Messages on Widgets'
                             description: 'If true, allows error messages to be displayed on Widgets. This setting can be overridden by each Widget.'
@@ -482,7 +513,7 @@ cyclotronServices.factory 'commonConfigService', ->
                             required: false
                             inherit: true
                             defaultHidden: true
-                            order: 9;
+                            order: 10;
 
                 dataSources: 
                     label: 'Data Sources'
@@ -3130,6 +3161,12 @@ cyclotronServices.factory 'commonConfigService', ->
                                 type: 'integer'
                                 required: false
                                 order: 3
+                            belowPagerMessage:
+                                label: 'Below Pager Message'
+                                description: 'If set, displays a message below the pager at the bottom of the Widget. The following variables can be used: #{itemsPerPage}, #{totalItems}, #{currentPage}.'
+                                type: 'string'
+                                required: false
+                                order: 4
                     filters: 
                         label: 'Filters'
                         description: 'Optional, but if provided, specifies name-value pairs used to filter the data source\'s result set. Each key specifies a column in the data source, and the value specifies either a single value (string) or a set of values (array of strings). Only rows which have the specifies value(s) will be permitted.'
