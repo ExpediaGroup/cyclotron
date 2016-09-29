@@ -39,7 +39,12 @@ cyclotronApp.controller 'PushDashboardController', ($scope, $uibModalInstance, $
         if !$scope.fields.pushLocation.requiresAuth
             deferred.resolve(null)
         else 
-            loginPromise = $http.post($scope.fields.pushLocation.serviceUrl + '/users/login', { 
+            targetUrl = new URI($scope.fields.pushLocation.serviceUrl)
+                .segment '/users/login'
+                .protocol ''
+                .toString()
+
+            loginPromise = $http.post(targetUrl, { 
                 username: $scope.fields.username, 
                 password: $scope.fields.password 
             })

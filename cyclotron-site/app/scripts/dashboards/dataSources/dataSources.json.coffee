@@ -51,6 +51,12 @@ cyclotronDataSources.factory 'jsonDataSource', ($q, $http, configService, dataSo
             compiledOptions = _.compile(options.options, {})
             _.assign(proxyBody, compiledOptions)
 
+        if options.awsCredentials?
+            # Add required properties for AWS request signing
+            proxyBody.host = url.hostname()
+            proxyBody.path = url.path() + url.search()
+            proxyBody.awsCredentials = options.awsCredentials
+
         return proxyBody
 
     runner = (options) ->
@@ -73,12 +79,13 @@ cyclotronDataSources.factory 'jsonDataSource', ($q, $http, configService, dataSo
                     data: result.body
                     columns: null
 
-        # Do the request, wiring up success/failure handlers
-        proxyUri = (_.jsExec(options.proxy) || configService.restServiceUrl) + '/proxy'
+        # Generate proxy URLs
+        proxyUri = new URI(_.jsExec(options.proxy) || configService.restServiceUrl)
+            .protocol ''     # Remove protocol to work with either HTTP/HTTPS
+            .segment 'proxy' # Append /proxy endpoint
+            .toString()
 
-        # Remove protocol to work with either HTTP or HTTPS
-        proxyUri = new URI(proxyUri).protocol('').toString()
-        
+        # Do the request, wiring up success/failure handlers        
         req = $http.post proxyUri, getProxyRequest(options)
         
         # Add callback handlers to promise

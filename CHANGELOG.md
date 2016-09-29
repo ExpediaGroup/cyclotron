@@ -1,3 +1,29 @@
+# 1.39.0 (09/28/2016)
+
+## Features
+
+ - SSL/TLS: Proxy server initializes itself with a list of trusted root CAs.  Added server option for manually providing CAs to trust when executing HTTPS requests
+
+## Bug Fixes
+
+ - Parameters: Serialize Parameters with a Moment.js moment value into the URL using ISO 8601 format
+
+ - Parameters: Fixed scenarios where changing the URL querystring didn't trigger a change in Parameters
+
+ - Table Widget: Fixed Column Grouping when used with Pagination
+
+ - Export: Fixed scenarios where Dashboard Parameters were excluded from Export
+
+ - Export: Disabled browser check dialog from appearing on exported Dashboards
+
+ - Export: Fixed exporting of Dashboards with no pages
+
+ - Fixed various HTTP requests to use current protocol and correctly append URI segements
+
+## Breaking Changes
+
+ - Removed custom HTTP/HTTPS pool with maxSockets: infinity. This is now the default value in Node.js v0.12.0 and above, so only older versions of Node.js will be affected.  As a workaround for older versions of Node.js, set http(s).globalAgent.maxSockets = infinity.
+
 # 1.38.0 (09/02/2016)
 
 ## Features

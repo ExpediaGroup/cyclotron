@@ -85,5 +85,10 @@ module.exports = {
     /* Limits the maximum size request that can be processed.
      * May need to be increased to save very large Dashboards.
      */
-    requestLimit: '5mb'
+    requestLimit: '5mb',
+
+    /* Provides additional CAs to trust when making HTTPS proxy requests */
+    trustedCa: [
+        // 'config/internalRoot.crt'
+    ]
 };

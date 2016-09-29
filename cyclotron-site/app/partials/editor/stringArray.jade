@@ -1,6 +1,12 @@
 .well.well-sm
     .form-group#editor-array-item(ng-repeat='v in model track by $index')
-        input.form-control(ng-model='v', ng-change='updateArrayValue($index, v)', placeholder='{{ definition.placeholder }}')
+
+        select.form-control(ng-show='definition.options', ng-model='v', ng-change='updateArrayValue($index, v)', title='{{ definition.description }}'
+            ng-options='optionValue.value as optionKey for (optionKey, optionValue) in definition.options')
+            option(value='')
+
+        input.form-control(ng-hide='definition.options', ng-model='v', ng-change='updateArrayValue($index, v)', placeholder='{{ definition.placeholder }}')
+
         i#editor-array-remove.inline-delete-icon.fa.fa-times(ng-click='removeArrayValue($index)', title='Remove this value')
 
     .horizontal-add.button-group

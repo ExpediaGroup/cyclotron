@@ -1,5 +1,5 @@
 ###
-# Copyright (c) 2013-2016 the original author or authors.
+# Copyright (c) 2016 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
 # you may not use this file except in compliance with the License. 
@@ -39,7 +39,11 @@ cyclotronDataSources.factory 'elasticsearchDataSource', ($q, $http, configServic
             json: true
             body: options.request
             headers: 
-                "Content-Type": "application/json"
+                'Content-Type': 'application/json'
+
+        if options.options?
+            compiledOptions = _.compile(options.options, {})
+            _.assign(proxyBody, compiledOptions)
 
         if options.awsCredentials?
             # Add required properties for AWS request signing
@@ -147,12 +151,13 @@ cyclotronDataSources.factory 'elasticsearchDataSource', ($q, $http, configServic
                     reject error
 
 
+            # Generate proxy URLs
+            proxyUri = new URI(_.jsExec(options.proxy) || configService.restServiceUrl)
+                .protocol ''     # Remove protocol to work with either HTTP/HTTPS
+                .segment 'proxy' # Append /proxy endpoint
+                .toString()
+
             # Do the request, wiring up success/failure handlers
-            proxyUri = (_.jsExec(options.proxy) || configService.restServiceUrl) + '/proxy'
-
-            # Remove protocol to work with either HTTP or HTTPS
-            proxyUri = new URI(proxyUri).protocol('').toString()
-
             req = $http.post proxyUri, getProxyRequest(options)
             
             # Add callback handlers to promise

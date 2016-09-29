@@ -27,8 +27,6 @@ var config = require('../config/config'),
     aws4  = require('aws4'),
     crypto = require('crypto');
 
-var pool = { maxSockets: Infinity };
-
 /* Crypto-process request options */
 var decrypter = function (req) {
     var decrypt = function (value) {
@@ -52,7 +50,6 @@ var decrypter = function (req) {
 
 var sendRequest = function (req, callback) {
     var proxyRequest = decrypter(req);
-    proxyRequest.pool = pool;
 
     if (proxyRequest.awsCredentials) {
         /* Should contain { accessKeyId: '', secretAccessKey: '' } */
@@ -61,7 +58,7 @@ var sendRequest = function (req, callback) {
 
     request(proxyRequest, function (err, proxyResponse, body) {
         if (err) {
-            console.log('Proxy Error: ' + err);
+            console.log('Proxy Error: ' + err + ' ' + JSON.stringify(proxyResponse) + ', err.connect: ' + err.connect);
             return callback({
                 error: err,
                 proxyResponse: proxyResponse,

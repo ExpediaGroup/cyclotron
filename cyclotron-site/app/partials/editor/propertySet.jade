@@ -54,9 +54,12 @@
             ng-required='{{ value.required }}', placeholder='{{ value.placeholder }}',
             type='{{ value.inputType || "text" }}', ng-switch-default)
 
-    select.form-control(ng-model='model[value.name]', ng-if='value.options', title='{{ value.description }}'
-        ng-options='optionValue.value as optionKey for (optionKey, optionValue) in getOptions(value.name, value.options)')
-        option(value='')
+    span(ng-if='value.options', ng-switch='value.type')
+        editor-view-string-array(model='model[value.name]', label='{{ value.label }}', definition='value', ng-switch-when='string[]')
+            
+        select.form-control(ng-model='model[value.name]', ng-switch-default, title='{{ value.description }}'
+            ng-options='optionValue.value as optionKey for (optionKey, optionValue) in getOptions(value.name, value.options)')
+            option(value='')
 
 div(ng-hide='hiddenProperties.length == 0')
     label Additional Properties

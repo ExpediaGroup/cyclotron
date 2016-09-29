@@ -1,7 +1,7 @@
 {
   "name": "cyclotron-svc",
   "description": "Cyclotron: REST API",
-  "version": "1.38.0",
+  "version": "1.39.0",
   "author": "Dave Bauman <dbauman@expedia.com>",
   "license": "MIT",
   "private": true,
@@ -38,7 +38,8 @@
     "passport-ldapauth": "~0.3.0",
     "request": "~2.39",
     "serve-static": "~1.9.3",
-    "shortid": "2.0.0"
+    "shortid": "2.0.0",
+    "ssl-root-cas": "^1.2.2"
   },
   "devDependencies": {
     "del": "^1.1.1",

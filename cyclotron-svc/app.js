@@ -16,7 +16,8 @@
 
 var config = require('./config/config');
 
-var express = require('express'),
+var _ = require('lodash'),
+    express = require('express'),
     morgan = require('morgan'),
     errorHandler = require('errorhandler'),
     bodyParser = require('body-parser'),
@@ -83,6 +84,30 @@ if (config.analytics && config.analytics.enable == true) {
     if (config.analytics.analyticsEngine == 'elasticsearch') {
         /* Initialize Elasticsearch for Analytics */
         var elasticsearch = require('./elastic');
+    }
+}
+
+/* Initialize SSL root CAs */
+var cas = require('ssl-root-cas/latest')
+  .inject();
+
+/* Optional: Load Additional Trusted Certificate Authorities */
+if (_.isArray(config.trustedCa) && !_.isEmpty(config.trustedCa)) {
+    for (ca of config.trustedCa) {
+        console.log('Loading trusted CA: ' + ca);
+        cas.addFile(ca);
+    }
+}
+
+/* Initialize SSL root CAs */
+var cas = require('ssl-root-cas/latest')
+  .inject();
+
+/* Optional: Load Additional Trusted Certificate Authorities */
+if (_.isArray(config.trustedCa) && !_.isEmpty(config.trustedCa)) {
+    for (ca of config.trustedCa) {
+        console.log('Loading trusted CA: ' + ca);
+        cas.addFile(ca);
     }
 }
 

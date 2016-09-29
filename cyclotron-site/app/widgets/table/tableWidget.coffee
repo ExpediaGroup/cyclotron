@@ -111,9 +111,19 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
         else
             row[columnName]
 
+    $scope.isCellHidden = (row, column, rowIndex) ->
+        # Always show the columns of the first row
+        if rowIndex == 0 then return false
+
+        return $scope.getRowSpan(row, column, rowIndex) == 0
+
     # Returns the row span for a given cell
-    $scope.getRowSpan = (row, column) ->
+    $scope.getRowSpan = (row, column, rowIndex) ->
         return 1 unless row.__rowSpans?
+
+        if rowIndex == 0 
+            return row.__rowSpanPos[column.name]
+
         return row.__rowSpans[column.name]
 
     # Table sort (TODO: Optimize mutiple sorts)
@@ -173,14 +183,16 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
     # Process the rows to collect row groups
     $scope.processRowGroups = (rows, columns) ->
 
+        # Iterate through columns
         _.each columns, (column, columnIndex) ->
-            currentGroupHead = null
+            currentGroupList = []
             currentGroupValue = null
 
-            # Loop through rows
+            # Loop through rows, look for repeated rows
             _.each rows, (row, rowIndex) ->
                 if !row.__rowSpans? 
-                    row.__rowSpans = {}
+                    row.__rowSpans = {}     # Stores the rowspan for the current row
+                    row.__rowSpanPos = {}   # Stores the rowspan offset from the current row to the end of the span
 
                 if column.groupRows != true
                     # Abort this column and set all the rows to 1
@@ -188,18 +200,28 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
 
                 else if rowIndex == 0
                     row.__rowSpans[column.name] = 1
-                    currentGroupHead = row
+                    row.__rowSpanPos[column.name] = 1
+                    currentGroupList = [row]
                     currentGroupValue = row[column.name]
                 else
                     if row[column.name] == currentGroupValue
-                        # Increment row span for the group head
-                        currentGroupHead.__rowSpans[column.name]++
+                        # Add current row to the list
+                        currentGroupList.push row
+                        currentGroupList[0].__rowSpans[column.name]++
 
+                        spanLength = currentGroupList[0].__rowSpans[column.name]
+
+                        # Store the distance from the current row to the end of the rowspan
+                        # Used for pagination, where any row might be at the top of a page
+                        _.each currentGroupList, (row, index) ->
+                            row.__rowSpanPos[column.name] = spanLength - index
+                                
                         # Set the current row to 0 so it doesn't appear
                         row.__rowSpans[column.name] = 0
                     else
                         row.__rowSpans[column.name] = 1
-                        currentGroupHead = row
+                        row.__rowSpanPos[column.name] = 1
+                        currentGroupList = [row]
                         currentGroupValue = row[column.name]
 
     # Expand regex and wildcard columns and return the new list

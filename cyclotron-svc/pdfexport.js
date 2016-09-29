@@ -54,7 +54,7 @@ casper.on('remote.message', function(message) {
 });
 
 var next = function() {
-    this.waitForSelector('div.dashboard-page', function afterPageLoad () {
+    this.waitForSelector('div.dashboard-pages', function afterPageLoad () {
         this.echo('-- Page Loaded --');
 
         this.waitWhileSelector(".spinner", function afterDataLoad () {
@@ -63,7 +63,7 @@ var next = function() {
 
             this.wait(1220, function() {
 
-                var currentPage = this.getElementAttribute('div.dashboard-page', 'page-number');
+                var currentPage = this.getElementAttribute('div.dashboard-page', 'page-number') || 0;
                 console.log('-- Current Page: ' + currentPage + ' --');
 
                 if (firstPage === true || currentPage != 0) {
@@ -81,20 +81,22 @@ var next = function() {
 
                     this.echo("Processing page " + currentPage + ": " + this.getCurrentUrl());
                     this.captureSelector(image, 'html');
+
+                    /* Move to the next page */
                     this.click('i.fa.fa-chevron-right');
 
                     currentPage++;
                     casper.then(next);
                 } else {
-                    this.then(buildPage);
+                    this.then(buildPdf);
                 }
             });
         }, timeoutFn, timeout);
-    }, timeoutFn, timeout);
+    }, timeoutFn, 10000);
 };
 
-/* Building resulting page and image */
-var buildPage = function() {
+/* Building resulting page, image, and pdf */
+var buildPdf = function() {
     var fs, pageHtml;
     this.echo("Build result page");
     fs = require("fs");

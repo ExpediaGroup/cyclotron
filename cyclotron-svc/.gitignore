@@ -1,6 +1,10 @@
 # Configuration
 config/config.js
 
+# Root CAs
+config/*.crt
+config/*.pem
+
 # Exports
 export/*
 

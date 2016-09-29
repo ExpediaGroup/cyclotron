@@ -26,7 +26,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
     exports = {
 
-        version: '1.38.0'
+        version: '1.39.0'
 
         logging: 
             enableDebug: false
@@ -581,6 +581,158 @@ cyclotronServices.factory 'commonConfigService', ->
                             defaultHidden: true
                             order: 104
                     options:
+                        cloudwatch:
+                            value: 'cloudwatch'
+                            message: 'Amazon CloudWatch monitors operational and performance metrics for your AWS cloud resources and applications. Refer to the <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/Welcome.html" target="_blank">API Documentation</a> for information on configuring the available options.'
+                            icon: 'fa-cloud-download'
+                            properties:
+                                url:
+                                    label: 'URL'
+                                    description: 'Specifies the Amazon CloudWatch Endpoint for the desired region, e.g. "monitoring.us-west-2.amazonaws.com".'
+                                    placeholder: 'CloudWatch Endpoint'
+                                    type: 'url'
+                                    inlineJs: true
+                                    inlineEncryption: true
+                                    required: true
+                                    order: 10
+                                awsCredentials:
+                                    label: 'AWS Credentials'
+                                    description: 'AWS IAM signing credentials for making authenticated requests.  If set, the request will be signed before it is sent.'
+                                    type: 'propertyset'
+                                    required: true
+                                    order: 12
+                                    properties:
+                                        accessKeyId:
+                                            label: 'Access Key Id'
+                                            description: 'AWS access key id'
+                                            type: 'string'
+                                            placeholder: 'Access Key Id'
+                                            inlineJs: true
+                                            inlineEncryption: true
+                                            order: 1
+                                        secretAccessKey:
+                                            label: 'Secret Access Key'
+                                            description: 'AWS sercet access key'
+                                            type: 'string'
+                                            placeholder: 'Secret Access Key'
+                                            inlineJs: true
+                                            inlineEncryption: true
+                                            order: 2
+                                parameters:
+                                    label: 'CloudWatch Parameters'
+                                    description: 'Set of parameters for the CloudWatch API.'
+                                    type: 'propertyset'
+                                    required: true
+                                    order: 13
+                                    properties:
+                                        Action:
+                                            label: 'Action'
+                                            description: 'Specifies one of the CloudWatch actions.'
+                                            type: 'string'
+                                            default: 'auto'
+                                            inlineJs: true
+                                            options:
+                                                ListMetrics:
+                                                    value: 'ListMetrics'
+                                                GetMetricStatistics:
+                                                    value: 'GetMetricStatistics'
+                                            required: true
+                                            order: 1
+                                        Namespace:
+                                            label: 'Namespace'
+                                            description: 'The namespace to filter against.'
+                                            type: 'string'
+                                            inlineJs: true
+                                            required: false
+                                            order: 2
+                                        MeasureName:
+                                            label: 'Metric Name'
+                                            description: 'The name of the metric to filter against.'
+                                            type: 'string'
+                                            inlineJs: true
+                                            required: false
+                                            order: 3
+                                        Dimensions:
+                                            label: 'Dimensions'
+                                            description: 'Optional; a list of Dimension key/values to filter against.'
+                                            type: 'hash'
+                                            required: false
+                                            inlineJsValue: true
+                                            inlineEncryption: true
+                                            order: 4
+                                        Statistics:
+                                            label: 'Statistics'
+                                            description: 'Specifies one or more Statistics to return.'
+                                            type: 'string[]'
+                                            inlineJs: true
+                                            options:
+                                                SampleCount:
+                                                    value: 'SampleCount'
+                                                Average:
+                                                    value: 'Average'
+                                                Sum:
+                                                    value: 'Sum'
+                                                Minimum:
+                                                    value: 'Minimum'
+                                                Maximum:
+                                                    value: 'Maximum'
+                                            required: true
+                                            order: 5
+                                        Period:
+                                            label: 'Period'
+                                            description: 'The granularity, in seconds, of the returned datapoints. A Period can be as short as one minute (60 seconds) or as long as one day (86,400 seconds), and must be a multiple of 60.'
+                                            type: 'integer'
+                                            default: 60
+                                            required: false
+                                            placeholder: 'Number of Seconds'
+                                            order: 6
+                                        StartTime:
+                                            label: 'Start Time'
+                                            description: 'The date/time of the first datapoint to return. The time stamp must be in ISO 8601 UTC format (e.g., 2014-09-03T23:00:00Z).'
+                                            type: 'string'
+                                            inlineJs: true
+                                            required: false
+                                            order: 8
+                                        EndTime:
+                                            label: 'End Time'
+                                            description: 'The date/time of the last datapoint to return. The time stamp must be in ISO 8601 UTC format (e.g., 2014-09-03T23:00:00Z).'
+                                            type: 'string'
+                                            inlineJs: true
+                                            required: false
+                                            order: 9
+                                refresh: 
+                                    label: 'Auto-Refresh'
+                                    description: 'Optional; specifies the number of seconds after which the Data Source reloads'
+                                    type: 'integer'
+                                    required: false
+                                    placeholder: 'Number of Seconds'
+                                    order: 15
+                                preProcessor:
+                                    label: 'Pre-Processor'
+                                    description: 'Specifies an optional JavaScript function that can inspect and modify the Data Source properties before it is executed. This method will be called before the Data Source is executed, and passed the Data Source object as an argument. This object can be modified, or a new/modified object returned. If this value is not an JavaScript function, it will be ignored.'
+                                    placeholder: 'JavaScript Function'
+                                    type: 'editor'
+                                    editorMode: 'javascript'
+                                    required: false
+                                    defaultHidden: true
+                                    order: 16
+                                postProcessor:
+                                    label: 'Post-Processor'
+                                    description: 'Specifies an optional JavaScript function that can inspect and modify the result before it is sent to the Widgets. If this value is not an JavaScript function, it will be ignored.'
+                                    placeholder: 'JavaScript Function'
+                                    type: 'editor'
+                                    editorMode: 'javascript'
+                                    required: false
+                                    order: 17
+                                proxy:
+                                    label: 'Proxy Server'
+                                    description: 'Specifies which Proxy server to route the requests through. If omitted, the default proxy sever will be used.'
+                                    type: 'url'
+                                    inlineJs: true
+                                    required: false
+                                    defaultHidden: true
+                                    order: 11
+                                
                         cyclotronData:
                             value: 'cyclotronData'
                             icon: 'fa-cloud-download'
@@ -917,6 +1069,30 @@ cyclotronServices.factory 'commonConfigService', ->
                                     required: false
                                     defaultHidden: true
                                     order: 11
+                                awsCredentials:
+                                    label: 'AWS Credentials'
+                                    description: 'Optional AWS IAM signing credentials for making authenticated requests.  If set, the request will be signed before it is sent.'
+                                    type: 'propertyset'
+                                    required: false
+                                    defaultHidden: true
+                                    order: 17
+                                    properties:
+                                        accessKeyId:
+                                            label: 'Access Key Id'
+                                            description: 'AWS access key id'
+                                            type: 'string'
+                                            placeholder: 'Access Key Id'
+                                            inlineJs: true
+                                            inlineEncryption: true
+                                            order: 1
+                                        secretAccessKey:
+                                            label: 'Secret Access Key'
+                                            description: 'AWS sercet access key'
+                                            type: 'string'
+                                            placeholder: 'Secret Access Key'
+                                            inlineJs: true
+                                            inlineEncryption: true
+                                            order: 2
 
                         mock: 
                             value: 'mock'

@@ -108,12 +108,13 @@ cyclotronDataSources.factory 'splunkDataSource', ($q, $http, configService, data
                     data: data
                     columns: fields
 
-        # Do the request, wiring up success/failure handlers
-        proxyUri = (_.jsExec(options.proxy) || configService.restServiceUrl) + '/proxy'
+        # Generate proxy URLs
+        proxyUri = new URI(_.jsExec(options.proxy) || configService.restServiceUrl)
+            .protocol ''     # Remove protocol to work with either HTTP/HTTPS
+            .segment 'proxy' # Append /proxy endpoint
+            .toString()
 
-        # Remove protocol to work with either HTTP or HTTPS
-        proxyUri = new URI(proxyUri).protocol('').toString()
-        
+        # Do the request, wiring up success/failure handlers   
         req = $http.post proxyUri, getProxyRequest(options)
 
         # Add callback handlers to promise

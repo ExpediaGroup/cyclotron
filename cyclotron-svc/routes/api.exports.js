@@ -74,9 +74,6 @@ var exportPdf = function (req, res, sync) {
             var queryIndex = req.url.indexOf('?')
             var query = queryIndex < 0 ? '' : req.url.substr(queryIndex);
 
-            /* Add exporting flag to URL */
-            query = (query === '' ? '?' : '&') + 'exporting=true'
-
             /* Construct dashboard URL */
             var dashboardUrl = config.webServer + '/' + dashboardName + query;
 
@@ -85,6 +82,8 @@ var exportPdf = function (req, res, sync) {
 
             /* Increase connection timeout: 15 minutes */
             req.connection.setTimeout(900*1000);
+
+            console.log('Exporting dashboard: ' + dashboardUrl);
 
             var terminal = childProcess.spawn('casperjs', ['pdfexport.js', dashboardUrl, id]);
 
@@ -229,7 +228,7 @@ exports.dataAsync = function (req, res) {
                     return res.status(500).send(err);
                 }
                 res.status(201).send({
-                    url: '//' + ip.address() + ':' + config.port + '/exports/' + key
+                    url: 'http://' + ip.address() + ':' + config.port + '/exports/' + key
                 });
             });
             
@@ -246,7 +245,7 @@ exports.dataAsync = function (req, res) {
                     return res.status(500).send(err);
                 }
                 res.status(201).send({
-                    url: '//' + ip.address() + ':' + config.port + '/exports/' + key
+                    url: 'http://' + ip.address() + ':' + config.port + '/exports/' + key
                 });
             });
             
@@ -263,7 +262,7 @@ exports.dataAsync = function (req, res) {
                     return res.status(500).send(err);
                 }
                 res.status(201).send({
-                    url: '//' + ip.address() + ':' + config.port + '/exports/' + key
+                    url: 'http://' + ip.address() + ':' + config.port + '/exports/' + key
                 });
             });
             

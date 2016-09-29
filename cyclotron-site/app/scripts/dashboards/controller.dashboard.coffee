@@ -215,16 +215,27 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $localFora
             toggleLikeHelper()
 
     handleQueryStringChanges = (parameters, oldParameters) ->
+        return if _.isEqual(parameters, oldParameters)
+        logService.debug 'Updating Cyclotron.parameters from querystring'
+
         _.assign($window.Cyclotron.parameters, parameters)
+
+        # Remove deleted parameters
+        deletedKeys = _.difference(_.keys(oldParameters), _.keys(parameters))
+        _.each deletedKeys, (key) ->
+            logService.debug 'Removing parameter from Cyclotron.parameters: ' + key
+            delete Cyclotron.parameters[key]
+            return
 
         if parameters.page != oldParameters.page
             $scope.goToPage(parameters.page)
 
     handleParameterChanges = (parameters, oldParameters) ->
-
-        deletedKeys = _.difference(_.keys(oldParameters), _.keys(parameters))
+        return if _.isEqual(parameters, oldParameters)
+        logService.debug 'Updating querystring from Cyclotron.parameters'
 
         # Remove deleted parameters from the URL
+        deletedKeys = _.difference(_.keys(oldParameters), _.keys(parameters))
         _.each deletedKeys, (key) ->
             logService.debug 'Removing parameter from URL: ' + key
             $location.search(key, null)
@@ -243,22 +254,28 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $localFora
             showInUrl = true
             if parameterDefinition?.showInUrl == false then showInUrl = false
 
+            stringify = (v) ->
+                if moment.isMoment(value)
+                    v.toISOString()
+                else
+                    v
+
             if key == 'page'
                 $location.search(key, null)
-            else if defaultValue? and _.jsExec(defaultValue).toString() == value.toString()
+            else if defaultValue? and stringify(_.jsExec(defaultValue)) == stringify(value)
                 $location.search(key, null)
-                deeplinkOptions[key] = value
+                deeplinkOptions[key] = stringify(value)
             else if !showInUrl
                 $location.search(key, null)
-                deeplinkOptions[key] = value
-                exportOptions[key] = value 
+                deeplinkOptions[key] = stringify(value)
+                exportOptions[key] = stringify(value) 
             else if key == 'live'
-                $location.search(key, value)
-                deeplinkOptions[key] = value
+                $location.search key, stringify(value)
+                deeplinkOptions[key] = stringify(value)
             else 
-                $location.search(key, value)
-                deeplinkOptions[key] = value
-                exportOptions[key] = value 
+                $location.search key, stringify(value)
+                deeplinkOptions[key] = stringify(value)
+                exportOptions[key] = stringify(value) 
 
             if parameterDefinition? and not _.isEqual value, oldParameters[key]
                 changeHandler = _.jsEval parameterDefinition.changeEvent

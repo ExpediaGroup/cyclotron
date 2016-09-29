@@ -37,7 +37,13 @@ cyclotronApp.controller 'ExportController', ($scope, $state, $stateParams, $loca
 
     $scope.export = ->
         $scope.exporting = true
-        exportService.exportAsync $scope.dashboardName, $scope.exportFormat.value, $location.search(), (result) ->
+
+        # Add default, built-in parameters
+        exportParameters = _.clone $location.search()
+        exportParameters.browsercheck = false
+        exportParameters.exporting = true
+
+        exportService.exportAsync $scope.dashboardName, $scope.exportFormat.value, exportParameters, (result) ->
             $scope.checkStatus(result.statusUrl)
 
 
