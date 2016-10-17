@@ -50,20 +50,6 @@ cyclotronDirectives.directive 'editorViewObjectArray', ->
                             cloned.name = clonedName + cloneIndex
                 $scope.model.splice(spliceIndex+1, 0, cloned)
 
-            # Moves an item to a new location
-            $scope.moveItem = (oldIndex, newIndex) ->
-                return unless $scope.model?
-                return if newIndex < 0 || newIndex >= $scope.model.length
-
-                item = $scope.model.splice(oldIndex, 1)[0]
-                $scope.model.splice(newIndex, 0, item)
-
-            $scope.moveUp = (index) ->
-                $scope.moveItem(index, index - 1)
-
-            $scope.moveDown = (index) ->
-                $scope.moveItem(index, index + 1)
-
             $scope.goToSubState = (state, item, index) ->
                 $scope.$parent.goToSubState(state, item, index)
 

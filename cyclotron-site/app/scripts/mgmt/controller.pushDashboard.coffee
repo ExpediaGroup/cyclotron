@@ -17,7 +17,7 @@
 #
 # PushDashboard controller -- for modal dialog
 #
-cyclotronApp.controller 'PushDashboardController', ($scope, $uibModalInstance, $q, $http, $timeout, configService, dashboardService, focusService, userService) ->
+cyclotronApp.controller 'PushDashboardController', ($scope, $uibModalInstance, $q, $http, $timeout, analyticsService, configService, dashboardService, focusService, userService) ->
 
     $scope.environmentsForPush = _.reject configService.cyclotronEnvironments, { canPush: false }
 
@@ -72,6 +72,7 @@ cyclotronApp.controller 'PushDashboardController', ($scope, $uibModalInstance, $
         p.then (sessionKey) ->
             q = dashboardService.pushToService($scope.editor.dashboardWrapper, $scope.fields.pushLocation.serviceUrl, sessionKey)
             q.then ->
+                analyticsService.recordEvent 'pushDashboard', { dashboardName: $scope.editor.dashboardWrapper.name, destination: $scope.fields.pushLocation.serviceUrl }
                 alertify.log("Pushed Dashboard to " + $scope.fields.pushLocation.name, 2500)
 
                 $uibModalInstance.close()

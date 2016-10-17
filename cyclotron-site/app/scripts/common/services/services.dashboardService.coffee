@@ -135,11 +135,11 @@ cyclotronServices.factory 'dashboardService', ($http, $resource, $q, analyticsSe
         p = dashboardResource.query({ q: query }).$promise
 
         p.then (dashboards) ->
-            deferred.resolve(dashboards)
+            deferred.resolve dashboards
 
         p.catch (error) ->
             alertify.error(error?.data || 'Cannot connect to cyclotron-svc (getDashboards)', 2500)
-            deferred.reject(error)
+            deferred.reject error
 
         return deferred.promise
 
@@ -160,10 +160,10 @@ cyclotronServices.factory 'dashboardService', ($http, $resource, $q, analyticsSe
         ).$promise
 
         p.then (dashboard) ->
-            deferred.resolve(dashboard)
+            deferred.resolve dashboard
 
         p.catch (error) ->
-            deferred.reject(error)
+            deferred.reject error
 
         return deferred.promise
 
@@ -174,6 +174,7 @@ cyclotronServices.factory 'dashboardService', ($http, $resource, $q, analyticsSe
             p = dashboardResource.save({ session: userService.currentSession()?.key }, dashboard).$promise
 
             p.then ->
+                analyticsService.recordEvent 'createDashboard', { dashboardName: dashboard.name }
                 alertify.log('Created Dashboard', 2500)
                 deferred.resolve()
 
@@ -184,7 +185,7 @@ cyclotronServices.factory 'dashboardService', ($http, $resource, $q, analyticsSe
                     userService.setLoggedOut()
                 else 
                     alertify.error(error.data, 2500)
-                deferred.reject(error)
+                deferred.reject error
 
         if userService.hasEditPermission(dashboard)
             doSave()
@@ -208,7 +209,8 @@ cyclotronServices.factory 'dashboardService', ($http, $resource, $q, analyticsSe
             }, dashboard).$promise
 
             p.then ->
-                alertify.log("Saved Dashboard", 2500)
+                analyticsService.recordEvent 'modifyDashboard', { dashboardName: dashboard.name, rev: dashboard.rev }
+                alertify.log 'Saved Dashboard', 2500
                 deferred.resolve()
 
             p.catch (error) ->
@@ -218,10 +220,10 @@ cyclotronServices.factory 'dashboardService', ($http, $resource, $q, analyticsSe
                         alertify.error('Dashboard not saved')
                         userService.setLoggedOut()
                     when 403
-                        alertify.error("You don't have permission to edit this Dashboard")
+                        alertify.error('You don\'t have permission to edit this Dashboard')
                     else 
                         alertify.error(error.data, 2500)
-                deferred.reject(error)
+                deferred.reject error
 
         if userService.hasEditPermission(dashboard)
             doUpdate()
@@ -231,7 +233,7 @@ cyclotronServices.factory 'dashboardService', ($http, $resource, $q, analyticsSe
                 if e 
                     doUpdate()
                 else
-                    deferred.reject('Cancelled')
+                    deferred.reject 'Cancelled'
 
         return deferred.promise
 
@@ -244,8 +246,9 @@ cyclotronServices.factory 'dashboardService', ($http, $resource, $q, analyticsSe
         }).$promise
 
         p.then (dashboard) ->
+            analyticsService.recordEvent 'deleteDashboard', { dashboardName: dashboard.name }
             alertify.log('Deleted Dashboard', 2500)
-            deferred.resolve(dashboard)
+            deferred.resolve dashboard
 
         p.catch (error) ->
             switch error.status
@@ -257,7 +260,7 @@ cyclotronServices.factory 'dashboardService', ($http, $resource, $q, analyticsSe
                     alertify.error("You don't have permission to delete this Dashboard")
                 else
                     alertify.error(error.data, 2500)
-            deferred.reject(error)
+            deferred.reject error
 
         return deferred.promise
 
@@ -267,11 +270,11 @@ cyclotronServices.factory 'dashboardService', ($http, $resource, $q, analyticsSe
         p = revisionsResource.query({name: dashboardName}).$promise
 
         p.then (dashboards) ->
-            deferred.resolve(dashboards)
+            deferred.resolve dashboards
 
         p.catch (error) ->
             alertify.error(error?.data || 'Cannot connect to cyclotron-svc (getRevisions)', 2500)
-            deferred.reject(error)
+            deferred.reject error
 
         return deferred.promise
 
@@ -281,10 +284,10 @@ cyclotronServices.factory 'dashboardService', ($http, $resource, $q, analyticsSe
         url = configService.restServiceUrl + '/dashboards/' + dashboardName + '/revisions/' + rev1 + '/diff/' + rev2
         $http.get(url).then (response) ->
             # Returns formatted HTML diff
-            deferred.resolve(response.data)
+            deferred.resolve response.data
         .catch (error) ->
             alertify.error(error?.data || 'Cannot connect to cyclotron-svc (getRevisionDiff)', 2500)
-            deferred.reject(error)
+            deferred.reject error
 
         return deferred.promise
 

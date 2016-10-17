@@ -22,10 +22,10 @@
 
     .sidebar-accordion
 
-        accordion-group(ng-repeat='content in dashboard.sidebar.sidebarContent track by $index', heading='{{ content.heading }}')
+        accordion-group(ng-repeat='content in sidebarContent track by $index', heading='{{ content.heading }}', is-open='content.isOpen')
             div(ng-bind-html='trustHtml(content.html)')
 
-        accordion-group.show-hide-widgets(heading='Show/Hide Widgets', ng-if='dashboard.sidebar.showHideWidgets == true')
+        accordion-group.show-hide-widgets(heading='Show/Hide Widgets', ng-if='dashboard.sidebar.showHideWidgets == true', is-open='isShowHideWidgetsOpen')
             
             ul.widget-list(dnd-list='calculatedWidgets')
                 li(ng-repeat='widget in calculatedWidgets',

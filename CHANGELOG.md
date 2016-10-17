@@ -1,3 +1,15 @@
+# 1.40.0 (10/12/2016)
+
+## Features
+
+ - Analytics: collect new analytics events for: Login, Logout, Create Dashboard, Modify Dashboard, Push Dashboard
+
+ - Dashboard Sidebar: Increased width of sidebar; expanded the first section in the sidebar initially.
+
+ - Dashboard Editor: Drag-and-drop to reorder Data Sources, Pages, Widgets, etc.
+
+ - Dashboard Editor: Added spinner when saving a Dashboard; prevent accidentally double-saving
+ 
 # 1.39.0 (09/28/2016)
 
 ## Features

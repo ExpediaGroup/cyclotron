@@ -75,6 +75,7 @@ cyclotronApp.controller 'GuiEditorController', ($scope, $state, $stateParams, $l
         $scope.editor.initialized and
             $scope.editor.hasEditPermission and
             $scope.isDirty() and
+            !$scope.isSaving and
             !$scope.hasDuplicateDataSourceName()
 
     $scope.canExport = ->
@@ -323,18 +324,17 @@ cyclotronApp.controller 'GuiEditorController', ($scope, $state, $stateParams, $l
                 $scope.editor.latestRevisionDeleted = true
                 $scope.editor.isDirty = true
 
-        
-
     $scope.save = ->
-        if not $scope.isDirty()
-            # Dashboard not modified; don't save
-            return
+        # Ensure Dashboard has been modified
+        return unless $scope.isDirty()
+            
         if not $scope.isLoggedIn()
             # Login then attempt to save again
             $scope.login(true).then ->
                 $scope.editor.hasEditPermission = userService.hasEditPermission $scope.editor.dashboardWrapper
                 $scope.save()
         else if $scope.canSave()
+            $scope.isSaving = true
             try 
                 # Create or Update the Dashboard, then reload
                 if ($scope.editor.isNew)
@@ -354,21 +354,29 @@ cyclotronApp.controller 'GuiEditorController', ($scope, $state, $stateParams, $l
                         $scope.editor.hasEditPermission = userService.hasEditPermission $scope.editor.dashboardWrapper
 
                 else
-                    dashboardService.update($scope.editor.dashboardWrapper).then ->
-                        $scope.editor.dashboardWrapper.rev = ++$scope.editor.latestRevision
+                    dashboardToSave = _.cloneDeep $scope.editor.dashboardWrapper
+                    dashboardService.update(dashboardToSave).then ->
+                        $scope.editor.latestRevision = $scope.editor.revision = ++dashboardToSave.rev
+                        $scope.editor.latestRevisionDeleted = false
+                        
+                        $scope.editor.dashboardWrapper.rev = $scope.editor.latestRevision
                         $scope.editor.dashboardWrapper.deleted = false
                         $scope.editor.dashboardWrapper.lastUpdatedBy = userService.currentUser()
-                        $scope.editor.latestRevision = $scope.editor.revision = $scope.editor.dashboardWrapper.rev
-                        $scope.editor.latestRevisionDeleted = false
-                        $scope.editor.cleanDashboardWrapper = _.cloneDeep $scope.editor.dashboardWrapper
+                        $scope.editor.cleanDashboardWrapper = dashboardToSave
+                        $scope.editor.cleanDashboardWrapper.rev = $scope.editor.latestRevision
+                        $scope.editor.cleanDashboardWrapper.deleted = false
+                        $scope.editor.cleanDashboardWrapper.lastUpdatedBy = userService.currentUser()
+
                         $scope.editor.hasEditPermission = userService.hasEditPermission $scope.editor.dashboardWrapper
                         $scope.editor.isDirty = false
+                        $scope.isSaving = false
                         $location.search('rev', null)
                
             catch e
+                $scope.isSaving = false
+
                 # Possibly a javascript parsing error on the eval
                 alertify.error(e.toString(), 10000)
-
 
     $scope.newPage = ->
         dashboardService.addPage $scope.editor.dashboard

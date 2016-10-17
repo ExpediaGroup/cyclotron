@@ -17,7 +17,7 @@
 #
 # Analytics controller
 #
-cyclotronApp.controller 'AnalyticsController', ($scope, analyticsService) ->
+cyclotronApp.controller 'AnalyticsController', ($scope, $uibModal, analyticsService) ->
 
     $scope.smallLimit = 10
     $scope.largeLimit = 20

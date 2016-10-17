@@ -198,15 +198,37 @@
         }
 
         .list-group {
+            list-style: none;
+            position: relative;
+
+            span.icon {
+                cursor: move;
+                padding: 0 0.5rem;
+            }
+
             .label {
                 font-weight: normal;
                 margin-right: 8px;
+                display: inline-block;
             }
 
             .drilldown {
                 font-size: 36px;
                 cursor: pointer;
                 color: #444;
+            }
+
+            > li {
+                position: relative;
+            }
+
+            .dndDraggingSource {
+                display: none;
+            }
+            .dndPlaceholder {
+                display: block;
+                background-color: #ddd;
+                min-height: 50px;
             }
         }
 

@@ -14,7 +14,7 @@
 # language governing permissions and limitations under the License. 
 ###
 
-cyclotronServices.factory 'userService', ($http, $q, $localForage, configService, logService) ->
+cyclotronServices.factory 'userService', ($http, $localForage, $q, $rootScope, configService, logService) ->
 
     loggedIn = false
     currentSession = null
@@ -93,6 +93,8 @@ cyclotronServices.factory 'userService', ($http, $q, $localForage, configService
             exports.cachedUserId = session.user._id
 
             loggedIn = true
+
+            $rootScope.$broadcast 'login', { }
             alertify.success('Logged in as <strong>' + session.user.name + '</strong>', 2500)
 
             deferred.resolve(session)
@@ -145,6 +147,7 @@ cyclotronServices.factory 'userService', ($http, $q, $localForage, configService
                 exports.setLoggedOut()
                 $localForage.removeItem('session')
                 
+                $rootScope.$broadcast('logout')
                 alertify.log('Logged Out', 2500)
                 deferred.resolve()
 

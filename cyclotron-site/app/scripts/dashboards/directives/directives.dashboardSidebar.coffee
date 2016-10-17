@@ -20,6 +20,12 @@ cyclotronDirectives.directive 'dashboardSidebar', ($timeout, layoutService) ->
         link: (scope, element, attrs) ->
             # Initial position 
             isSidebarExpanded = false
+
+            scope.sidebarContent = _.cloneDeep scope.dashboard.sidebar.sidebarContent
+            if scope.sidebarContent?.length > 0
+                scope.sidebarContent[0].isOpen = true
+            else 
+                scope.isShowHideWidgetsOpen = true
             
             $element = $(element)
             $parent = $element.parent()

@@ -1,17 +1,18 @@
 div
-    ul.list-group
-        li.list-group-item(ng-repeat='item in model') 
+    ul.list-group(dnd-list='model')
+        li.list-group-item(ng-repeat='item in model',
+            dnd-draggable='item'
+            dnd-moved='model.splice($index, 1)'
+            dnd-effect-allowed='move') 
 
             .clearfix
+                span.icon
+                    i.fa.fa-bars
+
                 span.object-array-name(ng-click='goToSubState(substate, item, $index)', title='Edit this {{ label }}') 
                     | {{ headingfn({item: item, index: $index, label: label}) }}
 
                 span.button-group.pull-right
-                    button#move-up.btn.btn-default(type='button', ng-click='moveUp($index)', title='Move {{ label }} Up') 
-                        i.fa.fa-angle-double-up
-
-                    button#move-down.btn.btn-default(type='button', ng-click='moveDown($index)', title='Move {{ label }} Down') 
-                        i.fa.fa-angle-double-down
                     
                     button#clone.btn.btn-default(type='button', ng-click='cloneItem($index)', title='Clone {{ label }}') 
                         i.fa.fa-copy

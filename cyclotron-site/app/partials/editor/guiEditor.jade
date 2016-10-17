@@ -5,7 +5,9 @@
         .dashboard-well
             .button-bar(ng-if='editor.initialized')
                 button.btn(ng-class='{"btn-default": !canSave(), "btn-success": canSave()}', ng-click='save()')
-                    i.fa.fa-check-square-o
+                    i.fa.fa-check-square-o(ng-hide='isSaving')
+                    span(ng-show='isSaving')
+                        i.fa.fa-cog.fa-spin
                     |  Save
 
                 .btn-group(uib-dropdown, ng-if='canPreview()')

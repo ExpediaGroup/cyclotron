@@ -313,7 +313,7 @@ cyclotronApp.config ($stateProvider, $urlRouterProvider, $locationProvider, $con
     }
     $locationProvider.hashPrefix = '!'
 
-cyclotronApp.run ($rootScope, $urlRouter, $location, $state, $stateParams, $uibModal, configService, userService) ->
+cyclotronApp.run ($rootScope, $urlRouter, $location, $state, $stateParams, $uibModal, analyticsService, configService, userService) ->
 
     #
     # Authentication-related scope variables
@@ -338,6 +338,12 @@ cyclotronApp.run ($rootScope, $urlRouter, $location, $state, $stateParams, $uibM
 
     $rootScope.logout = userService.logout
 
+    $rootScope.$on 'login', (event) ->
+        analyticsService.recordEvent 'login', {  }
+
+    $rootScope.$on 'logout', (event) ->
+        analyticsService.recordEvent 'logout', {  }
+        
     $rootScope.userTooltip = ->
         return '' unless userService.authEnabled
         'Logged In: ' + userService.currentUser().name
