@@ -29,7 +29,7 @@ var config = require('../config/config'),
 var Sessions = mongoose.model('session');
 
 var getExpiration = function () {
-    return moment().add(1, 'hour').toDate();
+    return moment().add(24, 'hour').toDate();
 }
 
 /* Removes all Sessions for a given username. */

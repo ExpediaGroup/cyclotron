@@ -1,8 +1,10 @@
 div.header-widget(ng-controller='HeaderWidget')
     .title(ng-if='showTitle')
-        a(ng-href='{{ headerTitle.link }}', ng-class='{ actionable: headerTitle.link }')
+        a.logo(ng-href='{{ headerTitle.link }}', ng-class='{ actionable: headerTitle.link }')
+            img(ng-src='{{ headerTitle.logoUrl }}', ng-show='headerTitle.logoUrl', ng-style='{ "height": headerTitle.logoSize }')
+        a.title(ng-href='{{ headerTitle.link }}', ng-class='{ actionable: headerTitle.link }')
             h1(ng-style='{ "font-size": headerTitle.titleSize }')
-                img.logo(ng-src='{{ headerTitle.logoUrl }}', ng-show='headerTitle.logoUrl', ng-style='{ "height": headerTitle.logoSize }')
+                
                 span {{ title }}
                 span.page-name.separator(ng-if='headerTitle.showPageName') {{ headerTitle.pageNameSeparator }}
                 span.page-name(ng-if='headerTitle.showPageName') {{ page.name }}

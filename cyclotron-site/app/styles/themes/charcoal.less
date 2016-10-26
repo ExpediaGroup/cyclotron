@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015 the original author or authors.
+ * Copyright (c) 2016 the original author or authors.
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License. 
@@ -14,28 +14,28 @@
  * language governing permissions and limitations under the License. 
  */
 
-/* Theme: dark2 */
+/* Theme: charcoal */
 
 @import "../../../vendor/lesselements/_elements.less";
 @import "../common/variables.less";
 
 /* Variables */
-@color: #D1D1D1;
-@pageBackgroundColor: #000;
-@widgetBackgroundColor: #000;
-@widgetBackgroundAccentColor: #202020;
+@color: #efefef;
+@pageBackgroundColor: #152029;
+@widgetBackgroundColor: #3d454c;
+@widgetBackgroundAccentColor: darken(#565F67, 5%);
 @widgetBackgroundAccentBorderColor: lighten(@widgetBackgroundAccentColor, 10%);
 
-@accentColor: #0A5D9C;
-@linkColor: lighten(@color, 10%);
-@headerColor: #202020;
-@tableRowHoverBackgroundColor: @accentColor;
-@headerPadding: 5px;
+@linkColor: lighten(@color, 15%);
+@headerColor: #353B41;
+@tableRowHoverBackgroundColor: lighten(@widgetBackgroundColor, 20%);
 @tableBorderColor: #ccc;
 @tableHeaderBorderBottom: 0;
 
+@fontFamily: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
 /* Dashboard Styles */
-.dashboard.dashboard-dark2 {
+.dashboard.dashboard-charcoal {
     background-color: @pageBackgroundColor;
     
     .dashboard-page-background {
@@ -45,7 +45,7 @@
     @sidebar-outline-color: #666;
     @sidebar-expander-color: #ddd;
     @sidebar-header-color: @color;
-    @sidebar-header-background-color: lighten(@pageBackgroundColor, 15%);
+    @sidebar-header-background-color: lighten(@pageBackgroundColor, 1%);
     @sidebar-iconbar-color: lighten(@color, 10%);
     @sidebar-iconbar-background-color: @widgetBackgroundColor; //lighten(@pageBackgroundColor, 8%);
     @sidebar-heading-color: @color;
@@ -61,54 +61,49 @@
 }
 
 .dashboard-page {
+    /* Well style, normal only */
     &.normal {
-        .dashboard-dark2.dashboard-widgetwrapper > .dashboard-widget {
-            padding: 1px;
+        .dashboard-charcoal.dashboard-widgetwrapper > .dashboard-widget {
+            padding: 0px;
         }
     }
 
     /* Page styles */
-    &.dashboard-dark2 {
+    &.dashboard-charcoal {
         color: @color;
         background-color: @pageBackgroundColor;
     }
 }
 
 /* Widget styles */
-.dashboard-widgetwrapper.dashboard-dark2 {
+.dashboard-widgetwrapper.dashboard-charcoal {
+
     color: @color;
-
-    > .widget-fullscreen, > .widget-helptext {
-        top: (2*@headerPadding);
-        right: (2*@headerPadding);
-
-        &:hover {
-            color: @accentColor;
-        }
-    }
 
     > .tooltip {
         .tooltip-inner {
-            background-color: #666;
-            color: White;
+            background-color: @pageBackgroundColor;
+            color: @color;
         }
         .tooltip-arrow {
-            border-top-color: #666;
-            border-bottom-color: #666;
+            border-top-color: @pageBackgroundColor;
+            border-bottom-color: @pageBackgroundColor;
         }
     }
 
     > .dashboard-widget {
+
+        .widget-body {
+            box-sizing: border-box;
+            margin: 10px;
+        }
+
+        font-family: @fontFamily;
+
         background-color: @widgetBackgroundColor;
 
         h1,h2,h3,h4,h5,h6 {
             color: White;
-        }
-
-        h1.title {
-            background-color: @headerColor;
-            margin: 0;
-            padding: @headerPadding;
         }
 
         button,
@@ -122,10 +117,10 @@
         a {
             color: @linkColor;
             text-decoration: none;
-            border-bottom: 0;
+            border-bottom: 1px dotted #888;
 
             &:hover {
-                color: lighten(@color, 5%);
+                color: lighten(@color, 30%);
             }
         }
     }
@@ -134,43 +129,59 @@
     @import "../_widgets.less";
 
     /* Extra styles */
-    .table-widget table {
-        margin-top: 4px;
-        th {
-            font-weight: bold;
-            font-size: .9rem;
+    h1.title {
+        box-sizing: border-box;
+        background-color: @widgetBackgroundAccentColor;
+        font-family: @fontFamily;
+
+        line-height: 3rem;
+        padding-left: 1rem;
+
+        > .tooltip {
+            .tooltip-inner {
+                background-color: @pageBackgroundColor;
+                color: @color;
+            }
+            .tooltip-arrow {
+                border-top-color: @pageBackgroundColor;
+                border-bottom-color: @pageBackgroundColor;
+            }
         }
     }
 
-    .stoplight-widget { 
-        .trafficlight-inner {
-            border: solid 5px #222;
-        }
-        .protector {
-            border-top: solid 90px #333 !important;
+    .header-widget {
+        padding: 10px;
+        .parameters {
+            .header-parameter, button {
+                .rounded(4px);
+            }
         }
     }
 }
 
 /* Transparent Variant */
-.dashboard-widgetwrapper.dashboard-dark2.theme-variant-transparent {
+.dashboard-widgetwrapper.dashboard-charcoal.theme-variant-transparent {
     > .dashboard-widget {
         background-color: transparent;
+        color: #ddd;
     }
 }
 
 /* Transparent-Unpadded Variant */
-.dashboard-widgetwrapper.dashboard-dark2.theme-variant-transparent-unpadded {
+.dashboard-widgetwrapper.dashboard-charcoal.theme-variant-transparent-unpadded {
     > .dashboard-widget {
         padding: 0 !important;
         background-color: transparent;
+        color: #ddd;
+
+        .widget-body {
+            margin: 0;
+        }
     }
 }
 
-.dashboard-dark2.dashboard-controls {
+.dashboard-charcoal.dashboard-controls {
     color: @color;
     a { color: @color; }
     background-color: @pageBackgroundColor;
-    border: 1px solid @widgetBackgroundColor;
 }
-

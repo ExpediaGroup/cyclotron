@@ -29,6 +29,9 @@ table
         td Cyclotron.pageName
         td Property that returns the name of the currently-displayed Page
     tr
+        td Cyclotron.currentUser
+        td Property containing an object of information about the logged-in user. If authentication is not enabled, or if the user is not logged in, it will return null.
+    tr
         td Cyclotron.goToPage(pageNumber)
         td Navigates to a specific page in the Dashboard (starting with page 1)
     tr
@@ -51,6 +54,9 @@ table
         td Downloads the provided data in one of the following formats: 'json', 'csv', 'xlsx'. CSV and XLSX are both tabular formats and may not be correctly formatted with nested data. See also 
             em  Cyclotron.currentPage.widgets['widgetName'].exportData(format)
             | .
+    tr
+        td Cyclotron.functions.recordEvent(eventData)
+        td Records a custom Dashboard event to Cyclotron's analytics database (if enabled). An object of custom key/value pairs can be provided, which are attached to the event. This function can be used to implement custom click tracking, error logging, etc.
 
 h4 Built-In Parameters
 

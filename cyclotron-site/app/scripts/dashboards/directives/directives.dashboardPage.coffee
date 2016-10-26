@@ -37,7 +37,7 @@ cyclotronDirectives.directive 'dashboardPage', ($compile, $window, $timeout, con
 
         template: '<div class="dashboard-page dashboard-{{page.theme}} {{page.style}}">' +
             '<div class="dashboard-page-inner">' +
-                '<div class="dashboard-widgetwrapper dashboard-{{widget.theme}}" ng-repeat="widget in sortedWidgets track by widget.uid"' +
+                '<div class="dashboard-widgetwrapper dashboard-{{widget.theme}} theme-variant-{{widget.themeVariant}}" ng-repeat="widget in sortedWidgets track by widget.uid"' +
                 ' widget="widget" page="page" page-overrides="pageOverrides" widget-index="$index" layout="layout" dashboard="dashboard" post-layout="postLayout()"></div>' + 
             '</div></div>'
 

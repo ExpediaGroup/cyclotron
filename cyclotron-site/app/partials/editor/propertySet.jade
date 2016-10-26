@@ -58,7 +58,7 @@
         editor-view-string-array(model='model[value.name]', label='{{ value.label }}', definition='value', ng-switch-when='string[]')
             
         select.form-control(ng-model='model[value.name]', ng-switch-default, title='{{ value.description }}'
-            ng-options='optionValue.value as optionKey for (optionKey, optionValue) in getOptions(value.name, value.options)')
+            ng-options='optionValue.value as (optionValue.label || optionKey) for (optionKey, optionValue) in getOptions(value.name, value.options)')
             option(value='')
 
 div(ng-hide='hiddenProperties.length == 0')

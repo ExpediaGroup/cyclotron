@@ -168,6 +168,8 @@ cyclotronDataSources.factory 'dataSourceFactory', ($rootScope, $interval, config
                                     # or return a new array that replaces it
                                     if _.isArray postProcessedResult
                                         cachedResult[resultSetName].data = postProcessedResult
+                                    else
+                                        logService.error 'The Post-Processor for "' + currentOptions.name + '" did not return an array; ignoring and using original result.'
 
                                 return 
 

@@ -192,6 +192,11 @@ cyclotronServices.factory 'analyticsService', ($http, $q, $localForage, $locatio
             visitId: exports.visitId
             details: details
 
+        if exports.currentDashboard?
+            req.dashboard = 
+                _id: exports.currentDashboard._id
+                name: exports.currentDashboard.name
+
         uidLoaded.promise.then ->
             if (userService.authEnabled && userService.isLoggedIn())
                 req.user = 

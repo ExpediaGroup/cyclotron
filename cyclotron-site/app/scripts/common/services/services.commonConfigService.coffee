@@ -26,7 +26,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
     exports = {
 
-        version: '1.40.0'
+        version: '1.41.0'
 
         logging: 
             enableDebug: false
@@ -80,22 +80,51 @@ cyclotronServices.factory 'commonConfigService', ->
                     default: 'dark'
                     required: false
                     options:
+                        charcoal:
+                            label: 'Charcoal'
+                            value: 'charcoal'
+                            dashboardBackgroundColor: '#1E2328'
+                        dark:
+                            label: 'Dark'
+                            value: 'dark'
+                            dashboardBackgroundColor: '#2f2f2f'
+                        darkmetro:
+                            label: 'Dark Metro'
+                            value: 'darkmetro'
+                            dashboardBackgroundColor: '#2f2f2f'
+                        gto:
+                            label: 'GTO'
+                            value: 'gto'
+                            dashboardBackgroundColor: 'white'
                         light:
+                            label: 'Light'
                             value: 'light'
                             dashboardBackgroundColor: 'white'
                         lightborderless:
+                            label: 'Light (borderless)'
                             value: 'lightborderless'
                             dashboardBackgroundColor: 'white'
-                        gto:
-                            value: 'gto'
-                            dashboardBackgroundColor: 'white'
-                        dark:
-                            value: 'dark'
-                            dashboardBackgroundColor: '#2f2f2f'
                         dark2:
+                            label: 'Very Dark'
                             value: 'dark2'
                             dashboardBackgroundColor: 'black'
                     order: 5
+                
+                themeVariant:
+                    label: 'Theme Variant'
+                    description: 'The default Theme Variant for the Dashboard; each Theme may or may not implement each variant. If this property is set, the value will be applies to any Pages that have not specified a Theme Variant. If it is not set, the default variant will be used.'
+                    type: 'string'
+                    default: 'default'
+                    required: false
+                    defaultHidden: true
+                    options:
+                        default:
+                            value: 'default'
+                        transparent:
+                            value: 'transparent'
+                        'transparent-unpadded':
+                            value: 'transparent-unpadded'
+                    order: 6
 
                 style:
                     label: 'Style'
@@ -109,7 +138,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         fullscreen:
                             value: 'fullscreen'
                     defaultHidden: true
-                    order: 6
+                    order: 7
 
                 autoRotate:
                     label: 'Auto-Rotate'
@@ -408,6 +437,14 @@ cyclotronServices.factory 'commonConfigService', ->
                                     required: false
                                     defaultHidden: true
                                     order: 110
+                                themeVariant:
+                                    label: 'Theme Variant'
+                                    description: 'If set, overrides the Page theme variant and allows a widget to have a different theme variant from the rest of the Page and Widgets.'
+                                    type: 'string'
+                                    inherit: true
+                                    required: false
+                                    defaultHidden: true
+                                    order: 111
                                 noData:
                                     label: 'No Data Message'
                                     description: 'If set, displays this message in the Widget when no data is loaded from the Data Source. If not set, no message will be displayed'
@@ -415,7 +452,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     inlineJs: true
                                     required: false
                                     defaultHidden: true
-                                    order: 111
+                                    order: 120
                                 noscroll: 
                                     label: 'No Scroll'
                                     description: 'If set to true, the widget will not have scrollbars and any overflow will be hidden. The effect of this setting varies per widget.'
@@ -423,7 +460,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     default: false
                                     required: false
                                     defaultHidden: true
-                                    order: 112
+                                    order: 121
                                 allowFullscreen:
                                     label: 'Allow Fullscreen'
                                     description: 'If true, the Widget can be maximized to fill the entire Dashboard; if false, the ability to view in fullscreen is disabled. This property overrides the Page setting.'
@@ -431,7 +468,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     inherit: true
                                     required: false
                                     defaultHidden: true
-                                    order: 113
+                                    order: 122
                                 allowExport:
                                     label: 'Allow Export'
                                     description: 'If true, the Widget data can be exported via a dropdown menu in the Widget. This property overrides the Page setting.'
@@ -439,7 +476,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     inherit: true
                                     required: false
                                     defaultHidden: true
-                                    order: 114
+                                    order: 123
                                 showWidgetErrors:
                                     label: 'Show Error Messages on Widgets'
                                     description: 'If true, allows error messages to be displayed on Widgets. This property overrides the Page setting.'
@@ -447,7 +484,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     required: false
                                     inherit: true
                                     defaultHidden: true
-                                    order: 115
+                                    order: 124
                                 hidden:
                                     label: 'Hidden'
                                     description: 'If true, the Widget will not be displayed in the Dashboard and will not occupy space in the Layout rendering. The Widget will still be initialized, however.'
@@ -455,7 +492,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     default: false
                                     required: false
                                     defaultHidden: true
-                                    order: 116
+                                    order: 125
                             order: 3
                         duration:
                             label: 'Auto-Rotate Duration (seconds)'
@@ -482,6 +519,14 @@ cyclotronServices.factory 'commonConfigService', ->
                             required: false
                             defaultHidden: true
                             order: 6
+                        themeVariant:
+                            label: 'Theme Variant'
+                            description: 'The theme variant for the Page.  If not set, the Dashboard setting or default value will apply.'
+                            type: 'string'
+                            inherit: true
+                            required: false
+                            defaultHidden: true
+                            order: 7
                         style:
                             label: 'Style'
                             description: 'The style for the Page. If not set, the Dashboard setting or default value will apply.'
@@ -489,7 +534,7 @@ cyclotronServices.factory 'commonConfigService', ->
                             inherit: true
                             required: false
                             defaultHidden: true
-                            order: 7
+                            order: 8
                         allowFullscreen:
                             label: 'Allow Fullscreen'
                             description: 'If true, each Widget on the page can be maximized to fill the entire Dashboard. This setting can be overridden by each Widget.'
@@ -497,7 +542,7 @@ cyclotronServices.factory 'commonConfigService', ->
                             inherit: true
                             required: false
                             defaultHidden: true
-                            order: 8
+                            order: 10
                         allowExport:
                             label: 'Allow Export'
                             description: 'If true, the Widget data can be exported via a dropdown menu in the Widget. This setting can be overridden by each Widget.'
@@ -505,7 +550,7 @@ cyclotronServices.factory 'commonConfigService', ->
                             inherit: true
                             required: false
                             defaultHidden: true
-                            order: 9
+                            order: 11
                         showWidgetErrors:
                             label: 'Show Error Messages on Widgets'
                             description: 'If true, allows error messages to be displayed on Widgets. This setting can be overridden by each Widget.'
@@ -513,7 +558,7 @@ cyclotronServices.factory 'commonConfigService', ->
                             required: false
                             inherit: true
                             defaultHidden: true
-                            order: 10;
+                            order: 12;
 
                 dataSources: 
                     label: 'Data Sources'
@@ -1858,6 +1903,9 @@ cyclotronServices.factory 'commonConfigService', ->
                     dark:
                         options:
                             dbackgroundColor: '#222222'
+                    darkmetro:
+                        options:
+                            dbackgroundColor: '#202020'
 
             chart:
                 name: 'chart'
@@ -2464,6 +2512,436 @@ cyclotronServices.factory 'commonConfigService', ->
                                     [1, '#333']
                                 ]
                             trackBorderColor: '#666'
+
+                    darkmetro: 
+                        colors: [
+                            '#007D9D' #Blue
+                            '#82B93A' #Green
+                            '#E3AAD5' #Pink
+                            '#EBDC46' #Yellow
+                            '#AC5B41' #Red
+                            '#D1D1D0' #Offwhite
+                            '#B07288'  #Purple
+                        ]
+                        chart: 
+                            backgroundColor: null #'#333333'
+                            borderWidth: 0
+                            borderRadius: 0
+                            plotBackgroundColor: null
+                            plotShadow: false
+                            plotBorderWidth: 0
+                            style:
+                                fontFamily: '"Open Sans", sans-serif'
+                                color: '#FFF'
+                        drilldown:
+                            activeAxisLabelStyle:
+                                color: '#999'
+                                textDecoration: 'none'
+                            activeDataLabelStyle:
+                                color: '#999'
+                                textDecoration: 'none'
+                        title: 
+                            style: 
+                                color: '#FFF'
+                                font: '16px "Lato", sans-serif'
+                                fontWeight: 'bold'
+                        subtitle: 
+                            style:
+                                color: '#FFF'
+                                font: '12px "Lato", sans-serif'
+                        xAxis:
+                            gridLineWidth: 0
+                            lineColor: '#999'
+                            tickColor: '#999'
+                            labels:
+                                style:
+                                    color: '#999'
+                                    fontSize: '11px'
+                            title:
+                                style:
+                                    color: '#EEE'
+                                    fontSize: '14px'
+                                    fontWeight: '300'
+                        yAxis: 
+                            alternateGridColor: null
+                            minorTickInterval: null
+                            gridLineColor: 'rgba(255, 255, 255, .1)'
+                            minorGridLineColor: 'rgba(255,255,255,0.07)'
+                            lineWidth: 0
+                            tickWidth: 0
+                            labels: 
+                                style: 
+                                    color: '#999'
+                                    fontSize: '11px'
+                            title: 
+                                style: 
+                                    color: '#EEE'
+                                    fontSize: '14px'
+                                    fontWeight: '300'
+                        legend: 
+                            borderRadius: 0
+                            borderWidth: 0
+                            itemStyle: 
+                                color: '#CCC'
+                            itemHoverStyle: 
+                                color: '#FFF'
+                            itemHiddenStyle: 
+                                color: '#333'
+                            symbolWidth: 40
+                        labels: 
+                            style:
+                                color: '#CCC'
+                        tooltip: 
+                            backgroundColor: 
+                                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
+                                stops: [
+                                    [0, 'rgba(96, 96, 96, .8)']
+                                    [1, 'rgba(16, 16, 16, .8)']
+                                ]
+                            borderWidth: 0
+                            style: 
+                                color: '#FFF'
+                        plotOptions:
+                            series: 
+                                dataLabels:
+                                    style:
+                                        color: '#999'
+                                        textShadow: false
+                                shadow: true
+                                marker:
+                                    enabled: false
+                                    states:
+                                        hover:
+                                            enabled: true
+                            bar:
+                                borderWidth: 0
+                            column:
+                                borderWidth: 0
+                            line:
+                                dataLabels:
+                                    color: '#CCC'
+                                marker: 
+                                    lineColor: '#333'
+                            pie: 
+                                borderWidth: 0
+                                dataLabels: 
+                                    color: '#999'
+                                    fontSize: '14px'
+                            spline:
+                                marker:
+                                    lineColor: '#333'
+                            scatter: 
+                                marker:
+                                    lineColor: '#333'
+                            candlestick:
+                                lineColor: 'white'
+
+                        toolbar:
+                            itemStyle:
+                                color: '#CCC'
+                            
+                        navigation: 
+                            buttonOptions: 
+                                symbolStroke: '#DDDDDD'
+                                hoverSymbolStroke: '#FFFFFF'
+                                theme: 
+                                    fill: 
+                                        linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
+                                        stops: [
+                                            [0.4, '#606060']
+                                            [0.6, '#333333']
+                                        ]
+                                    stroke: '#000000'
+
+                        # scroll charts
+                        rangeSelector: 
+                            buttonTheme: 
+                                fill: 
+                                    linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
+                                    stops: [
+                                        [0.4, '#888']
+                                        [0.6, '#555']
+                                    ]
+                                stroke: '#000000'
+                                style: 
+                                    color: '#CCC'
+                                    fontWeight: 'bold'
+                                states: 
+                                    hover: 
+                                        fill: 
+                                            linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
+                                            stops: [
+                                                [0.4, '#BBB']
+                                                [0.6, '#888']
+                                            ]
+                                        stroke: '#000000'
+                                        style: 
+                                            color: 'white'
+                                    select: 
+                                        fill: 
+                                            linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
+                                            stops: [
+                                                [0.1, '#000']
+                                                [0.3, '#333']
+                                            ]
+                                        stroke: '#000000'
+                                        style:
+                                            color: 'yellow'
+                            inputStyle: 
+                                backgroundColor: '#333'
+                                color: 'silver'
+                            labelStyle: 
+                                color: 'silver'
+                            
+                        navigator: 
+                            handles: 
+                                backgroundColor: '#666'
+                                borderColor: '#AAA'
+                            outlineColor: '#CCC'
+                            maskFill: 'rgba(16, 16, 16, 0.5)'
+                            series: 
+                                color: '#7798BF'
+                                lineColor: '#A6C7ED'
+
+                        scrollbar: 
+                            barBackgroundColor: 
+                                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
+                                stops: [
+                                    [0.4, '#888']
+                                    [0.6, '#555']
+                                ]
+                            barBorderColor: '#CCC'
+                            buttonArrowColor: '#CCC'
+                            buttonBackgroundColor: 
+                                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
+                                stops: [
+                                    [0.4, '#888']
+                                    [0.6, '#555']
+                                ]
+                            buttonBorderColor: '#CCC'
+                            rifleColor: '#FFF'
+                            trackBackgroundColor: 
+                                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
+                                stops: [
+                                    [0, '#000']
+                                    [1, '#333']
+                                ]
+                            trackBorderColor: '#666'
+
+                    charcoal: 
+                        colors: [
+                            '#007D9D' #Blue
+                            '#82B93A' #Green
+                            '#E3AAD5' #Pink
+                            '#EBDC46' #Yellow
+                            '#AC5B41' #Red
+                            '#D1D1D0' #Offwhite
+                            '#B07288'  #Purple
+                        ]
+                        chart: 
+                            backgroundColor: null #'#333333'
+                            borderWidth: 0
+                            borderRadius: 0
+                            plotBackgroundColor: null
+                            plotShadow: false
+                            plotBorderWidth: 0
+                            style:
+                                fontFamily: '"Open Sans", sans-serif'
+                                color: '#FFF'
+                        drilldown:
+                            activeAxisLabelStyle:
+                                color: '#999'
+                                textDecoration: 'none'
+                            activeDataLabelStyle:
+                                color: '#999'
+                                textDecoration: 'none'
+                        title: 
+                            style: 
+                                color: '#FFF'
+                                font: '16px "Lato", sans-serif'
+                                fontWeight: 'bold'
+                        subtitle: 
+                            style:
+                                color: '#FFF'
+                                font: '12px "Lato", sans-serif'
+                        xAxis:
+                            gridLineWidth: 0
+                            lineColor: '#999'
+                            tickColor: '#999'
+                            labels:
+                                style:
+                                    color: '#999'
+                                    fontSize: '11px'
+                            title:
+                                style:
+                                    color: '#EEE'
+                                    fontSize: '14px'
+                                    fontWeight: '300'
+                        yAxis: 
+                            alternateGridColor: null
+                            minorTickInterval: null
+                            gridLineColor: 'rgba(255, 255, 255, .1)'
+                            minorGridLineColor: 'rgba(255,255,255,0.07)'
+                            lineWidth: 0
+                            tickWidth: 0
+                            labels: 
+                                style: 
+                                    color: '#999'
+                                    fontSize: '11px'
+                            title: 
+                                style: 
+                                    color: '#EEE'
+                                    fontSize: '14px'
+                                    fontWeight: '300'
+                        legend: 
+                            borderRadius: 0
+                            borderWidth: 0
+                            itemStyle: 
+                                color: '#CCC'
+                            itemHoverStyle: 
+                                color: '#FFF'
+                            itemHiddenStyle: 
+                                color: '#333'
+                            symbolWidth: 40
+                        labels: 
+                            style:
+                                color: '#CCC'
+                        tooltip: 
+                            backgroundColor: 
+                                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
+                                stops: [
+                                    [0, 'rgba(96, 96, 96, .8)']
+                                    [1, 'rgba(16, 16, 16, .8)']
+                                ]
+                            borderWidth: 0
+                            style: 
+                                color: '#FFF'
+                        plotOptions:
+                            series: 
+                                dataLabels:
+                                    style:
+                                        color: '#999'
+                                        textShadow: false
+                                shadow: false
+                                marker:
+                                    enabled: false
+                                    states:
+                                        hover:
+                                            enabled: true
+                            bar:
+                                borderWidth: 0
+                            column:
+                                borderWidth: 0
+                            line:
+                                dataLabels:
+                                    color: '#CCC'
+                                marker: 
+                                    lineColor: '#333'
+                            pie: 
+                                borderWidth: 0
+                                dataLabels: 
+                                    color: '#999'
+                                    fontSize: '14px'
+                            spline:
+                                marker:
+                                    lineColor: '#333'
+                            scatter: 
+                                marker:
+                                    lineColor: '#333'
+                            candlestick:
+                                lineColor: 'white'
+
+                        toolbar:
+                            itemStyle:
+                                color: '#CCC'
+                            
+                        navigation: 
+                            buttonOptions: 
+                                symbolStroke: '#DDDDDD'
+                                hoverSymbolStroke: '#FFFFFF'
+                                theme: 
+                                    fill: 
+                                        linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
+                                        stops: [
+                                            [0.4, '#606060']
+                                            [0.6, '#333333']
+                                        ]
+                                    stroke: '#000000'
+
+                        # scroll charts
+                        rangeSelector: 
+                            buttonTheme: 
+                                fill: 
+                                    linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
+                                    stops: [
+                                        [0.4, '#888']
+                                        [0.6, '#555']
+                                    ]
+                                stroke: '#000000'
+                                style: 
+                                    color: '#CCC'
+                                    fontWeight: 'bold'
+                                states: 
+                                    hover: 
+                                        fill: 
+                                            linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
+                                            stops: [
+                                                [0.4, '#BBB']
+                                                [0.6, '#888']
+                                            ]
+                                        stroke: '#000000'
+                                        style: 
+                                            color: 'white'
+                                    select: 
+                                        fill: 
+                                            linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
+                                            stops: [
+                                                [0.1, '#000']
+                                                [0.3, '#333']
+                                            ]
+                                        stroke: '#000000'
+                                        style:
+                                            color: 'yellow'
+                            inputStyle: 
+                                backgroundColor: '#333'
+                                color: 'silver'
+                            labelStyle: 
+                                color: 'silver'
+                            
+                        navigator: 
+                            handles: 
+                                backgroundColor: '#666'
+                                borderColor: '#AAA'
+                            outlineColor: '#CCC'
+                            maskFill: 'rgba(16, 16, 16, 0.5)'
+                            series: 
+                                color: '#7798BF'
+                                lineColor: '#A6C7ED'
+
+                        scrollbar: 
+                            barBackgroundColor: 
+                                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
+                                stops: [
+                                    [0.4, '#888']
+                                    [0.6, '#555']
+                                ]
+                            barBorderColor: '#CCC'
+                            buttonArrowColor: '#CCC'
+                            buttonBackgroundColor: 
+                                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
+                                stops: [
+                                    [0.4, '#888']
+                                    [0.6, '#555']
+                                ]
+                            buttonBorderColor: '#CCC'
+                            rifleColor: '#FFF'
+                            trackBackgroundColor: 
+                                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
+                                stops: [
+                                    [0, '#000']
+                                    [1, '#333']
+                                ]
+                            trackBorderColor: '#666'
                         
             clock:
                 name: 'clock'
@@ -2593,6 +3071,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         required: false
                         inlineJs: true
                         order: 30
+            
             html:
                 name: 'html'
                 icon: 'fa-html5'
@@ -3581,6 +4060,9 @@ cyclotronServices.factory 'commonConfigService', ->
     # Copy Theme options to inherited locations
     exports.dashboard.properties.pages.properties.theme.options = exports.dashboard.properties.theme.options
     exports.dashboard.properties.pages.properties.widgets.properties.theme.options = exports.dashboard.properties.theme.options
+
+    exports.dashboard.properties.pages.properties.themeVariant.options = exports.dashboard.properties.themeVariant.options
+    exports.dashboard.properties.pages.properties.widgets.properties.themeVariant.options = exports.dashboard.properties.themeVariant.options
 
     # Copy Style options to inherited locations
     exports.dashboard.properties.pages.properties.style.options = exports.dashboard.properties.style.options

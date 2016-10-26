@@ -26,6 +26,7 @@ cyclotronDirectives.directive 'widgetBody', ($timeout) ->
                 $title = $widget.find '.title'
                 $footer = $widget.find '.widget-footer'
                 widgetBodyHeight = $widget.outerHeight() - $title.outerHeight() - $footer.outerHeight()
+                widgetBodyHeight -= parseInt($widgetBody.css('marginTop')) + parseInt($widgetBody.css('marginBottom'))
                 $widgetBody.height Math.floor(widgetBodyHeight)
 
                 if scope.widgetLayout?

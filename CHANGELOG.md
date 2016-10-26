@@ -1,20 +1,40 @@
+# 1.41.0 (10/27/2016)
+
+## Features
+
+ - Analytics: Add JavaScript API for Dashboards to record custom events to Cyclotron's analytics backend
+
+ - JavaScript API: Added Cyclotron.currentUser property to access the currently-logged in user (if any)
+
+ - Data Sources: If a Post-Processor doesn't return an array, an error will be displayed in the console.
+
+## Bug Fixes
+
+ - Clock Widget: Fix issue with tiny text
+
 # 1.40.0 (10/12/2016)
 
 ## Features
 
- - Analytics: collect new analytics events for: Login, Logout, Create Dashboard, Modify Dashboard, Push Dashboard
+ - Analytics: Collect new analytics events for: Login, Logout, Create Dashboard, Modify Dashboard, Push Dashboard
 
- - Dashboard Sidebar: Increased width of sidebar; expanded the first section in the sidebar initially.
+ - Dashboard Sidebar: Increased width of sidebar; expanded the first section in the sidebar initially
 
  - Dashboard Editor: Drag-and-drop to reorder Data Sources, Pages, Widgets, etc.
 
  - Dashboard Editor: Added spinner when saving a Dashboard; prevent accidentally double-saving
- 
+
 # 1.39.0 (09/28/2016)
 
 ## Features
 
+ - CloudWatch Data Source: Added new Data Source for retrieving data from Amazon CloudWatch
+
+ - JSON Data Source: Added options for AWS signing, allowing use with AWS APIs that require Signature Version 4
+ 
  - SSL/TLS: Proxy server initializes itself with a list of trusted root CAs.  Added server option for manually providing CAs to trust when executing HTTPS requests
+
+ - Highcharts upgraded to 4.2.7
 
 ## Bug Fixes
 
@@ -35,7 +55,6 @@
 ## Breaking Changes
 
  - Removed custom HTTP/HTTPS pool with maxSockets: infinity. This is now the default value in Node.js v0.12.0 and above, so only older versions of Node.js will be affected.  As a workaround for older versions of Node.js, set http(s).globalAgent.maxSockets = infinity.
-
 # 1.38.0 (09/02/2016)
 
 ## Features

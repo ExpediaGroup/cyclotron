@@ -30,6 +30,7 @@
 @headerColor: white;
 @tableRowHoverBackgroundColor: #efefef;
 @tableBorderColor: #555;
+@tableHeaderBorderBottom: 1px dashed #999;
 
 /* Dashboard Styles */
 .dashboard.dashboard-lightborderless {
@@ -64,49 +65,51 @@
 }
 
 /* Widget styles */
-.dashboard-lightborderless.dashboard-widgetwrapper > .dashboard-widget {
-
+.dashboard-widgetwrapper.dashboard-lightborderless {
     color: @color;
-    background-color: @widgetBackgroundColor;
 
-    a {
-        color: @linkColor;
-        text-decoration: none;
-        border-bottom: 1px dotted #888;
+    > .dashboard-widget {
+        background-color: @widgetBackgroundColor;
 
-        &:hover {
-            color: darken(@color, 30%);
-        }
-    }    
+        a {
+            color: @linkColor;
+            text-decoration: none;
+            border-bottom: 1px dotted #888;
+
+            &:hover {
+                color: darken(@color, 30%);
+            }
+        }    
+    }
+
+    /* Import widget styles, using the theme variables */
+    @import "../_widgets.less";
+
+    /* Extra styles */
+    .table-widget table th {
+        font-style: italic;
+    }
 }
+
+/* Transparent Variant */
+.dashboard-widgetwrapper.dashboard-lightborderless.theme-variant-transparent {
+    > .dashboard-widget {
+        background-color: transparent;
+    }
+}
+
+/* Transparent-Unpadded Variant */
+.dashboard-widgetwrapper.dashboard-lightborderless.theme-variant-transparent-unpadded {
+    > .dashboard-widget {
+        padding: 0 !important;
+        background-color: transparent;
+    }
+}
+
 
 .dashboard-lightborderless.dashboard-controls {
     color: @color;
     a { color: @color; }
     background-color: @pageBackgroundColor;
     border: 1px dotted @color;
-}
-
-.dashboard-lightborderless.dashboard-widgetwrapper {
-    /* Import widget styles, using the theme variables */
-    @import "../../widgets/annotationChart/_annotationChart.less";
-    @import "../../widgets/chart/_chart.less";
-    @import "../../widgets/clock/_clock.less";
-    @import "../../widgets/header/_header.less";
-    @import "../../widgets/html/_html.less";
-    @import "../../widgets/iframe/_iframe.less";
-    @import "../../widgets/image/_image.less";
-    @import "../../widgets/javascript/_javascript.less";
-    @import "../../widgets/number/_number.less";
-    @import "../../widgets/qrcode/_qrcode.less";
-    @import "../../widgets/stoplight/_stoplight.less";
-    @import "../../widgets/table/_table.less";
-    @import "../../widgets/tableau/_tableau.less";
-    @import "../../widgets/treemap/_treemap.less";
-    @import "../../widgets/youtube/_youtube.less";
-
-    /* Extra styles */
-    .table-widget table th {
-        font-style: italic;
-    }
 }

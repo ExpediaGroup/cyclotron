@@ -19,32 +19,44 @@
     height: 100%;
 
     .title {
+        display:flex;
+        flex-direction: row;
+        flex-wrap: wrap;
         a { 
             color: unset;
             text-decoration: none;
             border-bottom: none;
             cursor: unset;
+            word-wrap: break-word;
 
             &.actionable {
                 cursor: pointer
             }
-            h1 {
-                display: inline-block;
+        }
+
+        a.logo {
+            flex: 0 0 auto;
+            img {
+                margin-right: 0.75rem;
             }
         }
 
-        .logo {
-            margin-right: 0.75rem;
-        }
+        a.title { 
+            flex: 1 1 25rem;
+            
+            h1 {
+                display: inline-block;
+            }
 
-        .separator {
-            margin-left: 0.5rem;
-            margin-right: 0.5rem;
-        }
+            .separator {
+                margin-left: 0.5rem;
+                margin-right: 0.5rem;
+            }
 
-        .page-name {
-            color: @lighterText;
-            font-size: 80%;
+            .page-name {
+                color: @lighterText;
+                font-size: 80%;
+            }
         }
     }
 

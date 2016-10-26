@@ -28,6 +28,9 @@ cyclotronServices.factory 'logService', ($window, configService) ->
     writeLog = (args) ->
         $window.console.log '[' + now() + '] ' + _.map(args, getString).join ' '
 
+    writeError = (args) ->
+        $window.console.error '[' + now() + '] ' + _.map(args, getString).join ' '
+
     service = {
         debug: ->
             args = Array.prototype.slice.call arguments
@@ -42,7 +45,7 @@ cyclotronServices.factory 'logService', ($window, configService) ->
         error: ->
             args = Array.prototype.slice.call arguments
             args.unshift 'ERROR:'
-            writeLog args            
+            writeError args            
     }
 
     if configService.logging?.enableDebug == false

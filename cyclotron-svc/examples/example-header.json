@@ -34,7 +34,6 @@
             "margin": 10
         },
         "name": "Awesome Page",
-        "theme": "lightborderless",
         "widgets": [{
             "allowFullscreen": false,
             "gridHeight": 1,
@@ -48,10 +47,13 @@
                 "titleSize": "2.5rem"
             },
             "height": "100px",
+            "parameters": {},
+            "themeVariant": "transparent",
             "widget": "header"
         }, {
             "gridHeight": 1,
             "gridWidth": 1,
+            "layout": {},
             "theme": "light",
             "widget": "clock"
         }]
@@ -65,7 +67,6 @@
             "margin": 10
         },
         "name": "Another Awesome Page",
-        "theme": "light",
         "widgets": [{
             "allowFullscreen": false,
             "gridHeight": 1,
@@ -80,7 +81,7 @@
                 "titleSize": "2.5rem"
             },
             "height": "100px",
-            "theme": "lightborderless",
+            "themeVariant": "transparent",
             "widget": "header"
         }, {
             "gridHeight": 1,
@@ -113,7 +114,6 @@
             "margin": 10
         },
         "name": "Header With Parameters",
-        "theme": "light",
         "widgets": [{
             "allowFullscreen": false,
             "customHtml": "<div><small>This chart updates whenever a Parameter is changed, because the Change Event for each Parameter re-executes the Data Source.</small></div>",
@@ -134,7 +134,7 @@
                 "parametersIncluded": ["selectedCrime", "showTotal"],
                 "showParameters": true
             },
-            "theme": "lightborderless",
+            "themeVariant": "transparent",
             "widget": "header"
         }, {
             "dataSource": "uscrime-filtered",
@@ -191,6 +191,7 @@
                 "updateButtonLabel": "Change",
                 "updateEvent": "e = function() {\n    // Re-execute the Data Source whenever the button is clicked\n    Cyclotron.dataSources['uscrime-filtered2'].execute(true);\n}"
             },
+            "themeVariant": "transparent",
             "widget": "header"
         }, {
             "dataSource": "uscrime-filtered2",
@@ -279,7 +280,6 @@
             "margin": 10
         },
         "name": "Header With Separate Parameters",
-        "theme": "light",
         "widgets": [{
             "allowFullscreen": false,
             "gridHeight": 1,
@@ -295,7 +295,8 @@
             },
             "height": "85px",
             "noscroll": true,
-            "theme": "lightborderless",
+            "parameters": {},
+            "themeVariant": "transparent",
             "widget": "header"
         }, {
             "allowFullscreen": false,
@@ -346,7 +347,6 @@
             "margin": 10
         },
         "name": "Header With DateTime Parameters",
-        "theme": "light",
         "widgets": [{
             "allowFullscreen": false,
             "customHtml": "<div><small>This chart updates whenever a Parameter is changed, because the Change Event for each Parameter re-executes the Data Source.</small></div>",
@@ -367,7 +367,7 @@
                 "parametersIncluded": ["datetime", "date", "time"],
                 "showParameters": true
             },
-            "theme": "lightborderless",
+            "themeVariant": "transparent",
             "widget": "header"
         }, {
             "dataSource": "uscrime-types",
@@ -376,7 +376,6 @@
             },
             "gridHeight": 1,
             "gridWidth": 1,
-            "layout": {},
             "noData": "No Data",
             "widget": "chart"
         }]
@@ -389,7 +388,6 @@
             "margin": 10
         },
         "name": "Side Header",
-        "theme": "light",
         "widgets": [{
             "allowFullscreen": false,
             "gridHeight": 1,
@@ -486,5 +484,8 @@
         "name": "time"
     }],
     "scripts": [],
-    "theme": "lightborderless"
+    "sidebar": {
+        "showDashboardSidebar": true
+    },
+    "theme": "light"
 }

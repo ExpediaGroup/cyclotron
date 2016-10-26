@@ -352,6 +352,8 @@ cyclotronApp.controller 'GuiEditorController', ($scope, $state, $stateParams, $l
                         $state.go('edit.details', { dashboardName: dashboardName})
                         $scope.editor.isNew = false
                         $scope.editor.hasEditPermission = userService.hasEditPermission $scope.editor.dashboardWrapper
+                    .catch (e) ->
+                        $scope.isSaving = false
 
                 else
                     dashboardToSave = _.cloneDeep $scope.editor.dashboardWrapper
@@ -371,6 +373,8 @@ cyclotronApp.controller 'GuiEditorController', ($scope, $state, $stateParams, $l
                         $scope.editor.isDirty = false
                         $scope.isSaving = false
                         $location.search('rev', null)
+                    .catch (e) ->
+                        $scope.isSaving = false        
                
             catch e
                 $scope.isSaving = false

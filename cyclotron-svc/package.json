@@ -1,7 +1,7 @@
 {
   "name": "cyclotron-svc",
   "description": "Cyclotron: REST API",
-  "version": "1.40.0",
+  "version": "1.41.0",
   "author": "Dave Bauman <dbauman@expedia.com>",
   "license": "MIT",
   "private": true,

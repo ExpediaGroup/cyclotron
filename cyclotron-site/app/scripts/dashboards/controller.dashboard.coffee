@@ -45,12 +45,18 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $localFora
     # Load URL querystring into Cyclotron.parameters
     $window.Cyclotron =
         version: configService.version
+        currentUser: userService.currentUser()
         dataSources: {}
         functions: 
             forceUpdate: -> $scope.$apply()
+            
             exportData: (format, data, name = $scope.originalDashboardName) ->
                 return unless data?
                 downloadService.download name, format, data
+
+            recordEvent: (eventData) ->
+                analyticsService.recordEvent 'custom', eventData
+                
 
         parameters: _.clone $location.search()
         data: cyclotronDataService

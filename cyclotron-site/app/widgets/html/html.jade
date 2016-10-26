@@ -3,10 +3,11 @@
     
     h1.title(ng-if='::widget.title') {{ widgetTitle() }}
 
-    .widget-loading(spinjs, ng-if='isLoading()')
-    .widget-error(ng-if='widgetContext.dataSourceError == true && !isLoading()')
-    .widget-nodata(ng-if='widgetContext.nodata && !isLoading()')
-        .fa.fa-exclamation-triangle
-        span  {{ widgetContext.nodata }}
+    .widget-body
+        .widget-loading(spinjs, ng-if='isLoading()')
+        .widget-error(ng-if='widgetContext.dataSourceError == true && !isLoading()')
+        .widget-nodata(ng-if='widgetContext.nodata && !isLoading()')
+            .fa.fa-exclamation-triangle
+            span  {{ widgetContext.nodata }}
 
-    div(ng-if='!noDataOrError()', html-repeater='htmlStrings')
+        div(ng-if='!noDataOrError()', html-repeater='htmlStrings')
