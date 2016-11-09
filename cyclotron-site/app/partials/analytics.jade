@@ -125,7 +125,7 @@
                     span.more(ng-click='toggleLimit("topDashboardsLimit")', ng-show='topDashboardsLimit == largeLimit')
                         i.fa.fa-minus-square-o
                         |  less
-                    h2 Most Visited Dashboards
+                    h2 Most Visited Dashboards (All-Time)
                     table.table(ts-wrapper)
                         thead
                             tr
@@ -159,7 +159,7 @@
 
             .row
                 .col-md-4.col-sm-6
-                    h2 Data Sources Used
+                    h2 Data Sources Used 
                     div.c3chart(data='dataSourcesPie', options='dataSourceTypesOptions')
                 .col-md-4.col-sm-6
                     h2 Widgets Used

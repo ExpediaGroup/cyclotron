@@ -68,14 +68,29 @@ cyclotronApp.controller 'AnalyticsController', ($scope, $uibModal, analyticsServ
     # Analytics over time
     $scope.loadLifetimeData = ->
 
+        analyticsService.getTopDashboards().then (dashboards) ->
+            $scope.topDashboards = dashboards
+
         analyticsService.getStatistics().then (statistics) ->
             $scope.statistics = statistics
 
-        analyticsService.getUniqueVisitors().then (visitors) ->
+    # Analytics relative to a startDate
+    $scope.loadTimeseriesData = ->
+        timeSpan = $scope.selectedTimespan.split('_')
+        if timeSpan.length == 1 then timeSpan.unshift 1
+        startDate = moment().subtract(timeSpan[0], timeSpan[1])
+
+        analyticsService.getPageViewsOverTime(null, startDate).then (pageViews) ->
+            $scope.pageViews = pageViews
+
+        analyticsService.getVisitsOverTime(null, startDate).then (visits) ->
+            $scope.visits = visits
+
+        analyticsService.getUniqueVisitors(null, startDate).then (visitors) ->
             $scope.uniqueVisitorCount = visitors.length
             $scope.uniqueVisitors = visitors
 
-        analyticsService.getBrowsers().then (browsers) ->
+        analyticsService.getBrowsers(null, startDate).then (browsers) ->
             $scope.browsers = browsers
 
             # Pie chart
@@ -91,7 +106,7 @@ cyclotronApp.controller 'AnalyticsController', ($scope, $uibModal, analyticsServ
 
             $scope.browsersPie = [reducedBrowsers]
 
-        analyticsService.getDataSourcesByType().then (dataSourcesByType) ->
+        analyticsService.getDataSourcesByType(null, startDate).then (dataSourcesByType) ->
             $scope.dataSourcesByType = dataSourcesByType
 
             $scope.dataSourceTypesOptions.data.keys = { value: _.pluck dataSourcesByType, 'dataSourceType' }
@@ -102,7 +117,7 @@ cyclotronApp.controller 'AnalyticsController', ($scope, $uibModal, analyticsServ
 
             $scope.dataSourcesPie = [reducedTypes]
 
-        analyticsService.getWidgets().then (widgets) ->
+        analyticsService.getWidgets(null, startDate).then (widgets) ->
             widgets = _.reject widgets, (widget) -> _.isEmpty(widget.widget)
             $scope.widgets = widgets
             
@@ -114,23 +129,8 @@ cyclotronApp.controller 'AnalyticsController', ($scope, $uibModal, analyticsServ
 
             $scope.widgetsPie = [reducedWidgets]
 
-        analyticsService.getTopDashboards().then (dashboards) ->
-            $scope.topDashboards = dashboards
-
-        analyticsService.getDataSourcesByName().then (dataSources) ->
+        analyticsService.getDataSourcesByName(null, startDate).then (dataSources) ->
             $scope.dataSources = dataSources
-
-    # Analytics relative to a startDate
-    $scope.loadTimeseriesData = ->
-        timeSpan = $scope.selectedTimespan.split('_')
-        if timeSpan.length == 1 then timeSpan.unshift 1
-        startDate = moment().subtract(timeSpan[0], timeSpan[1])
-
-        analyticsService.getPageViewsOverTime(null, startDate).then (pageViews) ->
-            $scope.pageViews = pageViews
-
-        analyticsService.getVisitsOverTime(null, startDate).then (visits) ->
-            $scope.visits = visits
 
     # Initialize
     $scope.loadLifetimeData()

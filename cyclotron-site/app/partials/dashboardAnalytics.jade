@@ -56,7 +56,7 @@
 
     .row
         .col-sm-8
-            h2 Data Sources (All-Time)
+            h2 Data Sources 
             table.table(ts-wrapper)
                 thead
                     tr
@@ -74,7 +74,7 @@
                         td {{ dataSource.avgDuration | numeraljs:'0.0' }}
 
         .col-sm-4
-            h2 Top Unique Visitors (All-Time)
+            h2 Top Unique Visitors 
             table.table(ts-wrapper)
                 thead
                     tr
@@ -87,11 +87,11 @@
 
     .row
         .col-sm-4
-            h2 Browser Usage (All-Time)
+            h2 Browser Usage 
             div.c3chart(data='browsers', options='browserOptions')
         .col-sm-4
-            h2 Widgets Viewed (All-Time)
+            h2 Widgets Viewed 
             div.c3chart(data='widgets', options='widgetOptions')
         .col-sm-4
-            h2 Views Per Page (All-Time)
+            h2 Views Per Page
             div.c3chart(data='viewsPerPage', options='viewsPerPageOptions')

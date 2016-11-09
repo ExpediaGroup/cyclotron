@@ -64,43 +64,6 @@ cyclotronApp.controller 'DashboardAnalyticsController', ($scope, dashboard, anal
     $scope.toggleVisitors = ->
         $scope.showVisitors = not $scope.showVisitors
 
-    # Analytics over the lifetime of the dashboard
-    $scope.loadLifetimeData = ->
-        return unless dashboard.visits > 0
-
-        analyticsService.getUniqueVisitors($scope.dashboardId).then (visitors) ->
-            $scope.uniqueVisitorCount = visitors.length
-            $scope.uniqueVisitors = visitors
-
-        analyticsService.getBrowsers($scope.dashboardId).then (browsers) ->
-            $scope.browserOptions.data.keys = { value: _.pluck browsers, 'nameVersion' }
-            reducedBrowsers = _.reduce browsers, (result, browser) ->
-                result[browser.nameVersion] = browser.pageViews
-                return result
-            , {}
-
-            $scope.browsers = [reducedBrowsers]
-
-        analyticsService.getWidgets($scope.dashboardId).then (widgets) ->
-            $scope.widgetOptions.data.keys = { value: _.pluck widgets, 'widget' }
-            reducedWidgets = _.reduce widgets, (result, widget) ->
-                result[widget.widget] = widget.widgetViews
-                return result
-            , {}
-
-            $scope.widgets = [reducedWidgets]
-
-        analyticsService.getDataSourcesByName($scope.dashboardId).then (dataSources) ->
-            $scope.dataSources = dataSources
-
-        analyticsService.getPageViewsPerPage($scope.dashboardId).then (viewsPerPage) ->
-            categories = []
-
-            _.each viewsPerPage, (page) -> 
-                categories.push('Page ' + (page.page + 1))
-            $scope.viewsPerPage = viewsPerPage
-            $scope.viewsPerPageOptions.axis.x.categories = categories
-
     # Analytics relative to a startDate
     $scope.loadTimeseriesData = ->
         return unless dashboard.visits > 0
@@ -109,6 +72,39 @@ cyclotronApp.controller 'DashboardAnalyticsController', ($scope, dashboard, anal
         if timeSpan.length == 1 then timeSpan.unshift 1
         startDate = moment().subtract(timeSpan[0], timeSpan[1])
 
+        analyticsService.getUniqueVisitors($scope.dashboardId, startDate).then (visitors) ->
+            $scope.uniqueVisitorCount = visitors.length
+            $scope.uniqueVisitors = visitors
+
+        analyticsService.getBrowsers($scope.dashboardId, startDate).then (browsers) ->
+            $scope.browserOptions.data.keys = { value: _.pluck browsers, 'nameVersion' }
+            reducedBrowsers = _.reduce browsers, (result, browser) ->
+                result[browser.nameVersion] = browser.pageViews
+                return result
+            , {}
+
+            $scope.browsers = [reducedBrowsers]
+
+        analyticsService.getWidgets($scope.dashboardId, startDate).then (widgets) ->
+            $scope.widgetOptions.data.keys = { value: _.pluck widgets, 'widget' }
+            reducedWidgets = _.reduce widgets, (result, widget) ->
+                result[widget.widget] = widget.widgetViews
+                return result
+            , {}
+
+            $scope.widgets = [reducedWidgets]
+
+        analyticsService.getDataSourcesByName($scope.dashboardId, startDate).then (dataSources) ->
+            $scope.dataSources = dataSources
+
+        analyticsService.getPageViewsPerPage($scope.dashboardId, startDate).then (viewsPerPage) ->
+            categories = []
+
+            _.each viewsPerPage, (page) -> 
+                categories.push('Page ' + (page.page + 1))
+            $scope.viewsPerPage = viewsPerPage
+            $scope.viewsPerPageOptions.axis.x.categories = categories
+
         analyticsService.getPageViewsOverTime($scope.dashboardId, startDate).then (pageViews) ->
             $scope.pageViews = pageViews
 
@@ -116,8 +112,6 @@ cyclotronApp.controller 'DashboardAnalyticsController', ($scope, dashboard, anal
             $scope.visits = visits
 
     # Initialize
-    $scope.loadLifetimeData()
-
     dashboardService.getRevision dashboard.name, 1, (rev) ->
         $scope.rev1 = rev
         $scope.createdDate = moment(rev.date).format('MM/DD HH:mm:ss')

@@ -21,6 +21,7 @@
             "noscroll": true,
             "widget": "html"
         }, {
+            "dataSource": "datasource_0",
             "gridHeight": 2.5,
             "gridWidth": 1,
             "rules": {
@@ -28,18 +29,22 @@
                 "red": "${false}",
                 "yellow": "${false}"
             },
+            "sortBy": [],
             "title": "Stoplight with Title",
+            "tooltip": "grossbookingvalue:#{grossbookingvalue}",
             "widget": "stoplight"
         }, {
             "dataSource": "datasource_0",
             "gridHeight": 3.5,
             "gridWidth": 1,
+            "layout": {},
             "rules": {
                 "green": "${true /* Else */}",
                 "red": "${#{roomnightcount} >= 150}",
                 "yellow": "${#{roomnightcount} >= 100}"
             },
             "title": "Random Stoplight",
+            "tooltip": "roomnightcount:#{roomnightcount}",
             "widget": "stoplight"
         }, {
             "gridHeight": 1,
@@ -47,6 +52,7 @@
             "rules": {
                 "red": "${true}"
             },
+            "tooltip": "Time To Stop",
             "widget": "stoplight"
         }, {
             "gridHeight": 1,
@@ -54,6 +60,7 @@
             "rules": {
                 "yellow": "${true}"
             },
+            "tooltip": "Time To Get Ready",
             "widget": "stoplight"
         }, {
             "gridHeight": 1,
@@ -61,6 +68,7 @@
             "rules": {
                 "green": "${true}"
             },
+            "tooltip": "Time To Run",
             "widget": "stoplight"
         }, {
             "dataSource": "datasource_0",
@@ -74,5 +82,7 @@
             "widget": "stoplight"
         }]
     }],
+    "parameters": [],
+    "scripts": [],
     "theme": "light"
 }

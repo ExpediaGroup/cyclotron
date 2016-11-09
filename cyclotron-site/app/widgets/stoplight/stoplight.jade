@@ -1,3 +1,4 @@
+
 .stoplight-widget(ng-controller='StoplightWidget')
     h1.title(ng-if='::widget.title') {{ widgetTitle() }}
 
@@ -7,8 +8,8 @@
         .widget-nodata(ng-if='widgetContext.nodata && !isLoading()')
             .fa.fa-exclamation-triangle
             span  {{ widgetContext.nodata }}
-            
-        .trafficlight(ng-if='!widgetContext.loading && !widgetContext.dataSourceError', active-color='activeColor', ng-class='{transparent: widgetContext.nodata}')
+          
+        .trafficlight(ng-if='!widgetContext.loading && !widgetContext.dataSourceError', active-color='activeColor', ng-class='{transparent: widgetContext.nodata}', title='{{ tooltip }}')
             .protector
             .protector
             .protector
@@ -16,3 +17,4 @@
                 .light.red
                 .light.yellow
                 .light.green
+        

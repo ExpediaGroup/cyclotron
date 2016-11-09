@@ -1,3 +1,11 @@
+# 1.42.0 (11/10/2016)
+
+## Features
+
+- Analytics / Dashboard Analytics pages: Most charts now reflect data for the selected time-range
+
+- Stoplight Widget: Add tooltip option
+
 # 1.41.0 (10/27/2016)
 
 ## Features

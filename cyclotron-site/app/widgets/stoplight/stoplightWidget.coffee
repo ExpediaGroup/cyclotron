@@ -24,7 +24,9 @@ cyclotronApp.controller 'StoplightWidget', ($scope, dashboardService, dataServic
     $scope.evalColors = (row) ->
         rules = $scope.widget.rules
         return unless rules?
-
+        
+        $scope.tooltip = _.compile($scope.widget.tooltip, row)
+        
         if rules.red?
             red = _.compile(rules.red, row)
             if red == true then return $scope.activeColor = 'red'
@@ -37,7 +39,7 @@ cyclotronApp.controller 'StoplightWidget', ($scope, dashboardService, dataServic
             return
 
         $scope.activeColor = null
-
+    
     $scope.reload = ->
         $scope.dataSource.execute(true)
 

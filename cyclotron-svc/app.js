@@ -93,18 +93,6 @@ var cas = require('ssl-root-cas/latest')
 
 /* Optional: Load Additional Trusted Certificate Authorities */
 if (_.isArray(config.trustedCa) && !_.isEmpty(config.trustedCa)) {
-    for (ca of config.trustedCa) {
-        console.log('Loading trusted CA: ' + ca);
-        cas.addFile(ca);
-    }
-}
-
-/* Initialize SSL root CAs */
-var cas = require('ssl-root-cas/latest')
-  .inject();
-
-/* Optional: Load Additional Trusted Certificate Authorities */
-if (_.isArray(config.trustedCa) && !_.isEmpty(config.trustedCa)) {
     _.each(config.trustedCa, function(ca) {
         console.log('Loading trusted CA: ' + ca);
         cas.addFile(ca);

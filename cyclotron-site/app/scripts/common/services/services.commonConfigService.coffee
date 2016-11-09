@@ -26,7 +26,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
     exports = {
 
-        version: '1.41.0'
+        version: '1.42.0'
 
         logging: 
             enableDebug: false
@@ -3558,6 +3558,15 @@ cyclotronServices.factory 'commonConfigService', ->
                                 placeholder: 'Rule Expression'
                                 inlineJs: true
                                 order: 1
+                    tooltip:
+                        label: 'Tooltip'
+                        description: 'Sets the tooltip of the stoplight.'
+                        placeholder: 'Tooltip'
+                        type: 'string'
+                        inlineJs: true
+                        required: false
+                        defaultHidden: true
+                        order: 12
                     filters: 
                         label: 'Filters'
                         description: "Optional, but if provided, specifies name-value pairs used to filter the data source's result set. This has no effect if the dataSource property is not set.\nOnly the first row of the data source is used to get data, so this property can be used to narrow down on the correct row"
