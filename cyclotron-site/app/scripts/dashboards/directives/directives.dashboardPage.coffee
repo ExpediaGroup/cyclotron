@@ -79,15 +79,31 @@ cyclotronDirectives.directive 'dashboardPage', ($compile, $window, $timeout, con
                     scope.sortedWidgets = _.sortBy sortedWidgets, '_index'
                 else
                     # No overrides, so take the Widgets as-is
-                    scope.sortedWidgets = scope.page?.widgets || []
+                    scope.sortedWidgets = scope.page.widgets
 
 
             updatePage = ->
+                scope.page.widgets = scope.page?.widgets || []
 
                 # Assign uids to Widgets -- use for tracking if widgets are rearranged
                 _.each scope.page.widgets, (widget) ->
                     widget.uid ?= uuid.v4()
                     return
+
+                # Merge Linked Widgets
+                scope.page.widgets = _.map scope.page.widgets, (widget) ->
+                    if widget.widget == 'linkedWidget'
+                        indices = widget.linkedWidget.split ','
+                        pageIndex = parseInt indices[0]
+                        widgetIndex = parseInt indices[1]
+
+                        linkedWidget = scope.dashboard.pages[pageIndex]?.widgets[widgetIndex]
+                        
+                        widget = _.defaults widget, linkedWidget
+                        widget.widget = linkedWidget.widget
+                        widget
+                    else 
+                        widget
 
                 # Sort Widgets per overrides
                 resortWidgets()

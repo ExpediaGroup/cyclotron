@@ -58,7 +58,6 @@
     "qrcode.js": "qrcode-js#*",
     "script.js": "ded/script.js#2.5.7",
     "select2": "3.4.8",
-    "socket.io-client": "0.9.16",
     "spin.js": "2.1.0",
     "uri.js": "1.15.1"
   },
@@ -75,6 +74,8 @@
         "src-noconflict/mode-html.js",
         "src-noconflict/mode-javascript.js",
         "src-noconflict/mode-json.js",
+        "src-noconflict/mode-mysql.js",
+        "src-noconflict/mode-sql.js",
         "src-noconflict/theme-chrome.js",
         "src-noconflict/worker-css.js",
         "src-noconflict/worker-html.js",

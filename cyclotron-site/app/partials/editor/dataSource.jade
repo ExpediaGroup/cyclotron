@@ -9,8 +9,8 @@
         
 .form-group
     label(title='{{ dashboardProperties.dataSources.properties.type.description }}') Type
-    select.form-control(ng-model='dataSource.type', title='{{ dashboardProperties.dataSources.properties.type.description }}')
-        option(ng-repeat='(optionKey, optionValue) in dashboardProperties.dataSources.options') {{ optionValue.value }}
+    select.form-control(ng-model='dataSource.type', title='{{ dashboardProperties.dataSources.properties.type.description }}',
+        ng-options='optionKey as (optionValue.label || optionKey) for (optionKey, optionValue) in dashboardProperties.dataSources.options')
 
 .bg-info(ng-if='dataSourceMessage()', ng-bind-html='dataSourceMessage()')
 

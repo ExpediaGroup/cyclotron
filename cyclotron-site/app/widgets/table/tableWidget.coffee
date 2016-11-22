@@ -32,6 +32,7 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
 
     $scope.columnGroups = []
     sortFunction = _.jsEval $scope.widget.sortFunction
+    onSort = _.jsEval $scope.widget.onSort
 
     $scope.paging =
         boundaryLinks: true
@@ -69,10 +70,21 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
     $scope.sortBy = $scope.widget.sortBy
 
     $scope.selectSort = (columnName) ->
-        if columnName == $scope.sortBy
-            $scope.sortBy = '-' + columnName
-        else
-            $scope.sortBy = columnName
+        enableDefaultSort = true
+        descending = columnName == $scope.sortBy
+        if _.isFunction(onSort)
+            # Invoke event handle
+            result = onSort({ 
+                columnName
+                descending
+            })
+            if result == false
+                enableDefaultSort = false  
+        if enableDefaultSort
+            if descending 
+                $scope.sortBy = '-' + columnName
+            else
+                $scope.sortBy = columnName
 
     $scope.isSorted = (columnName, ascending) ->
         return false if _.isNullOrUndefined($scope.sortBy)

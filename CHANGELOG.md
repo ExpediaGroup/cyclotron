@@ -1,3 +1,11 @@
+# 1.43.0 (11/24/2016)
+
+## Features
+
+- Linked Widget: a new Widget which references and displays another Widget from the Dashboard
+
+- Table Widget: Added an "onSort" event property, allowing custom code to be run when changing the current sort order
+
 # 1.42.0 (11/10/2016)
 
 ## Features

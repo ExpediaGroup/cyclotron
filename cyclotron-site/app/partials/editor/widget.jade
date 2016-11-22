@@ -11,7 +11,7 @@
     
     select.form-control(ng-model='editor.selectedItem.widget', 
         ng-change='selectWidget()'
-        title='{{ dashboardProperties.pages.properties.widgets.properties.widget }}')
-        option(ng-repeat='(optionKey, optionValue) in widgets') {{ optionKey }}
+        title='{{ dashboardProperties.pages.properties.widgets.properties.widget }}',
+        ng-options='optionKey as (optionValue.label || optionKey) for (optionKey, optionValue) in widgets')
 
 .editor-property-set(dashboard='editor.dashboard', model='editor.selectedItem', definition='combinedWidgetProperties(editor.selectedItem)')

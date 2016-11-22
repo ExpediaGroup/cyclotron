@@ -341,6 +341,7 @@ cyclotronApp.controller 'GuiEditorController', ($scope, $state, $stateParams, $l
 
                     if !$scope.editor.dashboard.name? or $scope.editor.dashboard.name == ''
                         alertify.error('Dashboard Name property is missing', 10000)
+                        $scope.isSaving = false
                         return 
 
                     dashboardName = _.slugify($scope.editor.dashboard.name)

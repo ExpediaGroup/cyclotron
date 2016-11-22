@@ -17,6 +17,19 @@
 # Common Config File - all default or shared configs
 cyclotronServices.factory 'commonConfigService', ->
 
+    linkedWidgetOptions = (dashboard) ->
+        linkedWidgets = {}
+        _.each dashboard.pages, (page, pageIndex) ->
+            _.each page.widgets, (widget, widgetIndex) ->
+                return if widget.widget == 'linkedWidget'
+
+                widgetName = _.titleCase(widget.widget)
+                if widget.name?.length > 0 or widget.title?.length > 0
+                    widgetName += ': ' + (widget.name || widget.title)
+                linkedWidgets['Page ' + (pageIndex + 1) + ': ' + widgetName] = { value: pageIndex + ',' + widgetIndex }
+
+        linkedWidgets
+
     datasourceOptions = (dashboard) ->
         dataSources = {}
         _.each dashboard.dataSources, (dataSource) ->
@@ -26,7 +39,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
     exports = {
 
-        version: '1.42.0'
+        version: '1.43.0'
 
         logging: 
             enableDebug: false
@@ -628,6 +641,7 @@ cyclotronServices.factory 'commonConfigService', ->
                     options:
                         cloudwatch:
                             value: 'cloudwatch'
+                            label: 'CloudWatch'
                             message: 'Amazon CloudWatch monitors operational and performance metrics for your AWS cloud resources and applications. Refer to the <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/Welcome.html" target="_blank">API Documentation</a> for information on configuring the available options.'
                             icon: 'fa-cloud-download'
                             properties:
@@ -826,6 +840,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
                         elasticsearch:
                             value: 'elasticsearch'
+                            label: 'Elasticsearch'
                             icon: 'fa-cloud-download'
                             properties:
                                 url:
@@ -941,6 +956,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
                         graphite:
                             value: 'graphite'
+                            label: 'Graphite'
                             icon: 'fa-cloud-download'
                             message: 'The Graphite Data Source connects to any <a href="http://graphite.readthedocs.org/" target="_blank">Graphite<a> server to load time-series metrics via the Render api. For more details on usage, refer to the Graphite <a href="http://graphite.readthedocs.org/en/latest/render_api.html" target="_blank">documentation</a>.'
                             properties:
@@ -1011,8 +1027,10 @@ cyclotronServices.factory 'commonConfigService', ->
                                     required: false
                                     defaultHidden: true
                                     order: 11
+
                         javascript: 
                             value: 'javascript'
+                            label: 'JavaScript'
                             icon: 'fa-cloud-download'
                             message: 'The JavaScript Data Source allows custom JavaScript to be used to load or generate a Data Source.'
                             properties: 
@@ -1052,6 +1070,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
                         json:
                             value: 'json'
+                            label: 'JSON'
                             icon: 'fa-cloud-download'
                             properties:
                                 url:
@@ -1141,6 +1160,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
                         mock: 
                             value: 'mock'
+                            label: 'Mock'
                             icon: 'fa-cloud-download'
                             message: 'The Mock Data Source generates sample data for testing a dashboard.'
                             properties:
@@ -1170,6 +1190,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
                         splunk: 
                             value: 'splunk'
+                            label: 'Splunk'
                             icon: 'fa-cloud-download'
                             properties: 
                                 query:
@@ -1602,6 +1623,7 @@ cyclotronServices.factory 'commonConfigService', ->
         widgets:
             annotationChart:
                 name: 'annotationChart'
+                label: 'Annotation Chart'
                 icon: 'fa-bar-chart-o'
                 properties:
                     dataSource:
@@ -1909,6 +1931,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
             chart:
                 name: 'chart'
+                label: 'Chart'
                 icon: 'fa-bar-chart-o'
                 properties:
                     dataSource:
@@ -2945,6 +2968,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         
             clock:
                 name: 'clock'
+                label: 'Clock'
                 icon: 'fa-clock-o'
                 properties:
                     format:
@@ -2957,6 +2981,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
             header:
                 name: 'header'
+                label: 'Header'
                 icon: 'fa-header'
                 properties:
                     headerTitle:
@@ -3074,6 +3099,7 @@ cyclotronServices.factory 'commonConfigService', ->
             
             html:
                 name: 'html'
+                label: 'HTML'
                 icon: 'fa-html5'
                 properties:
                     dataSource:
@@ -3127,6 +3153,7 @@ cyclotronServices.factory 'commonConfigService', ->
                 
             iframe:
                 name: 'iframe'
+                label: 'iFrame'
                 icon: 'fa-desktop'
                 properties:
                     url:
@@ -3147,6 +3174,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
             image:
                 name: 'image'
+                label: 'Image'
                 icon: 'fa-image-o'
                 properties:
                     images:
@@ -3269,6 +3297,7 @@ cyclotronServices.factory 'commonConfigService', ->
                 
             javascript:
                 name: 'javascript'
+                label: 'JavaScript'
                 icon: 'fa-cogs'
                 properties:
                     dataSource:
@@ -3310,8 +3339,22 @@ cyclotronServices.factory 'commonConfigService', ->
                         required: false                        
                         order: 14
 
+            linkedWidget:
+                name: 'linkedWidget'
+                label: 'Linked Widget'
+                icon: 'fa-link'
+                properties:
+                    linkedWidget:
+                        label: 'Linked Widget'
+                        description: 'Selects another Widget in this Dashboard to link.'
+                        type: 'string'
+                        required: true
+                        options: linkedWidgetOptions
+                        order: 10
+            
             number: 
                 name: 'number'
+                label: 'Number'
                 icon: 'fa-cog'
                 properties:
                     dataSource:
@@ -3448,6 +3491,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
             qrcode: 
                 name: 'qrcode'
+                label: 'QRcode'
                 icon: 'fa-cogs'
                 properties:
                     text:
@@ -3520,6 +3564,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
             stoplight:
                 name: 'stoplight'
+                label: 'Stoplight'
                 icon: 'fa-cog'
                 properties:
                     dataSource:
@@ -3586,6 +3631,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
             table: 
                 name: 'table'
+                label: 'Table'
                 icon: 'fa-table'
                 properties:
                     dataSource:
@@ -3856,9 +3902,18 @@ cyclotronServices.factory 'commonConfigService', ->
                         required: false
                         defaultHidden: true
                         order: 19
+                    onSort:
+                        label: 'Sort Event'
+                        description: 'This event occurs when the user changes the sort order of a column. If this property is set with a JavaScript function, the function will be called as an event handler. Return false from the function to prevent the default sort implementation from being applied.'
+                        type: 'editor'
+                        editorMode: 'javascript'
+                        required: false
+                        defaultHidden: true
+                        order: 20 
 
             tableau: 
                 name: 'tableau'
+                label: 'Tableau'
                 icon: 'fa-cog'
                 properties: 
                     params:
@@ -3871,6 +3926,7 @@ cyclotronServices.factory 'commonConfigService', ->
         
             treemap:
                 name: 'treemap'
+                label: 'Treemap'
                 icon: 'fa-tree'
                 properties:
                     dataSource:
@@ -4001,6 +4057,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
             youtube:
                 name: 'youtube'
+                label: 'YouTube'
                 icon: 'fa-youtube'
                 properties:
                     videoId:
@@ -4102,14 +4159,14 @@ cyclotronServices.factory 'commonConfigService', ->
     # Add Widget and Data Source help pages
     helpDataSources.children = _.map _.sortBy(exports.dashboard.properties.dataSources.options, 'name'), (dataSource) ->
         { 
-            name: dataSource.value
+            name: dataSource.label || dataSource.value
             path: '/partials/help/datasources/' + dataSource.value + '.html'
             tags: _.map dataSource.properties, propertyMapHelper
         }
 
     helpWidgets.children = _.map _.sortBy(exports.widgets, 'name'), (widget) ->
         { 
-            name: widget.name
+            name: widget.label || widget.name
             path: '/widgets/' + widget.name + '/help.html'
             tags: _.map widget.properties, propertyMapHelper
         }
