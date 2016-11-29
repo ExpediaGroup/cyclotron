@@ -2,7 +2,7 @@
 
 Cyclotron is a browser-based platform for creating dashboards.  It provides standard boilerplate and plumbing, allowing non-programmers to easily create and edit dashboards using customizable components.  It has a built-in dashboard editor, and hosts the dashboards directly.
 
-Dashboards are defined declaratively as a JSON document, which contains all the properties required to render the Dashboard. 
+Dashboards are defined declaratively as a JSON document, which contains all the properties required to render the Dashboard.
 
 ## Contents
 
@@ -54,7 +54,7 @@ Dashboards are defined declaratively as a JSON document, which contains all the 
 
 Cyclotron is best thought of as an alternative to custom, light-weight websites that visualize data. It provides the web hosting, page layout, data loading, and assorted widgets—all without writing code. In contrast, building a comparable website from scratch would require provisioning a server/VM, choosing the appropriate web frameworks and libraries, and writing the code for the site. Cyclotron simplifies this process dramatically, making it ideal for rapid prototyping.
 
-However, Cyclotron has a limited set of built-in Widgets and Data Sources.  The HTML and JavaScript Widgets do allow for a wide degree of customization, but require some web development.  Cyclotron lacks built-in interactivity, so it may not be ideal for building highly interative websites.  It also is designed for building full-screen dashboards, not reports.
+However, Cyclotron has a limited set of built-in Widgets and Data Sources.  The HTML and JavaScript Widgets do allow for a wide degree of customization, but require some web development.  Cyclotron lacks built-in interactivity, so it may not be ideal for building highly interactive websites.  Additionally, it is designed for building full-screen dashboards, not reports.
 
 In regards to data, Cyclotron does not store or cache any data for Dashboards. Dashboards can load external data through various Data Sources, but it is done on-the-fly when Dashboards are viewed.  Cyclotron can do filtering/sorting and custom transformations, but this should not be considered a replacement for ETL jobs.  In this regard, Cyclotron is ideal as a front-end for an existing database or web service.
 
@@ -110,7 +110,7 @@ The `cyclotron-svc/` folder contains the REST API for Cyclotron, which interface
         cp config/sample.config.js config/config.js
 
     The sample config defaults to using a local MongoDB instance, with authentication disabled.  If using a remote MongoDB server or cluster, update the `mongodb` property accordingly.
-    
+
     If using Active Directory or LDAP, ensure that the property `enableAuth` is set to true, and that all the `ldap` properties are filled in correctly, including the service account username and password used to validate logins.
 
 4. Start the service in node:
@@ -137,7 +137,7 @@ The `cyclotron-site/` folder contains the website for Cyclotron.
 
         npm install --global gulp
 
-    **Windows/Linux/OSX**: this may need to be run as an Administrator or with sudo priviledges.
+    **Windows/Linux/OSX**: this may need to be run as an Administrator or with sudo privileges.
 
 4. Build and run the service:
 
@@ -152,7 +152,7 @@ The `cyclotron-site/` folder contains the website for Cyclotron.
     **Windows**: Git must be in the PATH to successfully build the website; if using GitHub for Windows, just open the Git Shell which automatically adds it.
 
 5. Update the configuration file at `_public/js/conf/configService.js` as needed.  Gulp automatically populates this file from `sample.configService.js` if it does not exist.
-    
+
     The sample config defaults to using a local cyclotron-svc instance, with authentication disabled.  If authentication has been enabled in the REST API, it must be enabled in this config as well.
 
 For more information on the Cyclotron website, please refer to [cyclotron-site/README.md](cyclotron-site/README.md).
