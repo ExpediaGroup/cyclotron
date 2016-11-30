@@ -360,4 +360,4 @@
 
 ## Features
 
- - Initial public release of Cyclotron
+ - Initial public release of Cyclotron test
