@@ -47,7 +47,7 @@ urlAdjuster = require 'gulp-css-url-adjuster'
 
 webserver = require 'gulp-webserver'
 
-karma = require('karma').server
+karma = require('karma')
 
 _ = require 'lodash'
 
@@ -296,10 +296,10 @@ gulp.task 'webserver', ->
         }
 
 gulp.task 'karma', (done) ->
-    karma.start {
+    new karma.Server({
         configFile: __dirname + '/test/karma-unit.conf.coffee'
         singleRun: true
-    }, done
+    }, done).start()
 
 gulp.task 'test', sequence('scripts', 'karma')
 
