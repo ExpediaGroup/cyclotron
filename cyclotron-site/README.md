@@ -103,19 +103,17 @@ Included in the repo is `nginx.conf`, which is a sample configuration for [Nginx
 
 1. Install Nginx, either [manually](http://nginx.org/en/download.html) or via your system's package manager.
 
-2. Copy the *built* web site files to the server, i.e. from `_public/` to `/opt/app/cyclotron-site`
+2. Create the configuration file, `/opt/app/cyclotron-site/_public/config/config.js`
 
-3. Create the configuration file, `/opt/app/cyclotron-site/config/config.js`
+3. Copy `nginx.conf` to `/etc/nginx/conf.d/cyclotron-site.conf`.
 
-4. Copy `nginx.conf` to `/etc/nginx/conf.d/cyclotron-site.conf`.
+4. Ensure that the main nginx config loads configurations from `/conf.d`
 
-5. Ensure that the main nginx config loads configurations from `/conf.d`
-
-6. Start or restart Nginx:
+5. Start or restart Nginx:
 
         sudo service nginx restart
 
-7. Enable Nginx to auto-run on system start:
+6. Enable Nginx to auto-run on system start:
 
         sudo chkconfig nginx on
 
