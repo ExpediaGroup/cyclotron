@@ -1,0 +1,136 @@
+{
+    "allowExport": false,
+    "allowFullscreen": false,
+    "autoRotate": false,
+    "dataSources": [{
+        "key": "${Dashboard.cyclotronDataKey}",
+        "name": "portal-data",
+        "preload": true,
+        "type": "cyclotronData"
+    }, {
+        "name": "portal-data-filtered",
+        "preload": true,
+        "processor": "//\n// Data Source which provides a filtered view of \"portal-data\"\n//\n// Uses Cyclotron.parameters which contain the selected filters\n//\np = function (promise) {\n    //\n    // Get cached data from portal-data data source\n    // Avoids reloading data from database every time the filters are changed.\n    // The promise resolves immediately if the data is already loaded\n    //\n    Cyclotron.dataSources['portal-data']\n    .getPromise()\n    .then(function (result) {\n        var data = result['0'].data;\n        \n        var q = Cyclotron.parameters.q;\n        var type = Cyclotron.parameters.type;\n        \n        // If q parameter is set..\n        if (!_.isEmpty(q)) {\n            // Apply text filter\n            q = q.toLowerCase();\n            data = _.filter(data, function (row) {\n                var match = false;\n                \n                // Check all fields for the search term\n                _.forIn(row, function (value, key) {\n                    if (value.toLowerCase().indexOf(q) > 0)\n                        // Value contains the search terms, so include it\n                        match = true;\n                })\n                \n                return match;\n            });\n        }\n        \n        // If type parameter is set..\n        if (!_.isEmpty(type)) {\n            // Apply type filter (exact match)\n            // Shortcut _.filter implementation for property match.\n            data = _.filter(data, { type: type });\n        }\n        \n        // Return the filtered data as the result from this data source\n        // Since it's async, we need to resolve the Promise object\n        promise.resolve(data);\n    });\n}",
+        "type": "javascript"
+    }],
+    "description": "Example portal dashboard that uses CyclotronData to store links",
+    "displayName": "Example Cyclotron Portal",
+    "name": "example-portal",
+    "openLinksInNewWindow": true,
+    "pages": [{
+        "frequency": 1,
+        "layout": {
+            "gridColumns": 1,
+            "gridHeightAdjustment": -110,
+            "gridRows": 1
+        },
+        "widgets": [{
+            "customHtml": "<div class=\"button-bar\">\n    <a href=\"/${Cyclotron.dashboardName}\" id=\"home\">\n        <button class=\"btn btn-link\">Home</button>\n    </a>\n    <a href=\"/${Cyclotron.dashboardName}/table\" id=\"table\">\n        <button class=\"btn btn-link\">Table</button>\n    </a>\n    <a href=\"/${Cyclotron.dashboardName}/admin\" id=\"admin\">\n        <button class=\"btn btn-link\">Administration</button>\n    </a>\n    \n    <label>\n        Search: \n        <input type=\"textbox\" id=\"search\" />\n    </label>\n    <label>\n        Type:\n        <select id=\"type\">\n            <option value=\"\">All</option>\n        </select>\n    </label>\n</div>\n<script>\n    _.each(Dashboard.filterType, function (type) {\n        $('#type').append($('<option>', {\n            value: type,\n            text: type\n        }));\n    });\n    \n    // Load parameters from URL into input controls\n    $('#type').val(Cyclotron.parameters.type);\n    $('#search').val(Cyclotron.parameters.q);\n\n    // Wire up buttons\n    $('#home').on('click', function () {\n        Cyclotron.goToPage(1);\n    });\n    $('#table').on('click', function () {\n        Cyclotron.goToPage(2);\n    });\n    $('#admin').on('click', function () {\n        Cyclotron.goToPage(3);\n    });\n    \n    // Wire up search and filter controls\n    $('#search').on('keyup', function () {\n        // Update parameter\n        Cyclotron.parameters.q = $(this).val();\n        \n        // Re-execute the filtered data source\n        Cyclotron.dataSources['portal-data-filtered'].execute(true);\n    });\n    \n    $('#type').on('change', function () {\n        Cyclotron.parameters.type = $(this).val();\n        \n        // Re-execute the filtered data source\n        Cyclotron.dataSources['portal-data-filtered'].execute(true);\n    })\n</script>",
+            "headerTitle": {
+                "logoSize": "48px",
+                "logoUrl": "/img/favicon128.png",
+                "showPageName": false,
+                "showTitle": true,
+                "titleSize": "42px"
+            },
+            "height": "130px",
+            "noscroll": true,
+            "parameters": {
+                "showParameters": false
+            },
+            "themeVariant": "transparent",
+            "widget": "header"
+        }, {
+            "dataSource": "portal-data-filtered",
+            "html": "<!-- Repeated HTML for each link in the portal data set -->\n<a class=\"portal-link\" href=\"#{link}\" target=\"_self\">\n    <span>\n        <h1>#{name}</h1>\n        <h2>#{description}</h2>\n        <p class=\"label label-default\">#{type}</p>\n    </span>\n</a>",
+            "postHtml": "<!-- Closing the outer container -->\n</div>",
+            "preHtml": "<div class=\"portal-link-container\">\n    <!-- Link boxes inserted here -->",
+            "widget": "html"
+        }]
+    }, {
+        "frequency": 1,
+        "layout": {
+            "gridColumns": 1,
+            "gridHeightAdjustment": -120,
+            "gridRows": 1
+        },
+        "name": "table",
+        "widgets": [{
+            "height": "110px",
+            "linkedWidget": "0,0",
+            "widget": "linkedWidget"
+        }, {
+            "allowFullscreen": false,
+            "columns": [{
+                "label": "Name",
+                "link": "#{link}",
+                "name": "name"
+            }, {
+                "label": "Description",
+                "name": "description"
+            }, {
+                "name": "link"
+            }, {
+                "name": "type"
+            }],
+            "dataSource": "portal-data-filtered",
+            "enableSort": true,
+            "freezeHeaders": true,
+            "widget": "table"
+        }]
+    }, {
+        "frequency": 1,
+        "layout": {
+            "gridColumns": 1,
+            "gridHeightAdjustment": -120,
+            "gridRows": 1
+        },
+        "name": "admin",
+        "widgets": [{
+            "height": "110px",
+            "linkedWidget": "0,0",
+            "widget": "linkedWidget"
+        }, {
+            "html": "<div id='html-container'>\n    <!-- Uses an Angular.js controller (found in Scripts) -->\n    <div ng-controller=\"AdminController\">\n        <button class=\"pull-right btn btn-success\" ng-click=\"save()\">Save All Changes</button>\n        <table class=\"table\">\n            <thead>\n                <tr>\n                    <th>Name</th>\n                    <th>Description</th>\n                    <th>Link</th>\n                    <th>Type</th>\n                    <th><!-- Delete --></th>\n                </tr>\n            </thead>\n            <tbody>\n                <tr ng-repeat=\"row in portalData\">\n                    <td><input type=\"textbox\" ng-model=\"row.name\"></td>\n                    <td><input type=\"textbox\" ng-model=\"row.description\"></td>\n                    <td><input type=\"textbox\" ng-model=\"row.link\"></td>\n                    <td><select ng-model=\"row.type\" ng-options=\"type for type in Dashboard.filterType\"></select></td>\n                    <td>\n                        <button class=\"btn btn-danger\" ng-click=\"deleteRow($index)\">Delete  <i class=\"fa fa-trash-o\"></i></button>\n                        </td>\n                </tr>\n                <tr>\n                    <td>\n                        <button class=\"btn btn-primary\" ng-click=\"addNew()\">Add New Row</button>\n                    </td>\n                </tr>\n            </tbody>\n        </table>\n        <hr>\n        <button class=\"pull-right btn btn-success\" ng-click=\"save()\">Save All Changes</button>\n    </div>\n</div>",
+            "layout": {},
+            "title": "Portal Administration",
+            "widget": "html"
+        }]
+    }],
+    "parameters": [{
+        "defaultValue": "",
+        "name": "q",
+        "showInUrl": true
+    }, {
+        "defaultValue": "",
+        "name": "type",
+        "showInUrl": true
+    }],
+    "scripts": [{
+        "name": "Configuration",
+        "singleLoad": true,
+        "text": "//\n// Configuration for this Dashboard\n//\nvar Dashboard = {\n    //\n    // CyclotronData key ... identifies a unique data set\n    // When cloning this dashboard, change this key to a unique string to avoid sharing the data set.\n    //\n    cyclotronDataKey: 'example-portal-portal-links-ds',\n    \n    //\n    // List of possible Tag values\n    // Used for filtering\n    //\n    filterType: [\n        'Widget',\n        'Data Source'\n    ]\n    \n    // Add additional filters or options here...\n}"
+    }, {
+        "name": "Initialization",
+        "singleLoad": true,
+        "text": "var defaultDataSet = [\n    { \n        name: 'example-annotation-chart',\n        description: 'Examples of the Annotation Chart widget.',\n        link: '/example-annotation-chart',\n        type: 'Widget'\n    }, { \n        name: 'example-chart-drilldown',\n        description: 'Examples of using drilldown in the Chart Widget.',\n        link: '/example-chart-drilldown',\n        type: 'Widget'\n    }, { \n        name: 'example-chart-line',\n        description: 'Examples of using the Chart widget to create Line charts.',\n        link: '/example-chart-line',\n        type: 'Widget'\n    }, {\n        name: 'example-datasource-javascript',\n        description: 'Examples with the Javascript data source.',\n        link: '/example-datasource-javascript',\n        type: 'Data Source'\n    }, {\n        name: 'example-datasource-json',\n        description: 'Examples with the JSON data source.',\n        link: '/example-datasource-json',\n        type: 'Data Source'\n    }, {\n        name: 'example-header',\n        description: 'Examples of using the Header Widget.',\n        link: '/example-header',\n        type: 'Widget'\n    }, {\n        name: 'example-html',\n        description: 'Examples of the HTML widget.',\n        link: '/example-html',\n        type: 'Widget'\n    }, {\n        name: 'example-image',\n        description: 'Examples of the Image widget.',\n        link: '/example-image',\n        type: 'Widget'\n    }, {\n        name: 'example-number',\n        description: 'Examples of the Number widget.',\n        link: '/example-number',\n        type: 'Widget'\n    }, {\n        name: 'example-table-basic',\n        description: 'Examples of the Table Widget.',\n        link: '/example-table-basic',\n        type: 'Widget'\n    }, {\n        name: 'example-youtube',\n        description: 'Examples of the YouTube widget.',\n        link: '/example-youtube',\n        type: 'Widget'\n    }\n];\n\n// Check to see if the CyclotronData bucket exists\n// If not, create it with an initial data set\nCyclotron.data.bucketExists(Dashboard.cyclotronDataKey)\n    .then (function (exists) {\n        if (!exists) {\n            console.log('CyclotronData bucket not found, initializing...');\n            \n            Cyclotron.data.createBucket(Dashboard.cyclotronDataKey, defaultDataSet)\n                .then (function (bucket) {\n                    console.log('CyclotronData bucket initialized!');\n                    Cyclotron.dataSources['portal-data'].execute(true);\n                    alertify.log('Initialization complete', 2500);\n                }).catch(function (error) {\n                    console.log(error);\n                });\n        }\n    }).catch(function (error) {\n        console.log(error);\n    });"
+    }, {
+        "name": "AdminController",
+        "singleLoad": true,
+        "text": "//\n// Angular.js controller used to manage the Admin page\n//\nangular.module('cyclotronApp').controllerProvider.register('AdminController', ['$scope', \n    function($scope) {\n        console.log('Init Angular App');\n        \n        // Store Dashboard configuration object inside Angular scope\n        $scope.Dashboard = Dashboard;\n        \n        $scope.portalData = [];\n        $scope.isDirty = false;\n        \n        // Adds a new row to the data set\n        $scope.addNew = function () {\n            // Push new, empty document to the end of the list\n            $scope.portalData.push({});\n        };\n        \n        // Removes a row from the data set\n        $scope.deleteRow = function (rowIndex) {\n            $scope.portalData.splice(rowIndex, 1);\n        };\n\n        $scope.save = function() {\n            Cyclotron.data.updateBucketData(Dashboard.cyclotronDataKey, $scope.portalData)\n            .then(function() {\n                $scope.isDirty = false;\n                Cyclotron.dataSources['portal-data'].execute(true);\n                alertify.success('Saved changes!', 2500);\n            });\n        };\n        \n        // Initialize controller with data set:\n        Cyclotron.dataSources['portal-data'].execute(false).then(function (data) {\n            $scope.portalData = data['0'].data;\n        });\n    }\n]);"
+    }],
+    "showDashboardControls": false,
+    "sidebar": {
+        "showDashboardSidebar": true,
+        "sidebarContent": [{
+            "heading": "About",
+            "html": "<p>\nThis is a Cyclotron dashboard which uses the built-in CyclotronData storage for storing a list of links.  There is an editor page which allows CRUD operations on the data.\n</p>\n<button class=\"btn\" onClick='Cyclotron.goToPage(3);'>Administration</button>"
+        }]
+    },
+    "styles": [{
+        "name": "Portal Styles",
+        "text": ".button-bar {\n    position: relative; \n    top: 0; \n    right: 0;\n    margin-top: 0.5rem;\n}\n\n.button-bar a {\n    display: inline-block;\n    border-bottom: 0 !important;\n}\n\n.button-bar label {\n    display: inline-block;\n    font-weight: 400;\n    margin-left: 0.5rem;\n}\n\n/* Portal Grid */\n\n.portal-link-container {\n    display: flex;\n    flex-direction: row;\n    flex-wrap: wrap;\n}\n\n.portal-link {\n    display: block;\n    width: 200px;\n    min-height: 120px;\n    flex-grow: 1;\n    flex-shrink: 0;\n    padding: 1rem;\n    margin: 1rem;\n    border: 1px solid #aaa !important;\n    border-left: 6px solid green !important;\n    color: #444 !important;\n}\n\n.portal-link:hover {\n    color: #040404 !important;\n}\n\n.portal-link h1 {\n    font-size: 1.5rem !important;\n    margin-bottom: 1rem;\n}\n.portal-link h2 {\n    font-size: 1.0rem !important;\n}\n.portal-link p.label {\n    display: inline-block;\n    margin-top: 0.5rem;\n}"
+    }],
+    "theme": "light",
+    "themeVariant": "transparent"
+}

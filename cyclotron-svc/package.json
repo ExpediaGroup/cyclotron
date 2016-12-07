@@ -1,7 +1,7 @@
 {
   "name": "cyclotron-svc",
   "description": "Cyclotron: REST API",
-  "version": "1.43.0",
+  "version": "1.44.0",
   "author": "Dave Bauman <dbauman@expedia.com>",
   "license": "MIT",
   "private": true,
@@ -31,7 +31,7 @@
     "ldapjs": "0.7.1",
     "lodash": "~4.14.1",
     "moment": "~2.8.3",
-    "mongoose": "~3.8.33",
+    "mongoose": "~4.5.1",
     "morgan": "~1.5.3",
     "node-uuid": "~1.4.3",
     "passport": "~0.2.2",

@@ -1,0 +1,25 @@
+h3 InfluxDB Data Source
+
+p 
+    a(href='https://docs.influxdata.com/influxdb', target='_blank') InfluxDB 
+    |  is an open source time series database built from the ground up to handle high write and query loads.
+    |  This Data Source supports querying InfluxDB for metrics using 
+    a(href='https://docs.influxdata.com/influxdb/v1.1/query_language/spec/', target='_blank') InfluxQL.
+
+P Please note that it may be necessary to set the optional 
+    em proxy 
+    | property in the Data Source in order to access web sites or services in other domains.  
+    | This property lists other Cyclotron servers which may have the required connectivity. 
+    | By default, this Data Source uses the current Cyclotron environment to proxy the request.
+
+property-table(properties='config.dashboard.properties.dataSources.options.influxdb.properties')
+
+h4 Pre-Processor
+
+p The InfluxDB Data Source supports an optional pre-processor function that will be called before
+    | the Data Source executes.  For more details, see the main Data Sources page.
+
+h4 Post-Processor
+
+p The InfluxDB Data Source supports an optional post-processor function that will be called after
+    | data is loaded.  For more details, see the main Data Sources page.

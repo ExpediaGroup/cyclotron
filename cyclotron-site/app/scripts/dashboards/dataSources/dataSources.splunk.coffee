@@ -71,6 +71,9 @@ cyclotronDataSources.factory 'splunkDataSource', ($q, $http, configService, data
 
         # Successful Result
         successCallback = (proxyResult) ->
+
+            data = []
+            fields = null
             
             # Fix malformed JSON and parse into an array
             try
@@ -78,29 +81,28 @@ cyclotronDataSources.factory 'splunkDataSource', ($q, $http, configService, data
                 results = JSON.parse body
 
                 # Select the final result (non-preview)
-                splunkResult = _.find results, { preview: false }
+                splunkResult = _.find(results, { preview: false }) || _.first(results)
             catch e
                 logService.error 'Unexpected response from Splunk: ' + proxyResult.body
                 splunkResult = null
 
-            return errorCallback 'Error retrieving data from Splunk', -1 unless _.isObject splunkResult
+            if !_.isEmpty results
 
-            errorMessages = _(splunkResult.messages)
-                .filter (message) -> message.type == 'ERROR'
-                .pluck 'text'
-                .value()
+                return errorCallback 'Error retrieving data from Splunk', -1 unless _.isObject splunkResult
 
-            if !_.isEmpty errorMessages
-                return errorCallback 'Splunk Error: ' + errorMessages.join(', '), -1 
+                errorMessages = _(splunkResult.messages)
+                    .filter (message) -> message.type == 'ERROR' or message.type == 'FATAL'
+                    .pluck 'text'
+                    .value()
 
-            data = []
-            fields = null
+                if !_.isEmpty errorMessages
+                    return errorCallback 'Splunk Error: ' + errorMessages.join(', '), -1 
 
-            # Translate from Splunk JSON_rows format to Cyclotron format
-            if !_.isEmpty(splunkResult)
-                fields = splunkResult.fields
-                data = _.map splunkResult.rows, (row) -> 
-                    _.zipObject fields, row
+                # Translate from Splunk JSON_rows format to Cyclotron format
+                if !_.isEmpty(splunkResult)
+                    fields = splunkResult.fields
+                    data = _.map splunkResult.rows, (row) -> 
+                        _.zipObject fields, row
 
             # Return the data
             q.resolve

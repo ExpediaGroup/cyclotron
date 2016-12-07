@@ -39,7 +39,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
     exports = {
 
-        version: '1.43.0'
+        version: '1.44.0'
 
         logging: 
             enableDebug: false
@@ -794,6 +794,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                 
                         cyclotronData:
                             value: 'cyclotronData'
+                            label: 'CyclotronData'
                             icon: 'fa-cloud-download'
                             message: 'Cyclotron has built-in support for a limited amount of data storage using uniquely-named buckets.  Refer to to the Documentation for more details.'
                             properties:
@@ -1028,6 +1029,106 @@ cyclotronServices.factory 'commonConfigService', ->
                                     defaultHidden: true
                                     order: 11
 
+                        influxdb:
+                            value: 'influxdb'
+                            label: 'InfluxDB'
+                            icon: 'fa-cloud-download'
+                            message: '<a href="https://www.influxdata.com/time-series-platform/influxdb/" target="_blank">InfluxDB</a> is an open source time series database built from the ground up to handle high write and query loads.'
+                            properties:
+                                url:
+                                    label: 'URL'
+                                    description: 'The InfluxDB server'
+                                    placeholder: 'InfluxDB Server URL or IP'
+                                    type: 'url'
+                                    inlineJs: true
+                                    required: true
+                                    order: 10
+                                database:
+                                    label: 'Database'
+                                    description: 'Specifies the target InfluxDB database for the query.'
+                                    placeholder: 'Database'
+                                    type: 'string'
+                                    required: true
+                                    inlineJs: true
+                                    inlineEncryption: true
+                                    required: false
+                                    order: 11
+                                query:
+                                    label: 'Query'
+                                    description: 'An InfluxQL query.'
+                                    type: 'string'
+                                    inlineJs: true
+                                    inlineEncryption: true
+                                    required: true
+                                    order: 11
+                                precision:
+                                    label: 'Precision'
+                                    description: 'Overrides the default timestamp precision.'
+                                    type: 'string'
+                                    default: 'ms'
+                                    inlineJs: true
+                                    options:
+                                        h:
+                                            value: 'h'
+                                        m:
+                                            value: 'm'
+                                        s:
+                                            value: 's'
+                                        ms:
+                                            value: 'ms'
+                                        u:
+                                            value: 'u'
+                                        ns:
+                                            value: 'ns'
+                                    order: 11
+                                username:
+                                    label: 'Username'
+                                    description: 'Optional; username for authentication, if enabled.'
+                                    type: 'string'
+                                    inlineJs: true
+                                    inlineEncryption: true
+                                    order: 15
+                                password:
+                                    label: 'Password'
+                                    description: 'Optional; password for authentication, if enabled.'
+                                    type: 'string'
+                                    inputType: 'password'
+                                    inlineJs: true
+                                    inlineEncryption: true
+                                    order: 16
+                                refresh:
+                                    label: 'Auto-Refresh'
+                                    description: 'Optional; specifies the number of seconds after which the Data Source reloads'
+                                    type: 'integer'
+                                    required: false
+                                    placeholder: 'Number of Seconds'
+                                    order: 21
+                                preProcessor:
+                                    label: 'Pre-Processor'
+                                    description: 'Specifies an optional JavaScript function that can inspect and modify the Data Source properties before it is executed. This method will be called before the Data Source is executed, and passed the Data Source object as an argument. This object can be modified, or a new/modified object returned. If this value is not an JavaScript function, it will be ignored.'
+                                    placeholder: 'JavaScript Function'
+                                    type: 'editor'
+                                    editorMode: 'javascript'
+                                    required: false
+                                    defaultHidden: true
+                                    order: 22
+                                postProcessor:
+                                    label: 'Post-Processor'
+                                    description: 'Specifies an optional JavaScript function that can inspect and modify the Graphite result before it is sent to the Widgets. If this value is not an JavaScript function, it will be ignored.'
+                                    placeholder: 'JavaScript Function'
+                                    type: 'editor'
+                                    editorMode: 'javascript'
+                                    required: false
+                                    order: 23
+                                proxy:
+                                    label: 'Proxy Server'
+                                    description: 'Specifies which Proxy server to route the requests through. If omitted, the default proxy sever will be used.'
+                                    type: 'url'
+                                    inlineJs: true
+                                    required: false
+                                    defaultHidden: true
+                                    order: 11
+
                         javascript: 
                             value: 'javascript'
                             label: 'JavaScript'
@@ -1230,6 +1331,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     label: 'Password'
                                     description: 'Password to authenticate with Splunk'
                                     type: 'string'
+                                    inputType: 'password'
                                     required: true
                                     inlineJs: true
                                     inlineEncryption: true
@@ -1480,6 +1582,7 @@ cyclotronServices.factory 'commonConfigService', ->
                 name: ''
                 sidebar:
                     showDashboardSidebar: true
+                pages: []
 
         # Dashboard Sidebar
         dashboardSidebar:
