@@ -39,7 +39,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
     exports = {
 
-        version: '1.44.0'
+        version: '1.45.0'
 
         logging: 
             enableDebug: false
@@ -3081,6 +3081,12 @@ cyclotronServices.factory 'commonConfigService', ->
                         default: 'dddd, MMMM Do YYYY, h:mm:ss a'
                         required: false
                         order: 10
+                    timezone:
+                        label: 'Time Zone'
+                        description: 'Enter time zone of your choice. "http://momentjs.com/timezone/" can help in choosing time zone'
+                        required: false
+                        type: 'string'
+                        order: 11
 
             header:
                 name: 'header'

@@ -1,3 +1,33 @@
+# 1.45.0 (12/21/2016)
+
+## Features
+
+- Clock Widget: Added option for Time Zone
+
+- Moment Timezone: Added to Cyclotron and available for use in Dashboards.  Includes all timezones, with data for years 2010-2020
+
+- Table Widget: Added a JavaScript function to programmatically change the current page in the Table
+
+- Example-London Dashboard: Added the example-london dashboard featured on the http://cyclotron.io page
+
+# 1.44.0 (12/07/2016)
+
+## Features
+
+- InfluxDB Data Source: a new Data Source which runs queries against InfluxDB
+
+- Example Portal Dashboard: a new example which implements a portal with links to various dashboards.  Data is stored internally in CyclotronData, and an admin page is provided for adding/updating/deleting links.
+
+## Bug Fixes
+
+- Splunk Data Source: Fix error handling, avoid displaying error message if query finds no data
+
+- Dashboard Editor: Fixed an issue with editing the Pages JSON before any Pages had been created
+
+- Node.js 7.x: Fix compatibility issues by upgrading Karma and Mongoose versions
+
+- Update included Nginx configuration to point to _public
+
 # 1.43.0 (11/24/2016)
 
 ## Features

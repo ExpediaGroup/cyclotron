@@ -28,7 +28,7 @@
 # Optionally, headers can be provided by the callback as well
 #
 
-cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dataService, logService) ->
+cyclotronApp.controller 'TableWidget', ($scope, $location, $window, dashboardService, dataService, logService) ->
 
     $scope.columnGroups = []
     sortFunction = _.jsEval $scope.widget.sortFunction
@@ -42,6 +42,11 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, dashboardService, dat
 
     if $scope.widget.pagination?.enabled
         $scope.paging.itemsPerPage = $scope.widget.pagination.itemsPerPage
+
+    if $scope.widget.name?
+        $window.Cyclotron.currentPage.widgets[$scope.widget.name].goToPage = (pageNumber) ->
+            $scope.$evalAsync ->
+                $scope.paging.currentPage = 1
     
     $scope.linkTarget = (column) ->
         if column.openLinksInNewWindow?

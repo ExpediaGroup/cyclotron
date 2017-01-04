@@ -22,18 +22,30 @@ cyclotronApp.controller 'ClockWidget', ($scope, $interval, configService) ->
     $scope.widgetContext.allowExport = false
     
     $scope.format = configService.widgets.clock.properties.format.default
-    
+    $scope.timezone = null
+
     # Load user-specified format if defined
-    if $scope.widget.format? 
+    if !_.isEmpty($scope.widget.format) 
         $scope.format = _.jsExec $scope.widget.format
+
+    # Load user-specified time-zone if defined
+    if !_.isEmpty($scope.widget.timezone) 
+        if moment.tz.zone($scope.widget.timezone)
+            $scope.timezone = _.jsExec $scope.widget.timezone 
+        else
+            $scope.widgetContext.dataSourceError = true
+            $scope.widgetContext.dataSourceErrorMessage = '"' + _.jsExec $scope.widget.timezone + '" is not a valid time zone'
 
     # Schedule an update every second
     $scope.updateTime = ->
-        $scope.currentTime = moment().format $scope.format
+        temp = moment()
+        if $scope.timezone? 
+            temp = temp.tz($scope.timezone)
+        $scope.currentTime = temp.format $scope.format
 
     $scope.updateTime()
     $scope.interval = $interval $scope.updateTime, 1000
-        
+    
     #
     # Cleanup
     #

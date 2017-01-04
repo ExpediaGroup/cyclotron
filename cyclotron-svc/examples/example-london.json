@@ -1,0 +1,178 @@
+{
+    "dataSources": [{
+        "name": "unemployment",
+        "postProcessor": "/* Sourced from http://data.london.gov.uk/dataset/london-economy-today */\npp = function (data) {\n    return  _.map(data, function (row) {\n        /* Parse Date string */\n        var matches = /(\\w{3})-\\w{3} (\\d{4})/.exec(row.time);\n        var time = moment(matches[1] + ' ' + matches[2], 'MMM YYYY');\n        row.time = time.valueOf();\n        return row;\n    });\n}",
+        "type": "json",
+        "url": "http://pastebin.com/raw.php?i=Em3ErTvs"
+    }, {
+        "name": "workforce_jobs",
+        "postProcessor": "/* Sourced from http://data.london.gov.uk/dataset/workforce-jobs */\npp = function (data) {\n    return _.map(data, function (row) {\n        /* Parse Date string */\n        var date = moment(row.date, 'MMM-YYYY');\n        row.date = date.valueOf();\n        return row;\n    });\n}",
+        "type": "json",
+        "url": "http://pastebin.com/raw.php?i=awS9PNw4"
+    }, {
+        "name": "workforce_jobs_pie",
+        "postProcessor": "/* Sourced from http://data.london.gov.uk/dataset/workforce-jobs */\npp = function (data) {\n    var last = _.omit(_.last(data), 'date');\n    \n    /* Pivot data for Pie Chart */\n    var r = _.map(_.keys(last), function (key) {\n        return {\n            job_type: _.titleCase(key.replace(/_/g, ' ')).replace('Uk', 'UK'),\n            total: last[key]\n        };\n    });\n    console.log(r);\n    return r;\n}",
+        "type": "json",
+        "url": "http://pastebin.com/raw.php?i=awS9PNw4"
+    }, {
+        "name": "workforce_change",
+        "type": "json",
+        "url": "http://pastebin.com/raw.php?i=FNKThZgt"
+    }],
+    "description": "Demonstration dashboard using data from http://data.london.gov.uk/.  Contains public sector information licensed under the Open Government Licence v2.0.",
+    "name": "example-london",
+    "pages": [{
+        "frequency": 1,
+        "layout": {
+            "gridColumns": 6,
+            "gridHeightAdjustment": -100,
+            "gridRows": 2,
+            "gutter": 8,
+            "margin": 8
+        },
+        "widgets": [{
+            "allowFullscreen": false,
+            "gridWidth": 6,
+            "height": "90px",
+            "html": "<h1 style=\"margin-bottom: 0.3rem\">London/UK Employment and Workforce Statistics</h1>\n<p>Data sourced from the <a href=\"http://data.london.gov.uk/\">London Datastore</a>.  Contains public sector information licensed under the <a href=\"https://www.nationalarchives.gov.uk/doc/open-government-licence/version/2/\">Open Government Licence v2</a>.</p>",
+            "noscroll": true,
+            "themeVariant": "transparent",
+            "widget": "html"
+        }, {
+            "dataSource": "unemployment",
+            "gridHeight": 1,
+            "gridWidth": 3,
+            "highchart": {
+                "chart": {
+                    "spacingTop": 15
+                },
+                "legend": {
+                    "margin": 12,
+                    "padding": 0
+                },
+                "series": [{
+                    "name": "London",
+                    "x": "time",
+                    "y": "london_unemployment_rate"
+                }, {
+                    "name": "UK",
+                    "x": "time",
+                    "y": "uk_unemployment_rate"
+                }],
+                "xAxis": {
+                    "type": "datetime"
+                },
+                "yAxis": {
+                    "title": {
+                        "text": "Unemployment Rate (%)"
+                    }
+                }
+            },
+            "layout": {},
+            "sortBy": ["time"],
+            "title": "Unemployment rate - 16 and over (Seasonally Adjusted)",
+            "widget": "chart"
+        }, {
+            "dataSource": "workforce_jobs",
+            "gridHeight": 1,
+            "gridWidth": 3,
+            "highchart": {
+                "chart": {
+                    "spacingTop": 15
+                },
+                "legend": {
+                    "margin": 12,
+                    "padding": 0
+                },
+                "series": [{
+                    "name": "London",
+                    "x": "date",
+                    "y": "london_total_workforce_jobs"
+                }, {
+                    "name": "UK",
+                    "x": "date",
+                    "y": "uk_total_workforce_jobs",
+                    "yAxis": 1
+                }],
+                "xAxis": {
+                    "type": "datetime"
+                },
+                "yAxis": [{
+                    "title": {
+                        "text": "UK Workforce Jobs"
+                    }
+                }, {
+                    "opposite": true,
+                    "title": {
+                        "text": "London Workforce Jobs"
+                    }
+                }]
+            },
+            "sortBy": ["date"],
+            "title": "Workforce Jobs (Seasonally Adjusted)",
+            "widget": "chart"
+        }, {
+            "columns": [{
+                "label": "Metric",
+                "name": "metric"
+            }, {
+                "group": "Total Workforce Jobs",
+                "label": "UK",
+                "name": "uk_total_workforce_jobs"
+            }, {
+                "border": "right",
+                "group": "Total Workforce Jobs",
+                "label": "London",
+                "name": "london_total_workforce_jobs"
+            }, {
+                "group": "Employee Jobs",
+                "label": "UK",
+                "name": "uk_employee_jobs"
+            }, {
+                "border": "right",
+                "group": "Employee Jobs",
+                "label": "London",
+                "name": "london_employee_jobs"
+            }, {
+                "group": "Self Employed Jobs",
+                "label": "UK",
+                "name": "uk_self_employed_jobs"
+            }, {
+                "group": "Self Employed Jobs",
+                "label": "London",
+                "name": "london_self_employed_jobs"
+            }],
+            "dataSource": "workforce_change",
+            "gridHeight": 1,
+            "gridWidth": 4,
+            "rules": [{
+                "columnsIgnored": ["metric"],
+                "numeralformat": "0.0%",
+                "rule": "'#{metric}'.indexOf('% Change') == 0"
+            }, {
+                "columnsIgnored": ["metric"],
+                "numeralformat": "0,0",
+                "rule": "'#{metric}'.indexOf('Change') == 0"
+            }],
+            "widget": "table"
+        }, {
+            "dataSource": "workforce_jobs_pie",
+            "filters": {
+                "job_type": "/UK (?!Total).*/"
+            },
+            "gridHeight": 1,
+            "gridWidth": 2,
+            "highchart": {
+                "series": [{
+                    "type": "pie",
+                    "x": "job_type",
+                    "y": "total"
+                }]
+            },
+            "title": "UK Workforce Job Types (June 2015)",
+            "widget": "chart"
+        }]
+    }],
+    "parameters": [],
+    "theme": "darkmetro"
+}

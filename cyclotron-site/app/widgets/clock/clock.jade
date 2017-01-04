@@ -1,3 +1,6 @@
 div.clock-widget(ng-controller='ClockWidget')
-    .the-number(number-count='1', is-horizontal='"false"')
-        h1.big {{ currentTime }}
+	h1.title(ng-if='::widget.title') {{ widgetTitle() }}
+	.widget-body
+		.widget-error(ng-if='widgetContext.dataSourceError')
+		.the-number(number-count='1', is-horizontal='"false"', ng-if='widgetContext.dataSourceError == false')
+			h1.big {{ currentTime }}

@@ -133,6 +133,7 @@ gulp.task 'vendor-scripts', ->
             'highcharts.js'
             'd3.js'
             'ng-google-chart.js'
+            'moment.js'
             '**'
         ])
         .pipe concat 'vendor.js'

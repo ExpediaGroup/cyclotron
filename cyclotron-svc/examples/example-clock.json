@@ -9,15 +9,24 @@
             "gridRows": 2
         },
         "widgets": [{
+            "format": "",
             "name": "Default",
+            "timezone": "",
+            "title": "Clock With Default Timezone",
             "widget": "clock"
         }, {
             "format": "HH:mm:ss",
+            "layout": {},
+            "timezone": "America/Los_Angeles",
+            "title": "Clock With Timezone America/Los_Angeles",
             "widget": "clock"
         }, {
             "format": "YYYY-MM-DD",
+            "timezone": "Asia/Kolkata",
+            "title": "Clock With Timezone Asia/Kolkata",
             "widget": "clock"
         }]
     }],
+    "parameters": [],
     "theme": "dark"
 }

@@ -50,6 +50,7 @@
     "masonry": "~4.1.1",
     "metrics-graphics": "2.6.0",
     "moment": "2.13.0",
+    "moment-timezone": "0.5.10",
     "ngTranscludeMod": "izhaki/ngTranscludeMod",
     "node-uuid": "1.4.3",
     "numeraljs": "1.5.3",
