@@ -1,3 +1,4 @@
+#! /bin/bash
 #
 # Cyclotron-svc daemon script
 # chkconfig: 2345 50 50
