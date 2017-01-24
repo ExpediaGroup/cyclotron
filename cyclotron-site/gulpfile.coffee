@@ -2,23 +2,23 @@
 # Copyright (c) 2013-2015 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
-# you may not use this file except in compliance with the License. 
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.opensource.org/licenses/mit-license.php
 #
-# Unless required by applicable law or agreed to in writing, 
-# software distributed under the License is distributed on an 
-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
-# either express or implied. See the License for the specific 
-# language governing permissions and limitations under the License. 
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+# either express or implied. See the License for the specific
+# language governing permissions and limitations under the License.
 ###
 
 gulp = require 'gulp'
 concat = require 'gulp-concat'
 filter = require 'gulp-filter'
 flatten = require 'gulp-flatten'
-order = require 'gulp-order'
+order = require 'gulp-order2'
 output = require 'gulp-output'
 plumber = require 'gulp-plumber'
 rename = require 'gulp-rename'
@@ -41,8 +41,8 @@ coffeelint = require 'gulp-coffeelint'
 uglify = require 'gulp-uglify'
 
 less = require 'gulp-less'
+cleanCss = require 'gulp-clean-css'
 concatCss = require 'gulp-concat-css'
-minifyCSS = require 'gulp-minify-css'
 urlAdjuster = require 'gulp-css-url-adjuster'
 
 webserver = require 'gulp-webserver'
@@ -83,7 +83,7 @@ gulp.task 'bower-install', ->
 gulp.task 'vendor-styles', ->
     cssFilter = filter '*.css'
     lessFilter = filter '**/*.less'
-    
+
     bowerCss = gulp.src mainBowerFiles()
         .pipe cssFilter
 
@@ -99,7 +99,7 @@ gulp.task 'vendor-styles', ->
         .pipe lessFilter
         .pipe less()
         .pipe lessFilter.restore()
-        
+
         .pipe flatten()
         .pipe urlAdjuster { replace:  ['select2','/img/select2'] }
         .pipe urlAdjuster { replace:  [/^\.\/fonts\/.*?\//,'../fonts/'] }
@@ -110,10 +110,10 @@ gulp.task 'vendor-styles', ->
 gulp.task 'vendor-scripts', ->
     jsFilter = filter '*.js'
     webWorkerFilter = filter 'worker-*.js'
-    
+
     bowerScripts = gulp.src mainBowerFiles()
         .pipe jsFilter
-    
+
     vendorScripts = gulp.src './vendor/**/*.js'
 
     scripts = merge(bowerScripts, vendorScripts)
@@ -225,7 +225,7 @@ gulp.task 'scripts', ->
 
 gulp.task 'styles', ->
     lessFilter = filter '**/*.less'
-    
+
     appCommon = gulp.src './app/styles/common/*.less'
         .pipe plumber(plumberError)
         .pipe less()
@@ -267,7 +267,7 @@ gulp.task 'minify', ->
 
     # Minify all css files
     css = gulp.src './_public/**/*.css'
-        .pipe minifyCSS { keepBreaks: true }
+        .pipe cleanCss()
         .pipe gulp.dest './_public'
 
     return merge(js, css)
