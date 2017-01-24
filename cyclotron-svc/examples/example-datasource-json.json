@@ -21,16 +21,13 @@
             "followAllRedirects": "${true}",
             "strictSSL": "${false}"
         },
-        "postProcessor": "pp = function (result) {\n    var firstResult = result.list[0];\n    return [{\n        name: firstResult.name,\n        temp: firstResult.main.temp,\n        humidity: firstResult.main.humidity,\n        description: firstResult.weather[0].main,\n        weather_code: firstResult.weather[0].id\n    }];\n}",
-        "proxy": "http://cyclotrondev.karmalab.net/api",
+        "postProcessor": "pp = function (result) {\n    return [{\n        name: result.name,\n        temp: result.main.temp,\n        humidity: result.main.humidity,\n        description: result.weather[0].main,\n        weather_code: result.weather[0].id\n    }];\n}",
         "queryParameters": {
-            "cnt": "10",
-            "lang": "en",
-            "lat": "47.596573",
-            "lon": "-122.15358"
+            "q": "Bellevue,US",
+            "appid": "8dc809734907311a1ce409b3645c3128"
         },
         "type": "json",
-        "url": "http://api.openweathermap.org/data/2.1/find/city"
+        "url": "http://api.openweathermap.org/data/2.5/weather"
     }],
     "description": "Examples with the JSON data source",
     "disableAnalytics": true,
