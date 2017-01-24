@@ -105,6 +105,8 @@ The `cyclotron-svc/` folder contains the REST API for Cyclotron, which interface
 
     **Windows**: this may need to be run as an Administrator.  Open the Node.js Command Prompt as an Administrator and run the command there.
 
+    **Windows/OSX/Linux**: node-gyp may require certain dependencies to be installed.  See platform-specific instructions [here](https://github.com/nodejs/node-gyp#installation).
+
 3. Create a configuration file at `cyclotron-svc/config/config.js`.  A sample configuration file `sample.config.js` is provided:
 
         cp config/sample.config.js config/config.js
