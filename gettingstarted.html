@@ -60,7 +60,7 @@
           <li>Node.js</li>
         </ul>
         <p>
-          Node.js and MongoDB are available on Linux, OS X, and Windows.  It's 
+          Node.js and MongoDB are available on Linux, macOS, and Windows.  It's 
           possible to run Cyclotron on any of these platforms, 
           although the specific steps may vary.
           
@@ -83,7 +83,7 @@
         <ol class="with-bullets extra-space">
           <li>Install the latest stable version of <a href="http://nodejs.org/">Node.js</a> for your system.  This should install <a href="https://www.npmjs.com/">npm</a> as well.</li>
           <div class="flash-notice">
-            <div class="title">OS X</div>OS X users can install Node.js via <a href="http://brew.sh/">Homebrew</a>:
+            <div class="title">macOS</div>macOS users can install Node.js via <a href="http://brew.sh/">Homebrew</a>:
             <pre class="code">brew install node
 </pre>
           </div>
@@ -109,6 +109,9 @@ npm -v
             <div class="flash-alert">
               <div class="title">Windows:</div>This may need to be run as an Administrator.  Open the Node.js Command Prompt as an Administrator 
               and run the command there.
+            </div>
+            <div class="flash-alert">
+              <div class="title">Windows/macOS/Linux: </div>Node-gyp may require certain prerequisites to avoid warnings during npm installation.  See platform-specific instructions <a href="https://github.com/nodejs/node-gyp#installation">here.</a>
             </div>
           </li>
           <li>Create a configuration file at <code>cyclotron-svc/config/config.js</code>.  A sample configuration file <code>sample.config.js</code> is provided in the same folder:
