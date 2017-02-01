@@ -179,9 +179,6 @@ cyclotronApp.config ($stateProvider, $urlRouterProvider, $locationProvider, $con
             resolve:
                 session: loadExistingSession
                 deps: lazyLoad ['/js/app.mgmt.js'], ['/css/app.mgmt.css']
-                dashboard: ['$q', '$stateParams', 'dashboardService', ($q, $stateParams, dashboardService) ->
-                    dashboardService.getDashboard $stateParams.dashboardName
-                ]
         })
         .state('export', {
             url: '/export/{dashboardName:.*}'

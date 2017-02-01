@@ -1,3 +1,15 @@
+# 1.46.0
+
+## Features
+
+## Bug Fixes
+
+- Dashboard Analytics: Fixed inability to view analytics for dashboards requiring authentication, even when logged in
+
+- Example example-datasource-json: Fixed broken weather API
+
+- Upgraded two library versions to fix builds in Node v6+
+
 # 1.45.0 (12/21/2016)
 
 ## Features

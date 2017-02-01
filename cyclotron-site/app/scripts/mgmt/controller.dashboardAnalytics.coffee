@@ -17,15 +17,9 @@
 #
 # Analytics controller -- for Dashboard analytics
 #
-cyclotronApp.controller 'DashboardAnalyticsController', ($scope, dashboard, analyticsService, dashboardService) ->
+cyclotronApp.controller 'DashboardAnalyticsController', ($scope, $stateParams, $uibModal, analyticsService, dashboardService) ->
 
-    $scope.dashboard = dashboard
-    $scope.dashboardId = dashboard._id
-
-    $scope.createdDate = '?'
-    $scope.lastModifiedDate = moment(dashboard.date).format('MM/DD HH:mm:ss')
-    $scope.longModifiedDate = moment(dashboard.date).format('MM/DD/YYYY HH:mm:ss')
-
+    $scope.dashboardName = $stateParams.dashboardName
 
     $scope.pageViewsOptions = 
         x_accessor: 'date'
@@ -66,7 +60,7 @@ cyclotronApp.controller 'DashboardAnalyticsController', ($scope, dashboard, anal
 
     # Analytics relative to a startDate
     $scope.loadTimeseriesData = ->
-        return unless dashboard.visits > 0
+        return unless $scope.dashboard.visits > 0
 
         timeSpan = $scope.selectedTimespan.split('_')
         if timeSpan.length == 1 then timeSpan.unshift 1
@@ -112,11 +106,62 @@ cyclotronApp.controller 'DashboardAnalyticsController', ($scope, dashboard, anal
             $scope.visits = visits
 
     # Initialize
-    dashboardService.getRevision dashboard.name, 1, (rev) ->
-        $scope.rev1 = rev
-        $scope.createdDate = moment(rev.date).format('MM/DD HH:mm:ss')
-        $scope.longCreatedDate = moment(rev.date).format('MM/DD/YYYY HH:mm:ss')
+    $scope.initialize = ->
+        q = dashboardService.getDashboard $scope.dashboardName
+        q.then (dashboard) ->
 
-    $scope.$watch 'selectedTimespan', (timespan) ->
-        $scope.loadTimeseriesData()
+            $scope.dashboard = dashboard
+            $scope.dashboardId = dashboard._id
+
+            $scope.createdDate = '?'
+            $scope.lastModifiedDate = moment(dashboard.date).format('MM/DD HH:mm:ss')
+            $scope.longModifiedDate = moment(dashboard.date).format('MM/DD/YYYY HH:mm:ss')
+                
+            q2 = dashboardService.getRevision dashboard.name, 1
+
+            q2.then (rev) ->
+                $scope.rev1 = rev
+                $scope.createdDate = moment(rev.date).format('MM/DD HH:mm:ss')
+                $scope.longCreatedDate = moment(rev.date).format('MM/DD/YYYY HH:mm:ss')
+
+                # Add watcher on the timespan control
+                $scope.$watch 'selectedTimespan', (timespan) ->
+                    $scope.loadTimeseriesData()
+
+        q.catch (error) ->
+            switch error.status
+                when 401
+                    $scope.login(true).then ->
+                        $scope.initialize()
+                    return
+                when 403
+                    $scope.dashboardEditors = error.data.data.editors
+                    $scope.dashboardName = $scope.dashboardName
+
+                    $uibModal.open {
+                        templateUrl: '/partials/viewPermissionDenied.html'
+                        scope: $scope
+                        controller: 'GenericErrorModalController'
+                        backdrop: 'static'
+                        keyboard: false
+                    }
+                when 404
+                    $uibModal.open {
+                        templateUrl: '/partials/404.html'
+                        scope: $scope
+                        controller: 'GenericErrorModalController'
+                        backdrop: 'static'
+                        keyboard: false
+                    }
+                else
+                    
+                    $uibModal.open {
+                        templateUrl: '/partials/500.html'
+                        scope: $scope
+                        controller: 'GenericErrorModalController'
+                        backdrop: 'static'
+                        keyboard: false
+                    }
+
+    $scope.initialize()
     

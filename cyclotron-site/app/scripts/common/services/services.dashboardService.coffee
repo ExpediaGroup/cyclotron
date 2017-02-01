@@ -291,14 +291,23 @@ cyclotronServices.factory 'dashboardService', ($http, $resource, $q, analyticsSe
 
         return deferred.promise
 
-    service.getRevision = (dashboardName, rev, callback) ->
-        revisionResource.get {
+    service.getRevision = (dashboardName, rev) ->
+        deferred = $q.defer()
+
+        p = revisionResource.get({
             name: dashboardName
             rev: rev
             session: userService.currentSession()?.key 
-        }, (revision) ->
-            if _.isFunction callback
-                callback(revision)
+        }).$promise 
+
+        p.then (revision) ->
+            deferred.resolve revision
+
+        p.catch (error) ->
+            alertify.error(error?.data || 'Cannot connect to cyclotron-svc (getRevision)', 2500)
+            deferred.reject error
+            
+        return deferred.promise
 
     service.like = (dashboard) ->
         p = likesResource.save2({ 
