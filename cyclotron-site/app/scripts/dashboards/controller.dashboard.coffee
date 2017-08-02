@@ -46,6 +46,7 @@ cyclotronApp.controller 'DashboardController', ($scope, $stateParams, $localFora
     $window.Cyclotron =
         version: configService.version
         currentUser: userService.currentUser()
+        currentUserPassword: userService.cachedPassword
         dataSources: {}
         functions: 
             forceUpdate: -> $scope.$apply()
