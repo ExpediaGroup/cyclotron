@@ -1,3 +1,19 @@
+# 1.48.0
+
+## Bug Fixes
+
+- Table Widget: fixed export to exclude internally-used columns
+
+# 1.47.0
+
+## Features
+
+## Bug Fixes
+
+ - CyclotronData: Fixed incorrect 404 responses for POST /data with a new key
+
+ - Proxy: Proxy request bodies that include an array were getting mangled
+
 # 1.46.0
 
 ## Features

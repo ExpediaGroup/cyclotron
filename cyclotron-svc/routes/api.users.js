@@ -65,7 +65,10 @@ var createSession = function (user, ip) {
         $setOnInsert: {
             firstLogin: new Date()
         }
-    }, { upsert: true})
+    }, { 
+        new: true,
+        upsert: true
+    })
     .then(_.partial(auth.createNewSession, ip))
     .spread(function (session) {
         return session.populateAsync('user');

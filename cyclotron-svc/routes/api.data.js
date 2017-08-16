@@ -89,6 +89,7 @@ exports.putPostSingle = function (req, res) {
         },
         $inc: { rev: 1 }
     }, {
+        new: true,
         upsert: true
     }).exec(_.wrap(res, api.getCallback));
 };

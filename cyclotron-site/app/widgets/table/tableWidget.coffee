@@ -332,26 +332,9 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, $window, dashboardSer
 
             data = eventData.data[dsDefinition.resultSet].data
             isUpdate = eventData.isUpdate
-            
-            # Filter the data if the widget has "filters"
-            if $scope.widget.filters?
-                data = dataService.filter(data, $scope.widget.filters)
-
-            # Check for no data
-            if _.isEmpty data
-                $scope.sortedRows = null
-                $scope.widgetContext.loading = false
-                $scope.widgetContext.allowExport = false
-
-                if $scope.widget.noData?
-                    $scope.widgetContext.nodata = _.jsExec($scope.widget.noData)
-                    
-                else
-                    $scope.widgetContext.nodata = null
-                return
-            else
-                $scope.widgetContext.nodata = null
-                $scope.widgetContext.allowExport = $scope.widget.allowExport != false
+           
+            # Filter and sort the data 
+            data = $scope.filterAndSortWidgetData(data)
 
             data = _.cloneDeep(data)
             _.each data, (row, index) -> row.__index = index
@@ -421,7 +404,7 @@ cyclotronApp.controller 'TableWidget', ($scope, $location, $window, dashboardSer
             $scope.processRules(data, $scope.widget.rules)
 
             # Save and sort rows
-            $scope.sortedRows = $scope.widgetContext.data = data
+            $scope.sortedRows = data
             $scope.sortRows()
 
             $scope.paging.totalItems = $scope.sortedRows.length
