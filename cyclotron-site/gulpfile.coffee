@@ -1,5 +1,5 @@
 ###
-# Copyright (c) 2013-2015 the original author or authors.
+# Copyright (c) 2013-2018 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,22 +22,20 @@ order = require 'gulp-order2'
 output = require 'gulp-output'
 plumber = require 'gulp-plumber'
 rename = require 'gulp-rename'
-sequence = require 'gulp-sequence'
-watch = require 'gulp-watch'
 merge = require 'merge-stream'
 
 fs = require 'fs'
 del = require 'del'
+path = require 'path'
 
 bower = require 'gulp-bower'
 mainBowerFiles = require 'main-bower-files'
 
-jade = require 'gulp-jade'
-
-ngAnnotate = require 'gulp-ng-annotate'
+pug = require 'gulp-pug'
 
 coffee = require 'gulp-coffee'
 coffeelint = require 'gulp-coffeelint'
+ngAnnotate = require 'gulp-ng-annotate'
 uglify = require 'gulp-uglify'
 
 less = require 'gulp-less'
@@ -45,14 +43,15 @@ cleanCss = require 'gulp-clean-css'
 concatCss = require 'gulp-concat-css'
 urlAdjuster = require 'gulp-css-url-adjuster'
 
-webserver = require 'gulp-webserver'
-
-karma = require('karma')
+connect = require 'gulp-connect'
+karma = require 'karma'
 
 _ = require 'lodash'
 
 coffeeOptions =
     bare: true
+    # Use our version instead of bundled
+    coffee: require('coffeescript') 
 
 coffeelintOptions =
     indentation:
@@ -74,15 +73,15 @@ plumberError = (error) ->
     console.log(error)
     this.emit('end')
 
-gulp.task 'clean', (done) ->
-    del(['./_public', './coverage', 'bower_components'], done)
+gulp.task 'clean', -> del(['./_public', './coverage', 'bower_components'])
 
-gulp.task 'bower-install', ->
+gulp.task 'bower-install', -> 
     bower()
+        .pipe(gulp.dest('bower_components'))
 
 gulp.task 'vendor-styles', ->
-    cssFilter = filter '*.css'
-    lessFilter = filter '**/*.less'
+    cssFilter = filter '**/*.css'
+    lessFilter = filter '**/*.less', { restore: true }
 
     bowerCss = gulp.src mainBowerFiles()
         .pipe cssFilter
@@ -98,7 +97,7 @@ gulp.task 'vendor-styles', ->
         #.pipe output { destination: 'css.text'}
         .pipe lessFilter
         .pipe less()
-        .pipe lessFilter.restore()
+        .pipe lessFilter.restore
 
         .pipe flatten()
         .pipe urlAdjuster { replace:  ['select2','/img/select2'] }
@@ -108,11 +107,12 @@ gulp.task 'vendor-styles', ->
         .pipe gulp.dest './_public/css'
 
 gulp.task 'vendor-scripts', ->
-    jsFilter = filter '*.js'
+    jsFilter = filter '**/*.js'
     webWorkerFilter = filter 'worker-*.js'
 
     bowerScripts = gulp.src mainBowerFiles()
         .pipe jsFilter
+        #.pipe output { destination: 'bower.text'}
 
     vendorScripts = gulp.src './vendor/**/*.js'
 
@@ -147,7 +147,7 @@ gulp.task 'vendor-scripts', ->
     merge(scripts, webWorkerScripts)
 
 gulp.task 'vendor-fonts', ->
-    fontFilter = filter ['*.eot', '*.woff*', '*.svg', '*.ttf']
+    fontFilter = filter ['**/*.eot', '**/*.woff*', '**/*.svg', '**/*.ttf']
 
     gulp.src mainBowerFiles()
         .pipe fontFilter
@@ -155,24 +155,27 @@ gulp.task 'vendor-fonts', ->
         .pipe gulp.dest './_public/fonts'
 
 gulp.task 'vendor-img', ->
-    imgFilter = filter ['*.png', '*.gif']
+    imgFilter = filter ['**/*.png', '**/*.gif']
 
     gulp.src mainBowerFiles()
         .pipe imgFilter
         .pipe flatten()
         .pipe gulp.dest './_public/img'
 
-gulp.task 'vendor', sequence('bower-install', ['vendor-fonts', 'vendor-scripts', 'vendor-styles', 'vendor-img'])
+gulp.task 'vendor', gulp.series(
+    'bower-install', 
+    gulp.parallel('vendor-fonts', 'vendor-scripts', 'vendor-styles', 'vendor-img')
+)
 
 gulp.task 'assets', ->
     gulp.src './app/assets/**/*.*'
         .pipe plumber()
         .pipe gulp.dest './_public'
 
-gulp.task 'jade', ->
-    gulp.src './app/**/*.jade'
+gulp.task 'pug', ->
+    gulp.src './app/**/*.pug'
         .pipe plumber()
-        .pipe jade { pretty: true }
+        .pipe pug { pretty: true }
         .pipe gulp.dest './_public'
 
 gulp.task 'scripts', ->
@@ -187,12 +190,12 @@ gulp.task 'scripts', ->
 
     # Slurp the rest
     slurp = (files, dest, annotate) ->
-        coffeeFilter = filter('**/*.coffee')
+        coffeeFilter = filter '**/*.coffee', { restore: true }
         slurpPipe = gulp.src files
             .pipe plumber()
             .pipe coffeeFilter
             .pipe coffee coffeeOptions
-            .pipe coffeeFilter.restore()
+            .pipe coffeeFilter.restore
 
         if annotate == true
             slurpPipe = slurpPipe.pipe(ngAnnotate(ngAnnotateOptions))
@@ -207,6 +210,7 @@ gulp.task 'scripts', ->
         './app/scripts/common/mixins.coffee'
         './app/scripts/common/app.coffee'
         './app/scripts/common/**/*.coffee'
+        './app/scripts/common/**/*.js'
     ], 'app.common.js', true)
 
     slurp(['./app/scripts/dashboards/**/*.coffee'], 'app.dashboards.js', true)
@@ -224,8 +228,6 @@ gulp.task 'scripts', ->
     return merged
 
 gulp.task 'styles', ->
-    lessFilter = filter '**/*.less'
-
     appCommon = gulp.src './app/styles/common/*.less'
         .pipe plumber(plumberError)
         .pipe less()
@@ -273,10 +275,10 @@ gulp.task 'minify', ->
     return merge(js, css)
 
 gulp.task 'watch', ->
-    watch 'app/assets/**/*', -> gulp.start ['assets']
-    watch 'app/**/*.jade', -> gulp.start ['jade']
-    watch 'app/**/*.less', -> gulp.start ['styles']
-    watch 'app/**/*.coffee', -> gulp.start ['scripts']
+    gulp.watch 'app/assets/**/*', gulp.parallel('assets')
+    gulp.watch 'app/**/*.pug', gulp.parallel('pug')
+    gulp.watch 'app/**/*.less', gulp.parallel('styles')
+    gulp.watch 'app/**/*.coffee', gulp.parallel('scripts')
 
 gulp.task 'webserver', ->
     confFolder = '_public/js/conf'
@@ -286,28 +288,28 @@ gulp.task 'webserver', ->
             .pipe rename 'configService.js'
             .pipe gulp.dest confFolder
 
-    gulp.src '_public'
-        .pipe webserver {
-            host: '0.0.0.0'
-            port: 8080
-            https: false
-            livereload: false
-            fallback: 'index.html'
-            open: 'http://localhost:8080'
-        }
+    connect.server {
+        root: '_public'
+        livereload: false
+        host: '0.0.0.0'
+        port: 8080
+        https: false
+        fallback: path.resolve('./_public/index.html')
+        open: 'http://localhost:8080'
+    }
 
 gulp.task 'karma', (done) ->
     new karma.Server({
         configFile: __dirname + '/test/karma-unit.conf.coffee'
         singleRun: true
-    }, done).start()
+    }, () => done()).start()
 
-gulp.task 'test', sequence('scripts', 'karma')
+gulp.task 'test', gulp.series('scripts', 'karma')
 
-gulp.task 'build', ['vendor', 'assets', 'jade', 'styles', 'scripts']
+gulp.task 'build', gulp.parallel('vendor', 'assets', 'pug', 'styles', 'scripts')
 
-gulp.task 'default', ['build']
+gulp.task 'server', gulp.series('build', gulp.parallel('watch', 'webserver'))
 
-gulp.task 'server', sequence('build', ['watch', 'webserver'])
+gulp.task 'production', gulp.series('clean', 'build', 'karma', 'minify')
 
-gulp.task 'production', sequence('clean', 'build', 'test', 'minify')
+gulp.task 'default', gulp.series('build')

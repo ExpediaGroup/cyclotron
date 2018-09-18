@@ -34,9 +34,9 @@ Dashboards are defined declaratively as a JSON document, which contains all the 
 
 * Declarative definition of Dashboards, requiring no HTML or JavaScript (although it's optionally available)
 
-* Included Widgets: Annotation Chart, Chart, Header, HTML, iFrame, Image, Javascript, Number, QRCode, Stoplight, Table, Treemap, Youtube
+* Included Widgets: Annotation Chart, Chart, Header, HTML, iFrame, Image, Javascript, JSON, Number, QRCode, Stoplight, Table, Treemap, Youtube
 
-* Included Data Sources: CyclotronData, Elasticsearch, Graphite, InfluxDB, Javascript, JSON, Splunk
+* Included Data Sources: CyclotronData, Elasticsearch, Graphite, InfluxDB, Javascript, JSON, Prometheus, Splunk
 
 * Built-in data loading, filtering, and sorting
 

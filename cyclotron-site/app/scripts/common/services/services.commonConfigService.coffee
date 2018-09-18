@@ -1,5 +1,5 @@
 ###
-# Copyright (c) 2013-2015 the original author or authors.
+# Copyright (c) 2013-2018 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
 # you may not use this file except in compliance with the License. 
@@ -39,7 +39,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
     exports = {
 
-        version: '1.48.0'
+        version: '2.0.0'
 
         logging: 
             enableDebug: false
@@ -97,30 +97,37 @@ cyclotronServices.factory 'commonConfigService', ->
                             label: 'Charcoal'
                             value: 'charcoal'
                             dashboardBackgroundColor: '#1E2328'
+                            aceTheme: 'solarized_dark'
                         dark:
                             label: 'Dark'
                             value: 'dark'
                             dashboardBackgroundColor: '#2f2f2f'
+                            aceTheme: 'tomorrow_night'
                         darkmetro:
                             label: 'Dark Metro'
                             value: 'darkmetro'
                             dashboardBackgroundColor: '#2f2f2f'
+                            aceTheme: 'tomorrow_night'
                         gto:
                             label: 'GTO'
                             value: 'gto'
                             dashboardBackgroundColor: 'white'
+                            aceTheme: 'chrome'
                         light:
                             label: 'Light'
                             value: 'light'
                             dashboardBackgroundColor: 'white'
+                            aceTheme: 'chrome'
                         lightborderless:
                             label: 'Light (borderless)'
                             value: 'lightborderless'
                             dashboardBackgroundColor: 'white'
+                            aceTheme: 'chrome'
                         dark2:
                             label: 'Very Dark'
                             value: 'dark2'
                             dashboardBackgroundColor: 'black'
+                            aceTheme: 'monokai'
                     order: 5
                 
                 themeVariant:
@@ -1033,7 +1040,7 @@ cyclotronServices.factory 'commonConfigService', ->
                             value: 'influxdb'
                             label: 'InfluxDB'
                             icon: 'fa-cloud-download'
-                            message: '<a href="https://www.influxdata.com/time-series-platform/influxdb/" target="_blank">InfluxDB</a> is an open source time series database built from the ground up to handle high write and query loads.'
+                            message: '<a href="https://www.influxdata.com/time-series-platform/influxdb/" target="_blank">InfluxDB</a> is an open-source time series database built from the ground up to handle high write and query loads.'
                             properties:
                                 url:
                                     label: 'URL'
@@ -1287,6 +1294,88 @@ cyclotronServices.factory 'commonConfigService', ->
                                     type: 'integer'
                                     required: false
                                     placeholder: 'Number of Seconds'
+                                    order: 11
+
+
+                        prometheus:
+                            value: 'prometheus'
+                            label: 'Prometheus'
+                            icon: 'fa-cloud-download'
+                            message: '<a href="https://prometheus.io/" target="_blank">Prometheus</a> is an open-source systems monitoring and alerting toolkit.'
+                            properties:
+                                url:
+                                    label: 'URL'
+                                    description: 'The Prometheus server'
+                                    placeholder: 'Prometheus Server URL or IP'
+                                    type: 'url'
+                                    inlineJs: true
+                                    required: true
+                                    order: 10
+                                query:
+                                    label: 'Query'
+                                    description: 'A Prometheus expression query string.'
+                                    type: 'string'
+                                    inlineJs: true
+                                    inlineEncryption: true
+                                    required: true
+                                    order: 11
+                                start:
+                                    label: 'Start'
+                                    description: 'Specifies the start time for the retrieved time range, in RFC 3339 (ISO 8601) format. If omitted, it defaults to 24 hours ago.'
+                                    placeholder: 'Start Time (ISO 8601 format)'
+                                    type: 'string'
+                                    inlineJs: true
+                                    inlineEncryption: true
+                                    required: false
+                                    order: 12
+                                end:
+                                    label: 'End'
+                                    description: 'Specifies the end time for the retrieved time range, in RFC 3339 (ISO 8601) format. If omitted, it defaults now.'
+                                    placeholder: 'End Time (ISO 8601 format)'
+                                    type: 'string'
+                                    inlineJs: true
+                                    inlineEncryption: true
+                                    required: false
+                                    order: 13
+                                step:
+                                    label: 'Step'
+                                    description: 'Query resolution step width (e.g. 10s, 1m, 4h, etc). If omitted, defaults to 1m.'
+                                    placeholder: 'Step width (10s, 1m, 4h, etc)'
+                                    type: 'string'
+                                    default: '1m'
+                                    inlineJs: true
+                                    order: 14
+                                refresh:
+                                    label: 'Auto-Refresh'
+                                    description: 'Optional; specifies the number of seconds after which the Data Source reloads'
+                                    type: 'integer'
+                                    required: false
+                                    placeholder: 'Number of Seconds'
+                                    order: 21
+                                preProcessor:
+                                    label: 'Pre-Processor'
+                                    description: 'Specifies an optional JavaScript function that can inspect and modify the Data Source properties before it is executed. This method will be called before the Data Source is executed, and passed the Data Source object as an argument. This object can be modified, or a new/modified object returned. If this value is not an JavaScript function, it will be ignored.'
+                                    placeholder: 'JavaScript Function'
+                                    type: 'editor'
+                                    editorMode: 'javascript'
+                                    required: false
+                                    defaultHidden: true
+                                    order: 22
+                                postProcessor:
+                                    label: 'Post-Processor'
+                                    description: 'Specifies an optional JavaScript function that can inspect and modify the Graphite result before it is sent to the Widgets. If this value is not an JavaScript function, it will be ignored.'
+                                    placeholder: 'JavaScript Function'
+                                    type: 'editor'
+                                    editorMode: 'javascript'
+                                    required: false
+                                    order: 23
+                                proxy:
+                                    label: 'Proxy Server'
+                                    description: 'Specifies which Proxy server to route the requests through. If omitted, the default proxy sever will be used.'
+                                    type: 'url'
+                                    inlineJs: true
+                                    required: false
+                                    defaultHidden: true
                                     order: 11
 
                         splunk: 
@@ -3448,6 +3537,20 @@ cyclotronServices.factory 'commonConfigService', ->
                         required: false                        
                         order: 14
 
+            json:
+                name: 'json',
+                label: 'JSON',
+                icon: 'fa-cog',
+                properties:
+                    dataSource:
+                        label: 'Data Source'
+                        description: 'The name of the Data Source providing data for this Widget.'
+                        placeholder: 'Data Source Name'
+                        type: 'string'
+                        required: false
+                        options: datasourceOptions
+                        order: 10
+            
             linkedWidget:
                 name: 'linkedWidget'
                 label: 'Linked Widget'
@@ -4231,7 +4334,6 @@ cyclotronServices.factory 'commonConfigService', ->
                         order: 18
     }  
 
-
     # Copy Theme options to inherited locations
     exports.dashboard.properties.pages.properties.theme.options = exports.dashboard.properties.theme.options
     exports.dashboard.properties.pages.properties.widgets.properties.theme.options = exports.dashboard.properties.theme.options
@@ -4241,7 +4343,6 @@ cyclotronServices.factory 'commonConfigService', ->
 
     # Copy Style options to inherited locations
     exports.dashboard.properties.pages.properties.style.options = exports.dashboard.properties.style.options
-
 
     # Table Widget: Column properties duplicated in Rules:
     tableProperties = exports.widgets.table.properties
@@ -4263,7 +4364,7 @@ cyclotronServices.factory 'commonConfigService', ->
     propertyMapHelper = (value, name) ->
         v = _.cloneDeep value
         v.name = name
-        v
+        return v
 
     # Add Widget and Data Source help pages
     helpDataSources.children = _.map _.sortBy(exports.dashboard.properties.dataSources.options, 'name'), (dataSource) ->

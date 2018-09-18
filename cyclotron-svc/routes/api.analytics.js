@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015 the original author or authors.
+ * Copyright (c) 2013-2018 the original author or authors.
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License. 
@@ -243,13 +243,47 @@ exports.getRecentEvents = function (req, res) {
         .exec(_.wrap(res, api.getCallback));
 };
 
-/* Gets 100 most-visited Dashboards (using cache) */
+/* Gets 100 most-visited Dashboards */
 exports.getTopDashboards = function (req, res) {
-    Dashboards.find({ deleted: false })
-        .select('-dashboard -editors -viewers')
-        .sort('-visits')
-        .limit(req.query.max || 100)
-        .exec(_.wrap(res, api.getCallback));
+    
+    var filters = getFilters(req.query.startDate, req.query.endDate, req.query.dashboard, req.query.resolution);
+    var max = parseInt(req.query.max);
+
+    /* Define match step with start and end dates */
+    var pipeline = getMatchingPipeline(filters);
+
+    /* Create pipeline */
+    pipeline = pipeline.concat({
+        $group: {
+            _id: '$dashboard',
+            pageViews: { $sum: 1 }
+        }
+    }, {
+        $sort: { pageViews: -1 }
+    }, {
+        $limit: max || 100
+    });
+
+    Analytics.aggregate(pipeline).exec(function (err, results) {
+        if (err) {
+            console.log(err);
+            return res.status(500).send(err);
+        }
+
+        Dashboards.populate(results, { 
+            path: '_id', 
+            select: '-dashboard -editors -viewers'
+        }, function (err, populatedResults) {
+            if (err) {
+                console.log(err);
+                return reject(err);
+            }
+
+            res.send(_.compact(_.map(populatedResults, function(result) {
+                return result._id;
+            })));
+        });
+    });
 };
 
 /* Create a filters object */
@@ -735,7 +769,6 @@ var aggregateDataSources = function (pipeline, res) {
     });
 };
 
-
 /* Gets Data Source statistics by Data Source type */
 exports.getDataSourcesByType = function (req, res) {
     
@@ -844,4 +877,3 @@ exports.getDataSourcesByErrorMessage = function (req, res) {
 
     aggregateDataSources(pipeline, res);
 };
-

@@ -1,5 +1,5 @@
 ###
-# Copyright (c) 2013-2015 the original author or authors.
+# Copyright (c) 2013-2018 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
 # you may not use this file except in compliance with the License. 
@@ -128,6 +128,9 @@ cyclotronServices.factory 'dashboardService', ($http, $resource, $q, analyticsSe
     #
     service.dashboards = ->
         dashboardResource
+
+    service.getTrendingDashboards = ->
+        analyticsService.getTopDashboards moment().subtract(3, 'days')
 
     service.getDashboards = (query) ->
         deferred = $q.defer()
@@ -317,7 +320,7 @@ cyclotronServices.factory 'dashboardService', ($http, $resource, $q, analyticsSe
 
         p.then ->
             analyticsService.recordEvent 'like', { dashboardName: dashboard.name }
-            alertify.log('Liked Dashboard', 2500)
+            alertify.log('Starred Dashboard', 2500)
             return
 
         p.catch (error) ->
@@ -336,7 +339,7 @@ cyclotronServices.factory 'dashboardService', ($http, $resource, $q, analyticsSe
 
         p.then ->
             analyticsService.recordEvent 'unlike', { dashboardName: dashboard.name }
-            alertify.log('Unliked Dashboard', 2500)
+            alertify.log('Unstarred Dashboard', 2500)
             return
 
         p.catch (error) ->
@@ -635,6 +638,7 @@ cyclotronServices.factory 'dashboardService', ($http, $resource, $q, analyticsSe
             else visits
 
         return {
+            number: visits
             text: text
             icon: icon
         }

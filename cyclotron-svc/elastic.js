@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 the original author or authors.
+ * Copyright (c) 2016-2018 the original author or authors.
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License. 
@@ -72,57 +72,25 @@ var getYearlyIndexName = function (type, date) {
     return elasticsearchConfig.indexPrefix + '-' + type + '-yearly-' + moment2.format('YYYY') + '-01-01';
 };
 
-/* Determine time-based index naming strategy */
-switch(elasticsearchConfig.pageviewsIndexStrategy) {
-    case 'daily':
-        exports.pageviewsIndexStrategy = _.partial(getDailyIndexName, 'pageviews');
-        break;
-    case 'weekly':
-        exports.pageviewsIndexStrategy = _.partial(getWeeklyIndexName, 'pageviews');
-        break;
-    case 'monthly':
-        exports.pageviewsIndexStrategy = _.partial(getMonthlyIndexName, 'pageviews');
-        break;
-    case 'yearly': 
-        exports.pageviewsIndexStrategy = _.partial(getYearlyIndexName, 'pageviews');
-        break;
-    default: 
-        exports.pageviewsIndexStrategy = _.partial(getWeeklyIndexName, 'pageviews');
+var getIndexStrategyForType = function (type) {
+    switch(elasticsearchConfig[type + 'IndexStrategy']) {
+        case 'daily':
+            return _.partial(getDailyIndexName, type);
+        case 'weekly':
+            return _.partial(getWeeklyIndexName, type);
+        case 'monthly':
+            return _.partial(getMonthlyIndexName, type);
+        case 'yearly': 
+            return _.partial(getYearlyIndexName, type);
+        default: 
+            return _.partial(getWeeklyIndexName, type);
+    }
 }
 
-switch(elasticsearchConfig.datasourcesIndexStrategy) {
-    case 'daily':
-        exports.datasourcesIndexStrategy = _.partial(getDailyIndexName, 'datasources');
-        break;
-    case 'weekly':
-        exports.datasourcesIndexStrategy = _.partial(getWeeklyIndexName, 'datasources');
-        break;
-    case 'monthly':
-        exports.datasourcesIndexStrategy = _.partial(getMonthlyIndexName, 'datasources');
-        break;
-    case 'yearly': 
-        exports.datasourcesIndexStrategy = _.partial(getYearlyIndexName, 'datasources');
-        break;
-    default: 
-        exports.datasourcesIndexStrategy = _.partial(getWeeklyIndexName, 'datasources');
-}
-
-switch(elasticsearchConfig.eventsIndexStrategy) {
-    case 'daily':
-        exports.eventsIndexStrategy = _.partial(getDailyIndexName, 'events');
-        break;
-    case 'weekly':
-        exports.eventsIndexStrategy = _.partial(getWeeklyIndexName, 'events');
-        break;
-    case 'monthly':
-        exports.eventsIndexStrategy = _.partial(getMonthlyIndexName, 'events');
-        break;
-    case 'yearly': 
-        exports.eventsIndexStrategy = _.partial(getYearlyIndexName, 'events');
-        break;
-    default: 
-        exports.eventsIndexStrategy = _.partial(getWeeklyIndexName, 'events');
-}
+/* Determine time-based index naming strategy per type */
+exports.pageviewsIndexStrategy = getIndexStrategyForType('pageviews');
+exports.datasourcesIndexStrategy = getIndexStrategyForType('datasources');
+exports.eventsIndexStrategy = getIndexStrategyForType('events');
 
 /* Create/Update Index Templates */
 var fs = require('fs');
@@ -133,6 +101,7 @@ _(files)
         console.log('Loading Elasticsearch Index Template: ' + file);
         var name = file.replace('.json', '');
         var template = require('./config/' + name);
+        var type = template.template.substring(1).replace('-*', '');
 
         /* Update Template name and alias with prefix */
         template.template = elasticsearchConfig.indexPrefix + template.template;
@@ -149,5 +118,12 @@ _(files)
 
             console.log('Elasticsearch Index Template: ' + file + ' ' + JSON.stringify(response));
         });
+
+        var index = getIndexStrategyForType(type)(new Date());
+        console.log('Initializing index: ' + index);
+        client.indices.create({
+            waitForActiveShards: 1,
+            index: index
+        })
     });
 

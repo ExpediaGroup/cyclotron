@@ -1,5 +1,5 @@
 ###
-# Copyright (c) 2013-2015 the original author or authors.
+# Copyright (c) 2013-2018 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
 # you may not use this file except in compliance with the License. 
@@ -21,6 +21,7 @@ cyclotronApp.controller 'LoginController', ($scope, $uibModalInstance, $localFor
 
     $scope.credentials = {}
     $scope.loginError = false
+    $scope.loggingIn = false
 
     $scope.loginMessage ?= configService.authentication.loginMessage
 
@@ -32,10 +33,12 @@ cyclotronApp.controller 'LoginController', ($scope, $uibModalInstance, $localFor
         focusService.focus 'focusUsername', $scope
 
     $scope.canLogin = ->
-        return !_.isEmpty($scope.credentials.username) && !_.isEmpty($scope.credentials.password)
+        return !_.isEmpty($scope.credentials.username) && !_.isEmpty($scope.credentials.password) && !$scope.loggingIn
 
     $scope.login = ->
+        return if $scope.loggingIn
         $scope.loginError = false
+        $scope.loggingIn = true
         loginPromise = userService.login $scope.credentials.username, $scope.credentials.password
 
         loginPromise.then (session) ->
@@ -44,6 +47,7 @@ cyclotronApp.controller 'LoginController', ($scope, $uibModalInstance, $localFor
 
         loginPromise.catch (error) ->
             $scope.loginError = true
+            $scope.loggingIn = false
             $scope.credentials.password = ''
             focusService.focus 'focusPassword', $scope
 

@@ -30,14 +30,14 @@
     "angular-sanitize": "1.4.9",
     "angular-tablesort": "1.1.0",
     "angular-ui-ace": "0.2.3",
-    "angular-ui-router": "0.2.14",
+    "angular-ui-router": "0.3.2",
     "angular-ui-select": "0.19.1",
     "angular-ui-switch": "~0.1.1",
     "bowser": "1.0.0",
     "c3": "0.4.10",
     "d3": "3.5.6",
     "datetimepicker": "~2.5.4",
-    "font-awesome": "~4.6",
+    "font-awesome": "~4.7",
     "highcharts-release": "4.2.7",
     "jquery": "2.1.4",
     "jquery-fullscreen": "1.1.4",
@@ -78,6 +78,9 @@
         "src-noconflict/mode-mysql.js",
         "src-noconflict/mode-sql.js",
         "src-noconflict/theme-chrome.js",
+        "src-noconflict/theme-monokai.js",
+        "src-noconflict/theme-solarized_dark.js",
+        "src-noconflict/theme-tomorrow_night.js",
         "src-noconflict/worker-css.js",
         "src-noconflict/worker-html.js",
         "src-noconflict/worker-javascript.js",
@@ -140,7 +143,8 @@
         "./font/lato-bold/*",
         "./font/lato-light/*",
         "./font/lato-lightitalic/*",
-        "./font/lato-regular/*"
+        "./font/lato-regular/*",
+        "./font/lato-semibold/*"
       ]
     },
     "masonry": {

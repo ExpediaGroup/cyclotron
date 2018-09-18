@@ -18,7 +18,7 @@ The installation instructions recommend installing Gulp globally using npm.  It 
 
 The longer command is the only disadvantage of this approach.  There are also a few scripts that can be executed via npm:
 
-    npm --run-script build  # Builds website
+    npm run-script build  # Builds website
     npm start               # Starts developement server
     npm test                # Runs unit tests  
 

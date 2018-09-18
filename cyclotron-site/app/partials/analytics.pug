@@ -34,22 +34,22 @@
                 ng-pluralize(count='statistics.revisions.avgRevisionCount', when='{"one": "Revision", "other": "Revisions"}')
                 |  per Dashboard
 
-        h2 Likes
-        dl(title='Total number of likes for all active Dashboards (currently)')
+        h2 Stars
+        dl(title='Total number of stars for all active Dashboards (currently)')
             dt {{ statistics.likes.count | numeraljs:'0,0' }} 
-            dd current Likes
-        dl(title='Total number of times Dashboards have been liked (or re-liked)')
+            dd current Stars
+        dl(title='Total number of times Dashboards have been starred (or re-starred)')
             dt {{ statistics.likeEvents.count | numeraljs:'0,0' }} 
-            dd all-time Likes (including repeats)
-        dl(title='Total number of Dashboard Likes within the past day')
+            dd all-time Stars (including repeats)
+        dl(title='Total number of Dashboard Stars within the past day')
             dt {{ statistics.likeEvents.occurredPastDayCount | numeraljs:'0,0' }} 
-            dd Likes in the past day
-        dl(title='Total number of Dashboard Likes within the last 30 days')
+            dd Stars in the past day
+        dl(title='Total number of Dashboard Stars within the last 30 days')
             dt {{ statistics.likeEvents.occurredPastThirtyDayCount | numeraljs:'0,0' }} 
-            dd Likes in the last 30 days
-        dl(title='Total number of times a Dashboard was unliked')
+            dd Stars in the last 30 days
+        dl(title='Total number of times a Dashboard was unstarred')
             dt {{ statistics.unlikeEvents.count | numeraljs:'0,0' }} 
-            dd Unlikes
+            dd Unstars
         
         h2 Visits
         dl(title='Total number of times any Dashboard was visited')
@@ -125,7 +125,7 @@
                     span.more(ng-click='toggleLimit("topDashboardsLimit")', ng-show='topDashboardsLimit == largeLimit')
                         i.fa.fa-minus-square-o
                         |  less
-                    h2 Most Visited Dashboards (All-Time)
+                    h2 Most Visited Dashboards
                     table.table(ts-wrapper)
                         thead
                             tr

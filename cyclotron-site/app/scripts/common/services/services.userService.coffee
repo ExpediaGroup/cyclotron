@@ -1,5 +1,5 @@
 ###
-# Copyright (c) 2013-2015 the original author or authors.
+# Copyright (c) 2013-2018 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
 # you may not use this file except in compliance with the License. 
@@ -47,8 +47,9 @@ cyclotronServices.factory 'userService', ($http, $localForage, $q, $rootScope, $
 
             if $window.Cyclotron?
                 $window.Cyclotron.currentUser = null
+                $window.Cyclotron.currentUsername = null
                 $window.Cyclotron.currentUserPassword = null
-                
+
             return
 
         isNewUser: true
@@ -68,6 +69,8 @@ cyclotronServices.factory 'userService', ($http, $localForage, $q, $rootScope, $
     $localForage.getItem('username').then (username) ->
         if username?
             exports.cachedUsername = username
+            if $window.Cyclotron?
+                $window.Cyclotron.currentUsername = username
 
     # Load cached userId (not UID)
     $localForage.getItem('cachedUserId').then (userId) ->
@@ -114,6 +117,7 @@ cyclotronServices.factory 'userService', ($http, $localForage, $q, $rootScope, $
 
             $rootScope.$broadcast 'login', { }
             if $window.Cyclotron?
+                $window.Cyclotron.currentUsername = username
                 $window.Cyclotron.currentUser = session.user
             
             alertify.success('Logged in as <strong>' + session.user.name + '</strong>', 2500)

@@ -1,10 +1,12 @@
 ul.nav.nav-pills.nav-stacked
     li(ng-repeat='section in items | filter:filter', ng-class='{active: section.selected == true}') 
-        a(ng-click='selectSection(section)') {{ section.name }}
+        a(ng-click='selectSection(section)') 
+            i.fa.fa-angle-right.text-muted(ng-show="section.selected != true")
+            i.fa.fa-angle-down.text-muted(ng-show="section.selected == true")
+            |  {{ section.name }}
 
         ul.nav.nav-pills.nav-stacked.indent(ng-if='section.expanded == true || isFiltered')
             li(ng-repeat='child in section.children | filter:filter', ng-class='{active: child.selected == true}') 
                 a(ng-click='selectChild(child, section)')
-                    i.fa.fa-angle-right.text-muted
-                    |  {{ child.name }}
+                    | {{ child.name }}
     
