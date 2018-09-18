@@ -61,6 +61,10 @@ cyclotronServices.factory 'configService', (commonConfigService) ->
             # Message displayed when logging in.  Set to null/blank to disable
             loginMessage: 'Please login using your LDAP username and password.'
 
+            # If true, the user's password will be encrypted and cached in the browser
+            # This allows data sources to authenticate with the current user's credentials
+            cacheEncryptedPassword: false
+
         # Analytics settings
         analytics:
             # Enable or disable analytic tracking for dashboards
