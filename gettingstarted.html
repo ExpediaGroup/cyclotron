@@ -7,8 +7,12 @@
     <meta name="description" content="Cyclotron: a web application for constructing dashboards.">
     <meta name="keywords" content="Cyclotron dashboards dashboard Expedia">
     <meta name="author" content="Dave Bauman &lt;dbauman@expedia.com&gt;">
-    <meta name="copyright" content="Copyright 2015, Expedia, Inc.">
+    <meta name="copyright" content="Copyright 2015-2018, Expedia Group">
     <meta http-equiv="ClearType" content="on">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Cyclotron">
+    <meta name="twitter:description" content="Cyclotron: a web application for constructing dashboards.">
+    <meta name="twitter:image" content="img/favicon128.png">
     <title>Cyclotron | Getting Started</title>
     <link rel="icon" type="image/png" href="img/favicon16.png" sizes="16x16">
     <link rel="icon" type="image/png" href="img/favicon32.png" sizes="32x32">
@@ -17,19 +21,19 @@
     <script src="js/vendor.js"></script>
   </head>
   <body>
-    <header role="banner" class="navigation">
-      <div class="navigation-wrapper"><a href="index.html" class="logo"> <img src="img/favicon64.png">
-          <p>Cyclotron</p></a><a id="js-mobile-menu" class="navigation-menu-button"><i class="fa fa-bars"></i></a>
+    <header class="navigation" role="banner">
+      <div class="navigation-wrapper"><a class="logo" href="index.html"><img src="img/favicon64.png">
+          <p>Cyclotron</p></a><a class="navigation-menu-button" id="js-mobile-menu"><i class="fa fa-bars"></i></a>
         <nav role="navigation">
-          <ul id="js-navigation-menu" class="navigation-menu show">
-            <li class="nav-link"><a href="index.html">Home</a></li>
-            <li class="nav-link"><a href="about.html">About</a></li>
-            <li class="nav-link"><a href="gettingstarted.html">Getting Started</a></li>
-            <li class="nav-link"><a href="faq.html">FAQ</a></li>
-            <li class="nav-link"><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron"><i class="fa fa-github"></i> GitHub</a></li>
+          <ul class="navigation-menu show" id="js-navigation-menu">
+            <li class="nav-link" id="home"><a href="index.html">Home</a></li>
+            <li class="nav-link" id="about"><a href="about.html">About</a></li>
+            <li class="nav-link" id="gettingstarted"><a href="gettingstarted.html">Getting Started</a></li>
+            <li class="nav-link" id="faq"><a href="faq.html">FAQ</a></li>
+            <li class="nav-link collapsed-only"><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron"><i class="fab fa-github"></i> GitHub</a></li>
           </ul>
-        </nav>
-      </div><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron" class="fork-me"><img src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+        </nav><a class="github" href="https://github.com/ExpediaInceCommercePlatform/cyclotron" aria-label="View source on Github"><i class="fab fa-github"></i></a>
+      </div>
     </header>
     <script>
       $(document).ready(function() {
@@ -45,8 +49,20 @@
               });
           });
       });
+      
+      var path = window.location.pathname;
+      if (path.indexOf('index.html') > -1) {
+          $('#home').addClass('active');
+      } else if (path.indexOf('about.html') > -1) {
+          $('#about').addClass('active');
+      } else if (path.indexOf('gettingstarted.html') > -1) {
+          $('#gettingstarted').addClass('active');
+      } else if (path.indexOf('faq.html') > -1) {
+          $('#faq').addClass('active');
+      }
     </script>
     <main>
+      <div class="header-padding"></div>
       <div class="container padded">
         <h1>Getting Started</h1>
         <p>
@@ -117,9 +133,7 @@ npm -v
           <li>Create a configuration file at <code>cyclotron-svc/config/config.js</code>.  A sample configuration file <code>sample.config.js</code> is provided in the same folder:
             <pre class="code">cp config/sample.config.js config/config.js</pre>
             <p>
-              The sample config defaults to using a local MongoDB instance, with authentication disabled.  
-              If using a remote MongoDB server or cluster, update the <code>mongodb</code> property accordingly.
-            </p>
+              The sample config defaults to using a local MongoDB instance, with authentication disabled.  If using a remote MongoDB server or cluster, update the <code>mongodb</code> property accordingly.</p>
             <p>If using Active Directory or LDAP, ensure that the property <code>enableAuth</code> is set to true, and that all the <code>ldap</code> properties are filled in correctly, including the service account username and password.</p>
           </li>
           <li>Start the service in node:
@@ -164,9 +178,7 @@ npm -v
           <li> 
             <p>Update the configuration file at <code>_public/js/conf/configService.js</code> as needed.  This file was automatically created from <code>sample.configService.js</code> the first time the project is built.</p>
             <p>
-              This sample config defaults to a local Cyclotron-svc instance, with authentication disabled.
-              If authentication has been enabled in the REST API, it must be enabled in this config as well.
-            </p>
+              This sample config defaults to a local Cyclotron-svc instance, with authentication disabled.If authentication has been enabled in the REST API, it must be enabled in this config as well.</p>
           </li>
         </ol>
         <p>For more information on the Cyclotron website and its configuration, please refer to <code>cyclotron-site/README.md</code>.</p>
@@ -190,8 +202,8 @@ npm -v
           <li>
             <h3>Contact</h3>
           </li>
-          <li><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron"><i class="fa fa-github"></i> GitHub</a></li>
-          <li><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron/issues"><i class="fa fa-github-alt"></i> Report a Bug</a></li>
+          <li><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron"><i class="fab fa-github"></i> GitHub</a></li>
+          <li><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron/issues"><i class="fab fa-github-alt"></i> Report a Bug</a></li>
         </ul>
         <ul>
           <li>
@@ -202,8 +214,8 @@ npm -v
         </ul>
       </div>
       <hr>
-      <p>An Open-Source Project by Expedia, Inc.</p>
-      <p>© Expedia, Inc.</p>
+      <p>An Open-Source Project by Expedia Group</p>
+      <p>© Expedia Group</p>
     </footer>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

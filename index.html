@@ -7,8 +7,12 @@
     <meta name="description" content="Cyclotron: a web application for constructing dashboards.">
     <meta name="keywords" content="Cyclotron dashboards dashboard Expedia">
     <meta name="author" content="Dave Bauman &lt;dbauman@expedia.com&gt;">
-    <meta name="copyright" content="Copyright 2015, Expedia, Inc.">
+    <meta name="copyright" content="Copyright 2015-2018, Expedia Group">
     <meta http-equiv="ClearType" content="on">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Cyclotron">
+    <meta name="twitter:description" content="Cyclotron: a web application for constructing dashboards.">
+    <meta name="twitter:image" content="img/favicon128.png">
     <title>Cyclotron</title>
     <link rel="icon" type="image/png" href="img/favicon16.png" sizes="16x16">
     <link rel="icon" type="image/png" href="img/favicon32.png" sizes="32x32">
@@ -17,19 +21,19 @@
     <script src="js/vendor.js"></script>
   </head>
   <body>
-    <header role="banner" class="navigation">
-      <div class="navigation-wrapper"><a href="index.html" class="logo"> <img src="img/favicon64.png">
-          <p>Cyclotron</p></a><a id="js-mobile-menu" class="navigation-menu-button"><i class="fa fa-bars"></i></a>
+    <header class="navigation" role="banner">
+      <div class="navigation-wrapper"><a class="logo" href="index.html"><img src="img/favicon64.png">
+          <p>Cyclotron</p></a><a class="navigation-menu-button" id="js-mobile-menu"><i class="fa fa-bars"></i></a>
         <nav role="navigation">
-          <ul id="js-navigation-menu" class="navigation-menu show">
-            <li class="nav-link"><a href="index.html">Home</a></li>
-            <li class="nav-link"><a href="about.html">About</a></li>
-            <li class="nav-link"><a href="gettingstarted.html">Getting Started</a></li>
-            <li class="nav-link"><a href="faq.html">FAQ</a></li>
-            <li class="nav-link"><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron"><i class="fa fa-github"></i> GitHub</a></li>
+          <ul class="navigation-menu show" id="js-navigation-menu">
+            <li class="nav-link" id="home"><a href="index.html">Home</a></li>
+            <li class="nav-link" id="about"><a href="about.html">About</a></li>
+            <li class="nav-link" id="gettingstarted"><a href="gettingstarted.html">Getting Started</a></li>
+            <li class="nav-link" id="faq"><a href="faq.html">FAQ</a></li>
+            <li class="nav-link collapsed-only"><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron"><i class="fab fa-github"></i> GitHub</a></li>
           </ul>
-        </nav>
-      </div><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron" class="fork-me"><img src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+        </nav><a class="github" href="https://github.com/ExpediaInceCommercePlatform/cyclotron" aria-label="View source on Github"><i class="fab fa-github"></i></a>
+      </div>
     </header>
     <script>
       $(document).ready(function() {
@@ -45,93 +49,219 @@
               });
           });
       });
+      
+      var path = window.location.pathname;
+      if (path.indexOf('index.html') > -1) {
+          $('#home').addClass('active');
+      } else if (path.indexOf('about.html') > -1) {
+          $('#about').addClass('active');
+      } else if (path.indexOf('gettingstarted.html') > -1) {
+          $('#gettingstarted').addClass('active');
+      } else if (path.indexOf('faq.html') > -1) {
+          $('#faq').addClass('active');
+      }
     </script>
     <main>
-      <div class="hero">
-        <div class="hero-background"></div>
-        <div class="hero-inner">
-          <div class="hero-logo"><img src="img/favicon128.png" alt="Cyclotron">
-            <h1>Cyclotron</h1>
+      <section class="page hero">
+        <div class="container">
+          <div class="hero-background">
+            <div class="rect" id="red"></div>
+            <div class="rect" id="blue"></div>
+            <div class="rect" id="purple"></div>
+            <div class="rect" id="green"></div>
+            <div class="rect" id="yellow"></div>
+            <div class="rect" id="red2"></div>
+            <div class="rect" id="yellow2"></div>
+            <div class="rect" id="green2"></div>
+            <div class="rect" id="blue2"></div>
           </div>
-          <div class="hero-copy">
-            <p>
-              A web application for constructing dashboards.
-              
-              
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="container padded">
-        <h1>An Easier Way to Create Dashboards</h1>
-        <p>
-          Cyclotron is a platform for creating and hosting dashboards, independent of any
-          single data source.  It's a batteries-included solution for
-          loading and visualizing data without programming.  It's the CMS of dashboarding.
-        </p>
-        <h1>Open Source Platform</h1>
-        <p>Cyclotron is an open-source project, with the entire source code available to  <a href="https://github.com/ExpediaInceCommercePlatform/cyclotron"> view and download</a> on GitHub.  With the full source available, it can easily be modified and adapted as needed. It is released under the MIT License.</p>
-        <p>It was created by <a href="http://www.expediainc.com/">Expedia, Inc</a>., and development and maintenance is on-going. Contributions from the larger open-source community are also welcomed&mdash;<a href="faq.html#contributing">see here.</a></p>
-        <div class="links-bar extra-spacing"><a href="about.html" class="big-icon-link"><i class="fa fa-arrow-circle-right"></i><span>More information</span></a><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron" class="big-icon-link"><i class="fa fa-github"></i><span>Download on GitHub</span></a></div>
-      </div>
-      <div class="dark-container">
-        <div class="container padded">
-          <h1>Example Dashboard</h1>
-          <p><a id="dark-theme" class="big-icon-link"><i class="fa fa-moon-o"></i><span>Dark Theme</span></a><a id="light-theme" class="big-icon-link"><i class="fa fa-sun-o"></i><span>Light Theme</span></a></p><a id="dark-example" href="img/example-dashboard-1.png" data-featherlight="image"><img src="img/example-dashboard-1.png" class="large-image"></a><a id="light-example" href="img/example-dashboard-1b.png" data-featherlight="image"><img src="img/example-dashboard-1b.png" class="large-image"></a>
-        </div>
-      </div>
-      <div class="container padded">
-        <h1>Features</h1>
-        <p>Cyclotron provides the framework and plumbing needed to quickly create new Dashboards.</p>
-        <div class="cards">
-          <div class="card">
-            <div class="card-image"><img src="img/card1.png"></div>
-            <div class="card-header">Data Sources &amp; Widgets</div>
-            <div class="card-copy">
-              <p>Cyclotron includes several Data Sources and Widget types to load and visualize data.</p>
+          <div class="hero-inner">
+            <div class="hero-logo">
+              <h1>Cyclotron</h1>
             </div>
-          </div>
-          <div class="card">
-            <div class="card-image"><img src="img/card2.png"></div>
-            <div class="card-header">Programming Not Required</div>
-            <div class="card-copy">
+            <div class="hero-copy">
               <p>
-                Web development experience not required; Cyclotron takes a declarative approach to specifying the
-                configuration of a Dashboard and has hundreds of properties for customization.
+                An easier way to create dashboards.
+                
               </p>
             </div>
           </div>
-          <div class="card">
-            <div class="card-image"><img src="img/card3.png"></div>
-            <div class="card-header">Extensible</div>
-            <div class="card-copy">
-              <p>Go beyond the standard Widgets by embedding custom HTML, JavaScript, and CSS.</p>
+        </div>
+        <div class="section-scroll">
+          <div>Explore</div>
+          <div><i class="fa fa-angle-down"></i></div>
+        </div>
+      </section>
+      <section class="page offwhite" id="intro">
+        <div class="container padded">
+          <div>
+            <h1>An Easier Way to Create Dashboards</h1>
+            <p class="big">
+              Cyclotron is a platform for creating and hosting dashboards, independent of anysingle data source.  It's a batteries-included solution for
+              loading and visualizing data without programming.  It's a CMS for dashboards.
+            </p>
+            <h1>Open Source Platform</h1>
+            <p class="big">
+              Cyclotron is an open-source project, with the entire source code available to
+              <a href="https://github.com/ExpediaInceCommercePlatform/cyclotron">view and download</a> on GitHub.  With the full source available, it can easily be modified and adapted as needed. It is released under the MIT License.
+            </p>
+            <p class="big">
+              It was created by
+              <a href="https://www.expediagroup.com/">Expedia Group</a>, and development and maintenance is on-going. Contributions from the larger open-source community are also welcomed&mdash;<a href="faq.html#contributing">see here.</a>
+            </p>
+            <div class="links-bar extra-spacing"><a class="big-icon-link" href="about.html"><i class="fa fa-arrow-circle-right"></i><span>More information</span></a><a class="big-icon-link" href="https://github.com/ExpediaInceCommercePlatform/cyclotron"><i class="fab fa-github"></i><span>Download on GitHub</span></a></div>
+          </div>
+        </div>
+        <div class="section-scroll">
+          <div>Demo</div>
+          <div><i class="fa fa-angle-down"></i></div>
+        </div>
+      </section>
+      <section class="page magic-blue">
+        <div id="circle1"></div>
+        <div id="circle2"></div>
+        <div id="circle3"></div>
+        <div class="container padded">
+          <div>
+            <h1 class="big-centered">Go ahead, take it for a spin.</h1>
+            <p class="centered"><a class="theme-icon-link" id="light-theme"><i class="fa fa-sun"></i><span>Light</span></a><a class="theme-icon-link" id="dark-theme"><i class="fa fa-moon"></i><span>Dark</span></a><a class="theme-icon-link" id="darkmetro-theme"><i class="fa fa-adjust"></i><span>Dark Metro</span></a><a class="theme-icon-link" id="charcoal-theme"><i class="fa fa-gem"></i><span>Charcoal</span></a></p>
+            <div class="demo">
+              <div class="device ipad">
+                <div class="camera"></div>
+                <div class="screen"><a class="example-image light-example" href="img/demo/laptop-light.png" data-featherlight="image"><img class="large-image" src="img/demo/laptop-light.png"></a><a class="example-image dark-example" href="img/demo/laptop-dark.png" data-featherlight="image"><img class="large-image" src="img/demo/laptop-dark.png"></a><a class="example-image darkmetro-example" href="img/demo/laptop-darkmetro.png" data-featherlight="image"><img class="large-image" src="img/demo/laptop-darkmetro.png"></a><a class="example-image charcoal-example" href="img/demo/laptop-charcoal.png" data-featherlight="image"><img class="large-image" src="img/demo/laptop-charcoal.png"></a></div>
+              </div>
+              <div class="device iphone6">
+                <div class="sleep"></div>
+                <div class="volume"></div>
+                <div class="sensor"></div>
+                <div class="speaker"></div>
+                <div class="screen"><a class="example-image light-example" href="img/demo/phone-light.png" data-featherlight="image"><img class="large-image" src="img/demo/phone-light.png"></a><a class="example-image dark-example" href="img/demo/phone-dark.png" data-featherlight="image"><img class="large-image" src="img/demo/phone-dark.png"></a><a class="example-image darkmetro-example" href="img/demo/phone-darkmetro.png" data-featherlight="image"><img class="large-image" src="img/demo/phone-darkmetro.png"></a><a class="example-image charcoal-example" href="img/demo/phone-charcoal.png" data-featherlight="image"><img class="large-image" src="img/demo/phone-charcoal.png"></a></div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="links-bar"><a href="about.html" class="big-icon-link"><i class="fa fa-arrow-circle-right"></i><span>Learn more</span></a></div>
-      </div>
+        <div class="section-scroll">
+          <div>More</div>
+          <div><i class="fa fa-angle-down"></i></div>
+        </div>
+      </section>
+      <section class="page">
+        <div class="container padded">
+          <div>
+            <h1 class="big-centered">Plug &amp; Play</h1>
+            <h2>Compatible Data Sources</h2>
+            <p class="big">Supports ElasticSearch, Graphite, InfluxDB, and many more!  Extensible with connectors for JSON web services and JavaScript libraries.</p>
+            <div class="list">
+              <div class="round-list-item"><img src="img/logos/cloudwatch-logo.png" alt="Amazon CloudWatch" title="Amazon CloudWatch"></div>
+              <div class="round-list-item"><img src="img/logos/elasticsearch-logo.png" alt="Elasticsearch" title="Elasticsearch"></div>
+              <div class="round-list-item"><img src="img/logos/graphite-logo.png" alt="Graphite" title="Graphite"></div>
+              <div class="round-list-item"><img src="img/logos/influxdb-logo.png" alt="InfluxDB" title="InfluxDB"></div>
+              <div class="round-list-item"><img src="img/logos/prometheus-logo.svg" alt="Prometheus" title="Prometheus"></div>
+              <div class="round-list-item"><img src="img/logos/splunk-logo.png" alt="Splunk" title="Splunk"></div>
+            </div>
+            <h2>Widgets</h2>
+            <p class="big">There are plenty of widgets out of the box, but don’t let us hold you back from building your own!</p>
+            <div class="list">
+              <div class="list-item"><i class="fa fa-chart-area"></i><span> Annotation Chart</span></div>
+              <div class="list-item"><i class="fa fa-chart-bar"></i><span> Chart</span></div>
+              <div class="list-item"><i class="fa fa-heading"></i><span> Header</span></div>
+              <div class="list-item"><i class="fab fa-html5"></i><span> HTML</span></div>
+              <div class="list-item"><i class="fa fa-window-maximize"></i><span> iframe</span></div>
+              <div class="list-item"><i class="fa fa-image"></i><span> Image</span></div>
+              <div class="list-item"><i class="fa fa-code"></i><span> JavaScript</span></div>
+              <div class="list-item"><i class="fa fa-file-code"></i><span> JSON</span></div>
+              <div class="list-item"><i class="fa fa-link"></i><span> Linked Widget</span></div>
+              <div class="list-item"><i class="fa fa-list-ol"></i><span> Number</span></div>
+              <div class="list-item"><i class="fa fa-qrcode"></i><span> QRCode</span></div>
+              <div class="list-item"><i class="fa fa-thermometer-full"></i><span> Stoplight</span></div>
+              <div class="list-item"><i class="fa fa-table"></i><span> Table</span></div>
+              <div class="list-item"><i class="fa fa-tree"></i><span> Treemap</span></div>
+              <div class="list-item"><i class="fab fa-youtube"></i><span> YouTube</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="section-scroll">
+          <div>More</div>
+          <div><i class="fa fa-angle-down"></i></div>
+        </div>
+      </section>
+      <section class="page">
+        <div class="container padded">
+          <div>
+            <h1>Features</h1>
+            <p class="big">Cyclotron provides the framework and plumbing needed to quickly create new Dashboards.</p>
+            <div class="cards">
+              <div class="card">
+                <div class="card-image"><img src="img/card1.png"></div>
+                <div class="card-header">Data Sources &amp; Widgets</div>
+                <div class="card-copy">
+                  <p>Cyclotron includes several Data Sources and Widget types to load and visualize data.</p>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-image"><img src="img/card2.png"></div>
+                <div class="card-header">Programming Not Required</div>
+                <div class="card-copy">
+                  <p>
+                    Web development experience not required; Cyclotron takes a declarative approach to specifying theconfiguration of a Dashboard and has hundreds of properties for customization.</p>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-image"><img src="img/card3.png"></div>
+                <div class="card-header">Extensible</div>
+                <div class="card-copy">
+                  <p>Go beyond the standard Widgets by embedding custom HTML, JavaScript, and CSS.</p>
+                </div>
+              </div>
+            </div>
+            <div class="links-bar"><a class="big-icon-link" href="about.html"><i class="fa fa-arrow-circle-right"></i><span>Learn more</span></a></div>
+          </div>
+        </div>
+      </section>
       <script>
         $(function () {
-            var darkExample = $('#dark-example'),
-                lightExample = $('#light-example'),
-                darkTheme = $('#dark-theme'),
-                lightTheme = $('#light-theme');
+            var darkTheme = $('#dark-theme'),
+                lightTheme = $('#light-theme'),
+                darkMetroTheme = $('#darkmetro-theme'),
+                charcoalTheme = $('#charcoal-theme');
+        
+            var allThemeIcons = $('.theme-icon-link'),
+                allExampleImages = $('.example-image');
         
             darkTheme.click(function() {
-                darkExample.show();
-                darkTheme.css({ opacity: 1 });
-        
-                lightExample.hide();
-                lightTheme.css({ opacity: 0.5 });
+                allExampleImages.removeClass('active');
+                $('.dark-example').addClass('active');
+                allThemeIcons.removeClass('active');
+                darkTheme.addClass('active');
             });
         
             lightTheme.click(function() {
-                lightExample.show();
-                lightTheme.css({ opacity: 1 });
+                allExampleImages.removeClass('active');
+                $('.light-example').addClass('active');
+                allThemeIcons.removeClass('active');
+                lightTheme.addClass('active');
+            });
         
-                darkExample.hide();
-                darkTheme.css({ opacity: 0.5 });
+            darkMetroTheme.click(function() {
+                allExampleImages.removeClass('active');
+                $('.darkmetro-example').addClass('active');
+                allThemeIcons.removeClass('active');
+                darkMetroTheme.addClass('active');
+            });
+        
+            charcoalTheme.click(function() {
+                allExampleImages.removeClass('active');
+                $('.charcoal-example').addClass('active');
+                allThemeIcons.removeClass('active');
+                charcoalTheme.addClass('active');
+            });
+        
+            lightTheme.addClass('active');
+            $('.light-example').addClass('active');
+        
+            $('.section-scroll').click(function() {
+                var top = $(this).closest('section.page').next().offset().top;
+                $('html, body').animate({ scrollTop: top }, 400);
             });
         });
       </script>
@@ -152,8 +282,8 @@
           <li>
             <h3>Contact</h3>
           </li>
-          <li><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron"><i class="fa fa-github"></i> GitHub</a></li>
-          <li><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron/issues"><i class="fa fa-github-alt"></i> Report a Bug</a></li>
+          <li><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron"><i class="fab fa-github"></i> GitHub</a></li>
+          <li><a href="https://github.com/ExpediaInceCommercePlatform/cyclotron/issues"><i class="fab fa-github-alt"></i> Report a Bug</a></li>
         </ul>
         <ul>
           <li>
@@ -164,8 +294,8 @@
         </ul>
       </div>
       <hr>
-      <p>An Open-Source Project by Expedia, Inc.</p>
-      <p>© Expedia, Inc.</p>
+      <p>An Open-Source Project by Expedia Group</p>
+      <p>© Expedia Group</p>
     </footer>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
