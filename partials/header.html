@@ -14,28 +14,25 @@
   </div>
 </header>
 <script>
-  $(document).ready(function() {
-      var menuToggle = $('#js-mobile-menu').unbind();
-      $('#js-navigation-menu').removeClass("show");
+  documentReady(function() {
+      var menuToggle = document.querySelectorAll('#js-mobile-menu')[0];
+      var menu = document.querySelectorAll('#js-navigation-menu')[0];
+      removeClass(menu, 'show');
   
-      menuToggle.on('click', function(e) {
+      menuToggle.addEventListener('click', function(e) {
           e.preventDefault();
-          $('#js-navigation-menu').slideToggle(function(){
-            if($('#js-navigation-menu').is(':hidden')) {
-              $('#js-navigation-menu').removeAttr('style');
-            }
-          });
+          toggleClass(menu, 'show');
       });
   });
   
   var path = window.location.pathname;
   if (path.indexOf('index.html') > -1) {
-      $('#home').addClass('active');
+      addClass(document.querySelectorAll('#home')[0], 'active');
   } else if (path.indexOf('about.html') > -1) {
-      $('#about').addClass('active');
+      addClass(document.querySelectorAll('#about')[0], 'active');
   } else if (path.indexOf('gettingstarted.html') > -1) {
-      $('#gettingstarted').addClass('active');
+      addClass(document.querySelectorAll('#gettingstarted')[0], 'active');
   } else if (path.indexOf('faq.html') > -1) {
-      $('#faq').addClass('active');
+      addClass(document.querySelectorAll('#faq')[0], 'active');
   }
 </script>

@@ -18,6 +18,7 @@
     <link rel="icon" type="image/png" href="img/favicon32.png" sizes="32x32">
     <link rel="stylesheet" href="css/vendor.css">
     <link rel="stylesheet" href="css/app.css">
+    <script src="js/app.js"></script>
     <script src="js/vendor.js"></script>
   </head>
   <body>
@@ -36,29 +37,26 @@
       </div>
     </header>
     <script>
-      $(document).ready(function() {
-          var menuToggle = $('#js-mobile-menu').unbind();
-          $('#js-navigation-menu').removeClass("show");
+      documentReady(function() {
+          var menuToggle = document.querySelectorAll('#js-mobile-menu')[0];
+          var menu = document.querySelectorAll('#js-navigation-menu')[0];
+          removeClass(menu, 'show');
       
-          menuToggle.on('click', function(e) {
+          menuToggle.addEventListener('click', function(e) {
               e.preventDefault();
-              $('#js-navigation-menu').slideToggle(function(){
-                if($('#js-navigation-menu').is(':hidden')) {
-                  $('#js-navigation-menu').removeAttr('style');
-                }
-              });
+              toggleClass(menu, 'show');
           });
       });
       
       var path = window.location.pathname;
       if (path.indexOf('index.html') > -1) {
-          $('#home').addClass('active');
+          addClass(document.querySelectorAll('#home')[0], 'active');
       } else if (path.indexOf('about.html') > -1) {
-          $('#about').addClass('active');
+          addClass(document.querySelectorAll('#about')[0], 'active');
       } else if (path.indexOf('gettingstarted.html') > -1) {
-          $('#gettingstarted').addClass('active');
+          addClass(document.querySelectorAll('#gettingstarted')[0], 'active');
       } else if (path.indexOf('faq.html') > -1) {
-          $('#faq').addClass('active');
+          addClass(document.querySelectorAll('#faq')[0], 'active');
       }
     </script>
     <main>
@@ -128,14 +126,14 @@
             <div class="demo">
               <div class="device ipad">
                 <div class="camera"></div>
-                <div class="screen"><a class="example-image light-example" href="img/demo/laptop-light.png" data-featherlight="image"><img class="large-image" src="img/demo/laptop-light.png"></a><a class="example-image dark-example" href="img/demo/laptop-dark.png" data-featherlight="image"><img class="large-image" src="img/demo/laptop-dark.png"></a><a class="example-image darkmetro-example" href="img/demo/laptop-darkmetro.png" data-featherlight="image"><img class="large-image" src="img/demo/laptop-darkmetro.png"></a><a class="example-image charcoal-example" href="img/demo/laptop-charcoal.png" data-featherlight="image"><img class="large-image" src="img/demo/laptop-charcoal.png"></a></div>
+                <div class="screen"><a class="example-image light-example" href="img/demo/laptop-light.png"><img class="large-image" src="img/demo/laptop-light.png"></a><a class="example-image dark-example" href="img/demo/laptop-dark.png"><img class="large-image" src="img/demo/laptop-dark.png"></a><a class="example-image darkmetro-example" href="img/demo/laptop-darkmetro.png"><img class="large-image" src="img/demo/laptop-darkmetro.png"></a><a class="example-image charcoal-example" href="img/demo/laptop-charcoal.png"><img class="large-image" src="img/demo/laptop-charcoal.png"></a></div>
               </div>
               <div class="device iphone6">
                 <div class="sleep"></div>
                 <div class="volume"></div>
                 <div class="sensor"></div>
                 <div class="speaker"></div>
-                <div class="screen"><a class="example-image light-example" href="img/demo/phone-light.png" data-featherlight="image"><img class="large-image" src="img/demo/phone-light.png"></a><a class="example-image dark-example" href="img/demo/phone-dark.png" data-featherlight="image"><img class="large-image" src="img/demo/phone-dark.png"></a><a class="example-image darkmetro-example" href="img/demo/phone-darkmetro.png" data-featherlight="image"><img class="large-image" src="img/demo/phone-darkmetro.png"></a><a class="example-image charcoal-example" href="img/demo/phone-charcoal.png" data-featherlight="image"><img class="large-image" src="img/demo/phone-charcoal.png"></a></div>
+                <div class="screen"><a class="example-image light-example" href="img/demo/phone-light.png"><img class="large-image" src="img/demo/phone-light.png"></a><a class="example-image dark-example" href="img/demo/phone-dark.png"><img class="large-image" src="img/demo/phone-dark.png"></a><a class="example-image darkmetro-example" href="img/demo/phone-darkmetro.png"><img class="large-image" src="img/demo/phone-darkmetro.png"></a><a class="example-image charcoal-example" href="img/demo/phone-charcoal.png"><img class="large-image" src="img/demo/phone-charcoal.png"></a></div>
               </div>
             </div>
           </div>
@@ -219,50 +217,56 @@
         </div>
       </section>
       <script>
-        $(function () {
-            var darkTheme = $('#dark-theme'),
-                lightTheme = $('#light-theme'),
-                darkMetroTheme = $('#darkmetro-theme'),
-                charcoalTheme = $('#charcoal-theme');
+        documentReady(function () {
+            var darkTheme = document.querySelector('#dark-theme'),
+                lightTheme = document.querySelector('#light-theme'),
+                darkMetroTheme = document.querySelector('#darkmetro-theme'),
+                charcoalTheme = document.querySelector('#charcoal-theme');
         
-            var allThemeIcons = $('.theme-icon-link'),
-                allExampleImages = $('.example-image');
+            var allThemeIcons = document.querySelectorAll('.theme-icon-link'),
+                allExampleImages = document.querySelectorAll('.example-image');
         
-            darkTheme.click(function() {
-                allExampleImages.removeClass('active');
-                $('.dark-example').addClass('active');
-                allThemeIcons.removeClass('active');
-                darkTheme.addClass('active');
+            function clearAll() {
+                removeClass(allThemeIcons, 'active');
+                removeClass(allExampleImages, 'active');
+            }
+        
+            darkTheme.addEventListener('click', function() {
+                clearAll();
+                addClass(document.querySelectorAll('.dark-example'), 'active');
+                addClass(darkTheme, 'active');
             });
         
-            lightTheme.click(function() {
-                allExampleImages.removeClass('active');
-                $('.light-example').addClass('active');
-                allThemeIcons.removeClass('active');
-                lightTheme.addClass('active');
+            lightTheme.addEventListener('click', function() {
+                clearAll();
+                addClass(document.querySelectorAll('.light-example'), 'active');
+                addClass(lightTheme, 'active');
             });
         
-            darkMetroTheme.click(function() {
-                allExampleImages.removeClass('active');
-                $('.darkmetro-example').addClass('active');
-                allThemeIcons.removeClass('active');
-                darkMetroTheme.addClass('active');
+            darkMetroTheme.addEventListener('click', function() {
+                clearAll();
+                addClass(document.querySelectorAll('.darkmetro-example'), 'active');
+                addClass(darkMetroTheme, 'active');
             });
         
-            charcoalTheme.click(function() {
-                allExampleImages.removeClass('active');
-                $('.charcoal-example').addClass('active');
-                allThemeIcons.removeClass('active');
-                charcoalTheme.addClass('active');
+            charcoalTheme.addEventListener('click', function() {
+                clearAll();
+                addClass(document.querySelectorAll('.charcoal-example'), 'active');
+                addClass(charcoalTheme, 'active');
             });
         
-            lightTheme.addClass('active');
-            $('.light-example').addClass('active');
+            addClass(lightTheme, 'active');
+            addClass(document.querySelectorAll('.light-example'), 'active');
         
-            $('.section-scroll').click(function() {
-                var top = $(this).closest('section.page').next().offset().top;
-                $('html, body').animate({ scrollTop: top }, 400);
-            });
+            var scrollHandler = function(el, i){
+                el.addEventListener('click', function() {
+                    el.closest('section.page').nextElementSibling.scrollIntoView({ block: 'start',  behavior: 'smooth' });
+                });
+            }
+        
+            Array.prototype.forEach.call(document.querySelectorAll('.section-scroll'), scrollHandler);
+        
+            baguetteBox.run('.example-image');
         });
       </script>
     </main>
