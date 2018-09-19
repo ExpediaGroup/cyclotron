@@ -1,5 +1,5 @@
 ###
-# Copyright (c) 2013-2015 the original author or authors.
+# Copyright (c) 2013-2018 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
 # you may not use this file except in compliance with the License. 
@@ -68,9 +68,6 @@ cyclotronApp.controller 'AnalyticsController', ($scope, $uibModal, analyticsServ
     # Analytics over time
     $scope.loadLifetimeData = ->
 
-        analyticsService.getTopDashboards().then (dashboards) ->
-            $scope.topDashboards = dashboards
-
         analyticsService.getStatistics().then (statistics) ->
             $scope.statistics = statistics
 
@@ -79,6 +76,9 @@ cyclotronApp.controller 'AnalyticsController', ($scope, $uibModal, analyticsServ
         timeSpan = $scope.selectedTimespan.split('_')
         if timeSpan.length == 1 then timeSpan.unshift 1
         startDate = moment().subtract(timeSpan[0], timeSpan[1])
+
+        analyticsService.getTopDashboards(startDate).then (dashboards) ->
+            $scope.topDashboards = dashboards
 
         analyticsService.getPageViewsOverTime(null, startDate).then (pageViews) ->
             $scope.pageViews = pageViews

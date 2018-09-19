@@ -10,8 +10,8 @@
         i.fa.fa-pause(ng-click='pause()', ng-show='!paused', title='Pause Dashboard page rotation')
         i.fa.fa-play(ng-click='play()', ng-show='paused', ng-class='{ disabled: !canMoveForward() }', title='Start Dashboard page rotation')
         a.fa.fa-download(ng-href='{{ exportUrl }}', target='_blank', title='Export the Dashboard')
-        i.fa.fa-thumbs-o-up(requires-auth, ng-if='!isLiked', ng-click='toggleLike()', title='Like this Dashboard')
-        i.fa.fa-thumbs-up(requires-auth, ng-if='isLiked', ng-click='toggleLike()', title='Unlike this Dashboard')    
+        i.fa.fa-star-o(requires-auth, ng-if='!isLiked', ng-click='toggleLike()', title='Star this Dashboard')
+        i.fa.fa-star(requires-auth, ng-if='isLiked', ng-click='toggleLike()', title='Unstar this Dashboard')    
         i.fa.fa-chevron-right(ng-click='moveForward()', ng-class='{ disabled: !canMoveForward() }', title='Go to the next page')
 
     .dashboard-pages

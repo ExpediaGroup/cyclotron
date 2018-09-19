@@ -1,0 +1,10 @@
+div.json-widget(ng-controller='JsonWidget')
+    h1.title(ng-if='::widget.title') {{ widgetTitle() }}
+    .widget-body
+        .widget-loading(spinjs, ng-if='isLoading()')
+        .widget-error(ng-if='widgetContext.dataSourceError == true && !isLoading()')
+        .widget-nodata(ng-if='widgetContext.nodata && !isLoading()')
+            .fa.fa-exclamation-triangle
+            span  {{ widgetContext.nodata }}
+
+        div(ui-ace='aceOptions', ng-model='jsonData')

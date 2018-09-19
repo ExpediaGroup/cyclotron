@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015 the original author or authors.
+ * Copyright (c) 2013-2018 the original author or authors.
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License. 
@@ -14,12 +14,23 @@
  * language governing permissions and limitations under the License. 
  */
 
+@mainFontFamily: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+@headerFontFamily: "Lato", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+@codeFontFamily: "Menlo", "Monaco", "Consolas", "Courier New", monospace;;
+
 @phonePortraitMaxWidth: 400px;
 
-@accentColor: #4A89DC;
+/* New Colors */
+@primaryColor: #414A56; // #4d8bd9; // #373737;
+@darkAccentColor: #637082; // #3c6fb1; // #5d5e60;
+@lightAccentColor: #EBEBEB;
+
+/* Old Colors */
+@accentColor: #2a86d5;
 @bodyColor: #222;
 @lighterText: #777;
-@highlight-shadow-color: rgba(81, 203, 238, 1);
+@highlight-shadow-color: @darkAccentColor; // #f9a11b;
+
 
 /* Customize scrollbar (webkit) */
 .custom-scrollbar() {
@@ -45,13 +56,11 @@
     color: @color;
     text-decoration: none;
     cursor: pointer;
-
-    border-bottom: 1px solid transparent;
+    border-bottom: 0;
 
     &:hover {
         color: darken(@color, 50%);
         text-decoration: none;
-        border-bottom: 1px dotted #888;
     }
 }
 

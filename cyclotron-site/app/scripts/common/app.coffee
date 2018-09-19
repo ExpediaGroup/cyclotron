@@ -1,5 +1,5 @@
 ###
-# Copyright (c) 2013-2016 the original author or authors.
+# Copyright (c) 2013-2018 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
 # you may not use this file except in compliance with the License. 
@@ -158,6 +158,7 @@ cyclotronApp.config ($stateProvider, $urlRouterProvider, $locationProvider, $con
             data:
                 title: 'Cyclotron | Help'
             resolve:
+                session: loadExistingSession
                 deps: lazyLoad ['/js/app.mgmt.js'], ['/css/app.mgmt.css']
         })
         .state('analytics', {

@@ -38,18 +38,18 @@
                 title='{{ editor.dashboardWrapper.visits }} total visits, {{ editor.dashboardWrapper.pageViews }} total page views')
                 i(class='fa {{ getVisitCategory().icon }}')
                 span  {{ getVisitCategory().text }} 
-                    ng-pluralize(count='getVisitCategory().text', when='{"one": "visit", "other": "visits"}')
+                    ng-pluralize(count='getVisitCategory().number', when='{"one": "visit", "other": "visits"}')
 
-            h2.text-muted.likes-control(requires-auth, 
+            h2.text-muted.stars-control(requires-auth, 
                 ng-hide='editor.isNew || !isLatestRevision() || !editor.likeCount', 
-                title='{{ editor.likeCount }} likes')
-                i.fa.fa-thumbs-up
+                title='{{ editor.likeCount }} stars')
+                i.fa.fa-star
                 span  {{ editor.likeCount }} 
-                    ng-pluralize(count='editor.likeCount', when='{1: "like", "other": "likes"}')
+                    ng-pluralize(count='editor.likeCount', when='{1: "star", "other": "stars"}')
 
             h4.small.text-muted(ng-if='editor.dashboard.description')
                 i.fa.fa-quote-left
-                |  {{ editor.dashboard.description }}
+                | {{ editor.dashboard.description }}
                 i.fa.fa-quote-right
 
             h4.small.text-danger(ng-if='editor.dashboardWrapper.deleted')

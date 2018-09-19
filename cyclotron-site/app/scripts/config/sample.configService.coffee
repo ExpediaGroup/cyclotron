@@ -111,6 +111,10 @@ cyclotronServices.factory 'configService', (commonConfigService) ->
                             properties:
                                 proxy:
                                     options: proxyOptions
+                        prometheus:
+                            properties:
+                                proxy:
+                                    options: proxyOptions
                         splunk:
                             properties:
                                 host:

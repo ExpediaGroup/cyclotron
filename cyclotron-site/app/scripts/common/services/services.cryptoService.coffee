@@ -1,5 +1,5 @@
 ###
-# Copyright (c) 2013-2017 the original author or authors.
+# Copyright (c) 2013-2018 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
 # you may not use this file except in compliance with the License. 

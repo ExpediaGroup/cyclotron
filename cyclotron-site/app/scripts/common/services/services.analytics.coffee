@@ -1,5 +1,5 @@
 ###
-# Copyright (c) 2013-2015 the original author or authors.
+# Copyright (c) 2013-2018 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
 # you may not use this file except in compliance with the License. 
@@ -90,13 +90,9 @@ cyclotronServices.factory 'analyticsService', ($http, $q, $localForage, $locatio
         getDataSourcesByError: (dashboardId, startDate, endDate) ->
             analyticsHelper 'getDataSourcesByError', 'datasourcesbyerrormessage', dashboardId, startDate, endDate
 
-        getTopDashboards: ->
-            $http.get(configService.restServiceUrl + '/analytics/topdashboards')
-            .then (result) ->
-                result.data
-            .catch (error) ->
-                alertify.error 'Cannot connect to cyclotron-svc (getTopDashboards)', 2500
-
+        getTopDashboards: (startDate, endDate) ->
+            analyticsHelper 'getTopDashboards', 'topdashboards', null, startDate, endDate
+    
         getStatistics: ->
             $http.get(configService.restServiceUrl + '/statistics')
             .then (result) ->

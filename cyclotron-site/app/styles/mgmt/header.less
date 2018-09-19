@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015 the original author or authors.
+ * Copyright (c) 2013-2018 the original author or authors.
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License. 
@@ -19,20 +19,26 @@
 
 .cyclotron-header {
 
-    @header-text-color: #333;
+    @header-text-color: white;
+    @header-text-contrast-color: #333;
+    @header-background-color: #414A56;
 
     padding: 8px 19px;
-    border-bottom: 1px solid #aaa;
+    //border-bottom: 1px solid #aaa;
+
     color: @header-text-color;
+    background-color: @header-background-color;
+    
+    a { color: @header-text-color; }
 
     .logo {
         height: 32px;
         vertical-align: top;
         margin-right: .4rem;
+        //filter: contrast(1%) brightness(200%);
     }
 
     h1 { 
-        font-family: "Courier New", Courier, monospace;
         font-weight: 300;
         font-size: 1.5rem;
         line-height: 34px;
@@ -48,21 +54,27 @@
         line-height: 34px;
         font-size: 1.5rem;
 
+        .user-select(none);
+
         a {
             color: @header-text-color;
-            margin: 0 .6rem;
+            padding: 0 .6rem;
         }
 
         i.fa-key {
             color: @highlight-shadow-color;
         }
 
-        .user-select(none);
+        .user {
+            img {
+                border-radius: 4px;
+            }
+        }
         
         a:not(.disabled):hover {
             i { 
                 color: @highlight-shadow-color; 
-                .transition-duration(.5s);
+                .transition-duration(.25s);
             }
         }
 
@@ -79,16 +91,23 @@
                 margin: auto;
             }
 
+            li {
+                a {
+                    color: @header-text-contrast-color;
+                }
+            }
+
             .dropdown-header {
                 text-align: left;
                 padding: 0;
-                font-variant: small-caps;
                 background-color: #eee;
                 margin-bottom: .25rem;
 
-                a:hover {
-                    border-bottom-color: transparent;
-                    background-color: #eee;
+                a {
+                    &:hover {
+                        border-bottom-color: transparent;
+                        background-color: #eee;
+                    }
                 }
             }
         }

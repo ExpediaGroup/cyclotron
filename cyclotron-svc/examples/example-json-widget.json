@@ -1,0 +1,43 @@
+{
+    "dataSources": [{
+        "format": "object",
+        "name": "mock",
+        "query": "SOURCE=mock",
+        "type": "mock"
+    }, {
+        "name": "worldpop",
+        "type": "json",
+        "url": "http://pastebin.com/raw.php?i=bCYyj12n"
+    }],
+    "description": "Examples of using the JSON Widget",
+    "disableAnalytics": true,
+    "name": "example-json-widget",
+    "pages": [{
+        "layout": {
+            "gridColumns": 2,
+            "gridRows": 2
+        },
+        "name": "JSON Widgets",
+        "widgets": [{
+            "dataSource": "mock",
+            "title": "Mock Data",
+            "widget": "json"
+        }, {
+            "dataSource": "mock",
+            "theme": "dark",
+            "title": "Mock Data (Dark)",
+            "widget": "json"
+        }, {
+            "dataSource": "worldpop",
+            "title": "World Population",
+            "widget": "json"
+        }, {
+            "dataSource": "worldpop",
+            "theme": "dark",
+            "title": "World Population (Dark)",
+            "widget": "json"
+        }]
+    }],
+    "scripts": [],
+    "theme": "light"
+}

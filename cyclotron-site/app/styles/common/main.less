@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015 the original author or authors.
+ * Copyright (c) 2013-2018 the original author or authors.
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License. 
@@ -21,13 +21,15 @@ html, body {
     padding: 0;
     -webkit-font-smoothing: antialiased; 
 
-    font-family: "Courier New", Courier, monospace;
+    font-family: @mainFontFamily;
+    font-size: 11pt;
 }
 
 h1 { font-weight: 600; font-size: 2rem; margin: 14px 0px; }
-h2 { font-weight: 300; font-size: 1.6rem; margin: 10px 0px;}
+h2 { font-weight: 300; font-size: 1.6rem; margin: 10px 0px; }
 h3 { font-weight: bold; margin-top: 32px; }
-h4 { font-weight: bold; margin-top: 0; margin-bottom: 4px;}
+h4 { font-weight: bold; margin-top: 0; margin-bottom: 4px; }
+h1, h2, h3, h4, h5, h6 { font-family: @headerFontFamily; }
 
 html,
 button,
@@ -116,19 +118,9 @@ table {
     width: 100%;
 }
 
-.errorPage {
-    background-color: black;
-}
-
 /* Occupy space but make invisible */
 .invisible {
     opacity: 0;
-}
-
-.code {
-    border: 1px dashed #999;
-    overflow: auto;
-    padding: 4px;
 }
 
 .ng-cloak { 
@@ -156,10 +148,6 @@ table {
         width: 100%;
         text-align: center;
         margin-top: 2rem;
-
-        a:hover {
-            border-bottom: 0px;
-        }
     }
 }
 

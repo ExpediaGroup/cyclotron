@@ -1,0 +1,28 @@
+h3 Prometheus Data Source
+
+p The Prometheus Data Source connects to any Prometheus server and uses the built-in API to extract raw values.
+    | It can output one or more targets, which can use the full list of 
+    a(href='http://graphite.readthedocs.org/en/latest/functions.html', target='_blank') Graphite functions
+    | .
+
+P Please note that it may be necessary to set the optional 
+    em proxy 
+    | property in the Data Source in order to access web sites or services in other domains.  
+    | This property lists other Cyclotron servers which may have the required connectivity. 
+    | By default, this Data Source uses the current Cyclotron environment to proxy the request.
+    
+p Examples of the Graphite Data Source are available on the 
+    a(href='/example-datasource-graphite') example-datasource-graphite
+    |  dashboard
+
+property-table(properties='config.dashboard.properties.dataSources.options.graphite.properties')
+
+h4 Pre-Processor
+
+p The Graphite Data Source supports an optional pre-processor function that will be called before
+    | the Data Source executes.  For more details, see the main Data Sources page.
+
+h4 Post-Processor
+
+p The Graphite Data Source supports an optional post-processor function that will be called after
+    | data is loaded.  For more details, see the main Data Sources page.

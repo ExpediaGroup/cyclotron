@@ -17,8 +17,8 @@
                     a(ng-href='{{ exportUrl }}', title='Export this Dashboard', target='_blank')
                         i.fa.fa-download
                 td(requires-auth)
-                    i.fa.fa-thumbs-o-up(ng-if='!isLiked', ng-click='toggleLike()', title='Like this Dashboard')
-                    i.fa.fa-thumbs-up(ng-if='isLiked', ng-click='toggleLike()', title='Unlike this Dashboard')    
+                    i.fa.fa-star-o(ng-if='!isLiked', ng-click='toggleLike()', title='Star this Dashboard')
+                    i.fa.fa-star(ng-if='isLiked', ng-click='toggleLike()', title='Unstar this Dashboard')    
 
     .sidebar-accordion
 

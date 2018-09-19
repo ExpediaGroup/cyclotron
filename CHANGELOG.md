@@ -1,8 +1,36 @@
+# 2.0.0
+
+## Features
+
+ - UI Redesign!  New look and feel for the management side of Cyclotron
+
+ - JSON Widget: New Widget which displays pretty-printed JSON data
+
+ - Prometheus Data Source: New Data Source for connecting to Prometheus
+
+ - Search: Additional advanced search terms, e.g. createdby:&lt;user&gt;
+
+ - CacheEncryptedPassword: Add optional setting that stores the user's encrypted password in local memory after logging in, allowing Data Sources to authenticate using the credentials of the current user, rather than a hardcoded account (note: this is disabled by default)
+
+ - "Likes" replaced with "Stars"
+
+ - Numerous upgrades to the build pipeline, including Gulp 4.0, Karma 3.x, etc.
+
+## Bug Fixes
+
+ - Sessions: restore sessions correctly when deeplinking to the /help page
+
+ - Upgraded angular-ui-router to resolve issues where the entire site would reload on navigation changes
+
+## Breaking Changes
+
+ - Upgraded from Jade to Pug; renamed file extensions accordingly
+
 # 1.48.0
 
 ## Bug Fixes
 
-- Table Widget: fixed export to exclude internally-used columns
+ - Table Widget: fixed export to exclude internally-used columns
 
 # 1.47.0
 
