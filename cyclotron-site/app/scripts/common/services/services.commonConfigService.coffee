@@ -39,7 +39,7 @@ cyclotronServices.factory 'commonConfigService', ->
 
     exports = {
 
-        version: '2.0.0'
+        version: '2.0.1'
 
         logging:
             enableDebug: false
