@@ -2,16 +2,16 @@
 # Copyright (c) 2013-2018 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
-# you may not use this file except in compliance with the License. 
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.opensource.org/licenses/mit-license.php
 #
-# Unless required by applicable law or agreed to in writing, 
-# software distributed under the License is distributed on an 
-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
-# either express or implied. See the License for the specific 
-# language governing permissions and limitations under the License. 
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+# either express or implied. See the License for the specific
+# language governing permissions and limitations under the License.
 ###
 
 # Common Config File - all default or shared configs
@@ -39,16 +39,16 @@ cyclotronServices.factory 'commonConfigService', ->
 
     exports = {
 
-        version: '2.0.0'
+        version: '2.0.1'
 
-        logging: 
+        logging:
             enableDebug: false
 
         authentication:
             enable: false
             loginMessage: 'Please login using your LDAP username and password.'
 
-        analytics: 
+        analytics:
             enable: false
 
         newUser:
@@ -129,7 +129,7 @@ cyclotronServices.factory 'commonConfigService', ->
                             dashboardBackgroundColor: 'black'
                             aceTheme: 'monokai'
                     order: 5
-                
+
                 themeVariant:
                     label: 'Theme Variant'
                     description: 'The default Theme Variant for the Dashboard; each Theme may or may not implement each variant. If this property is set, the value will be applies to any Pages that have not specified a Theme Variant. If it is not set, the default variant will be used.'
@@ -152,7 +152,7 @@ cyclotronServices.factory 'commonConfigService', ->
                     type: 'string'
                     default: 'normal'
                     required: false
-                    options: 
+                    options:
                         normal:
                             value: 'normal'
                         fullscreen:
@@ -402,7 +402,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     required: false
                                     inlineJs: true
                                     order: 2
-                                gridHeight: 
+                                gridHeight:
                                     label: 'Grid Rows'
                                     description: 'Specifies the number of vertical grid squares for this widget to occupy. Instead of an absolute height, this sets the relative size based on grid units.'
                                     placeholder: 'Number of Rows'
@@ -418,7 +418,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     default: '1'
                                     required: false
                                     order: 101
-                                height: 
+                                height:
                                     label: 'Height'
                                     description: 'If set, specifies the absolute display height of the widget. Any valid CSS value can be used (e.g. "200px", "40%", etc).'
                                     placeholder: 'Height'
@@ -434,7 +434,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     required: false
                                     defaultHidden: true
                                     order: 103
-                                autoHeight: 
+                                autoHeight:
                                     label: 'Auto-Height (Fit to Contents)'
                                     description: 'If true, disables both the gridHeight and height properties, and allows the Widget to be vertically sized to fit its contents.'
                                     type: 'boolean'
@@ -473,7 +473,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     required: false
                                     defaultHidden: true
                                     order: 120
-                                noscroll: 
+                                noscroll:
                                     label: 'No Scroll'
                                     description: 'If set to true, the widget will not have scrollbars and any overflow will be hidden. The effect of this setting varies per widget.'
                                     type: 'boolean'
@@ -580,7 +580,7 @@ cyclotronServices.factory 'commonConfigService', ->
                             defaultHidden: true
                             order: 12;
 
-                dataSources: 
+                dataSources:
                     label: 'Data Sources'
                     description: 'A list of Data Sources which connect to external services and pull in data for the Dashboard.'
                     type: 'datasources'
@@ -600,7 +600,7 @@ cyclotronServices.factory 'commonConfigService', ->
                             type: 'string'
                             required: true
                             order: 0
-                        filters: 
+                        filters:
                             label: 'Filters'
                             description: 'Optional, but if provided, specifies name-value pairs used to filter the data source\'s result set. Each key specifies a column in the data source, and the value specifies either a single value (string) or a set of values (array of strings). Only rows which have the specifies value(s) will be permitted'
                             type: 'hash'
@@ -609,7 +609,7 @@ cyclotronServices.factory 'commonConfigService', ->
                             required: false
                             defaultHidden: true
                             order: 101
-                        sortBy: 
+                        sortBy:
                             label: 'Sort By'
                             description: 'Optional, specifies the field(s) to sort the data by. If the value is a string, it will sort by that single field. If it is an array of strings, multiple fields will be used to sort, with left-to-right priority. The column name can be prefixed with a + or a - sign to indicate the direction or sort. + is ascending, while - is descending. The default sort direction is ascending, so the + sign does not need to be used. If this property is omitted, the original sort order of the data will be used.'
                             type: 'string[]'
@@ -645,6 +645,7 @@ cyclotronServices.factory 'commonConfigService', ->
                             required: false
                             defaultHidden: true
                             order: 104
+
                     options:
                         cloudwatch:
                             value: 'cloudwatch'
@@ -766,7 +767,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                             inlineJs: true
                                             required: false
                                             order: 9
-                                refresh: 
+                                refresh:
                                     label: 'Auto-Refresh'
                                     description: 'Optional; specifies the number of seconds after which the Data Source reloads'
                                     type: 'integer'
@@ -798,7 +799,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     required: false
                                     defaultHidden: true
                                     order: 11
-                                
+
                         cyclotronData:
                             value: 'cyclotronData'
                             label: 'CyclotronData'
@@ -813,7 +814,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     inlineJs: true
                                     required: true
                                     order: 10
-                                refresh: 
+                                refresh:
                                     label: 'Auto-Refresh'
                                     description: 'Optional; specifies the number of seconds after which the Data Source reloads'
                                     type: 'integer'
@@ -929,7 +930,16 @@ cyclotronServices.factory 'commonConfigService', ->
                                             inlineJs: true
                                             inlineEncryption: true
                                             order: 2
-                                refresh: 
+                                options:
+                                    label: 'Options'
+                                    description: 'Optional request parameters that are passed to the library making the HTTP request.'
+                                    type: 'hash'
+                                    required: false
+                                    inlineJsValue: true
+                                    inlineEncryption: true
+                                    defaultHidden: true
+                                    order: 19
+                                refresh:
                                     label: 'Auto-Refresh'
                                     description: 'Optional; specifies the number of seconds after which the Data Source reloads'
                                     type: 'integer'
@@ -1103,6 +1113,23 @@ cyclotronServices.factory 'commonConfigService', ->
                                     inlineJs: true
                                     inlineEncryption: true
                                     order: 16
+                                insecureSsl:
+                                    label: 'Insecure SSL'
+                                    description: 'If true, disables SSL certificate validation; useful for self-signed certificates.'
+                                    type: 'boolean'
+                                    default: false
+                                    required: false
+                                    defaultHidden: true
+                                    order: 18
+                                options:
+                                    label: 'Options'
+                                    description: 'Optional request parameters that are passed to the library making the HTTP request.'
+                                    type: 'hash'
+                                    required: false
+                                    inlineJsValue: true
+                                    inlineEncryption: true
+                                    defaultHidden: true
+                                    order: 19
                                 refresh:
                                     label: 'Auto-Refresh'
                                     description: 'Optional; specifies the number of seconds after which the Data Source reloads'
@@ -1121,7 +1148,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     order: 22
                                 postProcessor:
                                     label: 'Post-Processor'
-                                    description: 'Specifies an optional JavaScript function that can inspect and modify the Graphite result before it is sent to the Widgets. If this value is not an JavaScript function, it will be ignored.'
+                                    description: 'Specifies an optional JavaScript function that can inspect and modify the result before it is sent to the Widgets. If this value is not an JavaScript function, it will be ignored.'
                                     placeholder: 'JavaScript Function'
                                     type: 'editor'
                                     editorMode: 'javascript'
@@ -1136,12 +1163,12 @@ cyclotronServices.factory 'commonConfigService', ->
                                     defaultHidden: true
                                     order: 11
 
-                        javascript: 
+                        javascript:
                             value: 'javascript'
                             label: 'JavaScript'
                             icon: 'fa-cloud-download'
                             message: 'The JavaScript Data Source allows custom JavaScript to be used to load or generate a Data Source.'
-                            properties: 
+                            properties:
                                 processor:
                                     label: 'Processor'
                                     description: 'Specifies a JavaScript function used to provide data for the Data Source, either by directly returning a data set, or resolving a promise asynchronously. The function is called with an optional promise which can be used for this purpose.'
@@ -1150,7 +1177,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     editorMode: 'javascript'
                                     required: true
                                     order: 10
-                                refresh: 
+                                refresh:
                                     label: 'Auto-Refresh'
                                     description: 'Optional; specifies the number of seconds after which the Data Source reloads'
                                     type: 'integer'
@@ -1209,7 +1236,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     inlineEncryption: true
                                     defaultHidden: true
                                     order: 13
-                                refresh: 
+                                refresh:
                                     label: 'Auto-Refresh'
                                     description: 'Optional; specifies the number of seconds after which the Data Source reloads'
                                     type: 'integer'
@@ -1266,7 +1293,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                             inlineEncryption: true
                                             order: 2
 
-                        mock: 
+                        mock:
                             value: 'mock'
                             label: 'Mock'
                             icon: 'fa-cloud-download'
@@ -1288,14 +1315,13 @@ cyclotronServices.factory 'commonConfigService', ->
                                         ducati:
                                             value: 'ducati'
                                     order: 10
-                                refresh: 
+                                refresh:
                                     label: 'Refresh'
                                     description: 'Optional; specifies the number of seconds after which the Data Source reloads'
                                     type: 'integer'
                                     required: false
                                     placeholder: 'Number of Seconds'
                                     order: 11
-
 
                         prometheus:
                             value: 'prometheus'
@@ -1378,11 +1404,11 @@ cyclotronServices.factory 'commonConfigService', ->
                                     defaultHidden: true
                                     order: 11
 
-                        splunk: 
+                        splunk:
                             value: 'splunk'
                             label: 'Splunk'
                             icon: 'fa-cloud-download'
-                            properties: 
+                            properties:
                                 query:
                                     label: 'Query'
                                     description: 'Splunk query'
@@ -1445,7 +1471,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     defaultHidden: true
                                     required: false
                                     order: 16
-                                refresh: 
+                                refresh:
                                     label: 'Refresh'
                                     description: 'Optional; specifies the number of seconds after which the Data Source reloads'
                                     type: 'integer'
@@ -1485,7 +1511,7 @@ cyclotronServices.factory 'commonConfigService', ->
                     type: 'propertyset[]'
                     default: []
                     required: false
-                    properties: 
+                    properties:
                         name:
                             label: 'Name'
                             description: 'The name used to set or reference this Parameter.'
@@ -1553,7 +1579,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     required: false
                                     default: 'textbox'
                                     order: 2
-                                    options: 
+                                    options:
                                         textbox:
                                             value: 'textbox'
                                         dropdown:
@@ -1588,7 +1614,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         name: ''
                         defaultValue: ''
 
-                scripts: 
+                scripts:
                     label: 'Scripts'
                     description: 'Defines a list of inline JavaScript or external JavaScript URIs that are loaded when the Dashboard initializes.'
                     type: 'propertyset[]'
@@ -1627,7 +1653,7 @@ cyclotronServices.factory 'commonConfigService', ->
                     sample:
                         text: ''
 
-                styles: 
+                styles:
                     label: 'Styles'
                     description: 'Defines a list of inline CSS or external CSS URIs that are loaded when the Dashboard initializes.'
                     type: 'propertyset[]'
@@ -1658,8 +1684,8 @@ cyclotronServices.factory 'commonConfigService', ->
                             order: 1
                     sample:
                         text: ''
-            
-            controls: 
+
+            controls:
                 # Controls how long to display the controls before hiding.
                 duration: 1000
 
@@ -1691,60 +1717,60 @@ cyclotronServices.factory 'commonConfigService', ->
                 children: [
                     {
                         name: 'Quick Start'
-                        path: '/partials/help/quickstart.html' 
+                        path: '/partials/help/quickstart.html'
                         tags: ['help', 'creating', 'tags', 'theme', 'revisions', 'preview', 'data sources', 'pages', 'layout', 'widgets']
                     }
                     {
                         name: 'JSON'
-                        path: '/partials/help/json.html' 
+                        path: '/partials/help/json.html'
                         tags: ['json']
                     }
                     {
                         name: 'Examples'
-                        path: '/partials/help/examples.html' 
+                        path: '/partials/help/examples.html'
                         tags: ['examples', 'cyclotron-examples']
                     }
                     {
                         name: 'Browser Compatibility'
-                        path: '/partials/help/browserCompat.html' 
+                        path: '/partials/help/browserCompat.html'
                         tags: ['browser', 'compatibility', 'firefox', 'chrome', 'internet explorer', 'ie', 'safari', 'browsercheck']
                     }
                     {
                         name: 'Permissions'
-                        path: '/partials/help/permissions.html' 
+                        path: '/partials/help/permissions.html'
                         tags: ['permissions', 'edit permission', 'view permission', 'editors', 'viewers', 'restricted', 'login', 'rest', 'api']
                     }
                     {
                         name: 'Analytics'
-                        path: '/partials/help/analytics.html' 
+                        path: '/partials/help/analytics.html'
                         tags: ['analytics', 'pageviews', 'visits', 'metrics']
                     }
                     {
                         name: 'Encrypted Strings'
-                        path: '/partials/help/encryptedStrings.html' 
+                        path: '/partials/help/encryptedStrings.html'
                         tags: ['encryption', 'encrypted', '!{', 'decrypt', 'encrypt']
                     }
                     {
                         name: 'JavaScript API'
-                        path: '/partials/help/javascriptApi.html' 
+                        path: '/partials/help/javascriptApi.html'
                         tags: ['javascript', 'api', 'scripting']
                     }
                     {
                         name: 'CyclotronData'
-                        path: '/partials/help/cyclotrondata.html' 
+                        path: '/partials/help/cyclotrondata.html'
                         tags: ['cyclotrondata', 'data', 'storage', 'bucket', 'api']
                     }
                     {
                         name: '3rd Party Libraries'
-                        path: '/partials/help/3rdparty.html' 
+                        path: '/partials/help/3rdparty.html'
                         tags: ['libraries', 'jquery', 'moment', 'lodash', 'angular', 'numeral', 'localforage', 'uri', 'bootstrap', 'c3.js', 'd3.js', 'font awesome', 'highcharts', 'masonry', 'metricsgraphics', 'select2', 'spin.js']
                     }
-                    { 
+                    {
                         name: 'Hotkeys'
                         path: '/partials/help/hotkeys.html'
                         tags: ['hotkeys', 'keys', 'shortcuts']
                     }
-                    { 
+                    {
                         name: 'API'
                         path: '/partials/help/api.html'
                         tags: ['api', 'rest', 'service']
@@ -1756,27 +1782,27 @@ cyclotronServices.factory 'commonConfigService', ->
                 path: '/partials/help/dashboards.html'
                 tags: ['dashboards', 'pages', 'dataSources', 'scripts', 'parameters']
                 children: [
-                    { 
+                    {
                         name: 'Pages'
                         path: '/partials/help/pages.html'
                         tags: ['pages', 'widgets']
                     }
-                    { 
+                    {
                         name: 'Layout'
                         path: '/partials/help/layout.html'
                         tags: ['layout', 'grid', 'mobile', 'scrolling', 'position', 'absolute']
                     }
-                    { 
+                    {
                         name: 'Parameters'
                         path: '/partials/help/parameters.html'
                         tags: ['parameters']
                     }
-                    { 
+                    {
                         name: 'Scripts'
                         path: '/partials/help/scripts.html'
                         tags: ['scripts', 'javascript']
                     }
-                    { 
+                    {
                         name: 'Styles'
                         path: '/partials/help/styles.html'
                         tags: ['styles', 'css']
@@ -1802,10 +1828,10 @@ cyclotronServices.factory 'commonConfigService', ->
         }]
 
         # Page settings
-        page: 
-            sample: 
+        page:
+            sample:
                 frequency: 1
-                layout: 
+                layout:
                     gridColumns: 2
                     gridRows: 2
 
@@ -1839,7 +1865,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                 inlineJs: true
                                 type: 'string'
                                 order: 1
-                            format: 
+                            format:
                                 label: 'Format'
                                 description: 'Specifies which format the incoming datetime data is in.'
                                 type: 'string'
@@ -1909,59 +1935,59 @@ cyclotronServices.factory 'commonConfigService', ->
                         required: false
                         inlineJs: true
                         properties:
-                            allValuesSuffix: 
+                            allValuesSuffix:
                                 label: 'All Values Suffix'
                                 description: 'A suffix to be added to all values in the legend and tick labels in the vertical axes.'
                                 placeholder: 'Suffix'
                                 type: 'string'
                                 inlineJs: true
                                 defaultHidden: true
-                            annotationsWidth: 
+                            annotationsWidth:
                                 label: 'Annotations Width'
                                 description: 'The width (in percent) of the annotations area, out of the entire chart area. Must be a number in the range 5-80.'
                                 type: 'integer'
                                 inlineJs: true
                                 defaultHidden: true
-                            displayAnnotations: 
+                            displayAnnotations:
                                 label: 'Display Annotations'
                                 description: 'Controls whether annotations are displayed along with the chart.'
                                 type: 'boolean'
                                 inlineJs: true
                                 default: true
                                 defaultHidden: true
-                            displayAnnotationsFilter: 
+                            displayAnnotationsFilter:
                                 label: 'Display Annotations Filter'
                                 description: 'If set to true, the chart will display a filter control to filter annotations.'
                                 type: 'boolean'
                                 inlineJs: true
                                 default: false
                                 defaultHidden: true
-                            displayDateBarSeparator: 
+                            displayDateBarSeparator:
                                 label: 'Display Date Bar Separator'
                                 description: 'If set to true, the chart will display a small bar separator ( | ) between the series values and the date in the legend.'
                                 type: 'boolean'
                                 inlineJs: true
                                 default: false
                                 defaultHidden: true
-                            displayLegendDots: 
+                            displayLegendDots:
                                 label: 'Display Legend Dots'
                                 description: 'If set to true, the chart will display dots next to the values in the legend text.'
                                 type: 'boolean'
                                 inlineJs: true
                                 defaultHidden: true
-                            displayLegendValues: 
+                            displayLegendValues:
                                 label: 'Display Legend Values'
                                 description: 'If set to true, the chart will display the highlighted values in the legend.'
                                 type: 'boolean'
                                 inlineJs: true
                                 defaultHidden: true
-                            displayRangeSelector: 
+                            displayRangeSelector:
                                 label: 'Display Range Selector'
                                 description: 'If set to true, the chart will display the zoom range selection area (the area at the bottom of the chart).'
                                 type: 'boolean'
                                 inlineJs: true
                                 defaultHidden: true
-                            displayZoomButtons: 
+                            displayZoomButtons:
                                 label: 'Display Zoom Buttons'
                                 description: 'If set to true, the chart will display the zoom buttons ("1d 5d 1m" etc).'
                                 type: 'boolean'
@@ -2051,7 +2077,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                 type: 'datetime'
                                 inlineJs: true
                                 defaultHidden: true
-                        order: 13   
+                        order: 13
                     annotationEditing:
                         label: 'Built-In Annotation Editing'
                         description: 'Optional, but if enabled, allows users to create new annotations for points on the chart.  Annotations are stored automatically within Cyclotron.'
@@ -2082,7 +2108,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                 editorMode: 'javascript'
                                 required: false
                                 order: 1
-                    filters: 
+                    filters:
                         label: 'Filters'
                         description: 'Optional, but if provided, specifies name-value pairs used to filter the data source\'s result set. Each key specifies a column in the data source, and the value specifies either a single value (string) or a set of values (array of strings). Only rows which have the specifies value(s) will be permitted.'
                         type: 'hash'
@@ -2090,7 +2116,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         inlineJsValue: true
                         required: false
                         order: 20
-                    sortBy: 
+                    sortBy:
                         label: 'Sort By'
                         description: 'Optional, specifies the field(s) to sort the data by. If the value is a string, it will sort by that single field. If it is an array of strings, multiple fields will be used to sort, with left-to-right priority. The column name can be prefixed with a + or a - sign to indicate the direction or sort. + is ascending, while - is descending. The default sort direction is ascending, so the + sign does not need to be used. If this property is omitted, the original sort order of the data will be used.'
                         type: 'string[]'
@@ -2098,7 +2124,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         required: false
                         placeholder: 'Column name'
                         order: 20
-                
+
                 # Common options
                 options:
                     displayAnnotations: true
@@ -2150,7 +2176,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         inlineJs: true
                         required: true
                         order: 12
-                    filters: 
+                    filters:
                         label: 'Filters'
                         description: 'Optional, but if provided, specifies name-value pairs used to filter the data source\'s result set. Each key specifies a column in the data source, and the value specifies either a single value (string) or a set of values (array of strings). Only rows which have the specifies value(s) will be permitted.'
                         type: 'hash'
@@ -2158,7 +2184,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         inlineJsValue: true
                         required: false
                         order: 13
-                    sortBy: 
+                    sortBy:
                         label: 'Sort By'
                         description: 'Optional, specifies the field(s) to sort the data by. If the value is a string, it will sort by that single field. If it is an array of strings, multiple fields will be used to sort, with left-to-right priority. The column name can be prefixed with a + or a - sign to indicate the direction or sort. + is ascending, while - is descending. The default sort direction is ascending, so the + sign does not need to be used. If this property is omitted, the original sort order of the data will be used.'
                         type: 'string[]'
@@ -2198,19 +2224,19 @@ cyclotronServices.factory 'commonConfigService', ->
                             activeAxisLabelStyle:
                                 color: '#333'
                                 textDecoration: 'none'
-                        plotOptions: 
-                            series: 
+                        plotOptions:
+                            series:
                                 shadow: false
-                                marker: 
+                                marker:
                                     enabled: false
-                                    states: 
-                                        hover: 
+                                    states:
+                                        hover:
                                             enabled: true
                             bar:
                                 borderWidth: 0
-                            column: 
+                            column:
                                 borderWidth: 0
-                            pie: 
+                            pie:
                                 borderWidth: 0
                         title:
                             style:
@@ -2270,7 +2296,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         subtitle:
                             style:
                                 font: '12px "Lato", sans-serif'
-                        xAxis: 
+                        xAxis:
                             gridLineWidth: 0
                             labels:
                                 style:
@@ -2279,24 +2305,24 @@ cyclotronServices.factory 'commonConfigService', ->
                                 style:
                                     fontSize: '14px'
                                     fontWeight: '300'
-                        yAxis: 
+                        yAxis:
                             alternateGridColor: null
                             minorTickInterval: null
                             lineWidth: 0
                             tickWidth: 0
-                            labels: 
+                            labels:
                                 style:
                                     fontSize: '11px'
                             title:
                                 style:
                                     fontSize: '14px'
                                     fontWeight: '300'
-                        legend: 
+                        legend:
                             borderRadius: 0
                             borderWidth: 0
                             symbolWidth: 40
 
-                    dark: 
+                    dark:
                         colors: [
                             '#007D9D' #Blue
                             '#82B93A' #Green
@@ -2306,7 +2332,7 @@ cyclotronServices.factory 'commonConfigService', ->
                             '#D1D1D0' #Offwhite
                             '#B07288'  #Purple
                         ]
-                        chart: 
+                        chart:
                             backgroundColor: null #'#333333'
                             borderWidth: 0
                             borderRadius: 0
@@ -2323,12 +2349,12 @@ cyclotronServices.factory 'commonConfigService', ->
                             activeDataLabelStyle:
                                 color: '#999'
                                 textDecoration: 'none'
-                        title: 
-                            style: 
+                        title:
+                            style:
                                 color: '#FFF'
                                 font: '16px "Lato", sans-serif'
                                 fontWeight: 'bold'
-                        subtitle: 
+                        subtitle:
                             style:
                                 color: '#FFF'
                                 font: '12px "Lato", sans-serif'
@@ -2345,47 +2371,47 @@ cyclotronServices.factory 'commonConfigService', ->
                                     color: '#EEE'
                                     fontSize: '14px'
                                     fontWeight: '300'
-                        yAxis: 
+                        yAxis:
                             alternateGridColor: null
                             minorTickInterval: null
                             gridLineColor: 'rgba(255, 255, 255, .1)'
                             minorGridLineColor: 'rgba(255,255,255,0.07)'
                             lineWidth: 0
                             tickWidth: 0
-                            labels: 
-                                style: 
+                            labels:
+                                style:
                                     color: '#999'
                                     fontSize: '11px'
-                            title: 
-                                style: 
+                            title:
+                                style:
                                     color: '#EEE'
                                     fontSize: '14px'
                                     fontWeight: '300'
-                        legend: 
+                        legend:
                             borderRadius: 0
                             borderWidth: 0
-                            itemStyle: 
+                            itemStyle:
                                 color: '#CCC'
-                            itemHoverStyle: 
+                            itemHoverStyle:
                                 color: '#FFF'
-                            itemHiddenStyle: 
+                            itemHiddenStyle:
                                 color: '#333'
                             symbolWidth: 40
-                        labels: 
+                        labels:
                             style:
                                 color: '#CCC'
-                        tooltip: 
-                            backgroundColor: 
+                        tooltip:
+                            backgroundColor:
                                 linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                 stops: [
                                     [0, 'rgba(96, 96, 96, .8)']
                                     [1, 'rgba(16, 16, 16, .8)']
                                 ]
                             borderWidth: 0
-                            style: 
+                            style:
                                 color: '#FFF'
                         plotOptions:
-                            series: 
+                            series:
                                 dataLabels:
                                     style:
                                         color: '#999'
@@ -2403,17 +2429,17 @@ cyclotronServices.factory 'commonConfigService', ->
                             line:
                                 dataLabels:
                                     color: '#CCC'
-                                marker: 
+                                marker:
                                     lineColor: '#333'
-                            pie: 
+                            pie:
                                 borderWidth: 0
-                                dataLabels: 
+                                dataLabels:
                                     color: '#999'
                                     fontSize: '14px'
                             spline:
                                 marker:
                                     lineColor: '#333'
-                            scatter: 
+                            scatter:
                                 marker:
                                     lineColor: '#333'
                             candlestick:
@@ -2422,13 +2448,13 @@ cyclotronServices.factory 'commonConfigService', ->
                         toolbar:
                             itemStyle:
                                 color: '#CCC'
-                            
-                        navigation: 
-                            buttonOptions: 
+
+                        navigation:
+                            buttonOptions:
                                 symbolStroke: '#DDDDDD'
                                 hoverSymbolStroke: '#FFFFFF'
-                                theme: 
-                                    fill: 
+                                theme:
+                                    fill:
                                         linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                         stops: [
                                             [0.4, '#606060']
@@ -2437,31 +2463,31 @@ cyclotronServices.factory 'commonConfigService', ->
                                     stroke: '#000000'
 
                         # scroll charts
-                        rangeSelector: 
-                            buttonTheme: 
-                                fill: 
+                        rangeSelector:
+                            buttonTheme:
+                                fill:
                                     linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                     stops: [
                                         [0.4, '#888']
                                         [0.6, '#555']
                                     ]
                                 stroke: '#000000'
-                                style: 
+                                style:
                                     color: '#CCC'
                                     fontWeight: 'bold'
-                                states: 
-                                    hover: 
-                                        fill: 
+                                states:
+                                    hover:
+                                        fill:
                                             linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                             stops: [
                                                 [0.4, '#BBB']
                                                 [0.6, '#888']
                                             ]
                                         stroke: '#000000'
-                                        style: 
+                                        style:
                                             color: 'white'
-                                    select: 
-                                        fill: 
+                                    select:
+                                        fill:
                                             linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                             stops: [
                                                 [0.1, '#000']
@@ -2470,24 +2496,24 @@ cyclotronServices.factory 'commonConfigService', ->
                                         stroke: '#000000'
                                         style:
                                             color: 'yellow'
-                            inputStyle: 
+                            inputStyle:
                                 backgroundColor: '#333'
                                 color: 'silver'
-                            labelStyle: 
+                            labelStyle:
                                 color: 'silver'
-                            
-                        navigator: 
-                            handles: 
+
+                        navigator:
+                            handles:
                                 backgroundColor: '#666'
                                 borderColor: '#AAA'
                             outlineColor: '#CCC'
                             maskFill: 'rgba(16, 16, 16, 0.5)'
-                            series: 
+                            series:
                                 color: '#7798BF'
                                 lineColor: '#A6C7ED'
 
-                        scrollbar: 
-                            barBackgroundColor: 
+                        scrollbar:
+                            barBackgroundColor:
                                 linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                 stops: [
                                     [0.4, '#888']
@@ -2495,7 +2521,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                 ]
                             barBorderColor: '#CCC'
                             buttonArrowColor: '#CCC'
-                            buttonBackgroundColor: 
+                            buttonBackgroundColor:
                                 linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                 stops: [
                                     [0.4, '#888']
@@ -2503,7 +2529,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                 ]
                             buttonBorderColor: '#CCC'
                             rifleColor: '#FFF'
-                            trackBackgroundColor: 
+                            trackBackgroundColor:
                                 linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                 stops: [
                                     [0, '#000']
@@ -2511,7 +2537,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                 ]
                             trackBorderColor: '#666'
 
-                    dark2:  
+                    dark2:
                         colors: [
                             '#2095F0' #Blue
                             '#FF9A13' #Orange
@@ -2521,14 +2547,14 @@ cyclotronServices.factory 'commonConfigService', ->
                             '#FE131E' #Red
                             '#D1D1D0' #Offwhite
                         ]
-                        chart: 
+                        chart:
                             backgroundColor: null #'#333333'
                             borderWidth: 0
                             borderRadius: 0
                             plotBackgroundColor: null
                             plotShadow: false
                             plotBorderWidth: 0
-                            style: 
+                            style:
                                 fontFamily: '"Open Sans", sans-serif'
                                 color: '#FFF'
                         drilldown:
@@ -2538,12 +2564,12 @@ cyclotronServices.factory 'commonConfigService', ->
                             activeDataLabelStyle:
                                 color: '#999'
                                 textDecoration: 'none'
-                        title: 
-                            style: 
+                        title:
+                            style:
                                 color: '#FFF'
                                 font: '16px "Lato", sans-serif'
                                 fontWeight: 'bold'
-                        subtitle: 
+                        subtitle:
                             style:
                                 color: '#FFF'
                                 font: '12px "Lato", sans-serif'
@@ -2578,7 +2604,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                     color: '#EEE'
                                     fontSize: '14px'
                                     fontWeight: '300'
-                        legend: 
+                        legend:
                             borderRadius: 0
                             borderWidth: 0
                             itemStyle:
@@ -2617,8 +2643,8 @@ cyclotronServices.factory 'commonConfigService', ->
                                 borderWidth: 0
                             column:
                                 borderWidth: 0
-                            line: 
-                                dataLabels: 
+                            line:
+                                dataLabels:
                                     color: '#CCC'
                                 marker:
                                     lineColor: '#333'
@@ -2636,16 +2662,16 @@ cyclotronServices.factory 'commonConfigService', ->
                             candlestick:
                                 lineColor: 'white'
 
-                        toolbar: 
-                            itemStyle: 
+                        toolbar:
+                            itemStyle:
                                 color: '#CCC'
 
-                        navigation: 
-                            buttonOptions: 
+                        navigation:
+                            buttonOptions:
                                 symbolStroke: '#DDDDDD'
                                 hoverSymbolStroke: '#FFFFFF'
-                                theme: 
-                                    fill: 
+                                theme:
+                                    fill:
                                         linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                         stops: [
                                             [0.4, '#606060']
@@ -2677,7 +2703,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                         stroke: '#000000'
                                         style:
                                             color: 'white'
-                                    select: 
+                                    select:
                                         fill:
                                             linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                             stops: [
@@ -2702,8 +2728,8 @@ cyclotronServices.factory 'commonConfigService', ->
                             series:
                                 color: '#7798BF'
                                 lineColor: '#A6C7ED'
-                            
-                        scrollbar: 
+
+                        scrollbar:
                             barBackgroundColor:
                                 linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                 stops: [
@@ -2712,7 +2738,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                 ]
                             barBorderColor: '#CCC'
                             buttonArrowColor: '#CCC'
-                            buttonBackgroundColor: 
+                            buttonBackgroundColor:
                                 linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                 stops: [
                                     [0.4, '#888']
@@ -2720,7 +2746,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                 ]
                             buttonBorderColor: '#CCC'
                             rifleColor: '#FFF'
-                            trackBackgroundColor: 
+                            trackBackgroundColor:
                                 linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                 stops: [
                                     [0, '#000']
@@ -2728,7 +2754,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                 ]
                             trackBorderColor: '#666'
 
-                    darkmetro: 
+                    darkmetro:
                         colors: [
                             '#007D9D' #Blue
                             '#82B93A' #Green
@@ -2738,7 +2764,7 @@ cyclotronServices.factory 'commonConfigService', ->
                             '#D1D1D0' #Offwhite
                             '#B07288'  #Purple
                         ]
-                        chart: 
+                        chart:
                             backgroundColor: null #'#333333'
                             borderWidth: 0
                             borderRadius: 0
@@ -2755,12 +2781,12 @@ cyclotronServices.factory 'commonConfigService', ->
                             activeDataLabelStyle:
                                 color: '#999'
                                 textDecoration: 'none'
-                        title: 
-                            style: 
+                        title:
+                            style:
                                 color: '#FFF'
                                 font: '16px "Lato", sans-serif'
                                 fontWeight: 'bold'
-                        subtitle: 
+                        subtitle:
                             style:
                                 color: '#FFF'
                                 font: '12px "Lato", sans-serif'
@@ -2777,47 +2803,47 @@ cyclotronServices.factory 'commonConfigService', ->
                                     color: '#EEE'
                                     fontSize: '14px'
                                     fontWeight: '300'
-                        yAxis: 
+                        yAxis:
                             alternateGridColor: null
                             minorTickInterval: null
                             gridLineColor: 'rgba(255, 255, 255, .1)'
                             minorGridLineColor: 'rgba(255,255,255,0.07)'
                             lineWidth: 0
                             tickWidth: 0
-                            labels: 
-                                style: 
+                            labels:
+                                style:
                                     color: '#999'
                                     fontSize: '11px'
-                            title: 
-                                style: 
+                            title:
+                                style:
                                     color: '#EEE'
                                     fontSize: '14px'
                                     fontWeight: '300'
-                        legend: 
+                        legend:
                             borderRadius: 0
                             borderWidth: 0
-                            itemStyle: 
+                            itemStyle:
                                 color: '#CCC'
-                            itemHoverStyle: 
+                            itemHoverStyle:
                                 color: '#FFF'
-                            itemHiddenStyle: 
+                            itemHiddenStyle:
                                 color: '#333'
                             symbolWidth: 40
-                        labels: 
+                        labels:
                             style:
                                 color: '#CCC'
-                        tooltip: 
-                            backgroundColor: 
+                        tooltip:
+                            backgroundColor:
                                 linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                 stops: [
                                     [0, 'rgba(96, 96, 96, .8)']
                                     [1, 'rgba(16, 16, 16, .8)']
                                 ]
                             borderWidth: 0
-                            style: 
+                            style:
                                 color: '#FFF'
                         plotOptions:
-                            series: 
+                            series:
                                 dataLabels:
                                     style:
                                         color: '#999'
@@ -2835,17 +2861,17 @@ cyclotronServices.factory 'commonConfigService', ->
                             line:
                                 dataLabels:
                                     color: '#CCC'
-                                marker: 
+                                marker:
                                     lineColor: '#333'
-                            pie: 
+                            pie:
                                 borderWidth: 0
-                                dataLabels: 
+                                dataLabels:
                                     color: '#999'
                                     fontSize: '14px'
                             spline:
                                 marker:
                                     lineColor: '#333'
-                            scatter: 
+                            scatter:
                                 marker:
                                     lineColor: '#333'
                             candlestick:
@@ -2854,13 +2880,13 @@ cyclotronServices.factory 'commonConfigService', ->
                         toolbar:
                             itemStyle:
                                 color: '#CCC'
-                            
-                        navigation: 
-                            buttonOptions: 
+
+                        navigation:
+                            buttonOptions:
                                 symbolStroke: '#DDDDDD'
                                 hoverSymbolStroke: '#FFFFFF'
-                                theme: 
-                                    fill: 
+                                theme:
+                                    fill:
                                         linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                         stops: [
                                             [0.4, '#606060']
@@ -2869,31 +2895,31 @@ cyclotronServices.factory 'commonConfigService', ->
                                     stroke: '#000000'
 
                         # scroll charts
-                        rangeSelector: 
-                            buttonTheme: 
-                                fill: 
+                        rangeSelector:
+                            buttonTheme:
+                                fill:
                                     linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                     stops: [
                                         [0.4, '#888']
                                         [0.6, '#555']
                                     ]
                                 stroke: '#000000'
-                                style: 
+                                style:
                                     color: '#CCC'
                                     fontWeight: 'bold'
-                                states: 
-                                    hover: 
-                                        fill: 
+                                states:
+                                    hover:
+                                        fill:
                                             linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                             stops: [
                                                 [0.4, '#BBB']
                                                 [0.6, '#888']
                                             ]
                                         stroke: '#000000'
-                                        style: 
+                                        style:
                                             color: 'white'
-                                    select: 
-                                        fill: 
+                                    select:
+                                        fill:
                                             linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                             stops: [
                                                 [0.1, '#000']
@@ -2902,24 +2928,24 @@ cyclotronServices.factory 'commonConfigService', ->
                                         stroke: '#000000'
                                         style:
                                             color: 'yellow'
-                            inputStyle: 
+                            inputStyle:
                                 backgroundColor: '#333'
                                 color: 'silver'
-                            labelStyle: 
+                            labelStyle:
                                 color: 'silver'
-                            
-                        navigator: 
-                            handles: 
+
+                        navigator:
+                            handles:
                                 backgroundColor: '#666'
                                 borderColor: '#AAA'
                             outlineColor: '#CCC'
                             maskFill: 'rgba(16, 16, 16, 0.5)'
-                            series: 
+                            series:
                                 color: '#7798BF'
                                 lineColor: '#A6C7ED'
 
-                        scrollbar: 
-                            barBackgroundColor: 
+                        scrollbar:
+                            barBackgroundColor:
                                 linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                 stops: [
                                     [0.4, '#888']
@@ -2927,7 +2953,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                 ]
                             barBorderColor: '#CCC'
                             buttonArrowColor: '#CCC'
-                            buttonBackgroundColor: 
+                            buttonBackgroundColor:
                                 linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                 stops: [
                                     [0.4, '#888']
@@ -2935,7 +2961,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                 ]
                             buttonBorderColor: '#CCC'
                             rifleColor: '#FFF'
-                            trackBackgroundColor: 
+                            trackBackgroundColor:
                                 linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                 stops: [
                                     [0, '#000']
@@ -2943,7 +2969,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                 ]
                             trackBorderColor: '#666'
 
-                    charcoal: 
+                    charcoal:
                         colors: [
                             '#007D9D' #Blue
                             '#82B93A' #Green
@@ -2953,7 +2979,7 @@ cyclotronServices.factory 'commonConfigService', ->
                             '#D1D1D0' #Offwhite
                             '#B07288'  #Purple
                         ]
-                        chart: 
+                        chart:
                             backgroundColor: null #'#333333'
                             borderWidth: 0
                             borderRadius: 0
@@ -2970,12 +2996,12 @@ cyclotronServices.factory 'commonConfigService', ->
                             activeDataLabelStyle:
                                 color: '#999'
                                 textDecoration: 'none'
-                        title: 
-                            style: 
+                        title:
+                            style:
                                 color: '#FFF'
                                 font: '16px "Lato", sans-serif'
                                 fontWeight: 'bold'
-                        subtitle: 
+                        subtitle:
                             style:
                                 color: '#FFF'
                                 font: '12px "Lato", sans-serif'
@@ -2992,47 +3018,47 @@ cyclotronServices.factory 'commonConfigService', ->
                                     color: '#EEE'
                                     fontSize: '14px'
                                     fontWeight: '300'
-                        yAxis: 
+                        yAxis:
                             alternateGridColor: null
                             minorTickInterval: null
                             gridLineColor: 'rgba(255, 255, 255, .1)'
                             minorGridLineColor: 'rgba(255,255,255,0.07)'
                             lineWidth: 0
                             tickWidth: 0
-                            labels: 
-                                style: 
+                            labels:
+                                style:
                                     color: '#999'
                                     fontSize: '11px'
-                            title: 
-                                style: 
+                            title:
+                                style:
                                     color: '#EEE'
                                     fontSize: '14px'
                                     fontWeight: '300'
-                        legend: 
+                        legend:
                             borderRadius: 0
                             borderWidth: 0
-                            itemStyle: 
+                            itemStyle:
                                 color: '#CCC'
-                            itemHoverStyle: 
+                            itemHoverStyle:
                                 color: '#FFF'
-                            itemHiddenStyle: 
+                            itemHiddenStyle:
                                 color: '#333'
                             symbolWidth: 40
-                        labels: 
+                        labels:
                             style:
                                 color: '#CCC'
-                        tooltip: 
-                            backgroundColor: 
+                        tooltip:
+                            backgroundColor:
                                 linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                 stops: [
                                     [0, 'rgba(96, 96, 96, .8)']
                                     [1, 'rgba(16, 16, 16, .8)']
                                 ]
                             borderWidth: 0
-                            style: 
+                            style:
                                 color: '#FFF'
                         plotOptions:
-                            series: 
+                            series:
                                 dataLabels:
                                     style:
                                         color: '#999'
@@ -3050,17 +3076,17 @@ cyclotronServices.factory 'commonConfigService', ->
                             line:
                                 dataLabels:
                                     color: '#CCC'
-                                marker: 
+                                marker:
                                     lineColor: '#333'
-                            pie: 
+                            pie:
                                 borderWidth: 0
-                                dataLabels: 
+                                dataLabels:
                                     color: '#999'
                                     fontSize: '14px'
                             spline:
                                 marker:
                                     lineColor: '#333'
-                            scatter: 
+                            scatter:
                                 marker:
                                     lineColor: '#333'
                             candlestick:
@@ -3069,13 +3095,13 @@ cyclotronServices.factory 'commonConfigService', ->
                         toolbar:
                             itemStyle:
                                 color: '#CCC'
-                            
-                        navigation: 
-                            buttonOptions: 
+
+                        navigation:
+                            buttonOptions:
                                 symbolStroke: '#DDDDDD'
                                 hoverSymbolStroke: '#FFFFFF'
-                                theme: 
-                                    fill: 
+                                theme:
+                                    fill:
                                         linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                         stops: [
                                             [0.4, '#606060']
@@ -3084,31 +3110,31 @@ cyclotronServices.factory 'commonConfigService', ->
                                     stroke: '#000000'
 
                         # scroll charts
-                        rangeSelector: 
-                            buttonTheme: 
-                                fill: 
+                        rangeSelector:
+                            buttonTheme:
+                                fill:
                                     linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                     stops: [
                                         [0.4, '#888']
                                         [0.6, '#555']
                                     ]
                                 stroke: '#000000'
-                                style: 
+                                style:
                                     color: '#CCC'
                                     fontWeight: 'bold'
-                                states: 
-                                    hover: 
-                                        fill: 
+                                states:
+                                    hover:
+                                        fill:
                                             linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                             stops: [
                                                 [0.4, '#BBB']
                                                 [0.6, '#888']
                                             ]
                                         stroke: '#000000'
-                                        style: 
+                                        style:
                                             color: 'white'
-                                    select: 
-                                        fill: 
+                                    select:
+                                        fill:
                                             linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                             stops: [
                                                 [0.1, '#000']
@@ -3117,24 +3143,24 @@ cyclotronServices.factory 'commonConfigService', ->
                                         stroke: '#000000'
                                         style:
                                             color: 'yellow'
-                            inputStyle: 
+                            inputStyle:
                                 backgroundColor: '#333'
                                 color: 'silver'
-                            labelStyle: 
+                            labelStyle:
                                 color: 'silver'
-                            
-                        navigator: 
-                            handles: 
+
+                        navigator:
+                            handles:
                                 backgroundColor: '#666'
                                 borderColor: '#AAA'
                             outlineColor: '#CCC'
                             maskFill: 'rgba(16, 16, 16, 0.5)'
-                            series: 
+                            series:
                                 color: '#7798BF'
                                 lineColor: '#A6C7ED'
 
-                        scrollbar: 
-                            barBackgroundColor: 
+                        scrollbar:
+                            barBackgroundColor:
                                 linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                 stops: [
                                     [0.4, '#888']
@@ -3142,7 +3168,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                 ]
                             barBorderColor: '#CCC'
                             buttonArrowColor: '#CCC'
-                            buttonBackgroundColor: 
+                            buttonBackgroundColor:
                                 linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                 stops: [
                                     [0.4, '#888']
@@ -3150,14 +3176,14 @@ cyclotronServices.factory 'commonConfigService', ->
                                 ]
                             buttonBorderColor: '#CCC'
                             rifleColor: '#FFF'
-                            trackBackgroundColor: 
+                            trackBackgroundColor:
                                 linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }
                                 stops: [
                                     [0, '#000']
                                     [1, '#333']
                                 ]
                             trackBorderColor: '#666'
-                        
+
             clock:
                 name: 'clock'
                 label: 'Clock'
@@ -3241,7 +3267,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                 required: false
                                 inlineJs: true
                                 order: 20
-                    
+
                     parameters:
                         label: 'Parameters'
                         description: 'Contains properties for displaying Dashboard Parameters in the header.'
@@ -3285,7 +3311,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                 required: false
                                 defaultHidden: true
                                 order: 11
-                        
+
                     customHtml:
                         label: 'HTML Content'
                         description: 'Provides additional HTML content to be displayed in the header.  This can be used to customize the header display.'
@@ -3294,7 +3320,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         required: false
                         inlineJs: true
                         order: 30
-            
+
             html:
                 name: 'html'
                 label: 'HTML'
@@ -3332,7 +3358,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         required: false
                         default: ''
                         order: 13
-                    filters: 
+                    filters:
                         label: 'Filters'
                         description: 'Optional, but if provided, specifies name-value pairs used to filter the data source\'s result set. Each key specifies a column in the data source, and the value specifies either a single value (string) or a set of values (array of strings). Only rows which have the specifies value(s) will be permitted.'
                         type: 'hash'
@@ -3340,15 +3366,15 @@ cyclotronServices.factory 'commonConfigService', ->
                         inlineJsValue: true
                         required: false
                         order: 14
-                    sortBy: 
+                    sortBy:
                         label: 'Sort By'
                         description: 'Optional, specifies the field(s) to sort the data by. If the value is a string, it will sort by that single field. If it is an array of strings, multiple fields will be used to sort, with left-to-right priority. The column name can be prefixed with a + or a - sign to indicate the direction or sort. + is ascending, while - is descending. The default sort direction is ascending, so the + sign does not need to be used. If this property is omitted, the original sort order of the data will be used.'
                         placeholder: 'Column name'
                         type: 'string[]'
                         inlineJs: true
-                        required: false                        
+                        required: false
                         order: 15
-                
+
             iframe:
                 name: 'iframe'
                 label: 'iFrame'
@@ -3362,7 +3388,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         required: true
                         default: 'http://www.expedia.com'
                         order: 10
-                    refresh: 
+                    refresh:
                         label: 'Refresh'
                         description: 'Optional number of seconds; enables reloading the iframe contents periodically every N seconds.'
                         placeholder: 'Seconds'
@@ -3443,7 +3469,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                         value: 'bottom'
                                     left:
                                         value: 'left'
-                                    right: 
+                                    right:
                                         value: 'right'
                                 order: 4
                             backgroundColor:
@@ -3484,7 +3510,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                 required: false
                                 defaultHidden: true
                                 order: 7
-                    duration: 
+                    duration:
                         label: 'Auto-Rotate Duration'
                         description: 'Optional number of seconds; enables rotating among a set of images periodically.'
                         placeholder: 'Seconds'
@@ -3492,7 +3518,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         default: 0
                         required: false
                         order: 11
-                
+
             javascript:
                 name: 'javascript'
                 label: 'JavaScript'
@@ -3513,14 +3539,14 @@ cyclotronServices.factory 'commonConfigService', ->
                         type: 'string'
                         required: true
                         order: 11
-                    refresh: 
+                    refresh:
                         label: 'Refresh'
                         description: 'Optional; enables re-invoking the javascript object periodically every N seconds.'
                         placeholder: 'Seconds'
                         type: 'integer'
                         required: false
                         order: 12
-                    filters: 
+                    filters:
                         label: 'Filters'
                         description: 'Optional, but if provided, specifies name-value pairs used to filter the data source\'s result set. Each key specifies a column in the data source, and the value specifies either a single value (string) or a set of values (array of strings). Only rows which have the specifies value(s) will be permitted.'
                         type: 'hash'
@@ -3528,13 +3554,13 @@ cyclotronServices.factory 'commonConfigService', ->
                         inlineJsValue: true
                         required: false
                         order: 13
-                    sortBy: 
+                    sortBy:
                         label: 'Sort By'
                         description: 'Optional, specifies the field(s) to sort the data by. If the value is a string, it will sort by that single field. If it is an array of strings, multiple fields will be used to sort, with left-to-right priority. The column name can be prefixed with a + or a - sign to indicate the direction or sort. + is ascending, while - is descending. The default sort direction is ascending, so the + sign does not need to be used. If this property is omitted, the original sort order of the data will be used.'
                         placeholder: 'Column name'
                         type: 'string[]'
                         inlineJs: true
-                        required: false                        
+                        required: false
                         order: 14
 
             json:
@@ -3550,7 +3576,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         required: false
                         options: datasourceOptions
                         order: 10
-            
+
             linkedWidget:
                 name: 'linkedWidget'
                 label: 'Linked Widget'
@@ -3563,8 +3589,8 @@ cyclotronServices.factory 'commonConfigService', ->
                         required: true
                         options: linkedWidgetOptions
                         order: 10
-            
-            number: 
+
+            number:
                 name: 'number'
                 label: 'Number'
                 icon: 'fa-cog'
@@ -3684,7 +3710,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         type: 'url'
                         required: false
                         order: 14
-                    filters: 
+                    filters:
                         label: 'Filters'
                         description: "Optional, but if provided, specifies name-value pairs used to filter the data source's result set. This has no effect if the dataSource property is not set.\nOnly the first row of the data source is used to get data, so this property can be used to narrow down on the correct row"
                         type: 'hash'
@@ -3692,7 +3718,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         inlineJsValue: true
                         required: false
                         order: 15
-                    sortBy: 
+                    sortBy:
                         label: 'Sort By'
                         description: 'Optional, specifies the field(s) to sort the data by. If the value is a string, it will sort by that single field. If it is an array of strings, multiple fields will be used to sort, with left-to-right priority. The column name can be prefixed with a + or a - sign to indicate the direction or sort. + is ascending, while - is descending. The default sort direction is ascending, so the + sign does not need to be used. If this property is omitted, the original sort order of the data will be used.\nOnly the first row of the data source is used to get data, so this property can be used to sort the data and ensure the correct row comes first.'
                         type: 'string[]'
@@ -3701,7 +3727,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         placeholder: 'Column name'
                         order: 16
 
-            qrcode: 
+            qrcode:
                 name: 'qrcode'
                 label: 'QRcode'
                 icon: 'fa-cogs'
@@ -3735,7 +3761,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         options: datasourceOptions
                         defaultHidden: true
                         order: 13
-                    filters: 
+                    filters:
                         label: 'Filters'
                         description: 'Optional, but if provided, specifies name-value pairs used to filter the data source\'s result set.  Each key specifies a column in the data source, and the value specifies either a single value (string) or a set of values (array of strings).  Only rows which have the specifies value(s) will be permitted.'
                         type: 'hash'
@@ -3744,7 +3770,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         required: false
                         defaultHidden: true
                         order: 14
-                    sortBy: 
+                    sortBy:
                         label: 'Sort By'
                         description: 'Optional, specifies the field(s) to sort the data by. If the value is a string, it will sort by that single field. If it is an array of strings, multiple fields will be used to sort, with left-to-right priority. The column name can be prefixed with a + or a - sign to indicate the direction or sort. + is ascending, while - is descending. The default sort direction is ascending, so the + sign does not need to be used. If this property is omitted, the original sort order of the data will be used.'
                         placeholder: 'Column name'
@@ -3824,7 +3850,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         required: false
                         defaultHidden: true
                         order: 12
-                    filters: 
+                    filters:
                         label: 'Filters'
                         description: "Optional, but if provided, specifies name-value pairs used to filter the data source's result set. This has no effect if the dataSource property is not set.\nOnly the first row of the data source is used to get data, so this property can be used to narrow down on the correct row"
                         type: 'hash'
@@ -3832,7 +3858,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         inlineJsValue: true
                         required: false
                         order: 15
-                    sortBy: 
+                    sortBy:
                         label: 'Sort By'
                         description: 'Optional, specifies the field(s) to sort the data by. If the value is a string, it will sort by that single field. If it is an array of strings, multiple fields will be used to sort, with left-to-right priority. The column name can be prefixed with a + or a - sign to indicate the direction or sort. + is ascending, while - is descending. The default sort direction is ascending, so the + sign does not need to be used. If this property is omitted, the original sort order of the data will be used.\nOnly the first row of the data source is used to get data, so this property can be used to sort the data and ensure the correct row comes first.'
                         type: 'string[]'
@@ -3841,7 +3867,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         placeholder: 'Column name'
                         order: 16
 
-            table: 
+            table:
                 name: 'table'
                 label: 'Table'
                 icon: 'fa-table'
@@ -4089,7 +4115,7 @@ cyclotronServices.factory 'commonConfigService', ->
                                 type: 'string'
                                 required: false
                                 order: 4
-                    filters: 
+                    filters:
                         label: 'Filters'
                         description: 'Optional, but if provided, specifies name-value pairs used to filter the data source\'s result set. Each key specifies a column in the data source, and the value specifies either a single value (string) or a set of values (array of strings). Only rows which have the specifies value(s) will be permitted.'
                         type: 'hash'
@@ -4097,7 +4123,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         inlineJsValue: true
                         required: false
                         order: 17
-                    sortBy: 
+                    sortBy:
                         label: 'Sort By'
                         description: 'Optional, specifies the field(s) to sort the data by. If the value is a string, it will sort by that single field. If it is an array of strings, multiple fields will be used to sort, with left-to-right priority. The column name can be prefixed with a + or a - sign to indicate the direction or sort. + is ascending, while - is descending. The default sort direction is ascending, so the + sign does not need to be used. If this property is omitted, the original sort order of the data will be used.'
                         type: 'string[]'
@@ -4121,13 +4147,13 @@ cyclotronServices.factory 'commonConfigService', ->
                         editorMode: 'javascript'
                         required: false
                         defaultHidden: true
-                        order: 20 
+                        order: 20
 
-            tableau: 
+            tableau:
                 name: 'tableau'
                 label: 'Tableau'
                 icon: 'fa-cog'
-                properties: 
+                properties:
                     params:
                         label: 'Parameters'
                         description: 'An object of key-value pairs that Tableau uses to render the report. These parameters are specific to Tableau and will be passed-through to the view.'
@@ -4135,7 +4161,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         required: true
                         editorMode: 'json'
                         order: 10
-        
+
             treemap:
                 name: 'treemap'
                 label: 'Treemap'
@@ -4183,7 +4209,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         required: false
                         defaultHidden: true
                         inlineJs: true
-                        options: 
+                        options:
                             default:
                                 value: '0,0.[0]'
                             percent:
@@ -4217,7 +4243,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         required: false
                         defaultHidden: true
                         inlineJs: true
-                        options: 
+                        options:
                             default:
                                 value: '0,0.[0]'
                             percent:
@@ -4280,7 +4306,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         placeholder: 'ID'
                         required: true
                         order: 10
-                    autoplay: 
+                    autoplay:
                         label: 'Auto-Play'
                         description: 'If true, automatically plays the video when the Widget is loaded.'
                         type: 'boolean'
@@ -4288,7 +4314,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         default: true
                         required: false
                         order: 13
-                    loop: 
+                    loop:
                         label: 'Loop'
                         description: 'If true, automatically loops the video when it completes.'
                         type: 'boolean'
@@ -4296,7 +4322,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         default: true
                         required: false
                         order: 14
-                    enableKeyboard: 
+                    enableKeyboard:
                         label: 'Enable Keyboard'
                         description: 'If true, enables keyboard controls which are disabled by default.'
                         type: 'boolean'
@@ -4305,7 +4331,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         required: false
                         defaultHidden: true
                         order: 15
-                    enableControls: 
+                    enableControls:
                         label: 'Enable Controls'
                         description: 'If true, enables on-screen video controls which are disabled by default.'
                         type: 'boolean'
@@ -4323,7 +4349,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         required: false
                         defaultHidden: true
                         order: 17
-                    showRelated: 
+                    showRelated:
                         label: 'Show Related'
                         description: 'If true, displays related videos at the end of this video.'
                         type: 'boolean'
@@ -4332,7 +4358,7 @@ cyclotronServices.factory 'commonConfigService', ->
                         required: false
                         defaultHidden: true
                         order: 18
-    }  
+    }
 
     # Copy Theme options to inherited locations
     exports.dashboard.properties.pages.properties.theme.options = exports.dashboard.properties.theme.options
@@ -4368,14 +4394,14 @@ cyclotronServices.factory 'commonConfigService', ->
 
     # Add Widget and Data Source help pages
     helpDataSources.children = _.map _.sortBy(exports.dashboard.properties.dataSources.options, 'name'), (dataSource) ->
-        { 
+        {
             name: dataSource.label || dataSource.value
             path: '/partials/help/datasources/' + dataSource.value + '.html'
             tags: _.map dataSource.properties, propertyMapHelper
         }
 
     helpWidgets.children = _.map _.sortBy(exports.widgets, 'name'), (widget) ->
-        { 
+        {
             name: widget.label || widget.name
             path: '/widgets/' + widget.name + '/help.html'
             tags: _.map widget.properties, propertyMapHelper
