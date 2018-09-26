@@ -1,7 +1,7 @@
 {
   "name": "cyclotron-svc",
   "description": "Cyclotron: REST API",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "author": "Dave Bauman <dbauman@expedia.com>",
   "license": "MIT",
   "private": true,
@@ -19,7 +19,7 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "aws4": "^1.3.2",
+    "aws4": "^1.8.0",
     "bluebird": "2.3.6",
     "body-parser": "^1.18.3",
     "compression": "^1.7.3",

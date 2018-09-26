@@ -1,3 +1,17 @@
+# 2.0.2
+
+## Bug Fixes
+
+ - Elasticsearch Data Source: Removed unneeded `"json": true` option breaking requests
+
+# 2.0.1
+
+## Features
+
+ - InfluxDB Data Source: Added additional properties for controlling the HTTP(S) request that gets generated.  `options` gives full control of the request, while `insecureSsl` is a boolean shortcut for ignoring SSL validation
+
+ - Elasticsearch Data Source: Added undocumented `options` property
+
 # 2.0.0
 
 ## Features
@@ -133,7 +147,7 @@
  - CloudWatch Data Source: Added new Data Source for retrieving data from Amazon CloudWatch
 
  - JSON Data Source: Added options for AWS signing, allowing use with AWS APIs that require Signature Version 4
- 
+
  - SSL/TLS: Proxy server initializes itself with a list of trusted root CAs.  Added server option for manually providing CAs to trust when executing HTTPS requests
 
  - Highcharts upgraded to 4.2.7
@@ -271,7 +285,7 @@
 ## Features
 
  - Table Widget: Added optional pagination--can automatically or manually specify the number of rows displayed per page. Improves performance when displaying large Data Sources.
- 
+
  - Number Widget: Added Click event handler: can provide a JavaScript function that gets executed when the Number is clicked.
 
  - Dashboard Controls: Added an option to disable the UI controls completely
@@ -313,7 +327,7 @@
 ## Features
 
  - Persistent Parameters: added an option to persist the value of a parameter in the browser's storage. Any value changes are persisted automatically, and will be restored the next time the user opens the Dashboard
- 
+
  - Search: added sort parameters to URL, paging for results
 
  - Browse Dashboards: added a new link to see the top liked dashboards; new search filter "is:liked"

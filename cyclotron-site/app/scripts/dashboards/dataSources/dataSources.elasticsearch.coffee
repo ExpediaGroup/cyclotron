@@ -2,16 +2,16 @@
 # Copyright (c) 2016-2018 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
-# you may not use this file except in compliance with the License. 
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.opensource.org/licenses/mit-license.php
 #
-# Unless required by applicable law or agreed to in writing, 
-# software distributed under the License is distributed on an 
-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
-# either express or implied. See the License for the specific 
-# language governing permissions and limitations under the License. 
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+# either express or implied. See the License for the specific
+# language governing permissions and limitations under the License.
 ###
 
 #
@@ -20,7 +20,7 @@
 # Queries the Elasticsearch API.
 # Implements a limited but useful subset of functionality and attempts to parse the results into Cyclotron's format.
 # For more control, the JSON Data Source should be used directly.
-# 
+#
 # Always proxies requests through the Cyclotron service.
 #
 cyclotronDataSources.factory 'elasticsearchDataSource', ($q, $http, configService, dataSourceFactory, logService) ->
@@ -36,9 +36,8 @@ cyclotronDataSources.factory 'elasticsearchDataSource', ($q, $http, configServic
         proxyBody =
             url: url.toString()
             method: 'POST'
-            json: true
             body: options.request
-            headers: 
+            headers:
                 'Content-Type': 'application/json'
 
         if options.options?
@@ -97,7 +96,7 @@ cyclotronDataSources.factory 'elasticsearchDataSource', ($q, $http, configServic
         if responseAdapter == 'auto'
             if response.aggregations?
                 responseAdapter = 'aggregations'
-            else 
+            else
                 responseAdapter = 'hits'
 
         # Convert the Elasticsearch result based on the selected adapter
@@ -132,7 +131,7 @@ cyclotronDataSources.factory 'elasticsearchDataSource', ($q, $http, configServic
                         data = _.map result.body.responses, (response) ->
                             processResponse response, responseAdapter, reject
                         data = _.flatten data
-                    else 
+                    else
                         data = processResponse result.body, responseAdapter, reject
 
                     if _.isNull data
@@ -159,7 +158,7 @@ cyclotronDataSources.factory 'elasticsearchDataSource', ($q, $http, configServic
 
             # Do the request, wiring up success/failure handlers
             req = $http.post proxyUri, getProxyRequest(options)
-            
+
             # Add callback handlers to promise
             req.success successCallback
             req.error errorCallback
