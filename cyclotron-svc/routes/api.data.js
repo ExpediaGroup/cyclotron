@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2016 the original author or authors.
+ * Copyright (c) 2013-2018 the original author or authors.
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License. 
@@ -89,6 +89,7 @@ exports.putPostSingle = function (req, res) {
         },
         $inc: { rev: 1 }
     }, {
+        new: true,
         upsert: true
     }).exec(_.wrap(res, api.getCallback));
 };

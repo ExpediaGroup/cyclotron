@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015 the original author or authors.
+ * Copyright (c) 2013-2018 the original author or authors.
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License. 
@@ -51,7 +51,7 @@
         top: 0;
         left: 0;
         bottom: 0;
-        z-index: 9000;
+        z-index: 9001;
 
         &.collapsed {
             margin-left: -@sidebar-width * 1.2;
@@ -64,7 +64,7 @@
         position: fixed;
         bottom: 1rem;
         left: 50%;
-        width: 18rem;
+        width: 18.5rem;
         margin-left: -9rem;
         .opacity(0);
         transition: opacity 1s ease-in-out;
@@ -167,15 +167,6 @@
                         opacity: 0.4;
                         &:hover {
                             opacity: 0.7; 
-                        }
-                    }
-
-                    .dropdown-menu {
-                        a {
-                            border-bottom: 0;
-                            &:hover {
-                                border-bottom: 0;
-                            }
                         }
                     }
                 }

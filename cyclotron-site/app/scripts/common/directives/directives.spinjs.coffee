@@ -1,5 +1,5 @@
 ###
-# Copyright (c) 2013-2015 the original author or authors.
+# Copyright (c) 2013-2018 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
 # you may not use this file except in compliance with the License. 
@@ -68,7 +68,7 @@ cyclotronDirectives.directive 'spinjs', ->
                 className: 'spinner'
 
                 # The z-index (defaults to 2000000000)
-                zIndex: 2e9
+                zIndex: 9000
 
                 # Position relative to parent in px
                 top: 'auto'

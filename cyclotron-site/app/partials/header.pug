@@ -1,9 +1,9 @@
 .row.cyclotron-header
     h1(ui-sref='home' ui-sref-opts='{reload: true}')
-        img.logo(src='/img/favicon64.png', alt='Logo')
+        img.logo(src='/img/logo.svg', alt='Logo')
         | Cyclotron
     .links
-        a.home(ui-sref='home', title='Return to Home')
+        //-a.home(ui-sref='home', title='Return to Home')
             i.fa.fa-home
         a.new(ng-href='/edit/', target='_self', title='Create a new Dashboard')
             i.fa.fa-file-o

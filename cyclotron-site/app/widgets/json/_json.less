@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015 the original author or authors.
+ * Copyright (c) 2013-2018 the original author or authors.
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License. 
@@ -14,15 +14,22 @@
  * language governing permissions and limitations under the License. 
  */
 
-/*
- * Service for initialization of Ace.
- * Will run after all vendor files are loaded (e.g. Ace is already defined)
- */
-cyclotronServices.factory('aceService', function() {
+.json-widget {
+    /* Padding messes up the auto-sizing calculations */
+    padding: 0 !important;
+    
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+    width: 100%;
+    position: relative;
 
-    /* Configure ACE editor */
-    ace.require('ace/ext/language_tools');
-    ace.config.set('workerPath', '/js');
+    .widget-body {
+        position: relative;
+    }
 
-    return {}
-})
+    .ace_editor {
+        height: 100% !important;
+        width: 100% !important;
+    }
+}

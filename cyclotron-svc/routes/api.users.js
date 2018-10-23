@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015 the original author or authors.
+ * Copyright (c) 2013-2018 the original author or authors.
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License. 
@@ -65,7 +65,10 @@ var createSession = function (user, ip) {
         $setOnInsert: {
             firstLogin: new Date()
         }
-    }, { upsert: true})
+    }, { 
+        new: true,
+        upsert: true
+    })
     .then(_.partial(auth.createNewSession, ip))
     .spread(function (session) {
         return session.populateAsync('user');

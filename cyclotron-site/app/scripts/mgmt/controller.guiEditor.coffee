@@ -1,5 +1,5 @@
 ###
-# Copyright (c) 2013-2015 the original author or authors.
+# Copyright (c) 2013-2018 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
 # you may not use this file except in compliance with the License. 
@@ -157,7 +157,8 @@ cyclotronApp.controller 'GuiEditorController', ($scope, $state, $stateParams, $l
             $scope.loadDashboard $scope.editor.cleanDashboardWrapper
             $location.search('rev', null)
         else
-            dashboardService.getRevision $stateParams.dashboardName, $scope.editor.revision, (dashboardWrapper) ->
+            q = dashboardService.getRevision $stateParams.dashboardName, $scope.editor.revision
+            q.then (dashboardWrapper) ->
                 $scope.loadDashboard dashboardWrapper
                 $location.search('rev', $scope.editor.revision)
 

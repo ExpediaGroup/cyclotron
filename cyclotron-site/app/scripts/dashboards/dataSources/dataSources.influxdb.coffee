@@ -1,17 +1,17 @@
 ###
-# Copyright (c) 2016 the original author or authors.
+# Copyright (c) 2016-2018 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
-# you may not use this file except in compliance with the License. 
+# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.opensource.org/licenses/mit-license.php
 #
-# Unless required by applicable law or agreed to in writing, 
-# software distributed under the License is distributed on an 
-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
-# either express or implied. See the License for the specific 
-# language governing permissions and limitations under the License. 
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+# either express or implied. See the License for the specific
+# language governing permissions and limitations under the License.
 ###
 
 #
@@ -26,7 +26,7 @@ cyclotronDataSources.factory 'influxdbDataSource', ($q, $http, configService, da
         # Clean up of Influx API URL
         influxUrl = _.jsExec options.url
 
-        # Uses HTTP by default.. if HTTPS is enabled on the server, it needs to be 
+        # Uses HTTP by default.. if HTTPS is enabled on the server, it needs to be
         # manually specified
         if influxUrl.indexOf('http') != 0
             influxUrl = 'http://' + influxUrl
@@ -57,12 +57,19 @@ cyclotronDataSources.factory 'influxdbDataSource', ($q, $http, configService, da
 
     getProxyRequest = (options) ->
         # Format: https://github.com/mikeal/request#requestoptions-callback
-        body =
+        proxyBody =
             method: 'GET'
             json: true
             url: getInfluxUrl options
 
-        return body
+        if options.options?
+            compiledOptions = _.compile(options.options, {})
+            _.assign(proxyBody, compiledOptions)
+
+        if options.insecureSsl?
+            proxyBody.strictSSL = !options.insecureSsl
+
+        return proxyBody
 
     runner = (options) ->
 
@@ -85,7 +92,7 @@ cyclotronDataSources.factory 'influxdbDataSource', ($q, $http, configService, da
                 return errorCallback result.body.error, result.statusCode
 
             data = []
-            
+
             # Translate from InfluxDB JSON format to Cyclotron format
             if !_.isEmpty result.body?.results
                 if result.body.results.length > 1

@@ -1,5 +1,5 @@
 ###
-# Copyright (c) 2013-2015 the original author or authors.
+# Copyright (c) 2013-2018 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
 # you may not use this file except in compliance with the License. 
@@ -71,9 +71,10 @@ module.exports = (config) ->
         # - PhantomJS
         # - IE (only Windows)
         browsers: [
-            'PhantomJS'
+            #'PhantomJS'
             #'Firefox'
             #'Chrome'
+            'ChromeHeadless'
         ]
 
         # If browser does not capture in given timeout [ms], kill it

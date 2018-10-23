@@ -1,3 +1,73 @@
+# 2.0.2
+
+## Bug Fixes
+
+ - Elasticsearch Data Source: Removed unneeded `"json": true` option breaking requests
+
+# 2.0.1
+
+## Features
+
+ - InfluxDB Data Source: Added additional properties for controlling the HTTP(S) request that gets generated.  `options` gives full control of the request, while `insecureSsl` is a boolean shortcut for ignoring SSL validation
+
+ - Elasticsearch Data Source: Added undocumented `options` property
+
+# 2.0.0
+
+## Features
+
+ - UI Redesign!  New look and feel for the management side of Cyclotron
+
+ - JSON Widget: New Widget which displays pretty-printed JSON data
+
+ - Prometheus Data Source: New Data Source for connecting to Prometheus
+
+ - Search: Additional advanced search terms, e.g. createdby:&lt;user&gt;
+
+ - CacheEncryptedPassword: Add optional setting that stores the user's encrypted password in local memory after logging in, allowing Data Sources to authenticate using the credentials of the current user, rather than a hardcoded account (note: this is disabled by default)
+
+ - "Likes" replaced with "Stars"
+
+ - Numerous upgrades to the build pipeline, including Gulp 4.0, Karma 3.x, etc.
+
+## Bug Fixes
+
+ - Sessions: restore sessions correctly when deeplinking to the /help page
+
+ - Upgraded angular-ui-router to resolve issues where the entire site would reload on navigation changes
+
+## Breaking Changes
+
+ - Upgraded from Jade to Pug; renamed file extensions accordingly
+
+# 1.48.0
+
+## Bug Fixes
+
+ - Table Widget: fixed export to exclude internally-used columns
+
+# 1.47.0
+
+## Features
+
+## Bug Fixes
+
+ - CyclotronData: Fixed incorrect 404 responses for POST /data with a new key
+
+ - Proxy: Proxy request bodies that include an array were getting mangled
+
+# 1.46.0
+
+## Features
+
+## Bug Fixes
+
+- Dashboard Analytics: Fixed inability to view analytics for dashboards requiring authentication, even when logged in
+
+- Example example-datasource-json: Fixed broken weather API
+
+- Upgraded two library versions to fix builds in Node v6+
+
 # 1.45.0 (12/21/2016)
 
 ## Features
@@ -77,7 +147,7 @@
  - CloudWatch Data Source: Added new Data Source for retrieving data from Amazon CloudWatch
 
  - JSON Data Source: Added options for AWS signing, allowing use with AWS APIs that require Signature Version 4
- 
+
  - SSL/TLS: Proxy server initializes itself with a list of trusted root CAs.  Added server option for manually providing CAs to trust when executing HTTPS requests
 
  - Highcharts upgraded to 4.2.7
@@ -215,7 +285,7 @@
 ## Features
 
  - Table Widget: Added optional pagination--can automatically or manually specify the number of rows displayed per page. Improves performance when displaying large Data Sources.
- 
+
  - Number Widget: Added Click event handler: can provide a JavaScript function that gets executed when the Number is clicked.
 
  - Dashboard Controls: Added an option to disable the UI controls completely
@@ -257,7 +327,7 @@
 ## Features
 
  - Persistent Parameters: added an option to persist the value of a parameter in the browser's storage. Any value changes are persisted automatically, and will be restored the next time the user opens the Dashboard
- 
+
  - Search: added sort parameters to URL, paging for results
 
  - Browse Dashboards: added a new link to see the top liked dashboards; new search filter "is:liked"

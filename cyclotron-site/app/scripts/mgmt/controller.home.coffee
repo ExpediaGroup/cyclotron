@@ -1,5 +1,5 @@
 ###
-# Copyright (c) 2013-2015 the original author or authors.
+# Copyright (c) 2013-2018 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
 # you may not use this file except in compliance with the License. 
@@ -28,6 +28,7 @@ cyclotronApp.controller 'HomeController', ($scope, $location, $uibModal, configS
 
     $scope.showSplash = true
     $scope.loading = false
+    $scope.mode = 'home'
 
     $scope.sortByField = 'name'
     $scope.sortByReverse = false
@@ -40,6 +41,23 @@ cyclotronApp.controller 'HomeController', ($scope, $location, $uibModal, configS
 
     $scope.currentPage = 1
     $scope.itemsPerPage = 25
+
+    $scope.userDashboards = []
+    $scope.userLikedDashboards = []
+    $scope.userRecentDashboards = []
+    $scope.trendingDashboards = []
+
+    $scope.smallLimit = 10
+    $scope.largeLimit = 30
+
+    $scope.userDashboardsLimit = $scope.smallLimit
+    $scope.trendingDashboardsLimit = $scope.smallLimit
+
+    $scope.toggleLimit = (limit) ->
+        if $scope[limit] == $scope.smallLimit
+            $scope[limit] = $scope.largeLimit
+        else
+            $scope[limit] = $scope.smallLimit
 
     $scope.isTag = (hint) -> 
         _.contains $scope.search.allTags, hint
@@ -58,12 +76,13 @@ cyclotronApp.controller 'HomeController', ($scope, $location, $uibModal, configS
             $scope.getAdvancedSearchHints()
 
     $scope.getAdvancedSearchHints = ->
-        $scope.search.advanced = _.sortBy ['is:deleted', 'is:liked', 'include:deleted']
+        $scope.search.advanced = _.sortBy ['is:deleted', 'is:starred', 'include:deleted']
 
         if userService.authEnabled and userService.isLoggedIn()
             username = userService.currentUser().sAMAccountName
-            $scope.search.advanced.push 'likedby:' + username
+            $scope.search.advanced.push 'starredby:' + username
             $scope.search.advanced.push 'lastupdatedby:' + username
+            $scope.search.advanced.push 'createdby:' + username
 
         $scope.search.hints = $scope.search.advanced.concat $scope.search.allHints
 
@@ -83,12 +102,12 @@ cyclotronApp.controller 'HomeController', ($scope, $location, $uibModal, configS
         return unless $scope.search.query.length > 0
 
         $scope.showSplash = false
+        $scope.mode = 'home'
         $scope.loading = true
 
         p = dashboardService.getDashboards $scope.search.query.join(',')
         p.then (dashboards) ->
-            $scope.dashboards = dashboards
-            $scope.augmentDashboards()
+            $scope.dashboards = $scope.augmentDashboards dashboards
             $scope.resultsCount = $scope.dashboards.length
             $scope.loading = false
 
@@ -102,8 +121,8 @@ cyclotronApp.controller 'HomeController', ($scope, $location, $uibModal, configS
                     keyboard: false
                 }
 
-    $scope.augmentDashboards = ->
-        _.each $scope.dashboards, (dashboard) ->
+    $scope.augmentDashboards = (dashboards) ->
+        _.each dashboards, (dashboard) ->
             # Update permissions based on current user
             dashboard._canEdit = userService.hasEditPermission dashboard
             dashboard._canView = userService.hasViewPermission dashboard
@@ -116,6 +135,28 @@ cyclotronApp.controller 'HomeController', ($scope, $location, $uibModal, configS
             dashboard.visitCategory = dashboardService.getVisitCategory dashboard
             
             return
+
+        return dashboards
+
+    $scope.getUserDashboards = ->
+        p = dashboardService.getDashboards('ownedby:' + userService.cachedUsername)
+        p.then (dashboards) ->
+            $scope.userDashboards = $scope.augmentDashboards dashboards
+        p.catch (response) ->
+            $scope.userDashboards = []
+
+        q = dashboardService.getDashboards('starredby:' + userService.cachedUsername)
+        q.then (dashboards) ->
+            $scope.userLikedDashboards = $scope.augmentDashboards dashboards
+        q.catch (response) ->
+            $scope.userLikedDashboards = []
+    
+    $scope.getTrendingDashboards = ->
+        p = dashboardService.getTrendingDashboards()
+        p.then (dashboards) ->
+            $scope.trendingDashboards = $scope.augmentDashboards dashboards
+        p.catch (response) ->
+            $scope.trendingDashboards = []
 
     toggleLikeHelper = (dashboard) ->
         if dashboard._liked
@@ -227,8 +268,10 @@ cyclotronApp.controller 'HomeController', ($scope, $location, $uibModal, configS
 
     # Update displayed permissions after logging in/out
     $scope.$watch 'isLoggedIn()', ->
-        $scope.augmentDashboards()
+        $scope.augmentDashboards $scope.dashboards
         $scope.getAdvancedSearchHints()
+        $scope.getUserDashboards()
+        $scope.getTrendingDashboards()
 
     # Update search.query after using the back/forward buttons
     $scope.$watch (-> $location.search()), (newSearch, oldSearch) ->

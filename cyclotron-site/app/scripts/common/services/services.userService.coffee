@@ -1,5 +1,5 @@
 ###
-# Copyright (c) 2013-2015 the original author or authors.
+# Copyright (c) 2013-2018 the original author or authors.
 #
 # Licensed under the MIT License (the "License");
 # you may not use this file except in compliance with the License. 
@@ -14,7 +14,7 @@
 # language governing permissions and limitations under the License. 
 ###
 
-cyclotronServices.factory 'userService', ($http, $localForage, $q, $rootScope, $window, configService, logService) ->
+cyclotronServices.factory 'userService', ($http, $localForage, $q, $rootScope, $window, configService, cryptoService, logService) ->
 
     loggedIn = false
     currentSession = null
@@ -25,6 +25,8 @@ cyclotronServices.factory 'userService', ($http, $localForage, $q, $rootScope, $
         cachedUserId: null
 
         cachedUsername: null
+
+        cachedPassword: null
 
         isLoggedIn: -> 
             return true unless configService.authentication.enable
@@ -39,6 +41,16 @@ cyclotronServices.factory 'userService', ($http, $localForage, $q, $rootScope, $
         setLoggedOut: ->
             loggedIn = false
             currentSession = null
+            exports.cachedPassword = null
+            $localForage.removeItem('session')
+            $localForage.removeItem('cachedPassword')
+
+            if $window.Cyclotron?
+                $window.Cyclotron.currentUser = null
+                $window.Cyclotron.currentUsername = null
+                $window.Cyclotron.currentUserPassword = null
+
+            return
 
         isNewUser: true
 
@@ -57,11 +69,20 @@ cyclotronServices.factory 'userService', ($http, $localForage, $q, $rootScope, $
     $localForage.getItem('username').then (username) ->
         if username?
             exports.cachedUsername = username
+            if $window.Cyclotron?
+                $window.Cyclotron.currentUsername = username
 
     # Load cached userId (not UID)
     $localForage.getItem('cachedUserId').then (userId) ->
         if userId?
             exports.cachedUserId = userId
+
+    # Load cached user password (encrypted)
+    $localForage.getItem('cachedPassword').then (cachedPassword) ->
+        if cachedPassword? and configService.authentication.cacheEncryptedPassword
+            exports.cachedPassword = cachedPassword
+            if $window.Cyclotron?
+                $window.Cyclotron.currentUserPassword = cachedPassword
 
     # Load New User quality
     $localForage.getItem('newUser').then (value) ->
@@ -96,10 +117,24 @@ cyclotronServices.factory 'userService', ($http, $localForage, $q, $rootScope, $
 
             $rootScope.$broadcast 'login', { }
             if $window.Cyclotron?
+                $window.Cyclotron.currentUsername = username
                 $window.Cyclotron.currentUser = session.user
+            
             alertify.success('Logged in as <strong>' + session.user.name + '</strong>', 2500)
 
-            deferred.resolve(session)
+            if (configService.authentication.cacheEncryptedPassword)
+                # Encrypt and cache the password for use in data sources
+                cryptoService.encrypt(password).then (encrypedPassword) ->
+                    $localForage.setItem 'cachedPassword', encrypedPassword
+                    exports.cachedPassword = encrypedPassword
+                    if $window.Cyclotron?
+                        $window.Cyclotron.currentUserPassword = encrypedPassword
+
+                    deferred.resolve(session)
+            else 
+                
+                deferred.resolve(session)
+            
 
         post.error (error) ->
             exports.setLoggedOut()
@@ -124,12 +159,14 @@ cyclotronServices.factory 'userService', ($http, $localForage, $q, $rootScope, $
                     validator.success (session) ->
                         currentSession = session
                         loggedIn = true
+                        if $window.Cyclotron?
+                            $window.Cyclotron.currentUser = session.user
 
                         alertify.log('Logged in as <strong>' + session.user.name + '</strong>', 2500) unless hideAlerts
                         deferred.resolve(session)
 
                     validator.error (error) ->
-                        $localForage.removeItem('session')
+                        exports.setLoggedOut()
                         alertify.log('Previous session expired', 2500) unless hideAlerts
                         errorHandler()
                 else
@@ -147,11 +184,8 @@ cyclotronServices.factory 'userService', ($http, $localForage, $q, $rootScope, $
             promise = $http.post(configService.restServiceUrl + '/users/logout', { key: currentSession.key })
             promise.success ->
                 exports.setLoggedOut()
-                $localForage.removeItem('session')
                 
                 $rootScope.$broadcast('logout')
-                if $window.Cyclotron?
-                    $window.Cyclotron.currentUser = null
                 alertify.log('Logged Out', 2500)
                 deferred.resolve()
 

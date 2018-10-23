@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015 the original author or authors.
+ * Copyright (c) 2013-2018 the original author or authors.
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License. 
@@ -29,18 +29,6 @@
     @media only screen and (min-width: @newPhonePortraitMaxWidth) { 
         overflow-y: hidden;
     } 
-
-    header {
-        .user-select(none);
-
-        h1 {
-            width: 90%;
-            margin-left: auto;
-            margin-right: auto;
-            font-size: 2rem;
-            font-weight: normal;
-        }
-    }
 
     .new-user-message {
         max-width: 520px;
@@ -80,9 +68,31 @@
         }
     }
 
-    section.search {
+    section.splash {
+
+        background-color: @primaryColor;
+        color: white;
+        a { color: white; }
+
+        .cyclotron-header {
+            text-align: left;
+            border-bottom: 0;
+            margin: 0;
+        }
+
+        h1.big {
+            .user-select(none);
+            width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 300;
+            text-align: center;
+                
+            display: none;
+        }
+
         text-align: center;
-        margin-bottom: 2rem;
+        padding-bottom: 3rem;
 
         .ui-select-multiple {
             text-align: left;
@@ -90,20 +100,13 @@
 
         .ui-select-container {
             width: 90%;
+            border: 1px solid #ccc;
+            border-radius: 0.33rem;
 
-            .ui-select-match-item {
-                height: 14px;
-                i {
-                    line-height: inherit;
-                    height: 14px;
-                }
+            .select2-choices {
+                padding: 0.35rem;
+                border: 0;
             }
-        }
-
-        &.active {
-            margin-bottom: 2rem;
-            margin-top: 1rem;
-            h1 { margin-top: 1rem; display: inline-block; }
         }
 
         p {
@@ -111,7 +114,31 @@
         }
     }
 
+    section.links-bar {
+        background-color: @darkAccentColor;
+        margin-bottom: 2rem;
+        color: white;
+        font-weight: bold;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+
+        .link {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-top: 4px solid transparent;
+
+            &.active {
+                border-top: 4px solid white;
+            }
+        }
+    }
+
     section.main-links {
+        margin-top: 3rem;
         text-align: center;
 
         a {
@@ -145,6 +172,10 @@
             margin-top: 10rem;
         }
 
+        .well {
+            border-radius: 0.33rem;
+        }
+
         thead th {
             font-weight: normal;
             a.selected {
@@ -165,7 +196,7 @@
             }
 
             td.like {
-                font-size: 80%;
+                font-size: 90%;
                 line-height: 1.4rem;
                 i.fa {
                    color: @lighterText;
@@ -191,7 +222,8 @@
 
             .name { 
                 display: inline-block;
-                font-weight: bold;
+                font-weight: 300;
+                font-size: 1.4rem;
 
                 > i { 
                     margin-left: .7rem;
@@ -210,7 +242,8 @@
 
             .description, .info {
                 color: @lighterText;
-                font-size: 80%;
+                font-size: 95%;
+                margin: 0.1rem 0;
                 a {
                     color: @lighterText;
                     &:hover {
@@ -272,6 +305,13 @@
         }
     }
 
+    span.more {
+        float: right;
+        margin-top: 0.5rem;
+        cursor: pointer;
+        color: #999;
+    }
+
     .footer {
         width: 40%;
         min-width: 200px;
@@ -279,11 +319,16 @@
 
         border-top: 1px solid #eee;
         margin-top: 1rem;
-        padding-top: 1rem;
+        padding: 1rem;
         text-align: center;
 
         .separator {
             margin: 0 1rem;
+        }
+
+        color: #888;
+        a {
+            color: #888;
         }
     }
 
@@ -312,32 +357,26 @@
 
     /* Desktop view overrides */
     @media only screen and (min-width: @newPhonePortraitMaxWidth) { 
-        header {
-            margin-top: 8rem;
-            margin-bottom: 2rem;
-            h1 { 
-                text-align: center;
-                font-size: 3.5em; 
-            }
-        } 
+        section.splash {
 
-        &.with-results {
-            .new-user-message {
-                width: 80%;
+            .cyclotron-header h1 {
+                display: none;
             }
-        }
 
-        section.search {
-            margin-bottom: 3rem;
+            h1.big { 
+                display: block;
+                font-size: 3.5rem; 
+                margin-bottom: 3.5rem;
+
+                img.logo {
+                    height: 3.3rem;
+                    margin-right: 1rem;
+                    vertical-align: middle;
+                }
+            }
 
             .ui-select-container {
                 width: 56%;
-            }
-
-            &.active {
-                .ui-select-container {
-                    width: 80%;
-                }
             }
         }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 the original author or authors.
+ * Copyright (c) 2016-2018 the original author or authors.
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License. 
@@ -331,13 +331,43 @@ exports.getRecentEvents = function (req, res) {
     });
 };
 
-/* Gets 100 most-visited Dashboards (using cached values) */
+/* Gets 100 most-visited Dashboards */
 exports.getTopDashboards = function (req, res) {
-    Dashboards.find({ deleted: false })
-        .select('-dashboard -editors -viewers')
-        .sort('-visits')
-        .limit(req.query.max || 100)
-        .exec(_.wrap(res, api.getCallback));
+    var filters = getFilters(req.query.startDate, req.query.endDate, req.query.dashboard, req.query.resolution);
+    var max = parseInt(req.query.max);
+
+    elasticsearch.client.search({
+        index: elasticsearch.indexAlias('pageviews'),
+        body: {
+            size: 0,
+            query: getQuery(filters), 
+            aggs: {
+                dashboards: {
+                    terms: {
+                        field: 'dashboard._id',
+                        order: { _count : 'desc' },
+                        size: max || 100
+                    }
+                }
+            } 
+        }
+    }).then(function (response) {
+        Dashboards.populate(response.aggregations.dashboards.buckets, { 
+            path: 'key', 
+            select: '-dashboard -editors -viewers'
+        }, function (err, populatedResults) {
+            if (err) {
+                console.log(err);
+                return reject(err);
+            }
+
+            res.send(_.compact(_.map(populatedResults, function(result) {
+                return result.key;
+            })));
+        });
+    }).catch(function (err) {
+        res.status(500).send(err);
+    });
 };
 
 /* Create a filters object */

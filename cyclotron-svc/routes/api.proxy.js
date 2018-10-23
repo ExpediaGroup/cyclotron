@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015 the original author or authors.
+ * Copyright (c) 2013-2018 the original author or authors.
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License. 
@@ -24,7 +24,7 @@
 var config = require('../config/config'),
     _ = require('lodash'),
     request = require('request'),
-    aws4  = require('aws4'),
+    aws4 = require('aws4'),
     crypto = require('crypto');
 
 /* Crypto-process request options */
@@ -39,6 +39,8 @@ var decrypter = function (req) {
                 encrypted += cipher.final('utf8');
                 return encrypted;
             });
+        } else if (_.isArray(value)) {
+            return _.map(value, decrypt);
         } else if (_.isObject(value)) {
             return _.mapValues(value, decrypt);
         } else {

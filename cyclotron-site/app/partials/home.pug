@@ -1,0 +1,190 @@
+
+//- View All Dashboards and Edit them
+.home-page.container-fluid(ng-class='{ "with-splash": showSplash, "with-results": !showSplash }')
+
+    new-user-message
+
+    section.splash.row
+        include header
+
+        h1.big 
+            img.logo(src='/img/logo.svg', alt='Logo')
+            | Cyclotron
+
+        ui-select(ng-model='search.query', multiple='',
+            tagging='', tagging-label='(new)', tagging-tokens='SPACE|ENTER')
+            ui-select-match(placeholder='Search by Dashboard Name or Tags...')
+                i.fa.fa-tag(ng-if='isTag($item)')
+                i.fa.fa-filter(ng-if='isAdvanced($item)')
+                span  {{ $item }}
+            ui-select-choices(repeat='hint in search.hints | filter:$select.search | limitTo:100')
+                i.fa.fa-tag(ng-if='isTag(hint)')
+                i.fa.fa-filter(ng-if='isAdvanced(hint)')
+                span  {{ hint }}
+
+    section.links-bar.row
+        .link(ng-click='mode="home"', ng-class='{active: mode=="home"}') Home
+        .link(ng-click='mode="explore"', ng-class='{active: mode=="explore"}') Explore
+    
+    section.home-mode(ng-show='mode=="home"')
+        section.main-links(ng-show='showSplash')
+            a.disabled(title='You must login before creating a Dashboard', ng-if='!canEdit()', ng-click='loginAlert()')
+                i.fa.fa-file-o
+                span New Dashboard
+            a.new(ng-href='/edit/', target='_self', title='Create a new Dashboard', ng-if='canEdit()')
+                i.fa.fa-file-o
+                span New Dashboard
+            a.documentation(ui-sref='help', title='Documentation for Cyclotron')
+                i.fa.fa-question-circle
+                span Help
+            a.login(ng-if='analyticsEnabled()', ui-sref='analytics', title='Analytics for Cyclotron')
+                i.fa.fa-bar-chart
+                span Analytics
+            a.login(requires-auth, ng-if='!isLoggedIn()', ng-click='login()',title='Login')
+                i.fa.fa-unlock
+                span Login
+            a.logout(requires-login, ng-click='logout()', title='Logout')
+                i.fa.fa-lock
+                span Logout
+
+        section.results(ng-hide='showSplash')
+            .loading(ng-show='loading')
+                span.spinjs
+
+            .no-results.well.well-sm(ng-show='dashboards.length == 0')
+                span No matching Dashboards were found
+
+            div(ng-show='dashboards.length > 0')
+                table.table
+                    thead
+                        tr
+                            th(requires-auth)
+                                a(ng-click='sortBy("_liked", true)') 
+                                    i.fa.fa-star
+                            th
+                                a(ng-click='sortBy("name", false)', ng-class='{ selected: sortByField == "name" }') Name
+                                span  / 
+                                a(ng-click='sortBy(tagSorter, false)', ng-class='{ selected: sortByField == tagSorter }') Tags
+                                span  / 
+                                a(ng-click='sortBy("date", true)', ng-class='{ selected: sortByField == "date" }') Last Modified
+                            th.dashboard-analytics
+                                a(ng-click='sortBy("visits", true)', ng-class='{ selected: sortByField == "visits" }') Visits
+                                span(requires-auth)  / 
+                                a(requires-auth, ng-click='sortBy("likeCount", true)', ng-class='{ selected: sortByField == "likeCount" }') Stars
+                            th
+                    tr.dashboard-item(ng-repeat='dashboard in dashboards | orderBy:sortByField:sortByReverse | limitTo:itemsPerPage:(currentPage-1)*itemsPerPage', 
+                        ng-class='{"dashboard-item-unviewable": !dashboard._canView, "dashboard-item-deleted": dashboard.deleted }')
+                        td.like(requires-auth)
+                            a(ng-click='toggleLike(dashboard)')
+                                i.fa.fa-star(ng-if='dashboard._liked', title='Unstar this Dashboard')
+                                i.fa.fa-star-o(ng-if='!dashboard._liked', title='Star this Dashboard')
+                        td
+                            span.name(ng-if='dashboard.deleted') {{ dashboard.name }}
+                                i.fa.fa-trash-o(title="This Dashboard has been deleted.")
+
+                            span.name(ng-if='!dashboard._canView') {{ dashboard.name }}
+                                i.fa.fa-lock(title="You don't have permission to edit this Dashboard.")
+                                i.fa.fa-eye-slash(title="You don't have permission to view this Dashboard.")
+
+                            a.name(ng-if='dashboard._canView && !dashboard.deleted', ng-href='/{{ dashboard.name }}', target='_blank', title='Open the Dashboard') {{ dashboard.name }}
+                                i.fa.fa-lock(ng-if='isLoggedIn() && !dashboard._canEdit', title="You don't have permission to edit this Dashboard.")
+                                i.fa.fa-external-link
+
+                            .description(title='Description of dashboard', ng-if='dashboard.description') 
+                                i.fa.fa-quote-left
+                                |  {{ dashboard.description }} 
+                                i.fa.fa-quote-right
+
+                            .info
+                                span(title='Latest Editor') {{ dashboard.lastUpdatedBy.name }}
+                                span(ng-if='dashboard.lastUpdatedBy.name')  - 
+                                span(title='Latest revision number') rev {{ dashboard.rev }}
+                                span  -  
+                                span(title='Latest revision date') {{ dashboard.date | date:"short" }}
+
+                            .label.label-default(ng-repeat='tag in dashboard.tags', 
+                                ng-click='selectTag(tag)', title='Add to search') {{ tag }}
+
+                        td.dashboard-analytics
+                            .info(ng-if='dashboard.visits > 0')
+                                a(ui-sref='dashboardAnalytics({ dashboardName: dashboard.name })', 
+                                    title='View Analytics for this Dashboard')
+                                    i(class='fa {{ dashboard.visitCategory.icon }}')
+                                    span  {{ dashboard.visitCategory.text }} 
+                                        ng-pluralize(count='dashboard.visits', when='{"one": "visit", "other": "visits"}')
+                            .info(requires-auth, ng-if='dashboard.likeCount > 0')
+                                i.fa.fa-star
+                                span  {{ dashboard.likeCount }} 
+                                        ng-pluralize(count='dashboard.likeCount', when='{"one": "star", "other": "stars"}')
+
+                        td.dashboard-links
+                            div
+                                a(ui-sref='edit.details({ dashboardName: dashboard.name })', title='Edit this Dashboard', ng-if='canEdit(dashboard)')
+                                    i.fa.fa-edit
+                                    |  Edit
+                            div
+                                a.text-muted(ng-click='delete(dashboard.name)', title='Delete this Dashboard', ng-if='canDelete(dashboard)')
+                                    i.fa.fa-trash-o
+                                    |  Delete
+
+                .paging
+                    uib-pagination.pagination-sm(total-items='resultsCount', ng-model='currentPage', 
+                        items-per-page='itemsPerPage', max-size='5', boundary-links='true')
+                    div
+                        button.btn.btn-link(ng-if='itemsPerPage < 1000000', ng-click='setPageSize(1000000)') Show All
+
+    section.explore-mode(ng-show='mode=="explore"')
+        .row
+            .col-sm-4.col-sm-offset-2
+                section.user-dashboards
+                    span.more(ng-click='toggleLimit("userDashboardsLimit")', ng-show='userDashboardsLimit == smallLimit')
+                        i.fa.fa-plus-square-o
+                        |  more
+                    span.more(ng-click='toggleLimit("userDashboardsLimit")', ng-show='userDashboardsLimit == largeLimit')
+                        i.fa.fa-minus-square-o
+                        |  less
+                    h2 Your Dashboards
+                    table.table(ts-wrapper)
+                        thead
+                            tr
+                                th(ts-criteria='name|lowercase') Name
+                                th
+                                th(ts-criteria='visits|parseInt', ts-default='descending') Visits
+                        tbody
+                            tr(ng-repeat='dashboard in userDashboards | tablesort | limitTo:userDashboardsLimit', ts-repeat)
+                                td 
+                                    a(href='/{{ dashboard.name }}', target='_blank', title='Open this Dashboard in a new window') {{ dashboard.name }}
+                                td(style="white-space: nowrap;")
+                                    a(ui-sref='edit.details({ dashboardName: dashboard.name })', title='Edit this Dashboard', ng-if='canEdit(dashboard)')
+                                        i.fa.fa-edit
+                                        |  Edit
+                                td {{ dashboard.visits | numeraljs:'0,0' }}
+
+            .col-sm-4
+                section.trending
+                    span.more(ng-click='toggleLimit("trendingDashboardsLimit")', ng-show='trendingDashboardsLimit == smallLimit')
+                        i.fa.fa-plus-square-o
+                        |  more
+                    span.more(ng-click='toggleLimit("trendingDashboardsLimit")', ng-show='trendingDashboardsLimit == largeLimit')
+                        i.fa.fa-minus-square-o
+                        |  less
+                    h2 Trending Dashboards
+                    table.table(ts-wrapper)
+                        thead
+                            tr
+                                th(ts-criteria='name|lowercase') Name
+                                th
+                                th(ts-criteria='visits|parseInt', ts-default='descending') Visits
+                        tbody
+                            tr(ng-repeat='dashboard in trendingDashboards | tablesort | limitTo:trendingDashboardsLimit', ts-repeat)
+                                td 
+                                    a(href='/{{ dashboard.name }}', target='_blank', title='Open this Dashboard in a new window') {{ dashboard.name }}
+                                td(style="white-space: nowrap;")
+                                    a(ui-sref='edit.details({ dashboardName: dashboard.name })', title='Edit this Dashboard', ng-if='canEdit(dashboard)')
+                                        i.fa.fa-edit
+                                        |  Edit
+                                td {{ dashboard.visits | numeraljs:'0,0' }}
+
+
+    section.footer
+        include footer

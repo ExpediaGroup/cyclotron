@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015 the original author or authors.
+ * Copyright (c) 2013-2018 the original author or authors.
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License. 
@@ -136,7 +136,7 @@ exports.get = function (req, res) {
         
         /* Handle advanced search terms */
         _.each(tempSearchItems, function (item) {
-            if (item == 'is:liked') {
+            if (item == 'is:liked' || item == 'is:starred') {
                 dashboardFilter.likes = {
                     $exists: true,
                     $ne: []
@@ -145,8 +145,8 @@ exports.get = function (req, res) {
                 dashboardFilter.deleted = true;
             } else if (item == 'include:deleted') {
                 delete dashboardFilter.deleted;
-            } else if (item.indexOf('likedby:') == 0) {
-                promises.push(Users.findOne({ sAMAccountName: item.substring(8) }).exec().then(function (user) {
+            } else if (item.indexOf('likedby:') == 0 || item.indexOf('starredby:') == 0) {
+                promises.push(Users.findOne({ sAMAccountName: item.substring(item.indexOf(':') + 1) }).exec().then(function (user) {
                     if (_.isNull(user)) {  return { none: 'none' }; }
                     return {
                         likes: { $elemMatch: { $eq: user._id } }
@@ -157,6 +157,20 @@ exports.get = function (req, res) {
                     if (_.isNull(user)) {  return { none: 'none' }; }
                     return {
                         lastUpdatedBy: user._id
+                    };
+                }));
+            } else if (item.indexOf('createdby:') == 0) {
+                promises.push(Users.findOne({ sAMAccountName: item.substring(10) }).exec().then(function (user) {
+                    if (_.isNull(user)) {  return { none: 'none' }; }
+                    return {
+                        createdBy: user._id
+                    };
+                }));
+            } else if (item.indexOf('ownedby:') == 0) {
+                promises.push(Users.findOne({ sAMAccountName: item.substring(8) }).exec().then(function (user) {
+                    if (_.isNull(user)) {  return { none: 'none' }; }
+                    return {
+                        $or: [{ createdBy: user._id }, { lastUpdatedBy: user._id }]
                     };
                 }));
             } else {

@@ -34,9 +34,9 @@ Dashboards are defined declaratively as a JSON document, which contains all the 
 
 * Declarative definition of Dashboards, requiring no HTML or JavaScript (although it's optionally available)
 
-* Included Widgets: Annotation Chart, Chart, Header, HTML, iFrame, Image, Javascript, Number, QRCode, Stoplight, Table, Treemap, Youtube
+* Included Widgets: Annotation Chart, Chart, Header, HTML, iFrame, Image, Javascript, JSON, Number, QRCode, Stoplight, Table, Treemap, Youtube
 
-* Included Data Sources: CyclotronData, Elasticsearch, Graphite, InfluxDB, Javascript, JSON, Splunk
+* Included Data Sources: CyclotronData, Elasticsearch, Graphite, InfluxDB, Javascript, JSON, Prometheus, Splunk
 
 * Built-in data loading, filtering, and sorting
 
@@ -104,6 +104,8 @@ The `cyclotron-svc/` folder contains the REST API for Cyclotron, which interface
         npm install
 
     **Windows**: this may need to be run as an Administrator.  Open the Node.js Command Prompt as an Administrator and run the command there.
+
+    **Windows/OSX/Linux**: node-gyp may require certain dependencies to be installed.  See platform-specific instructions [here](https://github.com/nodejs/node-gyp#installation).
 
 3. Create a configuration file at `cyclotron-svc/config/config.js`.  A sample configuration file `sample.config.js` is provided:
 
