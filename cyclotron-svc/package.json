@@ -41,7 +41,7 @@
     "passport-ldapauth": "1.0.0",
     "request": "^2.88.0",
     "serve-static": "^1.13.2",
-    "shortid": "2.0.0",
+    "shortid": "2.2.13",
     "ssl-root-cas": "^1.2.2"
   },
   "devDependencies": {
