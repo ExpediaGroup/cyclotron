@@ -61,6 +61,8 @@ In regards to data, Cyclotron does not store or cache any data for Dashboards. D
 ## Requirements
 
 * Node.js
+    * Requires >= 6.x to run `cyclotron-site` tests
+    * Requires >= 0.10 to run
 * MongoDB (2.6+)
 * (Optional) Any web server--Nginx, Apache, IIS, etc
 

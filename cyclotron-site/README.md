@@ -12,15 +12,18 @@ Refer to the installation instructions in the parent [README.md](../README.md).
 
 [Gulp](http://gulpjs.com/) is a Node.js-based build system and task runner.  The configuration is defined in `gulpfile.coffee`.
 
-The installation instructions recommend installing Gulp globally using npm.  It is possible to avoid installing Gulp globally, by using the locally-installed gulp directly:
+The installation instructions recommend installing Gulp globally using `npm`.  This is not required thanks to [`npx`](https://blog.npmjs.org/post/162869356040/introducing-npx-an-npm-package-runner).  The following are equivalent:
 
+    gulp build
+    npx gulp build
+    npm run build
     ./node_modules/.bin/gulp build
 
-The longer command is the only disadvantage of this approach.  There are also a few scripts that can be executed via npm:
+The following `npm` tasks
 
-    npm run-script build  # Builds website
+    npm run build           # Builds website
     npm start               # Starts developement server
-    npm test                # Runs unit tests  
+    npm test                # Runs unit tests
 
 ### Gulp Tasks
 
@@ -63,7 +66,7 @@ This project has several Gulp tasks configured in `gulpfile.coffee`:
 
 ## Automated Tests
 
-Unit tests are written with [Karma](https://karma-runner.github.io/0.12/index.html) and [Jasmine](https://jasmine.github.io/), and executed on [PhantomJS](http://phantomjs.org/).  The tests can be run with the following command:
+Unit tests are written with [Karma](https://karma-runner.github.io/3.0/index.html) and [Jasmine](https://jasmine.github.io/), and executed on [PhantomJS](http://phantomjs.org/).  The tests can be run with the following command:
 
     gulp test
 
@@ -90,10 +93,10 @@ Search for Bower packages [here](http://bower.io/search/).
 When the website is opened, it loads its configuration from `_public/js/conf/configService.js`. If this file does not exist, `gulp server` automatically populates this file from `sample.configService.js` before starting the server.
 
 The available configuration properties are documented in `app/scripts/config/sample.configService.coffee'.  This config file can be used as-is to connect to a local Cyclotron-svc instance, or used as a starting point for a new configuration.
-    
+
 ## Deployment
 
-Deploying Cyclotron on a server is dependent on the OS and web server being used.  Since the entire site is compiled to static assets, any standard web server can host the website (e.g. Nginx, Apache, IIS, etc.).  
+Deploying Cyclotron on a server is dependent on the OS and web server being used.  Since the entire site is compiled to static assets, any standard web server can host the website (e.g. Nginx, Apache, IIS, etc.).
 
 Since the website is built as a single-page app, all URLs that don't map to a file in the filesystem should serve `index.html`.  This will allow the application to load, and the JavaScript router will render the correct page.
 

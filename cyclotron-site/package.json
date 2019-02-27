@@ -1,7 +1,7 @@
 {
   "name": "cyclotron-site",
   "description": "Cyclotron: website",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "author": "Dave Bauman <dbauman@expedia.com>",
   "license": "MIT",
   "private": true,
@@ -16,9 +16,10 @@
     "url": "https://github.com/ExpediaInceCommercePlatform/cyclotron/issues"
   },
   "scripts": {
-    "start": "gulp server",
-    "build": "gulp build",
-    "test": "gulp test"
+    "start": "npx gulp server",
+    "build": "npx gulp build",
+    "test": "npx gulp test",
+    "clean": "npx gulp clean"
   },
   "devDependencies": {
     "coffeescript": "~1.7",
@@ -43,7 +44,7 @@
     "gulp-rename": "~1.4.0",
     "gulp-uglify": "~3.0.1",
     "jasmine-core": "~3.2.1",
-    "karma": "~3.0.0",
+    "karma": "~3.1.4",
     "karma-chrome-launcher": "~2.2.0",
     "karma-coffee-preprocessor": "~1.0.1",
     "karma-coverage": "~1.1.1",

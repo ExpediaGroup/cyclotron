@@ -1,3 +1,9 @@
+# 2.0.3
+
+## Bug Fixes
+
+ - Updated `package-lock.json` to fix security vulnerabilities
+
 # 2.0.2
 
 ## Bug Fixes
@@ -417,7 +423,7 @@
  - Data Sources must be created with unique names
 
  - Navigating through Cyclotron pages using browser back button does not work
- 
+
  - Annotation Chart: annotationsWidth property in AnnotationChart widget should be a numerical field instead of a string
 
 # 1.23.0 (01/21/2016)
