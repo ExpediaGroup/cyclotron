@@ -27,7 +27,6 @@ var Dashboards = mongoose.model('dashboard2');
 
 var fs = require('fs'),
     childProcess = require('child_process'),
-    ip = require('ip'),
     shortid = require('shortid'),
     json2csv = require('json2csv'),
     json2xls = require('json2xls');
@@ -46,7 +45,7 @@ var exportKeys = {};
 /* Exports a Dashboard as a PDF */
 /* Handles sync and asych modes */
 var exportPdf = function (req, res, sync) {
-
+    let hostName = req.hostname;
     var dashboardName = req.params.name.toLowerCase();
     Dashboards
         .findOne({ name: dashboardName })
@@ -104,7 +103,7 @@ var exportPdf = function (req, res, sync) {
 
                     if (sync) {
                         /* Redirect to the generated report */
-                        res.redirect(302, 'http://' + ip.address() + ':' + config.port + '/exports/' + id + '.pdf');
+                        res.redirect(302, 'http://' + hostName + ':' + config.port + '/exports/' + id + '.pdf');
                     }
                 }
 
@@ -120,7 +119,7 @@ var exportPdf = function (req, res, sync) {
             });
 
             if (!sync) {
-                res.status(201).send({ statusUrl: 'http://' + ip.address() + ':' + config.port + '/exportstatus/' + id });
+                res.status(201).send({ statusUrl: 'http://' + hostname + ':' + config.port + '/exportstatus/' + id });
             }
         });
 };
@@ -140,7 +139,6 @@ exports.pdfAsync = function (req, res) {
 /* Returns the status of an export */
 exports.status = function (req, res) {
     var key = req.params.key;
-
     fs.readdir('export', function (err, files) {
         if (err) {
             console.log(err);
@@ -155,7 +153,7 @@ exports.status = function (req, res) {
         matchingFiles = _.sortBy(matchingFiles, _.identity);
 
         matchingFiles = _.map(matchingFiles, function (file) {
-            return 'http://' + ip.address() + ':' + config.port + '/exports/' + file;
+            return 'http://' + req.hostname + ':' + config.port + '/exports/' + file;
         });
 
         var pngs = [],
@@ -228,7 +226,7 @@ exports.dataAsync = function (req, res) {
                     return res.status(500).send(err);
                 }
                 res.status(201).send({
-                    url: 'http://' + ip.address() + ':' + config.port + '/exports/' + key
+                    url: 'http://' + req.hostname + ':' + config.port + '/exports/' + key
                 });
             });
             
@@ -245,7 +243,7 @@ exports.dataAsync = function (req, res) {
                     return res.status(500).send(err);
                 }
                 res.status(201).send({
-                    url: 'http://' + ip.address() + ':' + config.port + '/exports/' + key
+                    url: 'http://' + req.hostname + ':' + config.port + '/exports/' + key
                 });
             });
             
@@ -262,7 +260,7 @@ exports.dataAsync = function (req, res) {
                     return res.status(500).send(err);
                 }
                 res.status(201).send({
-                    url: 'http://' + ip.address() + ':' + config.port + '/exports/' + key
+                    url: 'http://' + req.hostname + ':' + config.port + '/exports/' + key
                 });
             });
             
