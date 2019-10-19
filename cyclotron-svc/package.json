@@ -32,7 +32,7 @@
     "json2xls": "^0.1.2",
     "jsondiffpatch": "0.1.41",
     "ldapjs": "1.0.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "moment": "^2.22.2",
     "mongoose": "~4.5.1",
     "morgan": "^1.9.1",
@@ -41,7 +41,7 @@
     "passport-ldapauth": "1.0.0",
     "request": "^2.88.0",
     "serve-static": "^1.13.2",
-    "shortid": "2.0.0",
+    "shortid": "2.2.13",
     "ssl-root-cas": "^1.2.2"
   },
   "devDependencies": {
