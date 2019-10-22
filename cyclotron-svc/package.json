@@ -46,6 +46,6 @@
   },
   "devDependencies": {
     "del": "^3.0.0",
-    "swagger-ui": "^2.1.2-M1"
+    "swagger-ui": "^3.23.11"
   }
 }
