@@ -17,12 +17,14 @@
 var config = require('./config/config');
 
 var _ = require('lodash'),
+    fs = require('fs'),
     express = require('express'),
     morgan = require('morgan'),
     errorHandler = require('errorhandler'),
     bodyParser = require('body-parser'),
     compression = require('compression'),
-    serveStatic = require('serve-static');
+    serveStatic = require('serve-static'),
+    swaggerUiAssetPath = require("swagger-ui-dist").getAbsoluteFSPath();
 
 var mongo = require('./mongo');
 
@@ -48,7 +50,18 @@ app.use(function(req, res, next) {
 });
 
 /* API Documentation */
-app.use(serveStatic(__dirname + '/docs'));
+const swaggerIndex = fs.readFileSync(`${swaggerUiAssetPath}/index.html`)
+    .toString()
+    .replace("https://petstore.swagger.io/v2/swagger.json", "swagger.json")
+
+const swaggerJson = fs.readFileSync('swagger.json')
+    .toString()
+    .replace(`"basePath": "/",`, `"basePath": "${config.basePath}",`)
+
+app.get("/", (req, res) => res.send(swaggerIndex))
+app.get("/index.html", (req, res) => res.send(swaggerIndex))
+app.get("/swagger.json", (req, res) => res.send(swaggerJson))
+app.use(serveStatic(swaggerUiAssetPath))
 
 /* Cross-origin requests */
 var cors = require('./middleware/cors');
