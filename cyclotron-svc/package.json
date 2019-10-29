@@ -1,7 +1,7 @@
 {
   "name": "cyclotron-svc",
   "description": "Cyclotron: REST API",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "author": "Dave Bauman <dbauman@expedia.com>",
   "license": "MIT",
   "private": true,
@@ -42,10 +42,10 @@
     "request": "^2.88.0",
     "serve-static": "^1.13.2",
     "shortid": "2.2.13",
-    "ssl-root-cas": "^1.2.2"
+    "ssl-root-cas": "^1.2.2",
+    "swagger-ui-dist": "^3.24.0"
   },
   "devDependencies": {
-    "del": "^3.0.0",
-    "swagger-ui": "^3.23.11"
+    "del": "^3.0.0"
   }
 }

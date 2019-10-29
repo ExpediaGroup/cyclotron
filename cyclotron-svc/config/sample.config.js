@@ -1,6 +1,6 @@
 /* Sample Configuration */
 module.exports = {
-    /* MongoDB connection string: 
+    /* MongoDB connection string:
      *      mongodb://<hostname[:port]>/<databaseName>
      * Cluster:
      *      mongodb://<host1[:port]>,<host2[:port]>,...<hostN[:port]>/<databaseName>
@@ -12,8 +12,11 @@ module.exports = {
     /* Port to run the Cyclotron Service on */
     port: 8077,
 
+    /* Base path this server is hosted at; used by Swagger docs */
+    basePath: '/',
+
     /* URL for website using this service
-     * Used for exporting Dashboards as PDFs via CasperJS 
+     * Used for exporting Dashboards as PDFs via CasperJS
      */
     webServer: 'http://localhost:777',
 
@@ -34,7 +37,7 @@ module.exports = {
         /* Configuration for Elasticsearch (if enabled) */
         elasticsearch: {
             /* String or String[]
-             * Can provide basic HTTP authentication like:  
+             * Can provide basic HTTP authentication like:
              *     host: [
              *         'user:password@my-elasticsearch-server1:9200',
              *         'user:password@my-elasticsearch-server2:9200'
