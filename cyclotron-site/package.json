@@ -52,7 +52,7 @@
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-matchers": "~3.8.3",
     "karma-nested-reporter": "~0.1.6",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "main-bower-files": "^2.13.3",
     "merge-stream": "~1.0.1"
   }
