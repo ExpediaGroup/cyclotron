@@ -175,6 +175,8 @@ We gladly accept contributions to Cyclotron in the form of issues, feature reque
 
 ## Licensing
 
+Copyright © 2015-2021 Expedia, Inc.
+
 Cyclotron is licensed under the MIT license; refer to [LICENSE](LICENSE) for the complete text.
 
 Cyclotron has a dependency on [Highcharts](http://www.highcharts.com/), a commercial JavaScript charting library.  Highcharts offers both a commercial license as well as a free non-commercial license.  Please review the [licensing options and terms](https://shop.highsoft.com/highcharts.html) before using this software, as the Cyclotron license neither provides nor implies a license for Highcharts.
