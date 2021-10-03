@@ -1,7 +1,7 @@
 {
     "dataSources": [{
         "name": "jquery-ajax",
-        "processor": "/* Loads a list of Cyclotron tags using jQuery.\n   Could be done with the JSON Data Source as well.\n */\np = function (promise) {\n    /* Start asychronous AJAX call */\n    $.getJSON('http://cyclotrondev.karmalab.net/api/tags', function(data) {\n        \n        /* Resolves the result asynchronously via the provided promise */\n        promise.resolve(_.map(data, function (tag) {\n           return { 'name': tag }; \n        })); \n    });\n}",
+        "processor": "/* Loads a list of Cyclotron tags using jQuery.\n   Could be done with the JSON Data Source as well.\n */\np = function (promise) {\n    /* Start asychronous AJAX call */\n    $.getJSON('http://cyclotron/api/tags', function(data) {\n        \n        /* Resolves the result asynchronously via the provided promise */\n        promise.resolve(_.map(data, function (tag) {\n           return { 'name': tag }; \n        })); \n    });\n}",
         "type": "javascript"
     }, {
         "name": "modernizr",
