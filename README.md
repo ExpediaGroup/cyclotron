@@ -15,6 +15,7 @@ Dashboards are defined declaratively as a JSON document, which contains all the 
      - [Node.js](#nodejs)
      - [REST API](#rest-api)
      - [Website](#website)
+- [Docker](#docker)
 - [Deployment](#deployment)
 - [Extending Cyclotron](#extending-cyclotron)
 - [Contributing](#contributing)
