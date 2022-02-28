@@ -161,6 +161,10 @@ The `cyclotron-site/` folder contains the website for Cyclotron.
 
 For more information on the Cyclotron website, please refer to [cyclotron-site/README.md](cyclotron-site/README.md).
 
+## Docker
+
+A Dockerfile and `docker-compose.yml` example can be found here: https://github.com/baumandm/cyclotron-docker.
+
 ## Deployment
 
 For specific details on deployment, please refer to [cyclotron-site/README.md](cyclotron-site/README.md) and [cyclotron-svc/README.md](cyclotron-svc/README.md).
