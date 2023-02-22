@@ -1,5 +1,11 @@
 # Cyclotron
 
+## 📻 News and updates
+
+Cyclotron is no longer being maintained.  The tech stack is over a decade old and has not aged well, so it basically needs a complete rewrite to modernize it. Feel free to fork and continue development.
+
+## About
+
 Cyclotron is a browser-based platform for creating dashboards.  It provides standard boilerplate and plumbing, allowing non-programmers to easily create and edit dashboards using customizable components.  It has a built-in dashboard editor, and hosts the dashboards directly.
 
 Dashboards are defined declaratively as a JSON document, which contains all the properties required to render the Dashboard.
